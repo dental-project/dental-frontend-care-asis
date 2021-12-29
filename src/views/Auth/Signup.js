@@ -64,7 +64,7 @@ export default function Signup() {
 
 
       axios
-        .get("http://localhost:8000/api/users/",
+        .post("http://localhost:8000/api/users/",
           { 
             userid: data.userid, 
             password: data.passwd,
