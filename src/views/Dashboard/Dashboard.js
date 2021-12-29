@@ -1,4 +1,4 @@
-import React ,{useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 
 // @material-ui/core
 import { makeStyles, Card, CardHeader, CardContent } from "@material-ui/core";
@@ -6,13 +6,15 @@ import { makeStyles, Card, CardHeader, CardContent } from "@material-ui/core";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomSelectBox from "components/CoustomSelectBox/CustomSelectBox.js"
+
+import DataTable from "components/Table/DataTable.js";
+
 
 // api
 import axios from 'axios';
 
 // redux
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,7 +54,7 @@ function Dashboard(props) {
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-          <CustomSelectBox setDashId={setDashId}/>
+          <DataTable />
         </GridItem>
       </GridContainer>
 

@@ -11,7 +11,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-2.jpg";
-import widgetImg from "images/widget.svg"
+import toothImg from "images/toothImg.svg";
 
 let ps;
 
@@ -48,16 +48,7 @@ export default function Admin({ ...rest }) {
   const handleImageClick = (image) => {
     setImage(image);
   };
-  const handleColorClick = (color) => {
-    setColor(color);
-  };
-  const handleFixedClick = () => {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
-    } else {
-      setFixedClasses("dropdown");
-    }
-  };
+  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -91,10 +82,10 @@ export default function Admin({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"iWidget"}
-        logo={widgetImg}
+        logoText={"Dental Clinic"}
+        logo={toothImg}
         image={image}
-        handleDrawerToggle={handleDrawerToggle}
+        //handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={color}
         {...rest}
@@ -113,15 +104,6 @@ export default function Admin({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {/* {getRoute() ? <Footer /> : null} */}
-        {/* <FixedPlugin
-          handleImageClick={handleImageClick}
-          handleColorClick={handleColorClick}
-          bgColor={color}
-          bgImage={image}
-          handleFixedClick={handleFixedClick}
-          fixedClasses={fixedClasses}
-        /> */}
       </div>
     </div>
   );

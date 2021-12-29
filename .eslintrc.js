@@ -14,6 +14,7 @@ module.exports = {
   },
   plugins: ["react"],
   extends: [
+    "extends:react-app",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended"
