@@ -27,20 +27,20 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
-        color: '#C56ACE',
+        color: '#00acc1',
     },
     '& .MuiOutlinedInput-root': {
     '&.Mui-focused fieldset': {
-            borderColor: '#C56ACE',
+            borderColor: '#00acc1',
         },
     },
   },
   customText: {
-    color: "#C56ACE",
+    color: "#26c6da",
     fontWeight: "bold",
     cursor:"pointer",
     "&:hover": {
-      color: "#FF6CAB"
+      color: "#1993A8"
     }
   },
   button: {
@@ -57,28 +57,56 @@ export default function Signup() {
     password.current = watch("passwd");
    
     const onSubmit = (data) => {
-      console.log(data);
+     
       if(data.passwd !== data.passwdConfirm) {
         return alert("비밀번호가 서로 일치하지 않습니다.");
       }
 
-      axios.post('http://localhost:8080/auth/createAccount', 
+
+      axios
+        .get("http://localhost:8000/api/users/",
           { 
-            user_id: data.userid, 
-            user_name: data.userName,
+            userid: data.userid, 
             password: data.passwd,
+            username: data.userName,
             email: data.email,
-            phone: data.phone
+            tel: data.tel,
+            vendor_id: data.vendorid
           }
+        
         )
-        .then((result) => { 
-          result.data.returnCode === "200" && history.push('/admin');
-          result.data.returnCode === "801" && alert("이미 존재하는 아이디 입니다.");
+        .then((result) => {
+          console.log(result);
         })
-        .catch(error => {
-          alert(error);
-          throw new Error(error);
-        });
+        .catch(() => {
+          console.log("실패");
+      });
+
+
+
+
+
+//       axios.post('http://localhost:8000/api/users', 
+//           { 
+//             userid: data.userid, 
+//             password: data.passwd,
+//             username: data.userName,
+//             email: data.email,
+//             tel: data.tel,
+//             vendor_id: data.vendorid
+//           }
+//         )
+//         .then((result) => { 
+
+// console.log(result);
+
+//           //result.data.returnCode === "200" && history.push('/admin');
+//           //result.data.returnCode === "801" && alert("이미 존재하는 아이디 입니다.");
+//         })
+//         .catch(error => {
+//           alert(error);
+//           throw new Error(error);
+//         });
 
     }
 
@@ -91,10 +119,6 @@ export default function Signup() {
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={12} >
-
-
-
-
 
                 {/* <TextField
                   className={classes.root}
@@ -129,122 +153,141 @@ export default function Signup() {
                           
                         // }
                       }}
-                      />              
+                    />              
 
-                      <Controller
-                        name="passwd"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                          <TextField
-                            className={classes.root} 
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                          />
-                        )}
-                        rules={{ 
-                          required: '패스워드를 입력 해주세요.'
-                        }}
-                      />
+                    <Controller
+                      name="passwd"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          type="password"
+                          label="Password"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ 
+                        required: '패스워드를 입력 해주세요.'
+                      }}
+                    />
 
-                      <Controller
-                        name="passwdConfirm"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                          <TextField
-                            className={classes.root} 
-                            type="password"
-                            label="Password Confirm"
-                            variant="outlined"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                          />
-                        )}
-                        rules={{ required: '패스워드 확인을 입력 해주세요.' }}
-                      />        
+                    <Controller
+                      name="passwdConfirm"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          type="password"
+                          label="Password Confirm"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ required: '입력한 패스워드를 확인 해주세요.' }}
+                    />        
 
-                      <Controller
-                        name="userName"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                          <TextField
-                            className={classes.root} 
-                            label="User Name"
-                            variant="outlined"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                          />
-                        )}
-                        rules={{ required: '이름을 입력 해주세요.' }}
-                      />  
+                    <Controller
+                      name="userName"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          label="User Name"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ required: '이름을 입력 해주세요.' }}
+                    />  
 
-                      <Controller
-                        name="email"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                          <TextField
-                            className={classes.root} 
-                            label="Email"
-                            variant="outlined"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                          />
-                        )}
-                        rules={{ 
-                          required: '이메일을 입력 해주세요.' ,
-                          pattern: {
-                            value: /\S+@\S+\.\S+/,
-                            message: "이메일 형식을 입력하세요."
-                          }
-                        }}
-                      />  
-                      <Controller
-                        name="phone"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: { onChange, value }, fieldState: { error } }) => (
-                          <TextField
-                            className={classes.root} 
-                            label="Phone Number"
-                            variant="outlined"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                          />
-                        )}
-                        rules={{ 
-                          required: '휴대폰 번호를 입력 해주세요.',
-                          pattern: {
-                            value: /^\d{3}\d{3,4}\d{4,}$/,
-                            message: "휴대폰 형식을 입력하세요."
-                          }
-                        }}
-                      />  
+                    <Controller
+                      name="email"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          label="Email"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ 
+                        required: '이메일을 입력 해주세요.' ,
+                        pattern: {
+                          value: /\S+@\S+\.\S+/,
+                          message: "이메일 형식을 입력하세요."
+                        }
+                      }}
+                    />  
+                    <Controller
+                      name="tel"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          label="Tel"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ 
+                        required: '휴대폰 번호를 입력 해주세요.',
+                        pattern: {
+                          value: /^\d{3}\d{3,4}\d{4,}$/,
+                          message: "휴대폰 형식을 입력하세요."
+                        }
+                      }}
+                    />
 
-                  <Button
-                    type="submit"
-                    className={classes.button} 
-                    color="custom" 
-                    round
-                    
-                  >
-                    Login
-                  </Button>
+                    <Controller
+                      name="vendorid"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                          className={classes.root} 
+                          label="Dental ID"
+                          variant="outlined"
+                          value={value}
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                        />
+                      )}
+                      rules={{ 
+                        required: '치과 아이디를 입력하세요.',
+                      }}
+                    />   
+
+                    <Button
+                      type="submit"
+                      className={classes.button} 
+                      color="info" 
+                      round
+                    >
+                      Sign up
+                    </Button>
 
                   </form>  
 

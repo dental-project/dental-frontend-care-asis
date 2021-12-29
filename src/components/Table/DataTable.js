@@ -87,6 +87,11 @@ export default function DataTable() {
         pageSize={5}
         checkboxSelection
         disableSelectionOnClick
+        onRowClick={(params, event) => {
+          if (!event.ignore) {
+            console.log("push -> /roles/" + params.row.id);
+          }
+        }}
       />
     </div>
   );

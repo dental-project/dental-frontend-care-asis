@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
     width: "96%",
     margin: theme.spacing(1),
     "& label.Mui-focused": {
-      color: "#C56ACE",
+      color: "#00acc1",
     },
     "& .MuiOutlinedInput-root": {
       "&.Mui-focused fieldset": {
-        borderColor: "#C56ACE",
+        borderColor: "#00acc1",
       },
     },
   },
@@ -45,26 +45,26 @@ const useStyles = makeStyles((theme) => ({
   titleText: {
     fontSize: "5vh",
     fontWeight: "bold",
-    background: "linear-gradient(60deg, #FF6CAB, #7366FF)",
+    background: "linear-gradient(60deg, #00acc1, #26c6da)",
     color: "transparent",
     WebkitBackgroundClip: "text"
   },
   customText: {
     float: "left",
     marginTop: "10px",
-    color: "#C56ACE",
+    color: "#26c6da",
     cursor: "pointer",
     "&:hover": {
-      color: "#FF6CAB",
+      color: "#1993A8",
     },
   },
   customText2: {
     float: "right",
     marginTop: "10px",
-    color: "#C56ACE",
+    color: "#26c6da",
     cursor: "pointer",
     "&:hover": {
-      color: "#FF6CAB",
+      color: "#1993A8",
     },
   },
 }));
@@ -160,7 +160,7 @@ export default function Signin() {
             />
             <Button
               className={classes.button}
-              color="custom"
+              color="info"
               round
               onClick={() => loginBtn()}
             >
