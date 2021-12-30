@@ -4,8 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from 'react-router-dom';
 
 // core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
+import Grid from '@material-ui/core/Grid';
 // import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
@@ -24,6 +23,9 @@ import { useForm, Controller } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    marginTop: "100px",
+  },
+  textField: {
     width: "95%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
@@ -111,24 +113,19 @@ export default function Signup() {
     }
 
     return (
-      <GridContainer>
-        <GridItem xs={10} sm={4} md={3} style={{margin: "50px auto"}}>
+      <Grid
+        className={classes.root}
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item xs={11} sm={8} md={3} >
           <Card>
-            <CardHeader style={{margin: "20px auto"}}>
+            <CardHeader>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12} >
-
-                {/* <TextField
-                  className={classes.root}
-                  type="password"
-                  //name="password"
-                  label="Password"
-                  variant="outlined"
-                  {...register('password', { required: true, minLength: 7 })}
-                />   */}
-               
+            
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <Controller
                       name="userid"
@@ -136,7 +133,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           label="User ID"
                           variant="outlined"
                           value={value}
@@ -161,7 +158,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           type="password"
                           label="Password"
                           variant="outlined"
@@ -182,7 +179,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           type="password"
                           label="Password Confirm"
                           variant="outlined"
@@ -201,7 +198,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           label="User Name"
                           variant="outlined"
                           value={value}
@@ -219,7 +216,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           label="Email"
                           variant="outlined"
                           value={value}
@@ -242,7 +239,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           label="Tel"
                           variant="outlined"
                           value={value}
@@ -266,7 +263,7 @@ export default function Signup() {
                       defaultValue=""
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
-                          className={classes.root} 
+                          className={classes.textField} 
                           label="Dental ID"
                           variant="outlined"
                           value={value}
@@ -291,8 +288,6 @@ export default function Signup() {
 
                   </form>  
 
-                </GridItem>
-              </GridContainer>
             </CardBody>
           
               
@@ -311,7 +306,7 @@ export default function Signup() {
             </CardFooter>
             
           </Card>
-        </GridItem>
-      </GridContainer>
+        </Grid>
+      </Grid>
     );
 }

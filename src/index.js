@@ -47,29 +47,38 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 // Data
-import Items from "api/Items.js";
+//import Items from "api/Items.js";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
-function reducer(state = Items.dashboard, action) {
 
-  if(action.type === "dashboardAdd") {
-    let dashCopy = [...state, action.dashboardAdd];
-    return dashCopy
-  }
+let test = {
+  a: "a"
+}
+
+function reducer(state = test, action) {
+
+  // if(action.type === "dashboardAdd") {
+  //   let dashCopy = [...state, action.dashboardAdd];
+  //   return dashCopy
+  // }
 
   return state;
 }
 
-const hist = createBrowserHistory();
+// const hist = createBrowserHistory();
+
+
+
+
 const store = createStore(reducer); 
 
 ReactDOM.render(
   <BrowserRouter>
  
     {/* <Switch> */}
+      {/* <Provider store={store}> */}
       <Provider store={store}>
-
         <App />
 
         {/* <Route path="/admin" component={Admin} />

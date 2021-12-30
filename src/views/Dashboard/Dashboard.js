@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 
 // @material-ui/core
-import { makeStyles, Card, CardHeader, CardContent } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
 // core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
+import Grid from '@material-ui/core/Grid';
+
+import Container from '@material-ui/core/Container';
+import Card from "components/Card/Card.js";
+import CardHeader from "components/Card/CardHeader.js";
+import CardBody from "components/Card/CardBody.js";
+import Typography from '@material-ui/core/Typography';
+// Material
+import TextField from "@material-ui/core/TextField";
+import CustomInput from "components/CustomInput/CustomInput.js";
+
 
 import DataTable from "components/Table/DataTable.js";
 
@@ -49,21 +58,95 @@ function Dashboard(props) {
 
 
   },[]);
-    
-  return (
-    <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <DataTable />
-        </GridItem>
-      </GridContainer>
+   
 
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
+
+
+
+
+
+
+
+
+  return (
+    <Container 
+      fixed
+      style={{maxWidth: "100%", background:"#E4E4E4"}}
+    >
+      <Grid 
+        container
+      >
+        <Grid item xs={12}>
+          <Card>
+          <CardHeader>
+            <Typography>추가,수정</Typography>
+          </CardHeader>
+          <CardBody>
+
+              {/*  <CustomInput
+                labelText="Company (disabled)"
+                id="company-disabled"
+                formControlProps={{
+                  fullWidth: false
+                }}
+                inputProps={{
+                  disabled: true
+                }}
+              />*/}
+           
           
-        </GridItem>
-      </GridContainer>
-    </div>
+            <CustomInput
+              labelText="거래처명"
+              id="username"
+              formControlProps={{
+                fullWidth: false
+              }}
+              style={{paddingLeft: "30px"}}
+
+            />
+          
+            <CustomInput
+              labelText="전화번호"
+              id="email-address"
+              formControlProps={{
+                fullWidth: false
+              }}
+              style={{marginLeft: "30px"}}
+            />
+        
+      
+            <CustomInput
+              labelText="환자명"
+              id="first-name"
+              formControlProps={{
+                fullWidth: false
+              }}
+            />
+          
+
+          </CardBody>
+        </Card>
+
+        </Grid>
+        <Grid 
+          item xs={12} 
+        >
+
+
+
+          <DataTable />
+
+
+
+
+        </Grid>
+        
+      </Grid>
+
+
+
+     
+    </Container>
   );
 }
 

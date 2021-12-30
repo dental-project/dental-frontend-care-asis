@@ -18,7 +18,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import axios from "axios";
 
 // api
-import dbAxios from "api/dbAxios.js";
+import dbAxios from "modules/dbAxios.js";
 
 // image
 import toothImg from "images/toothImg.svg";

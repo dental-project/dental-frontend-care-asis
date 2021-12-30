@@ -6,8 +6,8 @@
   "main": "dist/index.js",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
-    "@material-ui/data-grid": "^4.0.0-alpha.37",
     "@material-ui/icons": "^4.11.2",
+    "@toast-ui/react-grid": "^4.20.0",
     "axios": "^0.21.1",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
