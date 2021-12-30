@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
-import 'tui-grid/dist/tui-grid.css';
-import Grid from '@toast-ui/react-grid';
+import "tui-grid/dist/tui-grid.css";
+import Grid from "@toast-ui/react-grid";
+import RemoveButtonRenderer from "components/ToastGrid/Renderer";
+
+//import DataTable from "components/Table/DataTable.js";
 
 export default function Tuigrid() {
 
@@ -473,29 +476,50 @@ export default function Tuigrid() {
     { customerName: '마포한그루', phoneNumber: '010-1111-2222', patientName: '박진희', receiptDate: '2021-12-29',  completeDate: '2011-12-29', time: '12:00' }
   ];
   
+  const onRemoveButtonClicked = (rowIndex) => {
+    console.log(rowIndex);
+  };
+
   const columns = [
-    {name: 'customerName', header: '거래처명'},
-    {name: 'phoneNumber', header: '전화번호'},
-    {name: 'patientName', header: '환자명'},
-    {name: 'receiptDate', header: '접수일자'},
-    {name: 'completeDate', header: '완성일자'},
-    {name: 'time', header: '시간'}
+    { name: 'customerName', header: '거래처명' },
+    { name: 'phoneNumber', header: '전화번호' },
+    { name: 'patientName', header: '환자명' },
+    { name: 'receiptDate', header: '접수일자' },
+    { name: 'completeDate', header: '완성일자' },
+    { name: 'time', header: '시간'},
+    {
+      name: 'remove',
+      header: '삭제',
+      align: "center",
+      renderer: {
+        type: RemoveButtonRenderer,
+        options: {
+          onRemoveButtonClicked
+        }
+      }
+    }
+
+
+    // { 
+    //   name: 'remove', 
+    //   header: '삭제', 
+    //   renderer: {
+    //     type: 'removeRenderer',
+    //     options: {
+    //       onClickRemove
+    //     }
+    //   }
+    // }
   ];
 
 
    
 
-
-
-
-
   const check = (object) => {
-    console.log("rowKey : " + object.rowKey);
+    //console.log("rowKey : " + object.rowKey);
   }
 
   
-
-
 
   return(
     <div>
@@ -506,7 +530,7 @@ export default function Tuigrid() {
         bodyHeight={700}
         virtualScrolling={true}
         heightResizable={true}
-        rowHeaders={['checkbox','rowNum']}
+        rowHeaders={['rowNum']}
         onClick={check}
       />
     </div>
