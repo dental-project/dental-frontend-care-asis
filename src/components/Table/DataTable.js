@@ -498,28 +498,11 @@ export default function Tuigrid() {
         }
       }
     }
-
-
-    // { 
-    //   name: 'remove', 
-    //   header: '삭제', 
-    //   renderer: {
-    //     type: 'removeRenderer',
-    //     options: {
-    //       onClickRemove
-    //     }
-    //   }
-    // }
   ];
 
-
-   
-
   const check = (object) => {
-    //console.log("rowKey : " + object.rowKey);
+    //console.log(object);
   }
-
-  
 
   return(
     <div>
