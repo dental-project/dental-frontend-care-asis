@@ -11,13 +11,13 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Typography from '@material-ui/core/Typography';
+
+// tui Grid
+import DataTable from "components/Table/DataTable.js";
+
 // Material
 import TextField from "@material-ui/core/TextField";
 import CustomInput from "components/CustomInput/CustomInput.js";
-
-
-import DataTable from "components/Table/DataTable.js";
-
 
 // api
 import axios from 'axios';
@@ -40,11 +40,6 @@ function Dashboard(props) {
   const classes = useStyles();
   const [dashId, setDashId] = useState(0);
 
-
-
-
-
-
   useEffect( () => { 
     // axios.get('http://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=7ae87beac78e68f74c38e26c2f779f84')
     //   .then((result) => {
@@ -59,15 +54,6 @@ function Dashboard(props) {
 
   },[]);
    
-
-
-
-
-
-
-
-
-
   return (
     <Container 
       fixed
@@ -82,27 +68,12 @@ function Dashboard(props) {
             <Typography>추가,수정</Typography>
           </CardHeader>
           <CardBody>
-
-              {/*  <CustomInput
-                labelText="Company (disabled)"
-                id="company-disabled"
-                formControlProps={{
-                  fullWidth: false
-                }}
-                inputProps={{
-                  disabled: true
-                }}
-              />*/}
-           
-          
             <CustomInput
               labelText="거래처명"
               id="username"
               formControlProps={{
                 fullWidth: false
               }}
-              style={{paddingLeft: "30px"}}
-
             />
           
             <CustomInput
@@ -111,10 +82,8 @@ function Dashboard(props) {
               formControlProps={{
                 fullWidth: false
               }}
-              style={{marginLeft: "30px"}}
             />
         
-      
             <CustomInput
               labelText="환자명"
               id="first-name"
@@ -128,17 +97,8 @@ function Dashboard(props) {
         </Card>
 
         </Grid>
-        <Grid 
-          item xs={12} 
-        >
-
-
-
+        <Grid item xs={12} >
           <DataTable />
-
-
-
-
         </Grid>
         
       </Grid>
