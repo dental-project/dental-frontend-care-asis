@@ -77,17 +77,6 @@ export default function Signin() {
   const classes = useStyles();
   let history = useHistory();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/users/")
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(() => {
-        console.log("실패");
-      });
-  }, []);
-
   const [inputs, setInputs] = useState({
     userid: "",
     passwd: "",
@@ -103,25 +92,25 @@ export default function Signin() {
 
   const loginBtn = () => {
 
-    history.push("/admin")
+    console.log(inputs);
 
-    // axios
-    //   .post("http://localhost:8080/auth/login", {
-    //     user_id: inputs.userid,
-    //     password: inputs.passwd,
-    //   })
-    //   .then((result) => {
-    //     console.log(result);
-
-    //     result.data.returnCode === "200"
-    //       ? history.push("/admin")
-    //       : alert("로그인 정보가 일치하지 않습니다.");
-    //     return;
-    //   })
-    //   .catch((error) => {
-    //     alert(error);
-    //     throw new Error(error);
-    //   });
+    axios
+      .post("http://localhost:8080/api/user/login", {
+        user_id: inputs.userid,
+        password: inputs.passwd,
+      })
+      .then((result) => {
+        console.log(result);
+        //history.push("/admin")
+        // result.data.returnCode === "200"
+        //   ? history.push("/admin")
+        //   : alert("로그인 정보가 일치하지 않습니다.");
+        // return;
+      })
+      .catch((error) => {
+        console.log(error);
+        //throw new Error(error);
+      });
   };
 
   return (
