@@ -92,23 +92,25 @@ export default function Signin() {
 
   const loginBtn = () => {
 
-    axios
-      .post("http://localhost:8000/api/users/login/", {
-        userid: inputs.userid,
-        password: inputs.passwd,
-      })
-      .then((result) => {
-        console.log(result);
-        history.push("/admin")
-          result.status === 200
-          ? history.push("/admin")
-          : alert("로그인 정보가 일치하지 않습니다.");
-        return;
-      })
-      .catch((error) => {
-        console.log(error);
-        //throw new Error(error);
-      });
+    history.push("/admin")
+
+    // axios
+    //   .post("http://localhost:8000/api/users/login/", {
+    //     userid: inputs.userid,
+    //     password: inputs.passwd,
+    //   })
+    //   .then((result) => {
+    //     console.log(result);
+    //     history.push("/admin")
+    //       result.status === 200
+    //       ? history.push("/admin")
+    //       : alert("로그인 정보가 일치하지 않습니다.");
+    //     return;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     //throw new Error(error);
+    //   });
   };
 
   return (
