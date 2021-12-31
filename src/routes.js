@@ -17,7 +17,6 @@
 */
 // @material-ui/icons
 import DvrIcon from '@material-ui/icons/Dvr';
-import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 // import Person from "@material-ui/icons/Person";
 // import LibraryBooks from "@material-ui/icons/LibraryBooks";
 // import Notifications from "@material-ui/icons/Notifications";
@@ -26,7 +25,10 @@ import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 // core components/views for Admin layout
 
 import DashboardPage from "views/Dashboard/Dashboard.js";
- import UserProfile from "views/UserProfile/UserProfile.js";
+import PartRegister from "views/BasicManagement/PartRegister.js";
+import ItemRegister from "views/BasicManagement/ItemRegister.js";
+import DentalRegister from "views/BasicManagement/DentalRegister.js";
+import UserRegister from "views/Users/UserRegister.js";
 // import TableList from "views/TableList/TableList.js";
 // import Typography from "views/Typography/Typography.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -42,10 +44,32 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/user",
-    name: "User Profile",
+    path: "/partRegister",
+    name: "파트 등록",
     icon: DvrIcon,
-    component: UserProfile,
+    component: PartRegister,
+    layout: "/admin"
+  },
+  {
+    path: "/itemRegister",
+    name: "종목 등록",
+    icon: DvrIcon,
+    component: ItemRegister,
+    layout: "/admin"
+  },
+  {
+    path: "/dentalRegister",
+    name: "치과 등록",
+    icon: DvrIcon,
+    component: DentalRegister,
+    layout: "/admin"
+  },
+
+  {
+    path: "/userRegister",
+    name: "유저 회원가입",
+    icon: DvrIcon,
+    component: UserRegister,
     layout: "/admin"
   }
   // {

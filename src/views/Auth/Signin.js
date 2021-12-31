@@ -92,8 +92,6 @@ export default function Signin() {
 
   const loginBtn = () => {
 
-    console.log(inputs);
-
     axios
       .post("http://localhost:8000/api/users/login/", {
         userid: inputs.userid,
@@ -155,13 +153,13 @@ export default function Signin() {
             >
               Login
             </Button>
-            <Typography
+            {/* <Typography
               className={classes.customText}
               onClick={() => history.push("/auth/signup")}
             >
               Create Account
-            </Typography>
-            <Typography className={classes.customText2}>Forgot password?</Typography>
+            </Typography> */}
+            {/* <Typography className={classes.customText2}>Forgot password?</Typography> */}
           </CardBody>
         </Card>
       </Grid>

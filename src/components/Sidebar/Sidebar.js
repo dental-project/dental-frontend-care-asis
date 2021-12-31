@@ -12,8 +12,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-//import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.js";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
@@ -26,8 +24,6 @@ import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
-
-import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(styles);
 
@@ -50,102 +46,103 @@ export default function Sidebar(props) {
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
+
+
+  const pageClick = () => {
+   
+  }
+
+
+
+
   const { color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
     
-      return (
-          <div>
-          <NavLink
-            to={"/admin/dashboard/"}
-            //className={activePro + classes.item}
-            activeClassName="active"
-            key={0}
-          >
-            <ListItem button >
-              <ListItemIcon>
-                <SendIcon style={{ color: "#FFFFFF" }} />
-              </ListItemIcon>
-              <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
+      <NavLink
+        to={"/admin/dashboard"}
+        //className={activePro + classes.item}
+        activeClassName="active"
+        key={0}
+      >
+        <ListItem button >
+          <ListItemIcon>
+            <SendIcon style={{ color: "#FFFFFF" }} />
+          </ListItemIcon>
+          <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
+        </ListItem>
+      </NavLink>
+      
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>
+          <InboxIcon style={{ color: "#FFFFFF" }} />
+        </ListItemIcon>
+        <ListItemText primary="기초관리" style={{ color: "#FFFFFF" }} />
+        {open ? <ExpandLess style={{ color: "#FFFFFF" }} /> : <ExpandMore style={{ color: "#FFFFFF" }} />}
+      </ListItem>
+        
+      <NavLink
+        to={"/admin/partRegister"}
+        key={1}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="파트등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
-          </NavLink>
-         
-          <NavLink
-            to={"#"}
-            //className={activePro + classes.item}
-            activeClassName="active"
-            key={2}
-          >
-            <ListItem button onClick={handleClick}>
-              <ListItemIcon>
-                <InboxIcon style={{ color: "#FFFFFF" }} />
-              </ListItemIcon>
-              <ListItemText primary="기초관리" style={{ color: "#FFFFFF" }} />
-              {open ? <ExpandLess style={{ color: "#FFFFFF" }} /> : <ExpandMore style={{ color: "#FFFFFF" }} />}
+          </List>
+        </Collapse>
+      </NavLink> 
+
+      <NavLink
+        to={"/admin/itemRegister"}
+        key={2}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="종목등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
-            
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List to={"/admin/user/"} component="div" disablePadding style={{marginLeft: "20px"}}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon style={{ color: "#FFFFFF" }}>
-                    <StarBorder style={{ color: "#FFFFFF" }} />
-                  </ListItemIcon >
-                  <ListItemText primary="파트등록" style={{ color: "#FFFFFF" }} />
-                </ListItem>
-              </List>
-            </Collapse>
+          </List>
+        </Collapse>
+      </NavLink>
 
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding style={{marginLeft: "20px"}}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon style={{ color: "#FFFFFF" }}>
-                    <StarBorder style={{ color: "#FFFFFF" }} />
-                  </ListItemIcon >
-                  <ListItemText primary="종목등록" style={{ color: "#FFFFFF" }} />
-                </ListItem>
-              </List>
-            </Collapse>
-
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding style={{marginLeft: "20px"}}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon style={{ color: "#FFFFFF" }}>
-                    <StarBorder style={{ color: "#FFFFFF" }} />
-                  </ListItemIcon >
-                  <ListItemText primary="치과등록" style={{ color: "#FFFFFF" }} />
-                </ListItem>
-              </List>
-            </Collapse>
-
-          </NavLink>  
-
-{/*           
-
-            <ListItem button onClick={handleClick}>
-              <ListItemIcon>
-                <InboxIcon style={{ color: "#FFFFFF" }} />
-              </ListItemIcon>
-              <ListItemText primary="Inbox" />
-              {open ? <ExpandLess /> : <ExpandMore />}
+      <NavLink
+        to={"/admin/dentalRegister"}
+        key={3}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="치과등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
+          </List>
+        </Collapse>
+      </NavLink>
+       
+      <NavLink
+        to={"/admin/userRegister"}
+        //className={activePro + classes.item}
+        activeClassName="active"
+        key={4}
+      >
+        <ListItem button >
+          <ListItemIcon>
+            <SendIcon style={{ color: "#FFFFFF" }} />
+          </ListItemIcon>
+          <ListItemText primary="유저 회원가입" style={{ color: "#FFFFFF" }} />
+        </ListItem>
+      </NavLink>
 
-
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding style={{marginLeft: "20px"}}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon style={{ color: "#FFFFFF" }}>
-                    <StarBorder/>
-                  </ListItemIcon >
-                  <ListItemText primary="Starred" />
-                </ListItem>
-              </List>
-            </Collapse> */}
-
-
-            </div>
-
-        );
-    
     </List>
   );
   var brand = (
