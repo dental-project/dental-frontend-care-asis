@@ -19,8 +19,9 @@ import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import StarsIcon from '@material-ui/icons/Stars';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
@@ -67,7 +68,7 @@ export default function Sidebar(props) {
       >
         <ListItem button >
           <ListItemIcon>
-            <SendIcon style={{ color: "#FFFFFF" }} />
+            <AssignmentOutlinedIcon style={{ color: "#FFFFFF" }} />
           </ListItemIcon>
           <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
         </ListItem>
@@ -75,7 +76,7 @@ export default function Sidebar(props) {
       
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <InboxIcon style={{ color: "#FFFFFF" }} />
+          <StarsIcon style={{ color: "#FFFFFF" }} />
         </ListItemIcon>
         <ListItemText primary="기초관리" style={{ color: "#FFFFFF" }} />
         {open ? <ExpandLess style={{ color: "#FFFFFF" }} /> : <ExpandMore style={{ color: "#FFFFFF" }} />}
@@ -137,7 +138,7 @@ export default function Sidebar(props) {
       >
         <ListItem button >
           <ListItemIcon>
-            <SendIcon style={{ color: "#FFFFFF" }} />
+            <PersonAddIcon style={{ color: "#FFFFFF" }} />
           </ListItemIcon>
           <ListItemText primary="유저 회원가입" style={{ color: "#FFFFFF" }} />
         </ListItem>
