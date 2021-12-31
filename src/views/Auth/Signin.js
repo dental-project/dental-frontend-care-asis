@@ -95,8 +95,8 @@ export default function Signin() {
     console.log(inputs);
 
     axios
-      .post("http://localhost:8080/api/user/login", {
-        user_id: inputs.userid,
+      .post("http://localhost:8000/api/user/login/", {
+        userid: inputs.userid,
         password: inputs.passwd,
       })
       .then((result) => {
