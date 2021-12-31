@@ -26,7 +26,7 @@ import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 // core components/views for Admin layout
 
 import DashboardPage from "views/Dashboard/Dashboard.js";
-// import UserProfile from "views/UserProfile/UserProfile.js";
+ import UserProfile from "views/UserProfile/UserProfile.js";
 // import TableList from "views/TableList/TableList.js";
 // import Typography from "views/Typography/Typography.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -40,21 +40,14 @@ const dashboardRoutes = [
     icon: DvrIcon,
     component: DashboardPage,
     layout: "/admin"
+  },
+  {
+    path: "/user",
+    name: "User Profile",
+    icon: DvrIcon,
+    component: UserProfile,
+    layout: "/admin"
   }
-  // {
-  //   path: "/dashboardEdit",
-  //   name: "대시보드 편집",
-  //   icon: AddToQueueIcon,
-  //   component: DashboardEditPage,
-  //   layout: "/admin"
-  // }
-  // {
-  //   path: "/user",
-  //   name: "User Profile",
-  //   icon: Person,
-  //   component: UserProfile,
-  //   layout: "/admin"
-  // },
   // {
   //   path: "/table",
   //   name: "Table List",

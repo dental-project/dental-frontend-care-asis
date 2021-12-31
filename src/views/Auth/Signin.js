@@ -95,17 +95,17 @@ export default function Signin() {
     console.log(inputs);
 
     axios
-      .post("http://localhost:8000/api/user/login/", {
+      .post("http://localhost:8000/api/users/login/", {
         userid: inputs.userid,
         password: inputs.passwd,
       })
       .then((result) => {
         console.log(result);
-        //history.push("/admin")
-        // result.data.returnCode === "200"
-        //   ? history.push("/admin")
-        //   : alert("로그인 정보가 일치하지 않습니다.");
-        // return;
+        history.push("/admin")
+          result.status === 200
+          ? history.push("/admin")
+          : alert("로그인 정보가 일치하지 않습니다.");
+        return;
       })
       .catch((error) => {
         console.log(error);
