@@ -98,16 +98,12 @@ export default function Signin() {
         password: inputs.passwd,
       })
       .then((result) => {
-        console.log(result);
-        history.push("/admin")
-        //   result.status === 200
-        //   ? history.push("/admin")
-        //   : alert("로그인 정보가 일치하지 않습니다.");
-        return;
+        result.data.status === "SUCCESS"
+          ? history.push("/admin")
+          : alert(result.data.message);
       })
       .catch((error) => {
-        console.log(error);
-        //throw new Error(error);
+        throw new Error(error);
       });
   };
 
