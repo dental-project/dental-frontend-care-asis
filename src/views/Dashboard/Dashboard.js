@@ -11,6 +11,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Typography from '@material-ui/core/Typography';
+import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
 import ToastGrid from "components/Grid/ToastGrid.js";
@@ -22,7 +23,43 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 // api
 import axios from 'axios';
 
+// Form 양식
+import { useForm, Controller } from "react-hook-form";
+
+
+const useStyles = makeStyles((theme) => ({
+  textFieldDate: {
+    width: "49%"
+  },
+  textField: {
+    width: "23.5%",
+    margin: theme.spacing(1),
+    '& label.Mui-focused': {
+        color: '#00acc1',
+    },
+    '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+            borderColor: '#00acc1',
+        },
+    },
+  },
+  customText: {
+    color: "#26c6da",
+    fontWeight: "bold",
+    cursor:"pointer",
+    "&:hover": {
+      color: "#1993A8"
+    }
+  },
+  button: {
+    width: "49%"
+  }
+}));
+
 export default function Dashboard(props) {
+
+  const classes = useStyles();
+  const { watch,  handleSubmit, control } = useForm();
 
   useEffect( () => { 
     // axios.get('http://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=7ae87beac78e68f74c38e26c2f779f84')
@@ -36,6 +73,12 @@ export default function Dashboard(props) {
     //setTime(null);
   },[]);
    
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  const dateFormat = "YYYY-MM-DD";
+
   return (
     <Container 
       fixed
@@ -48,27 +91,124 @@ export default function Dashboard(props) {
               <Typography>추가,수정</Typography>
             </CardHeader>
             <CardBody>
-              <CustomInput
-                labelText="거래처명"
-                id="username"
-                formControlProps={{
-                  fullWidth: false
-                }}
-              />
-              <CustomInput
-                labelText="전화번호"
-                id="email-address"
-                formControlProps={{
-                  fullWidth: false
-                }}
-              />
-              <CustomInput
-                labelText="환자명"
-                id="first-name"
-                formControlProps={{
-                  fullWidth: false
-                }}
-              />
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+
+                <TextField
+                  id="date"
+                  label="접수일"
+                  type="date"
+                  defaultValue="2022-01-02"
+                  className={classes.textFieldDate}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+
+                <TextField
+                  id="date"
+                  label="완성일"
+                  type="date"
+                  defaultValue="2022-01-03"
+                  className={classes.textFieldDate}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+
+                <Controller
+                  name="customerName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="time"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      
+                    />
+                  )}
+                  rules={{ 
+                    required: 'time',
+                  }}
+                />
+                          
+                <Controller
+                  name="patientName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="치과"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: '치과명을 입력 해주세요.' }}
+                />  
+
+                <Controller
+                  name="patientName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="이름"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: '이름을 입력 해주세요.' }}
+                />
+
+
+                <Controller
+                  name="price"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="가공금액"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: '가공금액을 입력 해주세요.' }}
+                />
+                 <Button
+                  type="submit"
+                  className={classes.button} 
+                  color="info" 
+                  round
+                >
+                  추가
+                </Button>
+                <Button
+                  type="submit"
+                  className={classes.button} 
+                  color="info" 
+                  round
+                >
+                  수정
+                </Button>
+              </form>
+            
             </CardBody>
           </Card>
         </Grid>

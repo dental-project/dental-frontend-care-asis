@@ -1,5 +1,9 @@
 import React from "react";
 
+// Toast Grid
+import ToastGrid from "components/Grid/ToastGrid.js";
+
+
 export default function PartRegister() {
 
 
