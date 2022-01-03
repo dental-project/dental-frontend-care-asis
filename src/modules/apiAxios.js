@@ -5,7 +5,7 @@ export default function apiAxios(url, callback) {
         {
             url: '/api' + url,
             method: 'post',
-            baseURL: 'http://localhost:8080',
+            baseURL: 'http://localhost:8000',
             withCredentials: false,
         }
     ).then(function (response) {

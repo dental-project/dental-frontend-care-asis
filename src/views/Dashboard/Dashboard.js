@@ -28,11 +28,16 @@ import { useForm, Controller } from "react-hook-form";
 
 
 const useStyles = makeStyles((theme) => ({
+
+  grid: {
+    padding: theme.spacing(1)
+  },
+
   textFieldDate: {
-    width: "49%"
+    width: "100%"
   },
   textField: {
-    width: "23.5%",
+    width: "100%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -85,13 +90,14 @@ export default function Dashboard(props) {
       style={{maxWidth: "100%", background:"#E4E4E4"}}
     >
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={3} className={classes.grid}>
           <Card>
             <CardHeader>
               <Typography>추가,수정</Typography>
             </CardHeader>
             <CardBody>
 
+              
               <form onSubmit={handleSubmit(onSubmit)}>
 
                 <TextField
@@ -212,9 +218,18 @@ export default function Dashboard(props) {
             </CardBody>
           </Card>
         </Grid>
-        <Grid item xs={12} >
-          <ToastGrid />
+
+        <Grid item xs={9} className={classes.grid}>
+          <Card>
+            <CardHeader>
+              <Typography>추가,수정</Typography>
+            </CardHeader>
+            <CardBody>
+            <ToastGrid />
+              </CardBody>
+          </Card>
         </Grid>
+
       </Grid>
     </Container>
   );

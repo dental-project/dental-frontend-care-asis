@@ -92,19 +92,29 @@ export default function Signin() {
 
   const loginBtn = () => {
 
-    axios
-      .post("http://localhost:8000/api/users/login/", {
+    const url = "/users/login/";
+    const param = {
         userid: inputs.userid,
-        password: inputs.passwd,
-      })
-      .then((result) => {
-        result.data.status === "SUCCESS"
-          ? history.push("/admin")
-          : alert(result.data.message);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+        password: inputs.passwd
+    }
+
+  const result = dbAxios(url,param);
+         
+    
+
+    // axios
+    //   .post("http://localhost:8000/api/users/login/", {
+    //     userid: inputs.userid,
+    //     password: inputs.passwd,
+    //   })
+    //   .then((result) => {
+    //     result.data.status === "SUCCESS"
+    //       ? history.push("/admin")
+    //       : alert(result.data.message);
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error);
+    //   });
   };
 
   return (
