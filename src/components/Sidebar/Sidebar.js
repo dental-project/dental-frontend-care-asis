@@ -12,83 +12,137 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-//import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.js";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
+
+
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Collapse from '@material-ui/core/Collapse';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import StarsIcon from '@material-ui/icons/Stars';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles(styles);
 
 export default function Sidebar(props) {
   const classes = useStyles();
   let location = useLocation();
+
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+
+
+
+
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
+
   const { color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
-      {routes.map((prop, key) => {
-        var activePro = " ";
-        var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
-          activePro = classes.activePro + " ";
-          listItemClasses = classNames({
-            [" " + classes[color]]: true,
-          });
-        } else {
-          listItemClasses = classNames({
-            [" " + classes[color]]: activeRoute(prop.layout + prop.path),
-          });
-        }
-        const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path),
-        });
-        return (
-          <NavLink
-            to={prop.layout + prop.path}
-            className={activePro + classes.item}
-            activeClassName="active"
-            key={key}
-          >
-            <ListItem button className={classes.itemLink + listItemClasses}>
-              {typeof prop.icon === "string" ? (
-                <Icon
-                  className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive,
-                  })}
-                >
-                  {prop.icon}
-                </Icon>
-              ) : (
-                <prop.icon
-                  className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive,
-                  })}
-                />
-              )}
-              <ListItemText
-                primary={props.rtlActive ? prop.rtlName : prop.name}
-                className={classNames(classes.itemText, whiteFontClasses, {
-                  [classes.itemTextRTL]: props.rtlActive,
-                })}
-                disableTypography={true}
-              />
+    
+      <NavLink
+        to={"/admin/dashboard"}
+        //className={activePro + classes.item}
+        activeClassName="active"
+        key={0}
+      >
+        <ListItem button >
+          <ListItemIcon>
+            <AssignmentOutlinedIcon style={{ color: "#FFFFFF" }} />
+          </ListItemIcon>
+          <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
+        </ListItem>
+      </NavLink>
+      
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>
+          <StarsIcon style={{ color: "#FFFFFF" }} />
+        </ListItemIcon>
+        <ListItemText primary="기초관리" style={{ color: "#FFFFFF" }} />
+        {open ? <ExpandLess style={{ color: "#FFFFFF" }} /> : <ExpandMore style={{ color: "#FFFFFF" }} />}
+      </ListItem>
+        
+      <NavLink
+        to={"/admin/partRegister"}
+        key={1}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="파트등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
-          </NavLink>
-        );
-      })}
+          </List>
+        </Collapse>
+      </NavLink> 
+
+      <NavLink
+        to={"/admin/itemRegister"}
+        key={2}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="종목등록" style={{ color: "#FFFFFF" }} />
+            </ListItem>
+          </List>
+        </Collapse>
+      </NavLink>
+
+      <NavLink
+        to={"/admin/dentalRegister"}
+        key={3}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="치과등록" style={{ color: "#FFFFFF" }} />
+            </ListItem>
+          </List>
+        </Collapse>
+      </NavLink>
+       
+      <NavLink
+        to={"/admin/userRegister"}
+        //className={activePro + classes.item}
+        activeClassName="active"
+        key={4}
+      >
+        <ListItem button >
+          <ListItemIcon>
+            <PersonAddIcon style={{ color: "#FFFFFF" }} />
+          </ListItemIcon>
+          <ListItemText primary="유저 회원가입" style={{ color: "#FFFFFF" }} />
+        </ListItem>
+      </NavLink>
+
     </List>
   );
   var brand = (
     <div className={classes.logo}>
       <a
-        href="https://www.creative-tim.com?ref=mdr-sidebar"
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive,
         })}
-        target="_blank"
       >
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
@@ -116,7 +170,6 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            <AdminNavbarLinks />
             {links}
           </div>
           {image !== undefined ? (

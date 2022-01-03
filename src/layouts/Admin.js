@@ -85,7 +85,7 @@ export default function Admin({ ...rest }) {
         logoText={"Dental Clinic"}
         logo={toothImg}
         image={image}
-        //handleDrawerToggle={handleDrawerToggle}
+        handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={color}
         {...rest}

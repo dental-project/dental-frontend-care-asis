@@ -92,24 +92,28 @@ export default function Signin() {
 
   const loginBtn = () => {
 
-    console.log(inputs);
+    // const url = "/users/login/";
+    // const param = {
+    //     userid: inputs.userid,
+    //     password: inputs.passwd
+    // }
+
+    // const result = dbAxios(url,param);
+         
+    
 
     axios
-      .post("http://localhost:8000/api/user/login/", {
+      .post("http://localhost:8000/api/users/login/", {
         userid: inputs.userid,
         password: inputs.passwd,
       })
       .then((result) => {
-        console.log(result);
-        //history.push("/admin")
-        // result.data.returnCode === "200"
-        //   ? history.push("/admin")
-        //   : alert("로그인 정보가 일치하지 않습니다.");
-        // return;
+        result.data.status === "SUCCESS"
+          ? history.push("/admin")
+          : alert(result.data.message);
       })
       .catch((error) => {
-        console.log(error);
-        //throw new Error(error);
+        throw new Error(error);
       });
   };
 
@@ -155,13 +159,13 @@ export default function Signin() {
             >
               Login
             </Button>
-            <Typography
+            {/* <Typography
               className={classes.customText}
               onClick={() => history.push("/auth/signup")}
             >
               Create Account
-            </Typography>
-            <Typography className={classes.customText2}>Forgot password?</Typography>
+            </Typography> */}
+            {/* <Typography className={classes.customText2}>Forgot password?</Typography> */}
           </CardBody>
         </Card>
       </Grid>

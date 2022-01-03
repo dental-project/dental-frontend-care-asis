@@ -16,8 +16,6 @@ const useStyles = makeStyles(styles);
 
 export default function CustomInput(props) {
 
-  console.log(props);
-
   const classes = useStyles();
   const {
     formControlProps,
