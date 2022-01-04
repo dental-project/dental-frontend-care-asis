@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
-import ToastGrid from "components/Grid/ToastGrid.js";
+import ToastGrid from "components/ToastGrid/ToastGrid.js";
 
 // Material
 import TextField from "@material-ui/core/TextField";

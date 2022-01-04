@@ -11,6 +11,6 @@ export default function apiAxios(url, callback) {
         }
     ).then(function (response) {
         console.log(response);
-        callback(response);
+      
     });
 }

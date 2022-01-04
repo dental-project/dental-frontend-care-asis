@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
-import RemoveButtonRenderer from "components/ToastGrid/Renderer";
+import RemoveButtonRenderer from "components/ToastGridRenderer/Renderer.js";
 
 //import DataTable from "components/Table/DataTable.js";
 
-export default function Tuigrid() {
+export default function ToastGrid() {
 
   const data = [
     { customerName: '약수 연세치과', phoneNumber: '010-1111-2222', patientName: '최진실', receiptDate: '2021-12-29',  completeDate: '2011-12-29', time: '12:00', price: "86,000" },

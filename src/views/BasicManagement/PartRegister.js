@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
@@ -13,13 +13,16 @@ import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
-import PartGrid from "components/Grid/PartGrid.js";
+import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
 // Material
 import TextField from "@material-ui/core/TextField";
 
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
+
+// api
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -58,14 +61,28 @@ export default function PartRegister() {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
+    const [partData, setPartData] = useState([]);
+    const [columns, setColumns] = useState([
+        {name: "part_no", header: "CodeNo", align: "center"},
+        {name: "part_name", header: "파트명"}
+    ]);
+
+    useEffect( () => {
+        axios
+          .get("http://localhost:8000/api/code/part/")
+          .then((result) => {
+            
+            setPartData(result.data);
+         
+        })
+          .catch((error) => {
+            throw new Error(error);
+          });
+    }, []);
 
     const onSubmit = (data) => {
-        console.log(data);
+        
     };
-
-
-
-   
 
     return (
         <Container 
@@ -136,7 +153,10 @@ export default function PartRegister() {
                         <Typography>추가,수정</Typography>
                     </CardHeader>
                     <CardBody>
-                        <PartGrid />
+                        <BasicGrid 
+                            data={partData}
+                            columns={columns}
+                        />
                     </CardBody>
                 </Card>
                 </Grid>
