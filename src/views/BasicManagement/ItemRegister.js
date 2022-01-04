@@ -63,10 +63,10 @@ export default function ItemRegister() {
     const { watch,  handleSubmit, control } = useForm();
     const [itemData, setItemData] = useState([]);
     const [columns, setColumns] = useState([
-        {name: "part_no", header: "CodeNo", align: "center"},
-        {name: "part_name", header: "기공명"},
+        {name: "item_name", header: "CodeNo", align: "center"},
+        {name: "item_name", header: "기공명"},
         {name: "part_name", header: "Part"},
-        {name: "part_name", header: "Price1"},
+        {name: "price", header: "Price1"},
         {name: "part_name", header: "Price2"},
         {name: "part_name", header: "Price3"},
         {name: "part_name", header: "Price4"},
@@ -75,10 +75,9 @@ export default function ItemRegister() {
 
     useEffect( () => {
         axios
-          .get("http://localhost:8000/api/code//code/businessSector//")
+          .get("http://localhost:8000/api/code/item/")
           .then((result) => {
             setItemData(result.data);
-            console.log(result);
           })
           .catch((error) => {
             throw new Error(error);

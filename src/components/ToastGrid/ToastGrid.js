@@ -100,22 +100,15 @@ export default function ToastGrid() {
     }
   ];
   
-  const check = (object) => {
-    //console.log(object);
-  }
-
   return(
-    <div>
-      <Grid
-        data={data}
-        columns={columns}
-        rowHeight={20}
-        bodyHeight={700}
-        virtualScrolling={true}
-        heightResizable={true}
-        rowHeaders={['rowNum']}
-        onClick={check}
-      />
-    </div>
+    <Grid
+      data={data}
+      columns={columns}
+      rowHeight={20}
+      bodyHeight={700}
+      virtualScrolling={true}
+      heightResizable={true}
+      rowHeaders={['rowNum']}
+    />
   );
 }

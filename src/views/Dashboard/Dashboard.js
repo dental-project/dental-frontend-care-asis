@@ -216,8 +216,8 @@ export default function Dashboard(props) {
               <Typography>추가,수정</Typography>
             </CardHeader>
             <CardBody>
-            <ToastGrid />
-              </CardBody>
+              <ToastGrid />
+            </CardBody>
           </Card>
         </Grid>
 
