@@ -63,13 +63,13 @@ export default function DentalRegister() {
     const { watch,  handleSubmit, control } = useForm();
     const [dentalData, setDentalData] = useState([]);
     const [columns, setColumns] = useState([
-        {name: "part_no", header: "업소번호", align: "center"},
-        {name: "part_name", header: "거래처명"},
-        {name: "part_name", header: "대표자"},
+        {name: "vendor_id", header: "업소번호", align: "center"},
+        {name: "vendor_name", header: "거래처명"},
+        {name: "ceo", header: "대표자"},
         {name: "part_name", header: "*"},
         {name: "part_name", header: "등급"},
-        {name: "part_name", header: "전화번호"},
-        {name: "part_name", header: "사업자등록번호"},
+        {name: "070-4147-6452", header: "전화번호"},
+        {name: "486-91-00177", header: "사업자등록번호"},
         {name: "part_name", header: "계산서"},
         {name: "part_name", header: "명세서"},
         {name: "part_name", header: "계산%"}
@@ -77,7 +77,7 @@ export default function DentalRegister() {
 
     useEffect( () => {
         axios
-          .get("http://localhost:8000/api/code/item/")
+          .get("http://localhost:8000/api/vendor/")
           .then((result) => {
             setDentalData(result.data);
             console.log(result);
