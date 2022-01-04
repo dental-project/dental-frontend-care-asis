@@ -11,8 +11,7 @@ import CardBody from "components/Card/CardBody.js";
 import Typography from '@material-ui/core/Typography';
 // Material
 import TextField from "@material-ui/core/TextField";
-import PermIdentity from "@material-ui/icons/PermIdentity";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+
 
 // Axios
 import axios from "axios";
@@ -140,7 +139,6 @@ export default function Signin() {
               name="userid"
               label="User ID"
               variant="outlined"
-              icon={<PermIdentity />}
               onChange={handleChange}
             />
             <TextField
@@ -148,7 +146,6 @@ export default function Signin() {
               name="passwd"
               label="Password"
               variant="outlined"
-              icon={<LockOutlinedIcon />}
               onChange={handleChange}
             />
             <Button

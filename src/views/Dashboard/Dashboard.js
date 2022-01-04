@@ -86,7 +86,7 @@ export default function Dashboard(props) {
   return (
     <Container 
       fixed
-      style={{maxWidth: "100%", background:"#E4E4E4"}}
+      style={{maxWidth: "100%", background:"#1E1F28"}}
     >
       <Grid container>
         <Grid item xs={3} className={classes.grid}>
