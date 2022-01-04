@@ -159,6 +159,7 @@ export default function ItemRegister() {
                             <BasicGrid 
                                 data={itemData}
                                 columns={columns}
+                                type={"item"}
                             />
                         </CardBody>
                     </Card>

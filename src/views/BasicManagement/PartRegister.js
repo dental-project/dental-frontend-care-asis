@@ -61,6 +61,10 @@ export default function PartRegister() {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
+
+    const [partNo, setPartNo] = useState("");
+    const [partName, setPartName] = useState("");
+
     const [partData, setPartData] = useState([]);
     const [columns, setColumns] = useState([
         {name: "part_no", header: "CodeNo", align: "center"},
@@ -84,6 +88,12 @@ export default function PartRegister() {
         
     };
 
+    const highFuc = (params) => {
+        setPartNo(params.partNo);
+        setPartName(params.partName);
+    }
+
+
     return (
         <Container 
             fixed
@@ -106,7 +116,7 @@ export default function PartRegister() {
                                             className={classes.textField} 
                                             label="번호"
                                             variant="outlined"
-                                            value={value}
+                                            value={partNo}
                                             onChange={onChange}
                                             error={!!error}
                                             helperText={error ? error.message : null}
@@ -125,7 +135,7 @@ export default function PartRegister() {
                                             className={classes.textField} 
                                             label="파트명"
                                             variant="outlined"
-                                            value={value}
+                                            value={partName}
                                             onChange={onChange}
                                             error={!!error}
                                             helperText={error ? error.message : null}
@@ -156,6 +166,8 @@ export default function PartRegister() {
                         <BasicGrid 
                             data={partData}
                             columns={columns}
+                            type={"part"}
+                            hoc={highFuc}
                         />
                     </CardBody>
                 </Card>

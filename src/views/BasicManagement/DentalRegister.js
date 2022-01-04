@@ -68,8 +68,8 @@ export default function DentalRegister() {
         {name: "ceo", header: "대표자"},
         {name: "part_name", header: "*"},
         {name: "part_name", header: "등급"},
-        {name: "070-4147-6452", header: "전화번호"},
-        {name: "486-91-00177", header: "사업자등록번호"},
+        {name: "tel", header: "전화번호"},
+        {name: "business_number", header: "사업자등록번호"},
         {name: "part_name", header: "계산서"},
         {name: "part_name", header: "명세서"},
         {name: "part_name", header: "계산%"}
@@ -80,7 +80,6 @@ export default function DentalRegister() {
           .get("http://localhost:8000/api/vendor/")
           .then((result) => {
             setDentalData(result.data);
-            console.log(result);
           })
           .catch((error) => {
             throw new Error(error);
@@ -163,6 +162,7 @@ export default function DentalRegister() {
                         <BasicGrid 
                             data={dentalData}
                             columns={columns}
+                            type={"dental"}
                         />
                     </CardBody>
                 </Card>
