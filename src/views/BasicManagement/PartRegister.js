@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     grid: {
       padding: theme.spacing(1)
     },
-  
     textFieldDate: {
       width: "100%"
     },
@@ -77,8 +76,8 @@ export default function PartRegister() {
     };
 
     // input update
-    const [partNo, setPartNo] = useState("");
-    const [partName, setPartName] = useState("");
+    //const [partNo, setPartNo] = useState("");
+    //const [partName, setPartName] = useState("");
 
     const [partData, setPartData] = useState([]);
     const [columns, setColumns] = useState([
@@ -90,16 +89,58 @@ export default function PartRegister() {
         axios
           .get("http://localhost:8000/api/code/part/")
           .then((result) => {
-            
-            setPartData(result.data);
-         
-        })
+             setPartData(result.data);
+            })
           .catch((error) => {
             throw new Error(error);
           });
     }, []);
 
 
+    const save = () => {
+
+        // 추가
+        // axios
+        //     .post("http://localhost:8000/api/code/part/", {
+        //         part_no: inputs.partNo,
+        //         part_name: inputs.partName
+        //     })
+        //     .then((result) => {
+            
+               
+        //     console.log(result);
+        
+        // })
+        //     .catch((error) => {
+        //     throw new Error(error);
+        // });
+
+        // 수정
+
+
+        let parmas = {
+            part_no: inputs.partNo,
+            part_name: inputs.partName
+        }
+
+        axios
+        .patch("http://localhost:8000/api/code/part/11", 
+            parmas,
+            //headers: {'content-type': 'application/json'},
+        )
+        .then((result) => {
+        
+           
+        console.log(result);
+    
+    })
+        .catch((error) => {
+        throw new Error(error);
+    });
+
+
+        console.log("adsasdasd");
+    }
 
 
 
@@ -120,17 +161,17 @@ export default function PartRegister() {
 
 
 
-    const highFuc = (params) => {
-        setPartNo(params.partNo);
-        setPartName(params.partName);
-    }
+    // const highFuc = (params) => {
+    //     setPartNo(params.partNo);
+    //     setPartName(params.partName);
+    // }
 
 
     return (
         
         <Grid container>
             <Grid item xs={3} className={classes.grid}>
-                <Card style={{background: '#1E1F28'}}>
+                <Card>
                     <CardHeader>
                         <Typography>추가,수정</Typography>
                     </CardHeader>
@@ -140,7 +181,7 @@ export default function PartRegister() {
                             name="partNo"
                             label="CodeNo"
                             variant="outlined"
-                            value={partNo}
+                            //value={partNo}
                             onChange={handleChange}
                         />
                         <TextField
@@ -148,7 +189,7 @@ export default function PartRegister() {
                             name="partName"
                             label="파트명"
                             variant="outlined"
-                            value={partName}
+                            //value={partName}
                             onChange={handleChange}
                         />
                             {/* <Controller
@@ -192,6 +233,7 @@ export default function PartRegister() {
                                 className={classes.button} 
                                 color="info" 
                                 round
+                                onClick={() => save()}
                             >
                                 저장
                             </Button>
@@ -201,7 +243,7 @@ export default function PartRegister() {
             </Grid>
 
             <Grid item xs={9} className={classes.grid}>
-                <Card style={{background: '#1E1F28'}}>
+                <Card>
                     <CardHeader>
                         <Typography>추가,수정</Typography>
                     </CardHeader>
@@ -210,7 +252,7 @@ export default function PartRegister() {
                             data={partData}
                             columns={columns}
                             type={"part"}
-                            hoc={highFuc}
+                            //hoc={highFuc}
                         />
                     </CardBody>
                 </Card>
