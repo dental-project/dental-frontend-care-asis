@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -27,23 +28,58 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
- 
+  button: {
+    width: "100%"
+  }
 }));
 
 function DashModal(props) {
 
+  const classes = useStyles();
+
+
+  const top100Films = [
+    { title: 'CodeNo: 1, Removale App', part_no: 1 },
+    { title: 'CodeNo: 2, Fixed App', part_no: 2 },
+    { title: 'CodeNo: 3, Functional App', part_no: 3 },
+    { title: 'CodeNo: 4, Splints', part_no: 4 },
+    { title: 'CodeNo: 5, Diagnostic Study Models', part_no: 5 },
+
+    { title: 'CodeNo: 6, Tooth Positioner', part_no: 6 },
+    { title: 'CodeNo: 7, Indirect Bonding System', part_no: 7 },
+    { title: 'CodeNo: 8, Distalizing', part_no: 8 },
+    { title: 'CodeNo: 9, Sample', part_no: 9 }
+  ]
 
   const DashAdd = () => (
     <>
       <DialogContent>
         <DialogContentText>
-          사용자가 원하는 대시보드 명을 입력하고 추가 해주세요.
+          파트 등록
         </DialogContentText>
+        {/* <TextField
+          type="text"
+          margin="dense"
+          name="dashboardName"
+          label="번호"
+          variant="outlined"
+          autoFocus
+          fullWidth
+          onChange={handleDashboardInfo}
+        /> */}
+        <Autocomplete
+          id="combo-box-demo"
+          options={top100Films}
+          getOptionLabel={(option) => option.title}
+          style={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+        />
+
         <TextField
           type="text"
           margin="dense"
           name="dashboardName"
-          label="대시보드 명 입력"
+          label="파트명"
           variant="outlined"
           autoFocus
           fullWidth
@@ -92,30 +128,30 @@ function DashModal(props) {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // 페
+    // e.preventDefault(); // 페
  
-    if(props.dashModalType === "대시보드 추가") {
-      props.dispatch({ 
-        type: 'dashboardAdd', 
-        dashboardAdd: {
-          id:inputs.dashboardName, 
-          dashname: inputs.dashboardName,
-          web: [],
-          tablet: [],
-          mobile: []
-        }
-      });
-      props.setDashId(props.dashboard.length);
-      alert("추가가 완료 되었습니다."); 
-    }
-    props.close();
+    // if(props.dashModalType === "대시보드 추가") {
+    //   props.dispatch({ 
+    //     type: 'dashboardAdd', 
+    //     dashboardAdd: {
+    //       id:inputs.dashboardName, 
+    //       dashname: inputs.dashboardName,
+    //       web: [],
+    //       tablet: [],
+    //       mobile: []
+    //     }
+    //   });
+    //   props.setDashId(props.dashboard.length);
+    //   alert("추가가 완료 되었습니다."); 
+    // }
+    // props.close();
   }
 
   return (
     <Dialog open={props.open} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.dashModalType}</DialogTitle>
         {
-          props.dashModalType === "대시보드 추가" 
+          props.dashModalType === "추가" 
           ? <DashAdd />
           : <DashDelete />
         }

@@ -22,7 +22,13 @@ import TextField from "@material-ui/core/TextField";
 import { useForm, Controller } from "react-hook-form";
 
 // api
-import axios from 'axios';
+import axios from "axios";
+
+//
+import apiAxios from "modules/apiAxios.js";
+
+import DashModal from "components/Modal/DashModal.js"
+import { SettingsInputComponent } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -67,13 +73,13 @@ export default function PartRegister() {
         partName: "",
     });
 
-    const handleChange = (e) => {
-    const { value, name } = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value,
-         });
-    };
+    // const handleChange = (e) => {
+    // const { value, name } = e.target;
+    //     setInputs({
+    //         ...inputs,
+    //         [name]: value,
+    //      });
+    // };
 
     // input update
     //const [partNo, setPartNo] = useState("");
@@ -97,50 +103,59 @@ export default function PartRegister() {
     }, []);
 
 
-    const save = () => {
+    // const save = () => {
 
-        // 추가
-        // axios
-        //     .post("http://localhost:8000/api/code/part/", {
-        //         part_no: inputs.partNo,
-        //         part_name: inputs.partName
-        //     })
-        //     .then((result) => {
+    //     // 추가
+    //     // axios
+    //     //     .post("http://localhost:8000/api/code/part/", {
+    //     //         part_no: inputs.partNo,
+    //     //         part_name: inputs.partName
+    //     //     })
+    //     //     .then((result) => {
             
                
-        //     console.log(result);
+    //     //     console.log(result);
         
-        // })
-        //     .catch((error) => {
-        //     throw new Error(error);
-        // });
+    //     // })
+    //     //     .catch((error) => {
+    //     //     throw new Error(error);
+    //     // });
 
-        // 수정
+    //     // 수정
+    //     let parmas = {
+    //         part_no: inputs.partNo,
+    //         part_name: inputs.partName
+    //     }
+
+    //     axios
+    //     .patch("http://localhost:8000/api/code/part/11", 
+    //         {
+    //             // headers: {
+    //             //     'Content-Type': 'application/json'
+    //             //     }
+    //             //headers: {"Access-Control-Allow-Origin": "*"},
+    //             header: {"Content-Type": "application/json"},
+    //             header: {"Accept": "application/json"},
+    //             // headers: {"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"},
+    //             // headers: {"Access-Control-Max-Age": "86400"},
+    //         },
+    //         {
+    //             id: 11,
+    //             part_no: inputs.partNo,
+    //             part_name: inputs.partName    
+    //         }
+       
+    //     )
+    //     .then((result) => {
+    //         console.log(result);
+    //     })
+    //     .catch((error) => {
+    //         throw new Error(error);
+    //     });
 
 
-        let parmas = {
-            part_no: inputs.partNo,
-            part_name: inputs.partName
-        }
-
-        axios
-        .patch("http://localhost:8000/api/code/part/11", 
-            parmas,
-            //headers: {'content-type': 'application/json'},
-        )
-        .then((result) => {
-        
-           
-        console.log(result);
-    
-    })
-        .catch((error) => {
-        throw new Error(error);
-    });
-
-
-        console.log("adsasdasd");
-    }
+    //     console.log("adsasdasd");
+    // }
 
 
 
@@ -157,20 +172,33 @@ export default function PartRegister() {
     //     });
     //   };
 
-
-
-
-
     // const highFuc = (params) => {
     //     setPartNo(params.partNo);
     //     setPartName(params.partName);
     // }
 
+    // 모달
+    const [openDashAddModal, setOpenDashModal] = useState(false);
+    const [dashModalType, setDashModalType] = useState();
+    const handleDashModalOpen = () => {
+    setOpenDashModal(true);
+    };
+    const handleDashAddModalClose = () => {
+    setOpenDashModal(false);
+    };
+
+    const settingOpen = (e) => {
+        if(e.target.innerText === "추가") {
+            setDashModalType(e.target.innerText);
+            handleDashModalOpen();
+          }
+    }
+
 
     return (
         
         <Grid container>
-            <Grid item xs={3} className={classes.grid}>
+            {/* <Grid item xs={3} className={classes.grid}>
                 <Card>
                     <CardHeader>
                         <Typography>추가,수정</Typography>
@@ -192,42 +220,7 @@ export default function PartRegister() {
                             //value={partName}
                             onChange={handleChange}
                         />
-                            {/* <Controller
-                                name="codeNumber"
-                                control={control}
-                                defaultValue=""
-                                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                    <TextField
-                                        className={classes.textField} 
-                                        label="번호"
-                                        variant="outlined"
-                                        value={partNo}
-                                        onChange={onChange}
-                                        error={!!error}
-                                        helperText={error ? error.message : null}
-                                    />
-                                )}
-                                rules={{ 
-                                    required: '번호를 입력 해주세요.',
-                                }}
-                            />
-                            <Controller
-                                name="partName"
-                                control={control}
-                                defaultValue=""
-                                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                    <TextField
-                                        className={classes.textField} 
-                                        label="파트명"
-                                        variant="outlined"
-                                        value={partName}
-                                        onChange={onChange}
-                                        error={!!error}
-                                        helperText={error ? error.message : null}
-                                    />
-                                )}
-                                rules={{ required: '파트명을 입력 해주세요.' }}
-                            />   */}
+                            
                             <Button
                                 type="submit"
                                 className={classes.button} 
@@ -240,12 +233,21 @@ export default function PartRegister() {
                         
                     </CardBody>
                 </Card>
-            </Grid>
+            </Grid> */}
 
-            <Grid item xs={9} className={classes.grid}>
+            <Grid item xs={12} className={classes.grid}>
                 <Card>
                     <CardHeader>
                         <Typography>추가,수정</Typography>
+                        <Button
+                            type="submit"
+                            className={classes.button} 
+                            color="info" 
+                            round
+                            onClick={(e) => settingOpen(e)}
+                        >
+                            추가
+                        </Button>
                     </CardHeader>
                     <CardBody>
                         <BasicGrid 
@@ -257,6 +259,13 @@ export default function PartRegister() {
                     </CardBody>
                 </Card>
             </Grid>
+
+            <DashModal
+               
+                dashModalType={dashModalType}
+                open={openDashAddModal}
+                close={handleDashAddModalClose}
+            />
 
         </Grid>
     );

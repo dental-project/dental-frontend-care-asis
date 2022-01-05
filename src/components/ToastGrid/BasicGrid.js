@@ -19,26 +19,23 @@ const BasicGrid = ({
 
     let rowKey = object.rowKey;
     
-    let a = "";
-    let b = "";
+    //let a = "";
+    //let b = "";
 
-    if (type === "part") {
+    // if (type === "part") {
 
-      a = object.instance.store.data.rawData[rowKey].part_no;
-      b = object.instance.store.data.rawData[rowKey].part_name;
+    //   a = object.instance.store.data.rawData[rowKey].part_no;
+    //   b = object.instance.store.data.rawData[rowKey].part_name;
 
-      let parmas = {
-        partNo: a,
-        partName: b
-      }
+    //   let parmas = {
+    //     partNo: a,
+    //     partName: b
+    //   }
       
-      hoc(parmas);
+    //   hoc(parmas);
 
-      //setPartNo(a)
+    // }
 
-      //console.log(a);
-      //console.log(b);
-    }
     // if(type === "item") {
     //   console.log(object.instance.store.data.rawData[rowKey].item_no);
     //   console.log(object.instance.store.data.rawData[rowKey].item_name);
