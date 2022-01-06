@@ -102,6 +102,7 @@ const BasicGrid = ({
     <Grid
       data={data}
       columns={columns}
+      //rowHeaders={['rowNum']}
       rowHeight={20}
       bodyHeight={500}
       virtualScrolling={true}

@@ -63,20 +63,27 @@ export default function ItemRegister() {
     const { watch,  handleSubmit, control } = useForm();
     const [itemData, setItemData] = useState([]);
     const [columns, setColumns] = useState([
-        {name: "item_name", header: "CodeNo", align: "center"},
-        {name: "item_name", header: "기공명"},
-        {name: "part_name", header: "Part"},
-        {name: "price", header: "Price1"},
-        {name: "part_name", header: "Price2"},
-        {name: "part_name", header: "Price3"},
-        {name: "part_name", header: "Price4"},
-        {name: "part_name", header: "Price5"},
+        {name: "item_name", header: "기공명", align: "center"},
+        {name: "part_seq_id", header: "Part", align: "center"}
+     
     ]);
+
+    // const arr = [];
+
+    // props.data.map( (data) => arr.push({ title: data.part_name} ));
+  
+    // console.log(arr);
+  
+    
+  
+
+
 
     useEffect( () => {
         axios
           .get("http://localhost:8000/api/code/item/")
           .then((result) => {
+              console.log(result);
             setItemData(result.data);
           })
           .catch((error) => {

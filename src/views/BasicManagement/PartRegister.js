@@ -87,8 +87,7 @@ export default function PartRegister() {
 
     const [partData, setPartData] = useState([]);
     const [columns, setColumns] = useState([
-        {name: "part_no", header: "CodeNo", align: "center"},
-        {name: "part_name", header: "파트명"}
+        {name: "part_name", header: "파트명", align: "center"}
     ]);
 
     useEffect( () => {
@@ -178,63 +177,25 @@ export default function PartRegister() {
     // }
 
     // 모달
-    const [openDashAddModal, setOpenDashModal] = useState(false);
-    const [dashModalType, setDashModalType] = useState();
-    const handleDashModalOpen = () => {
-    setOpenDashModal(true);
+    const [openPartAddModal, setOpenPartModal] = useState(false);
+    const [partModalType, setPartModalType] = useState();
+    const handlePartModalOpen = () => {
+      setOpenPartModal(true);
     };
-    const handleDashAddModalClose = () => {
-    setOpenDashModal(false);
+    const handlePartAddModalClose = () => {
+      setOpenPartModal(false);
     };
 
-    const settingOpen = (e) => {
+    const partModalOpen = (e) => {
         if(e.target.innerText === "추가") {
-            setDashModalType(e.target.innerText);
-            handleDashModalOpen();
+            setPartModalType(e.target.innerText);
+            handlePartModalOpen();
           }
     }
 
-
     return (
-        
+      <>
         <Grid container>
-            {/* <Grid item xs={3} className={classes.grid}>
-                <Card>
-                    <CardHeader>
-                        <Typography>추가,수정</Typography>
-                    </CardHeader>
-                    <CardBody>
-                        <TextField
-                            className={classes.textField}
-                            name="partNo"
-                            label="CodeNo"
-                            variant="outlined"
-                            //value={partNo}
-                            onChange={handleChange}
-                        />
-                        <TextField
-                            className={classes.textField}
-                            name="partName"
-                            label="파트명"
-                            variant="outlined"
-                            //value={partName}
-                            onChange={handleChange}
-                        />
-                            
-                            <Button
-                                type="submit"
-                                className={classes.button} 
-                                color="info" 
-                                round
-                                onClick={() => save()}
-                            >
-                                저장
-                            </Button>
-                        
-                    </CardBody>
-                </Card>
-            </Grid> */}
-
             <Grid item xs={12} className={classes.grid}>
                 <Card>
                     <CardHeader>
@@ -244,7 +205,7 @@ export default function PartRegister() {
                             className={classes.button} 
                             color="info" 
                             round
-                            onClick={(e) => settingOpen(e)}
+                            onClick={(e) => partModalOpen(e)}
                         >
                             추가
                         </Button>
@@ -260,14 +221,16 @@ export default function PartRegister() {
                 </Card>
             </Grid>
 
-            <DashModal
-               
-                dashModalType={dashModalType}
-                open={openDashAddModal}
-                close={handleDashAddModalClose}
-            />
+            
 
         </Grid>
+
+<DashModal               
+partModalType={partModalType}
+open={openPartAddModal}
+close={handlePartAddModalClose}
+/>
+</>
     );
 
 }

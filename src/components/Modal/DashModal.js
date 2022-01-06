@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useState } from 'react';
+//import Button from '@material-ui/core/Button';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
-
+import Button from "components/CustomButtons/Button.js";
 // redux
 import { connect } from 'react-redux';
 
+import { useForm, Controller } from "react-hook-form";
+
+// api
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-
+  textField: {
+    width: "95%",
+    margin: theme.spacing(1),
+    '& label.Mui-focused': {
+        color: '#00acc1',
+    },
+    '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+            borderColor: '#00acc1',
+        },
+    },
+  },
   inputs: {
     '& label.Mui-focused': {
       color: '#26c6da',
@@ -35,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function DashModal(props) {
+export default function DashModal(props) {
 
   const classes = useStyles();
 
@@ -44,20 +59,39 @@ function DashModal(props) {
     stringify: (option) => option.title,
   });
   
-  const top100Films = [
-    { title: 'Removale App' },
-    { title: 'Fixed App' },
-    { title: 'Functional App' },
-    { title: 'Splints' },
-    { title: 'Diagnostic Study Models' },
-    { title: "Tooth Positioner" },
-    { title: "Indirect Bonding System" },
-    { title: "Distalizing" },
-    { title: "Sample" },
-    { title: "Test1" },
-    { title: "Test2" },
-    { title: "Test3" }
-  ];
+
+
+
+
+
+  const { watch,  handleSubmit, control } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+
+    axios
+    .post("http://localhost:8000/api/code/part/",{
+      part_name: data.partName
+    })
+    .then((result) => {
+       console.log(result);
+      })
+    .catch((error) => {
+      throw new Error(error);
+    });
+
+//  axios
+//     .patch("http://localhost:8000/api/code/part/12/",{
+//       part_name: data.partName
+//     })
+//     .then((result) => {
+//        console.log(result);
+//       })
+//     .catch((error) => {
+//       throw new Error(error);
+//     });
+
+  }
+
 
   const DashAdd = () => (
     <>
@@ -65,30 +99,67 @@ function DashModal(props) {
         <DialogContentText>
           파트 등록
         </DialogContentText>
+
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="User ID"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      
+                    />
+                  )}
+                  rules={{ 
+                    required: '아이디를 입력하세요.',
+                    // validate: (data) => {
+                    //   //console.log(data);
+                      
+                    // }
+                  }}
+                />
+                <Button
+                  type="submit"
+                  //className={classes.button} 
+                  color="info" 
+                  round
+                >
+                  추가
+                </Button>       
+          </form>
+
+
         {/* <TextField
-          type="text"
-          margin="dense"
-          name="dashboardName"
-          label="번호"
+          className={classes.textField}
+          name="userid"
+          label="User ID"
           variant="outlined"
-          autoFocus
-          fullWidth
-          onChange={handleDashboardInfo}
+          //onChange={handleChange}
         /> */}
-      
-        <Autocomplete
+         
+
+
+       {/* <Autocomplete
           id="filter-demo"
-          options={top100Films}
+          options={aaa}
           getOptionLabel={(option) => option.title}
           filterOptions={filterOptions}
           style={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-        />
+        /> */}
 
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.close} variant="contained" color="secondary">취소</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">추가</Button>
+        {/* <Button onClick={props.close} variant="contained" color="secondary">취소</Button> */}
+        {/* <Button onClick={handleSubmit} variant="contained" color="primary">추가</Button> */}
       </DialogActions>
     </>
   )
@@ -112,46 +183,38 @@ function DashModal(props) {
   )
 
 
-  // 대시보드 정보
-  const [inputs, setInputs] = useState({
-    dashboardName: '',
-  });
-
-  const handleDashboardInfo = (e) => {
-
-    const { value, name } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
-
-  }
-
-  const handleSubmit = (e) => {
-    // e.preventDefault(); // 페
  
-    // if(props.dashModalType === "대시보드 추가") {
-    //   props.dispatch({ 
-    //     type: 'dashboardAdd', 
-    //     dashboardAdd: {
-    //       id:inputs.dashboardName, 
-    //       dashname: inputs.dashboardName,
-    //       web: [],
-    //       tablet: [],
-    //       mobile: []
-    //     }
-    //   });
-    //   props.setDashId(props.dashboard.length);
-    //   alert("추가가 완료 되었습니다."); 
-    // }
-    // props.close();
-  }
+
+
+
+  // const handleSubmit = (e) => {
+
+  
+  //   console.log(e);
+  //   // e.preventDefault(); // 페
+ 
+  //   // if(props.dashModalType === "대시보드 추가") {
+  //   //   props.dispatch({ 
+  //   //     type: 'dashboardAdd', 
+  //   //     dashboardAdd: {
+  //   //       id:inputs.dashboardName, 
+  //   //       dashname: inputs.dashboardName,
+  //   //       web: [],
+  //   //       tablet: [],
+  //   //       mobile: []
+  //   //     }
+  //   //   });
+  //   //   props.setDashId(props.dashboard.length);
+  //   //   alert("추가가 완료 되었습니다."); 
+  //   // }
+  //   // props.close();
+  // }
 
   return (
     <Dialog open={props.open} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{props.dashModalType}</DialogTitle>
+        <DialogTitle id="form-dialog-title">{props.partModalType}</DialogTitle>
         {
-          props.dashModalType === "추가" 
+          props.partModalType === "추가" 
           ? <DashAdd />
           : <DashDelete />
         }
@@ -159,12 +222,12 @@ function DashModal(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    dashboard: state
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     dashboard: state
+//   }
+// }
 
-export default connect(
-  mapStateToProps
-)(DashModal)
+// export default connect(
+//   mapStateToProps
+// )(DashModal)
