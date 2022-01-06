@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -33,23 +33,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+
 function DashModal(props) {
 
   const classes = useStyles();
 
-
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.title,
+  });
+  
   const top100Films = [
-    { title: 'CodeNo: 1, Removale App', part_no: 1 },
-    { title: 'CodeNo: 2, Fixed App', part_no: 2 },
-    { title: 'CodeNo: 3, Functional App', part_no: 3 },
-    { title: 'CodeNo: 4, Splints', part_no: 4 },
-    { title: 'CodeNo: 5, Diagnostic Study Models', part_no: 5 },
-
-    { title: 'CodeNo: 6, Tooth Positioner', part_no: 6 },
-    { title: 'CodeNo: 7, Indirect Bonding System', part_no: 7 },
-    { title: 'CodeNo: 8, Distalizing', part_no: 8 },
-    { title: 'CodeNo: 9, Sample', part_no: 9 }
-  ]
+    { title: 'Removale App' },
+    { title: 'Fixed App' },
+    { title: 'Functional App' },
+    { title: 'Splints' },
+    { title: 'Diagnostic Study Models' },
+    { title: "Tooth Positioner" },
+    { title: "Indirect Bonding System" },
+    { title: "Distalizing" },
+    { title: "Sample" },
+    { title: "Test1" },
+    { title: "Test2" },
+    { title: "Test3" }
+  ];
 
   const DashAdd = () => (
     <>
@@ -67,24 +75,16 @@ function DashModal(props) {
           fullWidth
           onChange={handleDashboardInfo}
         /> */}
+      
         <Autocomplete
-          id="combo-box-demo"
+          id="filter-demo"
           options={top100Films}
           getOptionLabel={(option) => option.title}
+          filterOptions={filterOptions}
           style={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+          renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
         />
 
-        <TextField
-          type="text"
-          margin="dense"
-          name="dashboardName"
-          label="파트명"
-          variant="outlined"
-          autoFocus
-          fullWidth
-          onChange={handleDashboardInfo}
-        />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.close} variant="contained" color="secondary">취소</Button>
