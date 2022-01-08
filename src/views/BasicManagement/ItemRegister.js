@@ -68,17 +68,6 @@ export default function ItemRegister() {
      
     ]);
 
-    // const arr = [];
-
-    // props.data.map( (data) => arr.push({ title: data.part_name} ));
-  
-    // console.log(arr);
-  
-    
-  
-
-
-
     useEffect( () => {
         axios
           .get("http://localhost:8000/api/code/item/")

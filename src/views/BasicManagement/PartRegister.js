@@ -2,21 +2,18 @@ import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
-
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
-import Container from '@material-ui/core/Container';
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
-
-// Material
-import TextField from "@material-ui/core/TextField";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
+import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
@@ -27,8 +24,8 @@ import axios from "axios";
 //
 import apiAxios from "modules/apiAxios.js";
 
-import DashModal from "components/Modal/DashModal.js"
-import { SettingsInputComponent } from "@material-ui/icons";
+import Modal from "components/Modal/Modal.js"
+
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -67,27 +64,64 @@ export default function PartRegister() {
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
 
-    // input insert
-    const [inputs, setInputs] = useState({
-        partNo: "",
-        partName: "",
-    });
+    // 모달
+    const [openPartAddModal, setOpenPartModal] = useState(false);
+    const [registerType, setRegisterType] = useState("");
+    const [rowSeqId, setRowSeqId] = useState("");
+    const [rowPartName, setRowPartName] = useState("");
 
-    // const handleChange = (e) => {
-    // const { value, name } = e.target;
-    //     setInputs({
-    //         ...inputs,
-    //         [name]: value,
-    //      });
-    // };
+    const handlePartModalOpen = () => {
+      setOpenPartModal(true);
+    };
+    const handlePartAddModalClose = () => {
+      setOpenPartModal(false);
+    };
 
-    // input update
-    //const [partNo, setPartNo] = useState("");
-    //const [partName, setPartName] = useState("");
+    const partModalOpen = (e) => {
+      setRegisterType("추가");
+      handlePartModalOpen();
+    }
 
+    const onUpdateButtonClicked = (seqId,partName) => {
+      setRegisterType("수정");
+      setRowSeqId(seqId);
+      setRowPartName(partName);
+      handlePartModalOpen();
+    };
+
+    const onRemoveButtonClicked = (seqId) => {
+      setRegisterType("삭제");
+      setRowSeqId(seqId);
+      handlePartModalOpen();
+    };
+
+    // Toast Grid options value
     const [partData, setPartData] = useState([]);
     const [columns, setColumns] = useState([
-        {name: "part_name", header: "파트명", align: "center"}
+        {name: "seq_id", header: "CodeNo", align: "center"},
+        {name: "part_name", header: "파트명", align: "center"},
+        {
+          name: "update",
+          header: "수정",
+          align: "center",
+          renderer: {
+            type: UpdateButtonRenderer,
+            options: {
+              onUpdateButtonClicked
+            }
+          }
+        },
+        {
+          name: "remove",
+          header: "삭제",
+          align: "center",
+          renderer: {
+            type: RemoveButtonRenderer,
+            options: {
+              onRemoveButtonClicked
+            }
+          }
+        }
     ]);
 
     useEffect( () => {
@@ -101,136 +135,43 @@ export default function PartRegister() {
           });
     }, []);
 
-
-    // const save = () => {
-
-    //     // 추가
-    //     // axios
-    //     //     .post("http://localhost:8000/api/code/part/", {
-    //     //         part_no: inputs.partNo,
-    //     //         part_name: inputs.partName
-    //     //     })
-    //     //     .then((result) => {
-            
-               
-    //     //     console.log(result);
-        
-    //     // })
-    //     //     .catch((error) => {
-    //     //     throw new Error(error);
-    //     // });
-
-    //     // 수정
-    //     let parmas = {
-    //         part_no: inputs.partNo,
-    //         part_name: inputs.partName
-    //     }
-
-    //     axios
-    //     .patch("http://localhost:8000/api/code/part/11", 
-    //         {
-    //             // headers: {
-    //             //     'Content-Type': 'application/json'
-    //             //     }
-    //             //headers: {"Access-Control-Allow-Origin": "*"},
-    //             header: {"Content-Type": "application/json"},
-    //             header: {"Accept": "application/json"},
-    //             // headers: {"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"},
-    //             // headers: {"Access-Control-Max-Age": "86400"},
-    //         },
-    //         {
-    //             id: 11,
-    //             part_no: inputs.partNo,
-    //             part_name: inputs.partName    
-    //         }
-       
-    //     )
-    //     .then((result) => {
-    //         console.log(result);
-    //     })
-    //     .catch((error) => {
-    //         throw new Error(error);
-    //     });
-
-
-    //     console.log("adsasdasd");
-    // }
-
-
-
-    // const [inputs, setInputs] = useState({
-    //     userid: "",
-    //     passwd: "",
-    //   });
-    
-    //   const handleChange = (e) => {
-    //     const { value, name } = e.target;
-    //     setInputs({
-    //       ...inputs,
-    //       [name]: value,
-    //     });
-    //   };
-
-    // const highFuc = (params) => {
-    //     setPartNo(params.partNo);
-    //     setPartName(params.partName);
-    // }
-
-    // 모달
-    const [openPartAddModal, setOpenPartModal] = useState(false);
-    const [partModalType, setPartModalType] = useState();
-    const handlePartModalOpen = () => {
-      setOpenPartModal(true);
-    };
-    const handlePartAddModalClose = () => {
-      setOpenPartModal(false);
-    };
-
-    const partModalOpen = (e) => {
-        if(e.target.innerText === "추가") {
-            setPartModalType(e.target.innerText);
-            handlePartModalOpen();
-          }
-    }
-
     return (
       <>
         <Grid container>
             <Grid item xs={12} className={classes.grid}>
                 <Card>
                     <CardHeader>
-                        <Typography>추가,수정</Typography>
+                        <Typography>추가</Typography>
                         <Button
-                            type="submit"
-                            className={classes.button} 
-                            color="info" 
-                            round
-                            onClick={(e) => partModalOpen(e)}
-                        >
-                            추가
+                          type="submit"
+                          className={classes.button} 
+                          color="info" 
+                          round
+                          onClick={(e) => partModalOpen(e)}
+                        >추가
                         </Button>
                     </CardHeader>
                     <CardBody>
                         <BasicGrid 
-                            data={partData}
-                            columns={columns}
-                            type={"part"}
-                            //hoc={highFuc}
+                          type={"part"}
+                          columns={columns}
+                          data={partData}
+                          //hoc={highFuc}
                         />
                     </CardBody>
                 </Card>
             </Grid>
-
-            
-
         </Grid>
 
-<DashModal               
-partModalType={partModalType}
-open={openPartAddModal}
-close={handlePartAddModalClose}
-/>
-</>
-    );
+        <Modal      
+          type={"part"}         
+          modalType={registerType}
+          rowSeqId={rowSeqId}
+          rowValue={rowPartName}
+          open={openPartAddModal}
+          close={handlePartAddModalClose}
+        />
 
+      </>
+    );
 }

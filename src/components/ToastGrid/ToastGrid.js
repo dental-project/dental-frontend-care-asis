@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
-import RemoveButtonRenderer from "components/ToastGridRenderer/Renderer.js";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
 //import DataTable from "components/Table/DataTable.js";
 
