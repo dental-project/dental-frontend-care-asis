@@ -73,7 +73,7 @@ export default function PartRegister() {
     const handlePartModalOpen = () => {
       setOpenPartModal(true);
     };
-    const handlePartAddModalClose = () => {
+    const handlePartModalClose = () => {
       setOpenPartModal(false);
     };
 
@@ -169,7 +169,7 @@ export default function PartRegister() {
           rowSeqId={rowSeqId}
           rowValue={rowPartName}
           open={openPartAddModal}
-          close={handlePartAddModalClose}
+          close={handlePartModalClose}
         />
 
       </>

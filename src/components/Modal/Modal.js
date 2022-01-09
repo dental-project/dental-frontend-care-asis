@@ -48,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-
 export default function DashModal(props) {
 
   const classes = useStyles();
+  const { watch,  handleSubmit, control } = useForm();
+  const [ autoCompleteData, setAutoCompleteData ] = useState([]);
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
@@ -60,15 +60,74 @@ export default function DashModal(props) {
   });
   
 
-  console.log(props);
+
+  const aaa = [
+    { title: "Removale App" },
+    { title: "Fixed App" },
+    { title: "Functional App" },
+    { title: "Splints" },
+    { title: "Diagnostic Study Models" },
+    { title: "Tooth Positioner" },
+    { title: "Indirect Bonding System" },
+    { title: "Distalizing" },
+    { title: "Sample" },
+    { title: "test" },
+    { title: "test1" },
+    { title: "ㄴㅇㅎㄴㅇㅎㄴㅇㅎ" }
+  ];
 
 
 
-  const { watch,  handleSubmit, control } = useForm();
+  const bbb = [
+    { title: "테스트 기공" },
+    { title: "테스트 기공2" },
+    { title: "테스트 기공3" },
+    { title: "기공4 테스트" },
+    { title: "asdasdasd" }
+  ];
+
+
+
+  useEffect( () => {
+      axios
+        .get("http://localhost:8000/api/code/part/")
+        .then((result) => {
+
+          //setAutoCompleteData(result.data.part_name);
+          
+          //setAutoCompleteData(result.data);
+         
+          console.log(result.data);
+
+          //result.data.map( (data) => {title: data.part_name} )
+
+
+
+          //const dataArr = result.data.map( (data) => data.part_name );          
+          
+          //dataArr.map( (data) => console.log( {title: data} ) );
+          
+          // console.log(autoData);
+          //setAutoCompleteData(autoData);
+
+          //const a = result.data.map( (data) => { title: data.part_name } );
+
+          //console.log(a);
+
+
+
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+  }, []);
+
+  //console.log(autoCompleteData);
+  
   const onSubmit = (data) => {
   
     if(props.type === "part") {
-      props.registerType === "add" ? 
+      if(props.modalType === "추가") {
         axios
         .post("http://localhost:8000/api/code/part/",{
           part_name: data.partName
@@ -80,7 +139,7 @@ export default function DashModal(props) {
         .catch((error) => {
           throw new Error(error);
         })
-      : 
+      } else if(props.modalType === "수정") {
         axios
         .patch("http://localhost:8000/api/code/part/" + props.rowSeqId + "/",{
           part_name: data.partName
@@ -91,112 +150,143 @@ export default function DashModal(props) {
         .catch((error) => {
           throw new Error(error);
         });
+      } else if(props.modalType === "삭제") {
+        axios
+        .delete("http://localhost:8000/api/code/part/" + props.rowSeqId + "/")
+        .then((result) => {
+          console.log(result);
+          })
+        .catch((error) => {
+          throw new Error(error);
+        });
+      }
     }
-    
-
-  
   }
 
   const Part = () => (
     <>
       <DialogContent>
         <DialogContentText>
-          파트 {props.modalType}
+          파트명 {props.modalType}
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name="partName"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                className={classes.textField} 
-                label="파트명"
-                variant="outlined"
-                value={props.rowValue}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-              />
-            )}
-            rules={{ 
-              required: "파트명을 입력하세요."
-            }}
-          />
+          { 
+            props.modalType === "삭제"
+            ? null
+            : (
+              <>
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="기공명"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "파트명을 입력하세요."
+                  }}
+                />
+              </>
+            )
+          }
           <Button
             type="submit"
-            //className={classes.button} 
+            className={classes.button} 
             color="info" 
             round
           >{props.modalType}
-          </Button>
-              
-      </form>
+          </Button> 
+        </form>
           <Button
-            //className={classes.button} 
-            color="info" 
+            className={classes.button} 
+            color="danger" 
             round
             onClick={props.close}
           >취소
-          </Button>    
-       {/* <Autocomplete
-          id="filter-demo"
-          options={aaa}
-          getOptionLabel={(option) => option.title}
-          filterOptions={filterOptions}
-          style={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-        /> */}
-
+          </Button>
       </DialogContent>
-      <DialogActions>
-        {/* <Button onClick={props.close} variant="contained" color="secondary">취소</Button> */}
-        {/* <Button onClick={handleSubmit} variant="contained" color="primary">추가</Button> */}
-      </DialogActions>
     </>
   )
-
-  const Update = () => (
+  
+  const Item = () => (
     <>
       <DialogContent>
         <DialogContentText>
-          수정 하시겠습니까?
+          종목 {props.modalType}
         </DialogContentText>
-          <form onSubmit={onSubmit(onSubmit)}>
-            <Controller
-              name="partName"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <TextField
-                  className={classes.textField} 
-                  label="파트명"
-                  variant="outlined"
-                  //value={props.rowSeqId}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          { 
+            props.modalType === "삭제"
+            ? null
+            : (
+              <>
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="파트명"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "기공명을 입력하세요."
+                  }}
                 />
-              )}
-              rules={{ 
-                required: "파트명을 입력하세요."
-              }}
-            />
-            <Button
-              type="submit"
-              //className={classes.button} 
-              color="info" 
-              round
-            >추가
-            </Button>
-            <Button
-              //className={classes.button} 
-              color="info" 
-              round
-              onClick={props.close}
-            >취소
-            </Button>        
+              
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={aaa}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                />
+              
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo1"
+                  options={bbb}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="종목명" variant="outlined" />}
+                />
+                            
+            </>
+            )
+          }
+
+
+          <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >{props.modalType}
+          </Button> 
         </form>
+          <Button
+            className={classes.button} 
+            color="danger" 
+            round
+            onClick={props.close}
+          >취소
+          </Button>
+          
       </DialogContent>
     </>
   )
@@ -209,11 +299,21 @@ export default function DashModal(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button onClick={props.close} variant="contained" color="secondary">
-                취소
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Button
+              type="submit"
+              //className={classes.button} 
+              color="info" 
+              round
+            >{props.modalType}
             </Button>
-            <Button type="submit"variant="contained" color="primary">
-                확인
+          </form>
+            <Button
+              //className={classes.button} 
+              color="info" 
+              round
+              onClick={props.close}
+            >취소
             </Button>
         </DialogActions>
     </>
@@ -223,17 +323,17 @@ export default function DashModal(props) {
     <Dialog open={props.open} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.partModalType}</DialogTitle>
         {
-          props.type === "part"  
+          props.type === "part" 
           ? <Part /> 
-          : null 
-        }
-        {
-          props.type === "수정"
-          ? <Update />
           : null
         }
         {
-          props.type === "삭제"
+          props.type === "item"
+          ? <Item />
+          : null
+        }
+        {
+          props.type === "dental"
           ? <Delete />
           : null
         }

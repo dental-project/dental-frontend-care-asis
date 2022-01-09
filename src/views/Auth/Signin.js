@@ -142,6 +142,7 @@ export default function Signin() {
               onChange={handleChange}
             />
             <TextField
+              type="password"
               className={classes.textField}
               name="passwd"
               label="Password"
