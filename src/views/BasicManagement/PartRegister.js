@@ -12,8 +12,8 @@ import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
-import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
@@ -97,7 +97,7 @@ export default function PartRegister() {
 
     // Toast Grid options value
     const [partData, setPartData] = useState([]);
-    const [columns, setColumns] = useState([
+    const columns = ([
         {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "part_name", header: "파트명", align: "center"},
         {

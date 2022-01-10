@@ -60,6 +60,13 @@ export default function DashModal(props) {
   });
   
 
+  const dash1 = [ { title: "마포한그루" }, { title: "연세유라인" }, { title: "미소유" }, { title: "연세미엘치과" }, { title: "연세키즈사랑" }, { title: "연세윤치과" }, 
+                  { title: "군포 에미담치과" }, { title: "연세키즈투틴치과" }, { title: "중구강약안면외과" }, { title: "라임프로" }, { title: "연세후" }, 
+                  { title: "스노우화이트" }, { title: "과천 연세스위트" }, { title: "연세두리치과" }, { title: "서울늘편한" }, { title: "이바른치과" }, { title: "약수 연세치과" }, ];
+
+  const dash2 = [ { title: "파트1" }, { title: "파트2" }, { title: "파트3" }, { title: "파트4" }, { title: "파트5" }, { title: "파트6" }, { title: "파트7" } ];
+  const dash3 = [ { title: "상품1" }, { title: "상품2" }, { title: "상품3" }, { title: "상품4" }, { title: "상품5" }, { title: "상품6" }, { title: "상품7" } ];
+  const dash4 = [ { title: "CRS" }, { title: "AAA" }, { title: "BBB" }, { title: "CCC" }, { title: "DDD" }, { title: "EEE" } ];
 
   const aaa = [
     { title: "Removale App" },
@@ -77,14 +84,12 @@ export default function DashModal(props) {
   ];
 
 
+  
 
-  const bbb = [
-    { title: "테스트 기공" },
-    { title: "테스트 기공2" },
-    { title: "테스트 기공3" },
-    { title: "기공4 테스트" },
-    { title: "asdasdasd" }
-  ];
+  const dental1 = [ { title: "1" }, { title: "2" }, { title: "3" }, { title: "4" }, { title: "5" }, { title: "6" }, { title: "7" }, { title: "8" }, { title: "9" }, { title: "10" } ];
+  const dental2 = [ { title: "제조" }, { title: "보건업" } ];
+  const dental3 = [ { title: "치과기공소" }, { title: "치과병원" } ];
+  
 
 
 
@@ -93,28 +98,7 @@ export default function DashModal(props) {
         .get("http://localhost:8000/api/code/part/")
         .then((result) => {
 
-          //setAutoCompleteData(result.data.part_name);
-          
-          //setAutoCompleteData(result.data);
-         
           console.log(result.data);
-
-          //result.data.map( (data) => {title: data.part_name} )
-
-
-
-          //const dataArr = result.data.map( (data) => data.part_name );          
-          
-          //dataArr.map( (data) => console.log( {title: data} ) );
-          
-          // console.log(autoData);
-          //setAutoCompleteData(autoData);
-
-          //const a = result.data.map( (data) => { title: data.part_name } );
-
-          //console.log(a);
-
-
 
         })
         .catch((error) => {
@@ -162,6 +146,146 @@ export default function DashModal(props) {
       }
     }
   }
+
+
+
+  const Dashboard = () => (
+    <>
+      <DialogContent>
+        <DialogContentText>
+          치기공 {props.modalType}
+        </DialogContentText>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          { 
+            props.modalType === "삭제"
+            ? null
+            : (
+              <>
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="접수일"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "접수일을 입력하세요."
+                  }}
+                />
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="완성일"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "완성일을 입력하세요."
+                  }}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash1}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                />  
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="이름"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "이름을 입력하세요."
+                  }}
+                />
+                
+
+
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash2}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                /> 
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash3}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                /> 
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash4}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                /> 
+
+
+
+
+
+
+
+
+              </>
+            )
+          }
+          <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >{props.modalType}
+          </Button> 
+        </form>
+          <Button
+            className={classes.button} 
+            color="danger" 
+            round
+            onClick={props.close}
+          >취소
+          </Button>
+      </DialogContent>
+    </>
+  )
+
+
+
 
   const Part = () => (
     <>
@@ -234,7 +358,7 @@ export default function DashModal(props) {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
-                      label="파트명"
+                      label="기공명"
                       variant="outlined"
                       onChange={onChange}
                       error={!!error}
@@ -254,23 +378,10 @@ export default function DashModal(props) {
                   filterOptions={filterOptions}
                   style={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                />
-              
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo1"
-                  options={bbb}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="종목명" variant="outlined" />}
-                />
-                            
+                />        
             </>
             )
           }
-
-
           <Button
             type="submit"
             className={classes.button} 
@@ -291,37 +402,218 @@ export default function DashModal(props) {
     </>
   )
 
-  const Delete = () => (
+  const Dental = () => (
     <>
       <DialogContent>
-          <DialogContentText>
-              삭제 하시겠습니까?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Button
-              type="submit"
-              //className={classes.button} 
-              color="info" 
-              round
-            >{props.modalType}
-            </Button>
-          </form>
-            <Button
-              //className={classes.button} 
-              color="info" 
-              round
-              onClick={props.close}
-            >취소
-            </Button>
-        </DialogActions>
+        <DialogContentText>
+          치과 {props.modalType}
+        </DialogContentText>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          { 
+            props.modalType === "삭제"
+            ? null
+            : (
+              <>
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="거래처명"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "거래처명을 입력하세요."
+                  }}
+                />
+              
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="대표"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "대표명을 입력하세요."
+                  }}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dental1}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="단가등급" variant="outlined" />}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="전화번호"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "전화번호를 입력하세요."
+                  }}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="팩스번호"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "팩스번호를 입력하세요."
+                  }}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="등록번호"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "등록번호를 입력하세요."
+                  }}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dental2}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="업태" variant="outlined" />}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dental3}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="업종" variant="outlined" />}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="우편번호"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "우편번호를 입력하세요."
+                  }}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="주소"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "주소를 입력하세요."
+                  }}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="비고"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                />
+            </>
+            )
+          }
+          <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >{props.modalType}
+          </Button> 
+        </form>
+          <Button
+            className={classes.button} 
+            color="danger" 
+            round
+            onClick={props.close}
+          >취소
+          </Button>
+          
+      </DialogContent>
     </>
   )
 
   return (
     <Dialog open={props.open} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.partModalType}</DialogTitle>
+        {
+          props.type === "dash"
+          ? <Dashboard />
+          : null
+        }
         {
           props.type === "part" 
           ? <Part /> 
@@ -334,7 +626,7 @@ export default function DashModal(props) {
         }
         {
           props.type === "dental"
-          ? <Delete />
+          ? <Dental />
           : null
         }
       </Dialog>

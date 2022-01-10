@@ -24,6 +24,8 @@ import { useForm, Controller } from "react-hook-form";
 // api
 import axios from 'axios';
 
+import Modal from "components/Modal/Modal.js"
+
 const useStyles = makeStyles((theme) => ({
     grid: {
       padding: theme.spacing(1)
@@ -61,24 +63,40 @@ export default function DentalRegister() {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
+
+    // 모달
+    const [openDentalAddModal, setOpenDentalModal] = useState(false);
+    const [registerType, setRegisterType] = useState("");
+    const [rowSeqId, setRowSeqId] = useState("");
+    const [rowItemName, setRowItemName] = useState("");
+
+    const handleDentalModalOpen = () => {
+        setOpenDentalModal(true);
+    };
+    const handleDentalModalClose = () => {
+        setOpenDentalModal(false);
+    };
+
+    const dentalModalOpen = (e) => {
+        setRegisterType("추가");
+        handleDentalModalOpen();
+    }
+
     const [dentalData, setDentalData] = useState([]);
-    const [columns, setColumns] = useState([
-        {name: "vendor_id", header: "업소번호", align: "center"},
+    const columns = ([
         {name: "vendor_name", header: "거래처명"},
         {name: "ceo", header: "대표자"},
         {name: "part_name", header: "*"},
         {name: "part_name", header: "등급"},
         {name: "tel", header: "전화번호"},
-        {name: "business_number", header: "사업자등록번호"},
-        {name: "part_name", header: "계산서"},
-        {name: "part_name", header: "명세서"},
-        {name: "part_name", header: "계산%"}
+        {name: "business_number", header: "사업자등록번호"}
     ]);
 
     useEffect( () => {
         axios
           .get("http://localhost:8000/api/vendor/")
           .then((result) => {
+              console.log(result);
             setDentalData(result.data);
           })
           .catch((error) => {
@@ -91,85 +109,40 @@ export default function DentalRegister() {
     };
 
     return (
-        <Container 
-            fixed
-            style={{maxWidth: "100%", background:"#E4E4E4"}}
-            >
+        <>
             <Grid container>
-                <Grid item xs={3} className={classes.grid}>
+                <Grid item xs={12} className={classes.grid}>
                     <Card>
                         <CardHeader>
-                            <Typography>추가,수정</Typography>
+                            <Button
+                                type="submit"
+                                className={classes.button} 
+                                color="info" 
+                                round
+                                onClick={(e) => dentalModalOpen(e)}
+                            >추가
+                            </Button>
                         </CardHeader>
                         <CardBody>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Controller
-                                    name="codeNumber"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                        <TextField
-                                            className={classes.textField} 
-                                            label="번호"
-                                            variant="outlined"
-                                            value={value}
-                                            onChange={onChange}
-                                            error={!!error}
-                                            helperText={error ? error.message : null}
-                                        />
-                                    )}
-                                    rules={{ 
-                                        required: '번호를 입력 해주세요.',
-                                    }}
-                                />
-                                <Controller
-                                    name="partName"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                        <TextField
-                                            className={classes.textField} 
-                                            label="파트명"
-                                            variant="outlined"
-                                            value={value}
-                                            onChange={onChange}
-                                            error={!!error}
-                                            helperText={error ? error.message : null}
-                                        />
-                                    )}
-                                    rules={{ required: '파트명을 입력 해주세요.' }}
-                                />  
-                                <Button
-                                    type="submit"
-                                    className={classes.button} 
-                                    color="info" 
-                                    round
-                                >
-                                    저장
-                                </Button>
-                            </form>
-                        
+                        <BasicGrid 
+                            type={"dental"}
+                            columns={columns}
+                            data={dentalData}
+                        />
                         </CardBody>
                     </Card>
                 </Grid>
-
-                <Grid item xs={9} className={classes.grid}>
-                <Card>
-                    <CardHeader>
-                        <Typography>추가,수정</Typography>
-                    </CardHeader>
-                    <CardBody>
-                        <BasicGrid 
-                            data={dentalData}
-                            columns={columns}
-                            type={"dental"}
-                        />
-                    </CardBody>
-                </Card>
-                </Grid>
-
             </Grid>
-        </Container>
+            
+            <Modal      
+                type={"dental"}         
+                modalType={registerType}
+                rowSeqId={rowSeqId}
+                rowValue={rowItemName}
+                open={openDentalAddModal}
+                close={handleDentalModalClose}
+            />
+      </>
     );
 
 }

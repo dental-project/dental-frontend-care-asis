@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
-import ToastGrid from "components/ToastGrid/ToastGrid.js";
+import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
 // Material
 import TextField from "@material-ui/core/TextField";
@@ -26,6 +26,10 @@ import axios from 'axios';
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
 
+import Modal from "components/Modal/Modal.js"
+import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
+import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -65,163 +69,139 @@ export default function Dashboard(props) {
   const classes = useStyles();
   const { watch,  handleSubmit, control } = useForm();
 
-  useEffect( () => { 
-    // axios.get('http://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=7ae87beac78e68f74c38e26c2f779f84')
-    //   .then((result) => {
-    //     //console.log(result);
-    //   })
-    //   .catch(() => {
-    //     console.log("실패");
-    //   })
 
-    //setTime(null);
+  // 모달
+  const [openDashAddModal, setOpenDashModal] = useState(false);
+  const [registerType, setRegisterType] = useState("");
+  const [rowSeqId, setRowSeqId] = useState("");
+  const [rowItemName, setRowItemName] = useState("");
+
+  const handleDashModalOpen = () => {
+      setOpenDashModal(true);
+  };
+  const handleDashModalClose = () => {
+      setOpenDashModal(false);
+  };
+
+  const dashModalOpen = (e) => {
+      setRegisterType("추가");
+      handleDashModalOpen();
+  }
+
+  
+  const onDetailButtonClicked = () => {
+    //console.log(rowIndex);
+  };
+
+  const onUpdateButtonClicked = (seqId,partName) => {
+    //console.log(rowIndex);
+  };
+
+  const onRemoveButtonClicked = (rowIndex) => {
+    console.log(rowIndex);
+  };
+
+  const [dashData, setDentalData] = useState([]);
+  const columns = [
+    { name: 'customerName', header: '거래처명' },
+    { name: 'phoneNumber', header: '전화번호' },
+    { name: 'patientName', header: '환자명' },
+    { name: 'receiptDate', header: '접수일자' },
+    { name: 'completeDate', header: '완성일자' },
+    { name: 'time', header: '시간'},
+    { name: 'ModU', header: 'ModU'},
+    { name: 'ModL', header: 'ModL'},
+    { name: 'Bite', header: 'Bite'},
+    { name: 'App', header: 'App'},
+    { name: 'price', header: '기공금액(원)', align: 'center'},
+    { name: 'classification', header: '구분'},
+    {
+      name: "detail",
+      header: "상세보기",
+      align: "center",
+      renderer: {
+        type: DetailButtonRenderer,
+        options: {
+          onDetailButtonClicked
+        }
+      }
+    },
+    {
+      name: "update",
+      header: "수정",
+      align: "center",
+      renderer: {
+        type: UpdateButtonRenderer,
+        options: {
+          onUpdateButtonClicked
+        }
+      }
+    },
+    {
+      name: 'remove',
+      header: '삭제',
+      align: "center",
+      renderer: {
+        type: RemoveButtonRenderer,
+        options: {
+          onRemoveButtonClicked
+        }
+      }
+    }
+  ];
+
+
+  useEffect( () => { 
+    axios
+      .get("http://localhost:8000/api/vendor/")
+      .then((result) => {
+          console.log(result);
+        setDentalData(result.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+    });
   },[]);
    
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+
 
   const dateFormat = "YYYY-MM-DD";
 
   return (
-    <Container 
-      fixed
-      style={{maxWidth: "100%", background:"#1E1F28"}}
-    >
+    <>
       <Grid container>
-        <Grid item xs={3} className={classes.grid}>
+        <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
-              <Typography>추가,수정</Typography>
+              <Button
+                type="submit"
+                className={classes.button} 
+                color="info" 
+                round
+                onClick={(e) => dashModalOpen(e)}
+              >추가
+              </Button>
             </CardHeader>
             <CardBody>
-
-              
-              <form onSubmit={handleSubmit(onSubmit)}>
-
-                <TextField
-                  id="date"
-                  label="접수일"
-                  type="date"
-                  defaultValue="2022-01-02"
-                  className={classes.textFieldDate}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-
-                <TextField
-                  id="date"
-                  label="완성일"
-                  type="date"
-                  defaultValue="2022-01-03"
-                  className={classes.textFieldDate}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-
-                <Controller
-                  name="customerName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="time"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      
-                    />
-                  )}
-                  rules={{ 
-                    required: 'time',
-                  }}
-                />
-                          
-                <Controller
-                  name="patientName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="치과"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: '치과명을 입력 해주세요.' }}
-                />  
-
-                <Controller
-                  name="patientName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="이름"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: '이름을 입력 해주세요.' }}
-                />
-
-
-                <Controller
-                  name="price"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="가공금액"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: '가공금액을 입력 해주세요.' }}
-                />
-                 <Button
-                  type="submit"
-                  className={classes.button} 
-                  color="info" 
-                  round
-                >
-                  저장
-                </Button>
-              </form>
-            
+              <BasicGrid 
+                type={"dash"}
+                columns={columns}
+                data={dashData}
+              />
             </CardBody>
           </Card>
         </Grid>
-
-        <Grid item xs={9} className={classes.grid}>
-          <Card>
-            <CardHeader>
-              <Typography>추가,수정</Typography>
-            </CardHeader>
-            <CardBody>
-              <ToastGrid />
-            </CardBody>
-          </Card>
-        </Grid>
-
       </Grid>
-    </Container>
+
+      <Modal      
+        type={"dash"}         
+        modalType={registerType}
+        rowSeqId={rowSeqId}
+        rowValue={rowItemName}
+        open={openDashAddModal}
+        close={handleDashModalClose}
+      />
+
+    </>
   );
 }

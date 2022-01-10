@@ -82,9 +82,8 @@ export default function ItemRegister() {
         handleItemModalOpen();
     }
 
-
     const [itemData, setItemData] = useState([]);
-    const [columns, setColumns] = useState([
+    const columns = ([
         {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "item_name", header: "기공명", align: "center"},
         {name: "part_seq_id", header: "파트명", align: "center"}
@@ -94,7 +93,6 @@ export default function ItemRegister() {
         axios
           .get("http://localhost:8000/api/code/item/")
           .then((result) => {
-            //console.log(result);
             setItemData(result.data);
           })
           .catch((error) => {
