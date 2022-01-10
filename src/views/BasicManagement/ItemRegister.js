@@ -105,39 +105,38 @@ export default function ItemRegister() {
   
     return (
         <>
-            <Grid container>
-                <Grid item xs={12} className={classes.grid}>
-                    <Card>
-                        <CardHeader>
-                            <Button
-                                type="submit"
-                                className={classes.button} 
-                                color="info" 
-                                round
-                                onClick={(e) => itemModalOpen(e)}
-                            >추가
-                            </Button>
-                        </CardHeader>
-                        <CardBody>
-                            <BasicGrid 
-                                type={"item"}
-                                columns={columns}
-                                data={itemData}
-                            />
-                        </CardBody>
-                    </Card>
-                </Grid>
+          <Grid container>
+            <Grid item xs={12} className={classes.grid}>
+              <Card>
+                <CardHeader>
+                  <Button
+                    type="submit"
+                    className={classes.button} 
+                    color="info" 
+                    round
+                    onClick={(e) => itemModalOpen(e)}
+                  >추가
+                  </Button>
+                </CardHeader>
+                <CardBody>
+                  <BasicGrid 
+                    type={"item"}
+                    columns={columns}
+                    data={itemData}
+                  />
+                </CardBody>
+              </Card>
             </Grid>
-    
-            <Modal      
-                type={"item"}         
-                modalType={registerType}
-                rowSeqId={rowSeqId}
-                rowValue={rowItemName}
-                open={openItemAddModal}
-                close={handleItemModalClose}
-            />
-        </>
+          </Grid>
+  
+          <Modal      
+            type={"item"}         
+            modalType={registerType}
+            rowSeqId={rowSeqId}
+            rowValue={rowItemName}
+            open={openItemAddModal}
+            close={handleItemModalClose}
+          />
+      </>
     );
-
 }
