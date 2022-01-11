@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom"; 
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
 
 // core components
 import Grid from '@material-ui/core/Grid';
-
-import Container from '@material-ui/core/Container';
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
@@ -18,12 +16,11 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
 // Material
 import TextField from "@material-ui/core/TextField";
-import CustomInput from "components/CustomInput/CustomInput.js";
 
 // api
 import axios from 'axios';
 
-import Modal from "components/Modal/Modal.js"
+import FullModal from "components/Modal/FullModal.js"
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
@@ -66,32 +63,20 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard(props) {
 
   const classes = useStyles();
-  
+  let history = useHistory();
 
   // 모달
-  const [openDashAddModal, setOpenDashModal] = useState(false);
-  const [registerType, setRegisterType] = useState("");
-  const [rowSeqId, setRowSeqId] = useState("");
-  const [rowItemName, setRowItemName] = useState("");
-
-  const handleDashModalOpen = () => {
-      setOpenDashModal(true);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-  const handleDashModalClose = () => {
-      setOpenDashModal(false);
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  const dashModalOpen = (e) => {
-      setRegisterType("추가");
-      handleDashModalOpen();
-  }
 
-  
   const onDetailButtonClicked = () => {
-    // 
-    //history.push("/admin/dashboarddetail")
-
-
+    history.push("/admin/dashboardDetail");
   };
 
   const onUpdateButtonClicked = (seqId,partName) => {
@@ -106,12 +91,11 @@ export default function Dashboard(props) {
   const columns = [
     { name: 'customerName', header: '거래처명' },
     { name: 'phoneNumber', header: '전화번호' },
-    { name: 'patientName', header: '환자명' },
-    { name: 'receiptDate', header: '접수일자' },
-    { name: 'completeDate', header: '완성일자' },
-    { name: 'time', header: '시간'},
-    { name: 'ModU', header: 'ModU'},
-    { name: 'ModL', header: 'ModL'},
+    { name: 'patient_name', header: '환자명' },
+    { name: 'receipt_date', header: '접수일자' },
+    { name: 'completion_date', header: '완성일자' },
+    { name: 'upper', header: 'Upper'},
+    { name: 'lower', header: 'Lower'},
     { name: 'Bite', header: 'Bite'},
     { name: 'App', header: 'App'},
     { name: 'price', header: '기공금액(원)', align: 'center'},
@@ -166,20 +150,16 @@ export default function Dashboard(props) {
 
   useEffect( () => { 
     axios
-      .get("http://localhost:8000/api/vendor/")
+      .get("http://localhost:8000/api/sell/master/")
       .then((result) => {
           console.log(result);
-        setDentalData(result.data);
+          setDentalData(result.data);
       })
       .catch((error) => {
         throw new Error(error);
     });
   },[]);
    
-
-
-  const dateFormat = "YYYY-MM-DD";
-
   return (
     <>
       <Grid container>
@@ -191,7 +171,7 @@ export default function Dashboard(props) {
                 className={classes.button} 
                 color="info" 
                 round
-                onClick={(e) => dashModalOpen(e)}
+                onClick={(e) => handleClickOpen(e)}
               >추가
               </Button>
             </CardHeader>
@@ -199,14 +179,14 @@ export default function Dashboard(props) {
 
               
               <form className={classes.container} noValidate>
-                <Grid item xs={5} className={classes.grid} style={{float: "left"}}>
+                <Grid item xs={4} className={classes.grid} style={{float: "left"}}>
                   <TextField
                     id="date"
                     label="접수일자"
                     type="date"
                     defaultValue="2022-01-11"
                     className={classes.textField}
-                    style={{width: "30%"}}
+                    style={{width: "45%"}}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -218,22 +198,15 @@ export default function Dashboard(props) {
                     type="date"
                     defaultValue="2022-01-12"
                     className={classes.textField}
-                    style={{width: "30%"}}
+                    style={{width: "45%"}}
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
-                  <Button
-                    type="submit"
-                    color="primary" 
-                    round
-                    style={{width: "28%"}}
-                    //onClick={(e) => partModalOpen(e)}
-                  >날짜 검색
-                  </Button>
+               
                 </Grid>
 
-                <Grid item xs={5} className={classes.grid} style={{float: "left"}}>
+                <Grid item xs={6} className={classes.grid} style={{float: "left"}}>
                   <Autocomplete
                     id="filter-demo"
                     className={classes.grid}
@@ -258,7 +231,7 @@ export default function Dashboard(props) {
                     type="submit"
                     color="primary" 
                     round
-                    style={{float: "left", width: "150px"}}
+                    style={{float: "left", width: "100px"}}
                     //onClick={(e) => partModalOpen(e)}
                   >검색
                   </Button>
@@ -290,14 +263,20 @@ export default function Dashboard(props) {
         </Grid>
       </Grid>
 
-      <Modal      
+      <FullModal      
+        open={open}
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+      />
+
+      {/* <Modal      
         type={"dash"}         
         modalType={registerType}
         rowSeqId={rowSeqId}
         rowValue={rowItemName}
         open={openDashAddModal}
         close={handleDashModalClose}
-      />
+      /> */}
 
     </>
   );

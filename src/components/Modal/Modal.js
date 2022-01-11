@@ -19,7 +19,8 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    width: "95%",
+    float: "left",
+    width: "45%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -97,7 +98,7 @@ export default function DashModal(props) {
         .get("http://localhost:8000/api/code/part/")
         .then((result) => {
 
-          console.log(result.data);
+          //console.log(result.data);
 
         })
         .catch((error) => {
@@ -152,7 +153,7 @@ export default function DashModal(props) {
     <>
       <DialogContent>
         <DialogContentText>
-          기공물대장 {props.modalType}
+          접수 {props.modalType}
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           { 
@@ -160,40 +161,24 @@ export default function DashModal(props) {
             ? null
             : (
               <>
-                <Controller
-                  name="partName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="접수일"
-                      variant="outlined"
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "접수일을 입력하세요."
+                <TextField
+                  id="date"
+                  label="접수일자"
+                  type="date"
+                  defaultValue="2022-01-11"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
                   }}
                 />
-                <Controller
-                  name="partName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="완성일"
-                      variant="outlined"
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "완성일을 입력하세요."
+                <TextField
+                  id="date"
+                  label="완성일자"
+                  type="date"
+                  defaultValue="2022-01-11"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
                   }}
                 />
                 <Autocomplete
@@ -202,9 +187,9 @@ export default function DashModal(props) {
                   options={dash1}
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
-                  style={{ width: "95%" }}
                   renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
                 />  
+
                 <Controller
                   name="partName"
                   control={control}
@@ -232,7 +217,6 @@ export default function DashModal(props) {
                   options={dash2}
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
-                  style={{ width: "95%" }}
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 /> 
                 <Autocomplete
@@ -241,7 +225,6 @@ export default function DashModal(props) {
                   options={dash3}
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
-                  style={{ width: "95%" }}
                   renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                 /> 
                

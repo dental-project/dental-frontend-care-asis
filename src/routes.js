@@ -1,6 +1,7 @@
 // @material-ui/icons
 import DvrIcon from '@material-ui/icons/Dvr';
 import DashboardPage from "views/Dashboard/Dashboard.js";
+import DashboardDetailPage from "views/Dashboard/DashboardDetail.js";
 import PartRegister from "views/BasicManagement/PartRegister.js";
 import ItemRegister from "views/BasicManagement/ItemRegister.js";
 import DentalRegister from "views/BasicManagement/DentalRegister.js";
@@ -12,6 +13,13 @@ const dashboardRoutes = [
     name: "접수 리스트",
     icon: DvrIcon,
     component: DashboardPage,
+    layout: "/admin"
+  },
+  {
+    path: "/dashboardDetail",
+    name: "접수상세 리스트",
+    icon: DvrIcon,
+    component: DashboardDetailPage,
     layout: "/admin"
   },
   {
