@@ -23,9 +23,6 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 // api
 import axios from 'axios';
 
-// Form 양식
-import { useForm, Controller } from "react-hook-form";
-
 import Modal from "components/Modal/Modal.js"
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
@@ -69,8 +66,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard(props) {
 
   const classes = useStyles();
-  const { watch,  handleSubmit, control } = useForm();
-
+  
 
   // 모달
   const [openDashAddModal, setOpenDashModal] = useState(false);
@@ -92,7 +88,10 @@ export default function Dashboard(props) {
 
   
   const onDetailButtonClicked = () => {
-    //console.log(rowIndex);
+    // 
+    //history.push("/admin/dashboarddetail")
+
+
   };
 
   const onUpdateButtonClicked = (seqId,partName) => {

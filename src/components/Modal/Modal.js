@@ -444,15 +444,6 @@ export default function DashModal(props) {
                     required: "대표명을 입력하세요."
                   }}
                 />
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={dental1}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="단가등급" variant="outlined" />}
-                />
                 <Controller
                   name="itemName"
                   control={control}

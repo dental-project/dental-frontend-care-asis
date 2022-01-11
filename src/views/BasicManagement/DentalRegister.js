@@ -4,22 +4,13 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 
 import Grid from '@material-ui/core/Grid';
-
-import Container from '@material-ui/core/Container';
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
-
-// Material
-import TextField from "@material-ui/core/TextField";
-
-// Form 양식
-import { useForm, Controller } from "react-hook-form";
 
 // api
 import axios from 'axios';
@@ -62,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 export default function DentalRegister() {
 
     const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
 
     // 모달
     const [openDentalAddModal, setOpenDentalModal] = useState(false);
@@ -103,10 +93,6 @@ export default function DentalRegister() {
             throw new Error(error);
           });
     }, []);
-
-    const onSubmit = (data) => {
-        
-    };
 
     return (
         <>
