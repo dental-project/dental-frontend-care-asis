@@ -31,6 +31,8 @@ import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
 const useStyles = makeStyles((theme) => ({
   grid: {
     padding: theme.spacing(1)
@@ -151,6 +153,18 @@ export default function Dashboard(props) {
   ];
 
 
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.title,
+  });
+
+
+  const auto1 = [ { title: "전체" }, { title: "리더스탑치과" }, { title: "이바른치과" }, { title: "연세두리치과" }, { title: "서울스위트치과" }, { title: "연세바로치과" }, { title: "서울시카고" }];
+  const auto2 = [ { title: "전체" }, { title: "최진실" }, { title: "전윤화" }, { title: "정보경" }, { title: "이유림" }, { title: "조유나" }]
+
+
+
+
   useEffect( () => { 
     axios
       .get("http://localhost:8000/api/vendor/")
@@ -183,6 +197,85 @@ export default function Dashboard(props) {
               </Button>
             </CardHeader>
             <CardBody>
+
+           
+              <form className={classes.container} noValidate>
+                <TextField
+                  id="date"
+                  label="접수일자"
+                  type="date"
+                  defaultValue="2022-01-11"
+                  className={classes.textField}
+                  style={{float: "left", width: "200px"}}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              
+                <TextField
+                  id="date"
+                  label="완성일자"
+                  type="date"
+                  defaultValue="2022-01-12"
+                  className={classes.textField}
+                  style={{float: "left", width: "200px"}}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <Button
+                  type="submit"
+                  color="primary" 
+                  round
+                  style={{float: "left", width: "200px"}}
+                  //onClick={(e) => partModalOpen(e)}
+                >날짜 검색
+                </Button>
+
+
+
+                <Autocomplete
+                  id="filter-demo"
+                  options={auto1}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{float: "left", width: "200px", marginLeft: "100px"}}
+                  renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                />
+
+                <Autocomplete
+                  id="filter-demo"
+                  options={auto2}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{float: "left", width: "200px"}}
+                  renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
+                />
+
+                <Button
+                  type="submit"
+                  color="primary" 
+                  round
+                  style={{float: "left", width: "200px"}}
+                  //onClick={(e) => partModalOpen(e)}
+                >검색
+                </Button>
+
+
+                <Button
+                  type="submit"
+                  color="danger" 
+                  round
+                  style={{float: "left", width: "200px"}}
+                  //onClick={(e) => partModalOpen(e)}
+                >출력
+                </Button>
+              </form>
+           
+           
+
+
+
               <BasicGrid 
                 type={"dash"}
                 columns={columns}
