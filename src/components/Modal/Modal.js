@@ -234,7 +234,7 @@ export default function DashModal(props) {
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
                   style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} label="파트" variant="outlined" />}
                 /> 
                 <Autocomplete
                   className={classes.textField}
@@ -243,7 +243,7 @@ export default function DashModal(props) {
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
                   style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} label="상품" variant="outlined" />}
                 /> 
                 <Autocomplete
                   className={classes.textField}
@@ -252,16 +252,8 @@ export default function DashModal(props) {
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
                   style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="치과" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} label="상품명" variant="outlined" />}
                 /> 
-
-
-
-
-
-
-
-
               </>
             )
           }
