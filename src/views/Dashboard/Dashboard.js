@@ -198,78 +198,83 @@ export default function Dashboard(props) {
             </CardHeader>
             <CardBody>
 
-           
-              <form className={classes.container} noValidate>
-                <TextField
-                  id="date"
-                  label="접수일자"
-                  type="date"
-                  defaultValue="2022-01-11"
-                  className={classes.textField}
-                  style={{float: "left", width: "200px"}}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
               
-                <TextField
-                  id="date"
-                  label="완성일자"
-                  type="date"
-                  defaultValue="2022-01-12"
-                  className={classes.textField}
-                  style={{float: "left", width: "200px"}}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <Button
-                  type="submit"
-                  color="primary" 
-                  round
-                  style={{float: "left", width: "200px"}}
-                  //onClick={(e) => partModalOpen(e)}
-                >날짜 검색
-                </Button>
+              <form className={classes.container} noValidate>
+                <Grid item xs={5} className={classes.grid} style={{float: "left"}}>
+                  <TextField
+                    id="date"
+                    label="접수일자"
+                    type="date"
+                    defaultValue="2022-01-11"
+                    className={classes.textField}
+                    style={{width: "30%"}}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                
+                  <TextField
+                    id="date"
+                    label="완성일자"
+                    type="date"
+                    defaultValue="2022-01-12"
+                    className={classes.textField}
+                    style={{width: "30%"}}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    color="primary" 
+                    round
+                    style={{width: "28%"}}
+                    //onClick={(e) => partModalOpen(e)}
+                  >날짜 검색
+                  </Button>
+                </Grid>
 
+                <Grid item xs={5} className={classes.grid} style={{float: "left"}}>
+                  <Autocomplete
+                    id="filter-demo"
+                    className={classes.grid}
+                    options={auto1}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    style={{float: "left", width: "200px", marginLeft: "20px"}}
+                    renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                  />
 
+                  <Autocomplete
+                    id="filter-demo"
+                    className={classes.grid}
+                    options={auto2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    style={{float: "left", width: "200px"}}
+                    renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
+                  />
 
-                <Autocomplete
-                  id="filter-demo"
-                  options={auto1}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{float: "left", width: "200px", marginLeft: "100px"}}
-                  renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
-                />
+                  <Button
+                    type="submit"
+                    color="primary" 
+                    round
+                    style={{float: "left", width: "150px"}}
+                    //onClick={(e) => partModalOpen(e)}
+                  >검색
+                  </Button>
+                </Grid>   
 
-                <Autocomplete
-                  id="filter-demo"
-                  options={auto2}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{float: "left", width: "200px"}}
-                  renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
-                />
-
-                <Button
-                  type="submit"
-                  color="primary" 
-                  round
-                  style={{float: "left", width: "200px"}}
-                  //onClick={(e) => partModalOpen(e)}
-                >검색
-                </Button>
-
-
-                <Button
-                  type="submit"
-                  color="danger" 
-                  round
-                  style={{float: "left", width: "200px"}}
-                  //onClick={(e) => partModalOpen(e)}
-                >출력
-                </Button>
+                <Grid item xs={2} className={classes.grid} style={{float: "right"}}>
+                  <Button
+                    type="submit"
+                    color="danger" 
+                    round
+                    style={{width: "100%"}}
+                    //onClick={(e) => partModalOpen(e)}
+                  >출력
+                  </Button>
+                  </Grid>
               </form>
            
            
