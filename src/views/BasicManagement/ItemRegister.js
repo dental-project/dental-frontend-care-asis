@@ -85,14 +85,15 @@ export default function ItemRegister() {
     const [itemData, setItemData] = useState([]);
     const columns = ([
         {name: "seq_id", header: "CodeNo", align: "center"},
-        {name: "item_name", header: "기공명", align: "center"},
-        {name: "part_seq_id", header: "파트명", align: "center"}
+        {name: "part_seq_id", header: "파트명", align: "center"},
+        {name: "item_name", header: "장치명", align: "center"}
     ]);
 
     useEffect( () => {
         axios
           .get("http://localhost:8000/api/code/item/")
           .then((result) => {
+            console.log(result);
             setItemData(result.data);
           })
           .catch((error) => {

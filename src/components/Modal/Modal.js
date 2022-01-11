@@ -64,9 +64,8 @@ export default function DashModal(props) {
                   { title: "군포 에미담치과" }, { title: "연세키즈투틴치과" }, { title: "중구강약안면외과" }, { title: "라임프로" }, { title: "연세후" }, 
                   { title: "스노우화이트" }, { title: "과천 연세스위트" }, { title: "연세두리치과" }, { title: "서울늘편한" }, { title: "이바른치과" }, { title: "약수 연세치과" }, ];
 
-  const dash2 = [ { title: "파트1" }, { title: "파트2" }, { title: "파트3" }, { title: "파트4" }, { title: "파트5" }, { title: "파트6" }, { title: "파트7" } ];
-  const dash3 = [ { title: "상품1" }, { title: "상품2" }, { title: "상품3" }, { title: "상품4" }, { title: "상품5" }, { title: "상품6" }, { title: "상품7" } ];
-  const dash4 = [ { title: "CRS" }, { title: "AAA" }, { title: "BBB" }, { title: "CCC" }, { title: "DDD" }, { title: "EEE" } ];
+  const dash2 = [ { title: "파트명1" }, { title: "파트명2" }, { title: "파트명3" }, { title: "파트명4" }, { title: "파트명5" }, { title: "파트명6" }, { title: "파트명7" } ];
+  const dash3 = [ { title: "CRS" }, { title: "장치명1" }, { title: "장치명2" }, { title: "장치명3" }, { title: "장치명4" }, { title: "장치명5" } ];
 
   const aaa = [
     { title: "Removale App" },
@@ -153,7 +152,7 @@ export default function DashModal(props) {
     <>
       <DialogContent>
         <DialogContentText>
-          치기공 {props.modalType}
+          기공물대장 {props.modalType}
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           { 
@@ -234,7 +233,7 @@ export default function DashModal(props) {
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
                   style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="파트" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 /> 
                 <Autocomplete
                   className={classes.textField}
@@ -243,18 +242,9 @@ export default function DashModal(props) {
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
                   style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="상품" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                 /> 
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={dash4}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="상품명" variant="outlined" />}
-                /> 
-
+               
                   <div style={{align: "center"}}>test.png</div>
 
               <Button
@@ -295,7 +285,7 @@ export default function DashModal(props) {
     <>
       <DialogContent>
         <DialogContentText>
-          파트명 {props.modalType}
+          파트 {props.modalType}
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           { 
@@ -310,7 +300,7 @@ export default function DashModal(props) {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
-                      label="기공명"
+                      label="파트명"
                       variant="outlined"
                       onChange={onChange}
                       error={!!error}
@@ -347,7 +337,7 @@ export default function DashModal(props) {
     <>
       <DialogContent>
         <DialogContentText>
-          종목 {props.modalType}
+          장치 {props.modalType}
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           { 
@@ -355,6 +345,15 @@ export default function DashModal(props) {
             ? null
             : (
               <>
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={aaa}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                />
                 <Controller
                   name="itemName"
                   control={control}
@@ -362,7 +361,7 @@ export default function DashModal(props) {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
-                      label="기공명"
+                      label="장치명"
                       variant="outlined"
                       onChange={onChange}
                       error={!!error}
@@ -370,19 +369,9 @@ export default function DashModal(props) {
                     />
                   )}
                   rules={{ 
-                    required: "기공명을 입력하세요."
+                    required: "장치명을 입력하세요."
                   }}
-                />
-              
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={aaa}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  style={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                />        
+                />     
             </>
             )
           }

@@ -61,7 +61,7 @@ export default function Sidebar(props) {
           <ListItemIcon>
             <AssignmentOutlinedIcon style={{ color: "#FFFFFF" }} />
           </ListItemIcon>
-          <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
+          <ListItemText primary="접수 리스트" style={{ color: "#FFFFFF" }} />
         </ListItem>
       </NavLink>
       
@@ -99,7 +99,7 @@ export default function Sidebar(props) {
               <ListItemIcon style={{ color: "#FFFFFF" }}>
                 <StarBorder style={{ color: "#FFFFFF" }} />
               </ListItemIcon >
-              <ListItemText primary="종목등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="장치등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
           </List>
         </Collapse>

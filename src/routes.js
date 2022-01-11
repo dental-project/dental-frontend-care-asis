@@ -9,7 +9,7 @@ import UserRegister from "views/Users/UserRegister.js";
 const dashboardRoutes = [
   {
     path: "/dashboard",
-    name: "기공물대장",
+    name: "접수 리스트",
     icon: DvrIcon,
     component: DashboardPage,
     layout: "/admin"
@@ -23,7 +23,7 @@ const dashboardRoutes = [
   },
   {
     path: "/itemRegister",
-    name: "종목 등록",
+    name: "장치 등록",
     icon: DvrIcon,
     component: ItemRegister,
     layout: "/admin"
