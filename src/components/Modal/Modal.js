@@ -254,7 +254,19 @@ export default function DashModal(props) {
                   style={{ width: "95%" }}
                   renderInput={(params) => <TextField {...params} label="상품명" variant="outlined" />}
                 /> 
+
+                  <div style={{align: "center"}}>test.png</div>
+
+              <Button
+              className={classes.button} 
+              color="info" 
+              round
+              >이미지 업로드
+              </Button> 
+
               </>
+
+
             )
           }
           <Button
