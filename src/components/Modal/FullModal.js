@@ -176,7 +176,7 @@ export default function FullScreenDialog(props) {
 
             <Grid container justifyContent="center" spacing={spacing}>
                 <Autocomplete
-                    className={classes.textField2}
+                    className={classes.textField}
                     id="filter-demo"
                     options={dash2}
                     getOptionLabel={(option) => option.title}
@@ -184,19 +184,170 @@ export default function FullScreenDialog(props) {
                     renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 /> 
                 <Autocomplete
-                    className={classes.textField2}
+                    className={classes.textField}
                     id="filter-demo"
                     options={dash3}
                     getOptionLabel={(option) => option.title}
                     filterOptions={filterOptions}
                     renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
-                /> 
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="단가"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "단가를 입력하세요."
+                    }}
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="수량"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "수량을 입력하세요."
+                    }}
+                />
             </Grid>
 
-                <div style={{align: "center"}}>test.png</div>
+            <Grid container justifyContent="center" spacing={spacing}>
+                <Autocomplete
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                /> 
+                <Autocomplete
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash3}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="단가"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "단가를 입력하세요."
+                    }}
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="수량"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "수량을 입력하세요."
+                    }}
+                />
+            </Grid>
 
-            <Button className={classes.button} onClick={props.handleClose}>
-              저장
+            <Grid container justifyContent="center" spacing={spacing}>
+                <Autocomplete
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                /> 
+                <Autocomplete
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash3}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="단가"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "단가를 입력하세요."
+                    }}
+                />
+                <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                        className={classes.textField} 
+                        label="수량"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                    />
+                    )}
+                    rules={{ 
+                    required: "수량을 입력하세요."
+                    }}
+                />
+            </Grid>
+                {/* <div style={{align: "center"}}>test.png</div> */}
+
+
+
+                <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
+                    {"image.png"}
+                </Grid>
+
+            <Button className={classes.button} style={{marginTop: "30px"}} onClick={props.handleClose}>
+              이미지 업로드
             </Button>
 
 
