@@ -98,7 +98,7 @@ export default function PartRegister() {
     // Toast Grid options value
     const [partData, setPartData] = useState([]);
     const columns = ([
-        {name: "seq_id", header: "CodeNo", align: "center"},
+        // {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "part_name", header: "파트명", align: "center"},
         {
           name: "update",

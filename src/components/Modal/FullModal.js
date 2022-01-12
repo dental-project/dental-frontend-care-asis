@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   textField: {
-    width: "100%",
+    width: "97%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -256,8 +256,8 @@ export default function FullScreenDialog(props) {
                         label="Lower"
                       />
                     )}
-                  />bu
-                 </Grid>
+                  />
+                </Grid>
                 <Grid item xs={2}>
                   <Controller
                     name="partName"
@@ -311,23 +311,23 @@ export default function FullScreenDialog(props) {
 
                 <Grid item xs={2}>
                   <Autocomplete
-                      className={classes.textField}
-                      id="filter-demo"
-                      options={dash2}
-                      getOptionLabel={(option) => option.title}
-                      filterOptions={filterOptions}
-                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                   /> 
-                  
-                </Grid>    
+                </Grid>
+
                 <Grid item xs={2}>
                   <Autocomplete
-                      className={classes.textField}
-                      id="filter-demo"
-                      options={dash3}
-                      getOptionLabel={(option) => option.title}
-                      filterOptions={filterOptions}
-                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                    className={classes.textField}
+                    id="filter-demo"
+                    options={dash3}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                   />                  
                 </Grid>  
 
@@ -349,7 +349,7 @@ export default function FullScreenDialog(props) {
                     rules={{ 
                       required: "단가를 입력하세요."
                     }}
-                />
+                  />
                 </Grid> 
 
                 <Grid item xs={3}>
@@ -369,8 +369,8 @@ export default function FullScreenDialog(props) {
                     )}
                     rules={{ 
                       required: "수량을 입력하세요."
-                  }}
-                />
+                    }}
+                  />
                   
                 </Grid>    
 

@@ -19,8 +19,7 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    float: "left",
-    width: "45%",
+    width: "95%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -90,7 +89,6 @@ export default function DashModal(props) {
   const dental2 = [ { title: "제조" }, { title: "보건업" } ];
   const dental3 = [ { title: "치과기공소" }, { title: "치과병원" } ];
   
-
 
 
   useEffect( () => {
@@ -334,7 +332,7 @@ export default function DashModal(props) {
                   options={aaa}
                   getOptionLabel={(option) => option.title}
                   filterOptions={filterOptions}
-                  style={{ width: "95%" }}
+                  
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />
                 <Controller
@@ -573,6 +571,107 @@ export default function DashModal(props) {
     </>
   )
 
+
+
+
+
+
+
+
+
+
+
+  const Price = () => (
+    <>
+      <DialogContent>
+        <DialogContentText>
+          단가 {props.modalType}
+        </DialogContentText>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          { 
+            props.modalType === "삭제"
+            ? null
+            : (
+              <>
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash1}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash2}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={dash3}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                />  
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="단가"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "단가를 입력하세요."
+                  }}
+                />  
+            </>
+            )
+          }
+          <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >{props.modalType}
+          </Button> 
+        </form>
+          <Button
+            className={classes.button} 
+            color="danger" 
+            round
+            onClick={props.close}
+          >취소
+          </Button>
+          
+      </DialogContent>
+    </>
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <Dialog open={props.open} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.partModalType}</DialogTitle>
@@ -594,6 +693,11 @@ export default function DashModal(props) {
         {
           props.type === "dental"
           ? <Dental />
+          : null
+        }
+        {
+          props.type === "price"
+          ? <Price />
           : null
         }
       </Dialog>

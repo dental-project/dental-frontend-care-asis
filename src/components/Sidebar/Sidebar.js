@@ -122,10 +122,26 @@ export default function Sidebar(props) {
       </NavLink>
        
       <NavLink
+        to={"/admin/priceRegister"}
+        key={4}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="단가등록" style={{ color: "#FFFFFF" }} />
+            </ListItem>
+          </List>
+        </Collapse>
+      </NavLink>
+
+      <NavLink
         to={"/admin/userRegister"}
         //className={activePro + classes.item}
         activeClassName="active"
-        key={4}
+        key={5}
       >
         <ListItem button >
           <ListItemIcon>

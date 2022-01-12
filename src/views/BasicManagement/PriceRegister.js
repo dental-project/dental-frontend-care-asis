@@ -50,51 +50,42 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function DentalRegister() {
+export default function PriceRegister() {
 
     const classes = useStyles();
 
     // 모달
-    const [openDentalAddModal, setOpenDentalModal] = useState(false);
+    const [openPriceAddModal, setOpenPriceModal] = useState(false);
     const [registerType, setRegisterType] = useState("");
     const [rowSeqId, setRowSeqId] = useState("");
     const [rowItemName, setRowItemName] = useState("");
 
-    const handleDentalModalOpen = () => {
-        setOpenDentalModal(true);
+    const handlePriceModalOpen = () => {
+        setOpenPriceModal(true);
     };
-    const handleDentalModalClose = () => {
-        setOpenDentalModal(false);
+    const handlePriceModalClose = () => {
+        setOpenPriceModal(false);
     };
 
-    const dentalModalOpen = (e) => {
+    const priceModalOpen = (e) => {
         setRegisterType("추가");
-        handleDentalModalOpen();
+        handlePriceModalOpen();
     }
 
-    const [dentalData, setDentalData] = useState([]);
+    const [priceData, setPriceData] = useState([]);
     const columns = ([
-        {name: "vendor_name", header: "거래처명", align: "center" },
-        {name: "ceo", header: "대표", align: "center" },
-        {name: "tel", header: "전화번호", align: "center" },
-
-        {name: "fax", header: "팩스번호", align: "center" }, //
-        {name: "tel", header: "등록번호", align: "center" }, // ???
-        {name: "ㅁㄴㄹ", header: "업태", align: "center" }, // ???
-        {name: "ㅁㄴㄹ", header: "업종", align: "center" }, // ???
-        {name: "post_number", header: "우편번호", align: "center" }, //
-        {name: "address", header: "주소", align: "center" }, //
-        {name: "description", header: "비고", align: "center" }, //
-
-        {name: "business_number", header: "사업자등록번호", align: "center" }
+        {name: "vendor_name", header: "파트명", align: "center" },
+        {name: "part_name", header: "파트명", align: "center" },
+        {name: "item_name", header: "장치명", align: "center" },
+        {name: "price", header: "단가", align: "center" }
     ]);
 
     useEffect( () => {
         axios
-          .get("http://localhost:8000/api/vendor/")
+          .get("http://localhost:8000/api/sell/price/")
           .then((result) => {
               console.log(result);
-            setDentalData(result.data);
+            setPriceData(result.data);
           })
           .catch((error) => {
             throw new Error(error);
@@ -112,15 +103,15 @@ export default function DentalRegister() {
                                 className={classes.button} 
                                 color="info" 
                                 round
-                                onClick={(e) => dentalModalOpen(e)}
+                                onClick={(e) => priceModalOpen(e)}
                             >추가
                             </Button>
                         </CardHeader>
                         <CardBody>
                         <BasicGrid 
-                            type={"dental"}
+                            type={"price"}
                             columns={columns}
-                            data={dentalData}
+                            data={priceData}
                         />
                         </CardBody>
                     </Card>
@@ -128,12 +119,12 @@ export default function DentalRegister() {
             </Grid>
             
             <Modal      
-                type={"dental"}         
+                type={"price"}         
                 modalType={registerType}
                 rowSeqId={rowSeqId}
                 rowValue={rowItemName}
-                open={openDentalAddModal}
-                close={handleDentalModalClose}
+                open={openPriceAddModal}
+                close={handlePriceModalClose}
             />
       </>
     );

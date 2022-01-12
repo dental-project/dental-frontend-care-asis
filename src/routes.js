@@ -5,6 +5,7 @@ import DashboardDetailPage from "views/Dashboard/DashboardDetail.js";
 import PartRegister from "views/BasicManagement/PartRegister.js";
 import ItemRegister from "views/BasicManagement/ItemRegister.js";
 import DentalRegister from "views/BasicManagement/DentalRegister.js";
+import PriceRegister from "views/BasicManagement/PriceRegister.js";
 import UserRegister from "views/Users/UserRegister.js";
 
 const dashboardRoutes = [
@@ -41,6 +42,13 @@ const dashboardRoutes = [
     name: "치과 등록",
     icon: DvrIcon,
     component: DentalRegister,
+    layout: "/admin"
+  },
+  {
+    path: "/priceRegister",
+    name: "단가 등록",
+    icon: DvrIcon,
+    component: PriceRegister,
     layout: "/admin"
   },
   {

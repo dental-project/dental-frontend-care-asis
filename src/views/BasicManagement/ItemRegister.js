@@ -84,8 +84,8 @@ export default function ItemRegister() {
 
     const [itemData, setItemData] = useState([]);
     const columns = ([
-        {name: "seq_id", header: "CodeNo", align: "center"},
-        {name: "part_seq_id", header: "파트명", align: "center"},
+        // {name: "seq_id", header: "CodeNo", align: "center"},
+        {name: "part_name", header: "파트명", align: "center"},
         {name: "item_name", header: "장치명", align: "center"}
     ]);
 
