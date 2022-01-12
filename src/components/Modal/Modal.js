@@ -89,6 +89,7 @@ export default function DashModal(props) {
   const dental2 = [ { title: "제조" }, { title: "보건업" } ];
   const dental3 = [ { title: "치과기공소" }, { title: "치과병원" } ];
   
+  const bank = [ { title: "신한은행"}, { title: "국민은행" }, { title: "우리은행" }];
 
 
   useEffect( () => {
@@ -468,7 +469,7 @@ export default function DashModal(props) {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
-                      label="등록번호"
+                      label="사업자번호"
                       variant="outlined"
                       onChange={onChange}
                       error={!!error}
@@ -476,7 +477,7 @@ export default function DashModal(props) {
                     />
                   )}
                   rules={{ 
-                    required: "등록번호를 입력하세요."
+                    required: "사업자번호를 입력하세요."
                   }}
                 />
                 <Autocomplete
@@ -531,6 +532,33 @@ export default function DashModal(props) {
                   )}
                   rules={{ 
                     required: "주소를 입력하세요."
+                  }}
+                />
+                <Autocomplete
+                  className={classes.textField}
+                  id="filter-demo"
+                  options={bank}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{ width: "95%" }}
+                  renderInput={(params) => <TextField {...params} label="은행" variant="outlined" />}
+                />
+                <Controller
+                  name="itemName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="계좌번호"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "계좌번호를 입력하세요."
                   }}
                 />
                 <Controller

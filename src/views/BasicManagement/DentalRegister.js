@@ -77,16 +77,17 @@ export default function DentalRegister() {
         {name: "vendor_name", header: "거래처명", align: "center" },
         {name: "ceo", header: "대표", align: "center" },
         {name: "tel", header: "전화번호", align: "center" },
+        {name: "fax", header: "팩스번호", align: "center" },
+        {name: "business_number", header: "사업자번호", align: "center" },
+        {name: "business_type_name", header: "업태", align: "center" },
+        {name: "business_sector_name", header: "업종", align: "center" },
+        {name: "post_number", header: "우편번호", align: "center" }, 
+        {name: "address", header: "주소", align: "center" }, 
+        {name: "bank_name", header: "은행", align: "center" },
+        {name: "bank_account", header: "계좌번호", align: "center" },
+        {name: "description", header: "비고", align: "center" } 
 
-        {name: "fax", header: "팩스번호", align: "center" }, //
-        {name: "tel", header: "등록번호", align: "center" }, // ???
-        {name: "ㅁㄴㄹ", header: "업태", align: "center" }, // ???
-        {name: "ㅁㄴㄹ", header: "업종", align: "center" }, // ???
-        {name: "post_number", header: "우편번호", align: "center" }, //
-        {name: "address", header: "주소", align: "center" }, //
-        {name: "description", header: "비고", align: "center" }, //
-
-        {name: "business_number", header: "사업자등록번호", align: "center" }
+        
     ]);
 
     useEffect( () => {
