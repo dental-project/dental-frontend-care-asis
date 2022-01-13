@@ -105,7 +105,7 @@ export default function DashModal(props) {
         });
   }, []);
 
-  //console.log(autoCompleteData);
+  //console.log(props);
   
   const onSubmit = (data) => {
   

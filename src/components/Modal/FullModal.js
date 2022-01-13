@@ -256,8 +256,8 @@ export default function FullScreenDialog(props) {
                         label="Lower"
                       />
                     )}
-                  />
-                </Grid>
+                  />bu
+                 </Grid>
                 <Grid item xs={2}>
                   <Controller
                     name="partName"
@@ -294,14 +294,14 @@ export default function FullScreenDialog(props) {
                             name="appliance"
                             color="primary"
                           />
-                        }
+                        }                 
                         label="장치"
                       />
                     )}
                   />
                 </Grid>
 
-                <Grid item xs={2}></Grid>          
+                <Grid item xs={2}></Grid>  
 
 
 
@@ -311,27 +311,26 @@ export default function FullScreenDialog(props) {
 
                 <Grid item xs={2}>
                   <Autocomplete
-                    className={classes.textField}
-                    id="filter-demo"
-                    options={dash2}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                      className={classes.textField}
+                      id="filter-demo"
+                      options={dash2}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                   /> 
-                </Grid>
-
+                </Grid>    
                 <Grid item xs={2}>
                   <Autocomplete
-                    className={classes.textField}
-                    id="filter-demo"
-                    options={dash3}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                      className={classes.textField}
+                      id="filter-demo"
+                      options={dash3}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                   />                  
                 </Grid>  
 
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Controller
                     name="partName"
                     control={control}
@@ -349,10 +348,10 @@ export default function FullScreenDialog(props) {
                     rules={{ 
                       required: "단가를 입력하세요."
                     }}
-                  />
+                />
                 </Grid> 
 
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Controller
                     name="partName"
                     control={control}
@@ -369,10 +368,30 @@ export default function FullScreenDialog(props) {
                     )}
                     rules={{ 
                       required: "수량을 입력하세요."
-                    }}
-                  />
-                  
+                  }}
+                />
                 </Grid>    
+
+                <Grid item xs={2}>
+                  <Controller
+                    name="partName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <TextField
+                        className={classes.textField} 
+                        label="할인율 (%)"
+                        variant="outlined"
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                    rules={{ 
+                      required: "할인율을 입력하세요."
+                  }}
+                />
+                </Grid>                                     
 
                 <Grid item xs={1}>
                   <Button variant="outlined" color="secondary" style={{width: "100%",height: "74%", marginTop: "8px"}}>

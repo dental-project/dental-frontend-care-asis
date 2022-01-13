@@ -21,6 +21,8 @@ import TextField from "@material-ui/core/TextField";
 import axios from 'axios';
 
 import FullModal from "components/Modal/FullModal.js"
+import PrintModal from "components/Modal/PrintModal.js"
+
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
@@ -73,6 +75,18 @@ export default function Dashboard(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+
+  // 모달
+  const [openPrint, setOpenPrint] = React.useState(false);
+  const handleClickOpenPrint = () => {
+    setOpenPrint(true);
+  };
+  const handleClosePrint = () => {
+    setOpenPrint(false);
+  };
+
 
 
   const onDetailButtonClicked = () => {
@@ -178,7 +192,6 @@ export default function Dashboard(props) {
             </CardHeader>
             <CardBody>
 
-              
               <form className={classes.container} noValidate>
                 <Grid item xs={4} className={classes.grid} style={{float: "left"}}>
                   <TextField
@@ -237,14 +250,13 @@ export default function Dashboard(props) {
                   >검색
                   </Button>
                 </Grid>   
-
+                
                 <Grid item xs={2} className={classes.grid} style={{float: "right"}}>
                   <Button
-                    type="submit"
                     color="danger" 
                     round
                     style={{width: "100%"}}
-                    //onClick={(e) => partModalOpen(e)}
+                    onClick={(e) => handleClickOpenPrint(e)}
                   >출력
                   </Button>
                   </Grid>
@@ -268,6 +280,12 @@ export default function Dashboard(props) {
         open={open}
         handleClickOpen={handleClickOpen}
         handleClose={handleClose}
+      />
+
+      <PrintModal
+         
+        open={openPrint}
+        close={handleClosePrint}
       />
 
       {/* <Modal      

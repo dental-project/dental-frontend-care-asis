@@ -25,6 +25,10 @@ import { useForm, Controller } from "react-hook-form";
 import axios from 'axios';
 
 import Modal from "components/Modal/Modal.js"
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
+import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -64,6 +68,11 @@ export default function ItemRegister() {
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
 
+    const filterOptions = createFilterOptions({
+      matchFrom: 'start',
+      stringify: (option) => option.title,
+    });
+
     // 모달
     const [openItemAddModal, setOpenItemModal] = useState(false);
     const [registerType, setRegisterType] = useState("");
@@ -82,12 +91,47 @@ export default function ItemRegister() {
         handleItemModalOpen();
     }
 
+
+
+    const onUpdateButtonClicked = (seqId,partName) => {
+      //console.log(rowIndex);
+    };
+  
+    const onRemoveButtonClicked = (rowIndex) => {
+      console.log(rowIndex);
+    };
+
     const [itemData, setItemData] = useState([]);
     const columns = ([
         // {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "part_name", header: "파트명", align: "center"},
-        {name: "item_name", header: "장치명", align: "center"}
+        {name: "item_name", header: "장치명", align: "center"},
+        {
+          name: "update",
+          header: "수정",
+          align: "center",
+          renderer: {
+            type: UpdateButtonRenderer,
+            options: {
+              onUpdateButtonClicked
+            }
+          }
+        },
+        {
+          name: 'remove',
+          header: '삭제',
+          align: "center",
+          renderer: {
+            type: RemoveButtonRenderer,
+            options: {
+              onRemoveButtonClicked
+            }
+          }
+        }
     ]);
+
+    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
+    const auto2 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
     useEffect( () => {
         axios
@@ -118,6 +162,38 @@ export default function ItemRegister() {
                   </Button>
                 </CardHeader>
                 <CardBody>
+
+                  <Grid item xs={6} className={classes.grid}>
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto1}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "300px", marginLeft: "20px"}}
+                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                    />
+
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto2}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "300px"}}
+                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                    />
+
+                    <Button
+                      type="submit"
+                      color="primary" 
+                      round
+                      style={{float: "left", width: "100px"}}
+                      //onClick={(e) => partModalOpen(e)}
+                    >검색
+                    </Button>
+                  </Grid>    
+
                   <BasicGrid 
                     type={"item"}
                     columns={columns}

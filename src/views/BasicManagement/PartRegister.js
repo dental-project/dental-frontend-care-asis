@@ -25,7 +25,8 @@ import axios from "axios";
 import apiAxios from "modules/apiAxios.js";
 
 import Modal from "components/Modal/Modal.js"
-
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -64,6 +65,11 @@ export default function PartRegister() {
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
 
+    const filterOptions = createFilterOptions({
+      matchFrom: 'start',
+      stringify: (option) => option.title,
+    });
+
     // 모달
     const [openPartAddModal, setOpenPartModal] = useState(false);
     const [registerType, setRegisterType] = useState("");
@@ -94,6 +100,12 @@ export default function PartRegister() {
       setRowSeqId(seqId);
       handlePartModalOpen();
     };
+
+
+
+    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
+
+
 
     // Toast Grid options value
     const [partData, setPartData] = useState([]);
@@ -141,7 +153,6 @@ export default function PartRegister() {
             <Grid item xs={12} className={classes.grid}>
                 <Card>
                     <CardHeader>
-                        <Typography>추가</Typography>
                         <Button
                           type="submit"
                           className={classes.button} 
@@ -152,6 +163,28 @@ export default function PartRegister() {
                         </Button>
                     </CardHeader>
                     <CardBody>
+
+                      <Grid item xs={6} className={classes.grid}>
+                        <Autocomplete
+                          id="filter-demo"
+                          className={classes.grid}
+                          options={auto1}
+                          getOptionLabel={(option) => option.title}
+                          filterOptions={filterOptions}
+                          style={{float: "left", width: "300px"}}
+                          renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                        />
+
+                        <Button
+                          type="submit"
+                          color="primary" 
+                          round
+                          style={{float: "left", width: "100px"}}
+                          //onClick={(e) => partModalOpen(e)}
+                        >검색
+                        </Button>
+                      </Grid>                     
+
                         <BasicGrid 
                           type={"part"}
                           columns={columns}
