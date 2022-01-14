@@ -9,7 +9,7 @@ import App from "App.js";
 
 // redux
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import store from './redux/store';
 
 // Data
 //import Items from "api/Items.js";
@@ -23,20 +23,10 @@ let test = {
 
 function reducer(state = test, action) {
 
-  // if(action.type === "dashboardAdd") {
-  //   let dashCopy = [...state, action.dashboardAdd];
-  //   return dashCopy
-  // }
-
   return state;
 }
 
-// const hist = createBrowserHistory();
 
-
-
-
-const store = createStore(reducer); 
 
 ReactDOM.render(
   <BrowserRouter>

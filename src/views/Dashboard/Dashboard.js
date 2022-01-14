@@ -29,6 +29,11 @@ import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
+
+import { connect } from 'react-redux'
+import { addSubscriber } from "redux/index";
+
+
 const useStyles = makeStyles((theme) => ({
   grid: {
     padding: theme.spacing(1)
@@ -62,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Dashboard(props) {
+function Dashboard({ count, addSubscriber}) {
 
   const classes = useStyles();
   let history = useHistory();
@@ -172,9 +177,18 @@ export default function Dashboard(props) {
     });
   },[]);
    
+
+  const [number, setNumber] = useState(2);
+
   return (
     <>
       <Grid container>
+
+        <h2>{count}</h2>
+        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
+        <button onClick={ () => addSubscriber(number)}></button>
+
+
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
@@ -296,3 +310,23 @@ export default function Dashboard(props) {
     </>
   );
 }
+
+const mapStateToProps = ({subscribers}) => {
+
+  return {
+    count: subscribers.count
+  }
+}
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     addSubscriber: () => dispatch(addSubscriber())
+//   }
+// }
+// ==>
+
+const mapDispatchToProps = {
+  addSubscriber: (number) => addSubscriber(number)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
