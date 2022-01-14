@@ -160,9 +160,6 @@ export default function Dashboard(props) {
   const auto1 = [ { title: "전체" }, { title: "리더스탑치과" }, { title: "이바른치과" }, { title: "연세두리치과" }, { title: "서울스위트치과" }, { title: "연세바로치과" }, { title: "서울시카고" }];
   const auto2 = [ { title: "전체" }, { title: "최진실" }, { title: "전윤화" }, { title: "정보경" }, { title: "이유림" }, { title: "조유나" }]
 
-
-
-
   useEffect( () => { 
     axios
       .get("http://localhost:8000/api/sell/master/")
@@ -259,7 +256,7 @@ export default function Dashboard(props) {
                     onClick={(e) => handleClickOpenPrint(e)}
                   >출력
                   </Button>
-                  </Grid>
+                </Grid>
               </form>
            
            
@@ -283,7 +280,6 @@ export default function Dashboard(props) {
       />
 
       <PrintModal
-         
         open={openPrint}
         close={handleClosePrint}
       />
