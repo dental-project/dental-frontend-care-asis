@@ -16,15 +16,16 @@
     "perfect-scrollbar": "1.5.0",
     "prop-types": "15.7.2",
     "react": "16.13.1",
-    "react-chartist": "0.14.3",
     "react-dom": "16.13.1",
-    "react-google-maps": "9.4.5",
     "react-hook-form": "^7.11.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-swipeable-views": "0.13.9",
     "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.1",
     "styled-components": "^5.3.3"
   },
   "scripts": {

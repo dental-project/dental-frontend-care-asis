@@ -28,6 +28,9 @@ import Modal from "components/Modal/Modal.js"
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
+import { connect } from 'react-redux'
+import { fetchComments } from 'redux/index';
+
 const useStyles = makeStyles((theme) => ({
     grid: {
       padding: theme.spacing(1)
@@ -60,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function PartRegister() {
+function PartRegister({fetchComments}) {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -137,7 +140,11 @@ export default function PartRegister() {
     ]);
 
     useEffect( () => {
-        axios
+        
+      fetchComments()
+      
+      
+      axios
           .get("http://localhost:8000/api/code/part/")
           .then((result) => {
              setPartData(result.data);
@@ -208,3 +215,14 @@ export default function PartRegister() {
       </>
     );
 }
+
+const mapStateToProps = ({comments}) => {
+  return {
+    comments: comments.items
+  }
+}
+const mapDispatchToProps = {
+  fetchComments
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PartRegister)

@@ -70,7 +70,20 @@ export default function DashModal(props) {
   console.log(props);
   
   const onSubmit = (data) => {
-  
+    axios
+      .post("http://localhost:8000/api/report/",{
+        receipt_date: "2022-01-01",
+        completion_date: "2022-01-15",
+        vendor_id: 1,
+        day: "day"
+      })
+      .then((result) => {
+        console.log(result);
+        
+        })
+      .catch((error) => {
+        throw new Error(error);
+    })
     
   }
 

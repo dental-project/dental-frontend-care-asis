@@ -184,9 +184,9 @@ function Dashboard({ count, addSubscriber}) {
     <>
       <Grid container>
 
-        <h2>{count}</h2>
+        {/* <h2>{count}</h2>
         <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
-        <button onClick={ () => addSubscriber(number)}></button>
+        <button onClick={ () => addSubscriber(number)}></button> */}
 
 
         <Grid item xs={12} className={classes.grid}>
