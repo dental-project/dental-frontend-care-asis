@@ -30,6 +30,7 @@ import TextField from "@material-ui/core/TextField";
 
 import { connect } from 'react-redux'
 import { fetchComments } from 'redux/index';
+import { Repeat } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister({fetchComments}) {
+function PartRegister({ fetchComments, loading, comments }) {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -154,6 +155,17 @@ function PartRegister({fetchComments}) {
           });
     }, []);
 
+
+    const commentsItems = loading ? (<div>is loading...</div>) : (
+      comments.map(comment => (
+        <div key={comment.id}>
+          <h3>{comment.name}</h3>
+          <p>{comment.email}</p>
+          <p>{comment.body}</p>
+        </div>
+      ))
+    )
+
     return (
       <>
         <Grid container>
@@ -198,6 +210,10 @@ function PartRegister({fetchComments}) {
                           data={partData}
                           //hoc={highFuc}
                         />
+
+
+                        {commentsItems}
+                        
                     </CardBody>
                 </Card>
             </Grid>
