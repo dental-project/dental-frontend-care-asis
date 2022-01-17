@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister({ fetchComments, loading, comments }) {
+function PartRegister({ fetchComments, loading, parts }) {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -145,26 +145,35 @@ function PartRegister({ fetchComments, loading, comments }) {
       fetchComments()
       
       
-      axios
-          .get("http://localhost:8000/api/code/part/")
-          .then((result) => {
-             setPartData(result.data);
-            })
-          .catch((error) => {
-            throw new Error(error);
-          });
+      // axios
+      //     .get("http://localhost:8000/api/code/part/")
+      //     .then((result) => {
+      //        setPartData(result.data);
+      //       })
+      //     .catch((error) => {
+      //       throw new Error(error);
+      //     });
+
+      
+
     }, []);
 
-
     const commentsItems = loading ? (<div>is loading...</div>) : (
-      comments.map(comment => (
-        <div key={comment.id}>
-          <h3>{comment.name}</h3>
-          <p>{comment.email}</p>
-          <p>{comment.body}</p>
+      parts.map(part => (
+        <div key={part.seq_id}>
+          <h3>{part.part_name}</h3>
         </div>
       ))
     )
+   
+
+    // const commentsItems = loading ? (<div>is loading...</div>) : (
+    //   parts.map(part => (
+    //     <div key={part.seq_id}>
+    //       <h3>{part.part_name}</h3>
+    //     </div>
+    //   ))
+    // )
 
     return (
       <>
@@ -232,9 +241,9 @@ function PartRegister({ fetchComments, loading, comments }) {
     );
 }
 
-const mapStateToProps = ({comments}) => {
+const mapStateToProps = ({parts}) => {
   return {
-    comments: comments.items
+    parts: parts.items
   }
 }
 const mapDispatchToProps = {

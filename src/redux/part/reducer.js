@@ -1,25 +1,25 @@
-import { FETCH_COMMENTS, FETCH_COMMENTS_REQUEST, FETCH_COMMENTS_SUCCESS, FETCH_COMMENTS_FAILURE } from './types'
+import { AXIOS_PART_REQUEST, AXIOS_PART_SUCCESS, AXIOS_PART_FAILURE } from './types'
 
-const comment = {
+const part = {
     items: [],
     loading: false,
     err: null
 }
 
-const commentsReducer = (state=comment, action) => {
+const partsReducer = (state=part, action) => {
     switch(action.type) {
-        case FETCH_COMMENTS_REQUEST:
+        case AXIOS_PART_REQUEST:
             return {
                 ...state,
                 loading: true,
             }
-        case FETCH_COMMENTS_SUCCESS:
+        case AXIOS_PART_SUCCESS:
             return {
                 ...state,
                 items: action.payload,
                 loading: false,
             }
-        case FETCH_COMMENTS_FAILURE:
+        case AXIOS_PART_FAILURE:
             return {
                 ...state,
                 err: action.payload,
@@ -31,4 +31,4 @@ const commentsReducer = (state=comment, action) => {
 }
 
 
-export default commentsReducer
+export default partsReducer
