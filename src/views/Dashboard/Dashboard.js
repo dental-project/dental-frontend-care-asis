@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Dashboard({ count, addSubscriber}) {
+export default function Dashboard() {
 
   const classes = useStyles();
   let history = useHistory();
@@ -311,12 +311,12 @@ function Dashboard({ count, addSubscriber}) {
   );
 }
 
-const mapStateToProps = ({subscribers}) => {
+// const mapStateToProps = ({subscribers}) => {
 
-  return {
-    count: subscribers.count
-  }
-}
+//   return {
+//     count: subscribers.count
+//   }
+// }
 
 // const mapDispatchToProps = (dispatch) => {
 //   return {
@@ -325,8 +325,8 @@ const mapStateToProps = ({subscribers}) => {
 // }
 // ==>
 
-const mapDispatchToProps = {
-  addSubscriber: (number) => addSubscriber(number)
-}
+// const mapDispatchToProps = {
+//   addSubscriber: (number) => addSubscriber(number)
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+// export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

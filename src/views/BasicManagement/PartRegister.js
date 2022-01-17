@@ -18,19 +18,14 @@ import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
 
-// api
-import axios from "axios";
-
-//
-import apiAxios from "modules/apiAxios.js";
-
 import Modal from "components/Modal/Modal.js"
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
-import { connect } from 'react-redux'
-import { axiosParts } from 'redux/index';
+import { postCreators } from 'modules/parts';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -64,7 +59,32 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister({ axiosParts, loading, parts }) {
+function PartRegister(props) {
+
+  console.log(props);
+
+  const dispatch = useDispatch();
+
+
+  // onClickㅇ[ 버튼 해줘야함]
+  function CreatePost() {
+    const content = {
+      seq_id: 99,
+      part_name: "reduxtest"
+    };
+
+    dispatch(postCreators.addPostMiddleware(content));
+  }
+
+  useEffect(() => {
+    dispatch(postCreators.getPostMiddleware());
+  }, []);
+
+
+
+
+
+
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -141,34 +161,20 @@ function PartRegister({ axiosParts, loading, parts }) {
     ]);
 
     useEffect( () => {
-        
-      console.log(parts);
+    
 
-      axiosParts();
-      
-      console.log(parts);
-
-      axios
-          .get("http://localhost:8000/api/code/part/")
-          .then((result) => {
-             setPartData(result.data);
-            })
-          .catch((error) => {
-            throw new Error(error);
-          });
+      // axios
+      //     .get("http://localhost:8000/api/code/part/")
+      //     .then((result) => {
+      //        setPartData(result.data);
+      //       })
+      //     .catch((error) => {
+      //       throw new Error(error);
+      //     });
 
       
 
     }, []);
-
-    const commentsItems = loading ? (<div>is loading...</div>) : (
-      parts.map(part => (
-        <div key={part.seq_id}>
-          <h3>{part.part_name}</h3>
-        </div>
-      ))
-    )
-   
 
     // const commentsItems = loading ? (<div>is loading...</div>) : (
     //   parts.map(part => (
@@ -221,8 +227,6 @@ function PartRegister({ axiosParts, loading, parts }) {
                 //hoc={highFuc}
               />
 
-              {commentsItems}
-                
             </CardBody>
           </Card>
         </Grid>
@@ -241,13 +245,13 @@ function PartRegister({ axiosParts, loading, parts }) {
   );
 }
 
-const mapStateToProps = ({parts}) => {
+const mapStateToProps = (post) => {
   return {
-    parts: parts.items
+    post: post
   }
 }
-const mapDispatchToProps = {
-  axiosParts
-}
+// const mapDispatchToProps = {
+//   axiosParts
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PartRegister)
+export default connect(mapStateToProps)(PartRegister)

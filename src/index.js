@@ -6,7 +6,7 @@ import App from "App.js";
 
 // redux
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import store from './modules/index';
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 

@@ -16,8 +16,6 @@ import TextField from "@material-ui/core/TextField";
 // Axios
 import axios from "axios";
 
-// api
-import dbAxios from "modules/dbAxios.js";
 
 // image
 import toothImg from "images/toothImg.svg";
