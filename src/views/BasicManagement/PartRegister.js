@@ -29,8 +29,8 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import TextField from "@material-ui/core/TextField";
 
 import { connect } from 'react-redux'
-import { fetchComments } from 'redux/index';
-import { Repeat } from "@material-ui/icons";
+import { axiosParts } from 'redux/index';
+
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister({ fetchComments, loading, parts }) {
+function PartRegister({ axiosParts, loading, parts }) {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -142,17 +142,20 @@ function PartRegister({ fetchComments, loading, parts }) {
 
     useEffect( () => {
         
-      fetchComments()
+      console.log(parts);
+
+      axiosParts();
       
-      
-      // axios
-      //     .get("http://localhost:8000/api/code/part/")
-      //     .then((result) => {
-      //        setPartData(result.data);
-      //       })
-      //     .catch((error) => {
-      //       throw new Error(error);
-      //     });
+      console.log(parts);
+
+      axios
+          .get("http://localhost:8000/api/code/part/")
+          .then((result) => {
+             setPartData(result.data);
+            })
+          .catch((error) => {
+            throw new Error(error);
+          });
 
       
 
@@ -175,70 +178,67 @@ function PartRegister({ fetchComments, loading, parts }) {
     //   ))
     // )
 
-    return (
-      <>
-        <Grid container>
-            <Grid item xs={12} className={classes.grid}>
-                <Card>
-                    <CardHeader>
-                        <Button
-                          type="submit"
-                          className={classes.button} 
-                          color="info" 
-                          round
-                          onClick={(e) => partModalOpen(e)}
-                        >추가
-                        </Button>
-                    </CardHeader>
-                    <CardBody>
+  return (
+    <>
+      <Grid container>
+        <Grid item xs={12} className={classes.grid}>
+          <Card>
+            <CardHeader>
+              <Button
+                type="submit"
+                className={classes.button} 
+                color="info" 
+                round
+                onClick={(e) => partModalOpen(e)}
+              >추가
+              </Button>
+            </CardHeader>
+            <CardBody>
+              <Grid item xs={6} className={classes.grid}>
+                <Autocomplete
+                  id="filter-demo"
+                  className={classes.grid}
+                  options={auto1}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={filterOptions}
+                  style={{float: "left", width: "300px"}}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                />
+                <Button
+                  type="submit"
+                  color="primary" 
+                  round
+                  style={{float: "left", width: "100px"}}
+                  //onClick={(e) => partModalOpen(e)}
+                >검색
+                </Button>
+              </Grid>                     
 
-                      <Grid item xs={6} className={classes.grid}>
-                        <Autocomplete
-                          id="filter-demo"
-                          className={classes.grid}
-                          options={auto1}
-                          getOptionLabel={(option) => option.title}
-                          filterOptions={filterOptions}
-                          style={{float: "left", width: "300px"}}
-                          renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                        />
+              <BasicGrid 
+                type={"part"}
+                columns={columns}
+                data={partData}
+                //hoc={highFuc}
+              />
 
-                        <Button
-                          type="submit"
-                          color="primary" 
-                          round
-                          style={{float: "left", width: "100px"}}
-                          //onClick={(e) => partModalOpen(e)}
-                        >검색
-                        </Button>
-                      </Grid>                     
-
-                        <BasicGrid 
-                          type={"part"}
-                          columns={columns}
-                          data={partData}
-                          //hoc={highFuc}
-                        />
-
-
-                        {commentsItems}
-                        
-                    </CardBody>
-                </Card>
-            </Grid>
+              {commentsItems}
+                
+            </CardBody>
+          </Card>
         </Grid>
+      </Grid>
 
-        <Modal      
-          type={"part"}         
-          modalType={registerType}
-          rowSeqId={rowSeqId}
-          rowValue={rowPartName}
-          open={openPartAddModal}
-          close={handlePartModalClose}
-        />
+      <Modal      
+        type={"part"}         
+        modalType={registerType}
+        rowSeqId={rowSeqId}
+        rowValue={rowPartName}
+        open={openPartAddModal}
+        close={handlePartModalClose}
+      />
 
-      </>
-    );
+    </>
+  );
 }
 
 const mapStateToProps = ({parts}) => {
@@ -247,7 +247,7 @@ const mapStateToProps = ({parts}) => {
   }
 }
 const mapDispatchToProps = {
-  fetchComments
+  axiosParts
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PartRegister)

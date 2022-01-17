@@ -30,5 +30,4 @@ const partsReducer = (state=part, action) => {
         
 }
 
-
 export default partsReducer

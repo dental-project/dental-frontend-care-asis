@@ -1,4 +1,5 @@
 import { AXIOS_PART_REQUEST, AXIOS_PART_SUCCESS, AXIOS_PART_FAILURE } from './types'
+import axios from "axios";
 
 const axiosPartRequest = () => {
     return {
@@ -20,13 +21,37 @@ const axiosPartFailure = (error) => {
     }
 }
 
-export const fetchComments = () => {
+export const axiosParts = () => {
     return (dispatch) => {
         dispatch(axiosPartRequest())
-        fetch("http://localhost:8000/api/code/part/")
+        axios.get("http://localhost:8000/api/code/part/")
             .then(response => response.json())
-            .then(parts => 
-                dispatch(axiosPartSuccess(parts)))
+            .then(parts => dispatch(axiosPartSuccess(parts)))
             .catch(error => dispatch(axiosPartFailure(error)))
     }
 }
+
+
+    
+      
+      // axios
+      //     .get("http://localhost:8000/api/code/part/")
+      //     .then((result) => {
+      //        setPartData(result.data);
+      //       })
+      //     .catch((error) => {
+      //       throw new Error(error);
+      //     });
+
+
+
+// export const fetchComments = () => {
+//     return (dispatch) => {
+//         dispatch(axiosPartRequest())
+//         fetch("http://localhost:8000/api/code/part/")
+//             .then(response => response.json())
+//             .then(parts => 
+//                 dispatch(axiosPartSuccess(parts)))
+//             .catch(error => dispatch(axiosPartFailure(error)))
+//     }
+// }
