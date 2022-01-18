@@ -4,31 +4,28 @@ import { produce } from 'immer';
 import { apis } from 'apis/axios'
 
 // action 생성
-const LOAD_POST = 'LOAD_POST';
-const ADD_POST = 'ADD_POST';
+const READ_PART = 'READ_PART';
+const ADD_PART = 'ADD_PART';
 
 // action creators
-const loadPost = createAction(LOAD_POST, (list) => ({ list }));
-const AddPost = createAction(ADD_POST, (post) => ({ post }));
+const readPart = createAction(READ_PART, (data) => ({ data }));
+const addPart = createAction(ADD_PART, (post) => ({ post }));
 
 // initialState
 const initialState = {
-  list: [],
+  data: [],
 };
 
 // middleware
 const getPostMiddleware = () => {
   return (dispatch) => {
     apis
-      .getPost()
+      .getPart()
       .then((res) => {
-        console.log(res);
         
-        const post_list = res.data;
+        const partData = res.data;
 
-        
-
-        dispatch(loadPost(post_list));
+        dispatch(readPart(partData));
       })
       .catch((err) => {
         console.error(err);
@@ -36,14 +33,14 @@ const getPostMiddleware = () => {
   };
 };
 
-const addPostMiddleware = (post) => {
-  console.log(post);
+const addPostMiddleware = (part) => {
+  
   return (dispatch) => {
     apis
-      .createPost(post)
+      .createPart(part)
       .then((result) => {
-        console.log(result);
-        dispatch(AddPost(post));
+        //console.log(result);
+        dispatch(addPart(part));
       })
       .catch((err) => {
         console.error(err);
@@ -54,24 +51,24 @@ const addPostMiddleware = (post) => {
 // reducer
 export default handleActions(
   {
-    [LOAD_POST]: (state, action) =>
+    [READ_PART]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.list;
+        draft.data = action.payload.data;
       }),
-    [ADD_POST]: (state, action) =>
+    [ADD_PART]: (state, action) =>
       produce(state, (draft) => {
-        draft.list.push(action.payload.post);
+        draft.data.push(action.payload.post);
       }),
   },
   initialState
 );
 
-const postCreators = {
+const parts = {
   getPostMiddleware,
   addPostMiddleware,
 };
 
-export { postCreators };
+export { parts };
 
 
 

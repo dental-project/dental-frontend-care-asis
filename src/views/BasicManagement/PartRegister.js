@@ -18,14 +18,17 @@ import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
 
-import Modal from "components/Modal/Modal.js"
+
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
-import { postCreators } from 'modules/parts';
+import { parts } from 'modules/parts';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { connect } from 'react-redux'
+
+
+import PartModalContainer from "containers/PartModalContainer";
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -59,12 +62,36 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister(props) {
+function PartRegister({part}) {
 
-  console.log(props);
+  const classes = useStyles();
+  const { watch,  handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
+  // const aa = useSelector((state) => state.part);
 
+
+  // Toast Grid options value
+  const columns = ([
+      {name: "seq_id", header: "CodeNo", align: "center"},
+      {name: "part_name", header: "파트명", align: "center"},
+      { name: "update", header: "수정", align: "center",
+        renderer: {
+          type: UpdateButtonRenderer,
+          options: {
+            onUpdateButtonClicked
+          }
+        }
+      },
+      { name: "remove", header: "삭제", align: "center",
+        renderer: {
+          type: RemoveButtonRenderer,
+          options: {
+            onRemoveButtonClicked
+          }
+        }
+      }
+  ]);
 
   // onClickㅇ[ 버튼 해줘야함]
   function CreatePost() {
@@ -73,33 +100,35 @@ function PartRegister(props) {
       part_name: "reduxtest"
     };
 
-    dispatch(postCreators.addPostMiddleware(content));
+    dispatch(parts.addPostMiddleware(content));
   }
 
   useEffect(() => {
-    dispatch(postCreators.getPostMiddleware());
+    dispatch(parts.getPostMiddleware());
   }, []);
 
 
 
+  const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
 
 
 
 
-    const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
+
+   
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.title,
     });
 
-    // 모달
-    const [openPartAddModal, setOpenPartModal] = useState(false);
+    
     const [registerType, setRegisterType] = useState("");
     const [rowSeqId, setRowSeqId] = useState("");
     const [rowPartName, setRowPartName] = useState("");
 
+    // 모달
+    const [openPartAddModal, setOpenPartModal] = useState(false);
     const handlePartModalOpen = () => {
       setOpenPartModal(true);
     };
@@ -124,65 +153,6 @@ function PartRegister(props) {
       setRowSeqId(seqId);
       handlePartModalOpen();
     };
-
-
-
-    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
-
-
-
-    // Toast Grid options value
-    const [partData, setPartData] = useState([]);
-    const columns = ([
-        // {name: "seq_id", header: "CodeNo", align: "center"},
-        {name: "part_name", header: "파트명", align: "center"},
-        {
-          name: "update",
-          header: "수정",
-          align: "center",
-          renderer: {
-            type: UpdateButtonRenderer,
-            options: {
-              onUpdateButtonClicked
-            }
-          }
-        },
-        {
-          name: "remove",
-          header: "삭제",
-          align: "center",
-          renderer: {
-            type: RemoveButtonRenderer,
-            options: {
-              onRemoveButtonClicked
-            }
-          }
-        }
-    ]);
-
-    useEffect( () => {
-    
-
-      // axios
-      //     .get("http://localhost:8000/api/code/part/")
-      //     .then((result) => {
-      //        setPartData(result.data);
-      //       })
-      //     .catch((error) => {
-      //       throw new Error(error);
-      //     });
-
-      
-
-    }, []);
-
-    // const commentsItems = loading ? (<div>is loading...</div>) : (
-    //   parts.map(part => (
-    //     <div key={part.seq_id}>
-    //       <h3>{part.part_name}</h3>
-    //     </div>
-    //   ))
-    // )
 
   return (
     <>
@@ -223,7 +193,7 @@ function PartRegister(props) {
               <BasicGrid 
                 type={"part"}
                 columns={columns}
-                data={partData}
+                data={part}
                 //hoc={highFuc}
               />
 
@@ -232,11 +202,11 @@ function PartRegister(props) {
         </Grid>
       </Grid>
 
-      <Modal      
-        type={"part"}         
+      <PartModalContainer      
+        //type={"part"}         
         modalType={registerType}
-        rowSeqId={rowSeqId}
-        rowValue={rowPartName}
+        //rowSeqId={rowSeqId}
+        //rowValue={rowPartName}
         open={openPartAddModal}
         close={handlePartModalClose}
       />
@@ -245,13 +215,13 @@ function PartRegister(props) {
   );
 }
 
-const mapStateToProps = (post) => {
+//export default PartRegister;
+
+const mapStateToProps = ({part}) => {
   return {
-    post: post
+    part: part.data
   }
 }
-// const mapDispatchToProps = {
-//   axiosParts
-// }
 
 export default connect(mapStateToProps)(PartRegister)
+
