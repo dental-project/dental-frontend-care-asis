@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   // const bank = [ { title: "신한은행"}, { title: "국민은행" }, { title: "우리은행" }];
 
 
-  useEffect( () => {
+  //useEffect( () => {
       // axios
       //   .get("http://localhost:8000/api/code/part/")
       //   .then((result) => {
@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
       //   .catch((error) => {
       //     throw new Error(error);
       //   });
-  }, []);
+  //}, []);
 
   //console.log(props);
   
@@ -675,16 +675,15 @@ const useStyles = makeStyles((theme) => ({
   // )
 
 
-  const Modal = (props) => {
-
+  const Modal = ({ partModalType ,open, children}) => {
 
   return (
-    <Dialog open={props.open} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{props.partModalType}</DialogTitle>
+    <Dialog open={open} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">{partModalType}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-            파트 {modalType}
-        </DialogContentText>
+        
+          {children}
+           
       </DialogContent>
     </Dialog>
   );
