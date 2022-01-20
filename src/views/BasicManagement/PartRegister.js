@@ -70,6 +70,7 @@ function PartRegister({part}) {
   const dispatch = useDispatch();
   // const aa = useSelector((state) => state.part);
 
+ // console.log(part);
 
   // Toast Grid options value
   const columns = ([
@@ -93,29 +94,21 @@ function PartRegister({part}) {
       }
   ]);
 
-  // onClickㅇ[ 버튼 해줘야함]
-  function CreatePost() {
-    const content = {
-      seq_id: 99,
-      part_name: "reduxtest"
-    };
 
-    dispatch(parts.addPostMiddleware(content));
-  }
 
+  const [partData, setPartData] = useState([]);
+ 
+  console.log(part);
   useEffect(() => {
     dispatch(parts.getPostMiddleware());
-  }, []);
+    
+  }, [] );
+  
+  //setPartData(part.data)
+  //console.log(partData);
 
 
-
-  const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
-
-
-
-
-
-   
+    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -193,7 +186,7 @@ function PartRegister({part}) {
               <BasicGrid 
                 type={"part"}
                 columns={columns}
-                data={part}
+                data={part.data}
                 //hoc={highFuc}
               />
 
@@ -219,7 +212,7 @@ function PartRegister({part}) {
 
 const mapStateToProps = ({part}) => {
   return {
-    part: part.data
+    part: part
   }
 }
 

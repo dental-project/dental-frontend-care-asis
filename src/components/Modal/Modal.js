@@ -1,52 +1,16 @@
 import React, { useEffect, useState } from 'react';
 //import Button from '@material-ui/core/Button';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import TextField from "@material-ui/core/TextField";
+
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from "components/CustomButtons/Button.js";
-
-import { useForm, Controller } from "react-hook-form";
 
 // api
 import axios from "axios";
 
 import { connect } from 'react-redux'
 
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    width: "95%",
-    margin: theme.spacing(1),
-    '& label.Mui-focused': {
-        color: '#00acc1',
-    },
-    '& .MuiOutlinedInput-root': {
-    '&.Mui-focused fieldset': {
-            borderColor: '#00acc1',
-        },
-    },
-  },
-  inputs: {
-    '& label.Mui-focused': {
-      color: '#26c6da',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#26c6da',
-    },
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: '#26c6da',
-      },
-    },
-  },
-  button: {
-    width: "100%"
-  }
-}));
 
 
 
@@ -675,15 +639,13 @@ const useStyles = makeStyles((theme) => ({
   // )
 
 
-  const Modal = ({ partModalType ,open, children}) => {
+  const Modal = ({ modalType ,open, children}) => {
 
   return (
-    <Dialog open={open} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{partModalType}</DialogTitle>
+    <Dialog open={open}>
+      <DialogTitle id="form-dialog-title">{modalType}</DialogTitle>
       <DialogContent>
-        
           {children}
-           
       </DialogContent>
     </Dialog>
   );

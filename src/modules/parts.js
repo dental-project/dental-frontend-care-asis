@@ -9,11 +9,14 @@ const ADD_PART = 'ADD_PART';
 
 // action creators
 const readPart = createAction(READ_PART, (data) => ({ data }));
-const addPart = createAction(ADD_PART, (post) => ({ post }));
+const addPart = createAction(ADD_PART, (data) => ({ data }));
 
 // initialState
 const initialState = {
   data: [],
+  loading: false,
+  modal: "false",
+  err: null
 };
 
 // middleware
@@ -21,10 +24,8 @@ const getPostMiddleware = () => {
   return (dispatch) => {
     apis
       .getPart()
-      .then((res) => {
-        
-        const partData = res.data;
-
+      .then((result) => {        
+        const partData = result.data;
         dispatch(readPart(partData));
       })
       .catch((err) => {
@@ -34,13 +35,12 @@ const getPostMiddleware = () => {
 };
 
 const addPostMiddleware = (part) => {
-  
   return (dispatch) => {
     apis
       .createPart(part)
       .then((result) => {
-        //console.log(result);
         dispatch(addPart(part));
+        alert("파트명을 추가 하였습니다.");
       })
       .catch((err) => {
         console.error(err);
@@ -57,7 +57,7 @@ export default handleActions(
       }),
     [ADD_PART]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.post);
+        draft.data.push(action.payload.data);
       }),
   },
   initialState
