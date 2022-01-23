@@ -68,47 +68,28 @@ function PartRegister({part}) {
   const { watch,  handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
-  // const aa = useSelector((state) => state.part);
+  //const aa = useSelector((part) => part);
 
  // console.log(part);
 
-  // Toast Grid options value
-  const columns = ([
-      {name: "seq_id", header: "CodeNo", align: "center"},
-      {name: "part_name", header: "파트명", align: "center"},
-      { name: "update", header: "수정", align: "center",
-        renderer: {
-          type: UpdateButtonRenderer,
-          options: {
-            onUpdateButtonClicked
-          }
-        }
-      },
-      { name: "remove", header: "삭제", align: "center",
-        renderer: {
-          type: RemoveButtonRenderer,
-          options: {
-            onRemoveButtonClicked
-          }
-        }
-      }
-  ]);
+  
 
 
 
   const [partData, setPartData] = useState([]);
  
-  console.log(part);
+  //
   useEffect(() => {
-    dispatch(parts.getPostMiddleware());
-    
+    dispatch(parts.getPartMiddleware());
+    setPartData(part.data);
   }, [] );
-  
+  console.log(partData);
+  //console.log(aa);
   //setPartData(part.data)
   //console.log(partData);
 
 
-    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
+    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"} ];
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -140,12 +121,37 @@ function PartRegister({part}) {
       setRowPartName(partName);
       handlePartModalOpen();
     };
-
+ 
     const onRemoveButtonClicked = (seqId) => {
+
+      console.log(seqId);
+
       setRegisterType("삭제");
       setRowSeqId(seqId);
       handlePartModalOpen();
     };
+
+    // Toast Grid options value
+    const columns = ([
+      {name: "seq_id", header: "CodeNo", align: "center"},
+      {name: "part_name", header: "파트명", align: "center"},
+      { name: "update", header: "수정", align: "center",
+        renderer: {
+          type: UpdateButtonRenderer,
+          options: {
+            onUpdateButtonClicked
+          }
+        }
+      },
+      { name: "remove", header: "삭제", align: "center",
+        renderer: {
+          type: RemoveButtonRenderer,
+          options: {
+            onRemoveButtonClicked
+          }
+        }
+      }
+    ]);
 
   return (
     <>
@@ -198,7 +204,7 @@ function PartRegister({part}) {
       <PartModalContainer      
         //type={"part"}         
         modalType={registerType}
-        //rowSeqId={rowSeqId}
+        rowSeqId={rowSeqId}
         //rowValue={rowPartName}
         open={openPartAddModal}
         close={handlePartModalClose}

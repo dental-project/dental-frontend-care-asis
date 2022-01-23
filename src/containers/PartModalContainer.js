@@ -42,74 +42,87 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const PartModalContainer = ({ part, modalType, open, close }) => {
+const PartModalContainer = ({ part, modalType, open, close, rowSeqId }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     const dispatch = useDispatch();
 
 
-    useEffect(() => {
-      dispatch(parts.getPostMiddleware());
-    }, []);
+    // useEffect(() => {
+    //   dispatch(parts.getPartMiddleware());
+    // }, []);
 
-
+    //console.log(rowSeqId);
 
 
     const onSubmit = (data) => {
 
-      const content = {
-        part_name:data.partName
-      };
-  
-      dispatch(parts.addPostMiddleware(content));
+      if(modalType === "추가") {
+        const content = {
+          part_name: data.partName
+        };
+    
+        dispatch(parts.addPartMiddleware(content));
+      } else if(modalType === "수정") {
+        
+      } else if(modalType === "삭제") {
+        const content = {
+          seq_id: rowSeqId
+        };
+    
+        dispatch(parts.deletePartMiddleware(rowSeqId));
+      }
+      
 
     }
 
     return (
       <Modal open={open} modalType={modalType}>
-      { 
-        modalType === "삭제"
-        ? null
-        : (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Controller
-                name="partName"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    className={classes.textField} 
-                    label="파트명"
-                    variant="outlined"
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                  />
-                )}
-                rules={{ 
-                  required: "파트명을 입력하세요."
-                }}
-              />
-              <Button
-                type="submit"
-                className={classes.button} 
-                color="info" 
-                round
-              >
-                {modalType}
-              </Button> 
-            </form>
-          )
-      }
-          
+        <form onSubmit={handleSubmit(onSubmit)}>
+        { 
+          modalType === "삭제"
+          ? null
+          : (
+              <>
+                <Controller
+                  name="partName"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="파트명"
+                      variant="outlined"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                    required: "파트명을 입력하세요."
+                  }}
+                />
+                
+              </>
+            )
+        }
           <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >
+            {modalType}
+          </Button> 
+        </form>
+        <Button
           className={classes.button} 
           color="danger" 
           round
           onClick={close}
-          >취소
-          </Button>
+        >취소
+        </Button>
       </Modal>
     )
 }

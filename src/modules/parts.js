@@ -2,14 +2,17 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { apis } from 'apis/axios'
+import { createImportSpecifier } from 'typescript';
 
 // action 생성
 const READ_PART = 'READ_PART';
 const ADD_PART = 'ADD_PART';
+const REMOVE_PART = 'REMOVE_PART';
 
 // action creators
 const readPart = createAction(READ_PART, (data) => ({ data }));
 const addPart = createAction(ADD_PART, (data) => ({ data }));
+const removePart = createAction(REMOVE_PART, (data) => ({ data }));
 
 // initialState
 const initialState = {
@@ -20,7 +23,7 @@ const initialState = {
 };
 
 // middleware
-const getPostMiddleware = () => {
+const getPartMiddleware = () => {
   return (dispatch) => {
     apis
       .getPart()
@@ -34,7 +37,7 @@ const getPostMiddleware = () => {
   };
 };
 
-const addPostMiddleware = (part) => {
+const addPartMiddleware = (part) => {
   return (dispatch) => {
     apis
       .createPart(part)
@@ -44,6 +47,21 @@ const addPostMiddleware = (part) => {
       })
       .catch((err) => {
         console.error(err);
+      });
+  };
+};
+
+const deletePartMiddleware = (part) => {
+  console.log(part);
+  return (dispatch) => {
+    apis
+      .deletePart(part)
+      .then((result) => {
+        dispatch(removePart(part));
+        alert("파트명을 삭제 했습니다.");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 };
@@ -59,13 +77,18 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data.push(action.payload.data);
       }),
+    [REMOVE_PART]: (state, action) =>
+      produce(state, (draft) => {
+        draft.data.push(action.payload.data);
+      }),
   },
   initialState
 );
 
 const parts = {
-  getPostMiddleware,
-  addPostMiddleware,
+  getPartMiddleware,
+  addPartMiddleware,
+  deletePartMiddleware,
 };
 
 export { parts };
