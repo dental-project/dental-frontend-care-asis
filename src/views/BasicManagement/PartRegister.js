@@ -75,11 +75,19 @@ function PartRegister() {
     console.log("렌더링");
   }, [partData.length] );
  
-  const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"} ];
+
+  
+  
+  
+
+
+
+  const auto1 = [ {part_name: "전체"} ];
+  partData.map( (data) => auto1.push({ part_name: data.part_name}) );
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option) => option.title,
+    stringify: (option) => option.part_name,
   });
 
   
@@ -116,8 +124,8 @@ function PartRegister() {
 
   // Toast Grid options value
   const columns = ([
-    {name: "seq_id", header: "CodeNo", align: "center"},
-    {name: "part_name", header: "파트명", align: "center"},
+    { name: "seq_id", header: "CodeNo", align: "center"},
+    { name: "part_name", header: "파트명", align: "center"},
     { name: "update", header: "수정", align: "center",
       renderer: {
         type: UpdateButtonRenderer,
@@ -135,6 +143,31 @@ function PartRegister() {
       }
     }
   ]);
+
+
+
+  const [value, setValue] = useState('');
+
+  const [searchData, setSearchData] = useState([]);
+
+  //const result = partData.filter(v => v.part_name === value);
+
+  //partData.filter(v => console.log(v));
+
+  console.log(partData);
+  console.log([searchData]);
+
+
+  const onClickSearch = (e) => {
+    partData.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+
+    
+  }
+
+
+
+
+
 
   return (
     <>
@@ -157,9 +190,21 @@ function PartRegister() {
                   id="filter-demo"
                   className={classes.grid}
                   options={auto1}
-                  getOptionLabel={(option) => option.title}
+                  getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
                   style={{float: "left", width: "300px"}}
+                  
+                  onChange={(event, newValue) => {
+                    //setValue(newValue);
+                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
+
+                    
+                    //console.log(newValue);
+                    setValue(newValue);
+                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
+                    
+                  }}
+
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />
                 <Button
@@ -167,7 +212,7 @@ function PartRegister() {
                   color="primary" 
                   round
                   style={{float: "left", width: "100px"}}
-                  //onClick={(e) => partModalOpen(e)}
+                  onClick={(e) => onClickSearch(e)}
                 >검색
                 </Button>
               </Grid>                     
@@ -175,9 +220,14 @@ function PartRegister() {
               <BasicGrid 
                 type={"part"}
                 columns={columns}
-                data={partData}
+                data={
+                  value.part_name === "전체" ? partData : [searchData]
+                }
                 //hoc={highFuc}
               />
+
+
+
 
             </CardBody>
           </Card>

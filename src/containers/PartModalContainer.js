@@ -49,32 +49,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
     const dispatch = useDispatch();
   
 
-    const [inputs, setInputs] = useState('');
-   
-
-
-
-
-    // const onChange  = (e) => {
-      
-    //   //setInputPartName(e.target.value);
-    //   //console.log(e.target.value);
-
-    //   const { value, name } = e.target;
-    //   setInputs({
-    //     ...inputs,
-    //     [name]: value,
-    //   });
-
-
-    //   // const handleChange = (e) => {
-    //   //   const { value, name } = e.target;
-    //   //   setInputs({
-    //   //     ...inputs,
-    //   //     [name]: value,
-    //   //   });
-    //   // };
-    // }
 
     const onSubmit = (data) => {
 
@@ -98,11 +72,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
       
     }
 
-
-
-
-
-
     return (
       <Modal open={open} modalType={modalType}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,13 +83,12 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
                 <Controller
                   name="partName"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
                       label="파트명"
                       variant="outlined"
-                      value={value}
+                      defaultValue={partName?partName:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
