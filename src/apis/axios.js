@@ -16,7 +16,7 @@ export const apis = {
   // 게시물 작성하기
   createPart: (contents) => instance.post('api/code/part/', contents),
   // 게시물 수정하기
-  updatePart: (id, content) => instance.put(`api/code/part/${id}`, content),
+  patchPart: (seq_id, contents) => instance.patch(`api/code/part/${seq_id}/`, contents),
   // 게시물 삭제하기
-  deletePart: (rowSeqId) => instance.delete(`api/code/part/${rowSeqId}/`),
+  deletePart: (seq_id) => instance.delete(`api/code/part/${seq_id}/`),
 };

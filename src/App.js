@@ -8,7 +8,7 @@ function App() {
   return (
     <Switch>
       <Route path="/auth/signin" component={Signin} /> 
-      <Route path="/admin" component={Admin} />
+      <Route path="/dental" component={Admin} />
       <Redirect path="/" to="/auth/signin" />
     </Switch>                
   );

@@ -106,7 +106,7 @@ export default function Signin() {
       })
       .then((result) => {
         result.data.status === "SUCCESS"
-          ? history.push("/admin")
+          ? history.push("/dental")
           : alert(result.data.message);
       })
       .catch((error) => {

@@ -10,17 +10,6 @@ const BasicGrid = ({
   hoc
 }) => {
 
-  const [partNo, setPartNo] = useState("");
-  const [part_name, setPartNameNo] = useState("");
-
-  
-
-  // const check = (object) => {
-
-  //   let rowKey = object.rowKey;
-    
-  // }
-
   TuiGrid.applyTheme('default', {
     
     scrollbar: {
@@ -47,9 +36,6 @@ const BasicGrid = ({
         border: '#173C4F'
       },
      
- 
-     
-    
     }
 
     // cell: {

@@ -2,16 +2,17 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { apis } from 'apis/axios'
-import { createImportSpecifier } from 'typescript';
 
 // action 생성
 const READ_PART = 'READ_PART';
 const ADD_PART = 'ADD_PART';
+const UPDATE_PART = 'UPDATE_PART';
 const REMOVE_PART = 'REMOVE_PART';
 
 // action creators
 const readPart = createAction(READ_PART, (data) => ({ data }));
 const addPart = createAction(ADD_PART, (data) => ({ data }));
+const updatePart = createAction(UPDATE_PART, (data) => ({ data }));
 const removePart = createAction(REMOVE_PART, (data) => ({ data }));
 
 // initialState
@@ -51,13 +52,31 @@ const addPartMiddleware = (part) => {
   };
 };
 
-const deletePartMiddleware = (part) => {
-  console.log(part);
+const updatePartMiddleware = (seqId, contents) => {
   return (dispatch) => {
     apis
-      .deletePart(part)
+      .patchPart(seqId, contents)
       .then((result) => {
-        dispatch(removePart(part));
+
+        dispatch(updatePart(seqId,contents));
+        alert("파트명을 수정 했습니다.");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}
+
+
+
+
+const deletePartMiddleware = (seqId) => {
+  console.log(seqId);
+  return (dispatch) => {
+    apis
+      .deletePart(seqId)
+      .then((result) => {
+        dispatch(removePart(seqId));
         alert("파트명을 삭제 했습니다.");
       })
       .catch((err) => {
@@ -77,17 +96,52 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data.push(action.payload.data);
       }),
+    
+    [UPDATE_PART]: (state, action) =>
+      
+    
+    produce(state, (draft) => {
+      //if(state.seq_id === )
+
+
+
+
+        // console.log(state);
+        // console.log(action);
+        // console.log(draft);
+      }),
+
     [REMOVE_PART]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.data);
+        draft.data = []
       }),
   },
   initialState
 );
 
+// // reducer
+// export default handleActions(
+//   {
+//     [READ_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data = action.payload.data;
+//       }),
+//     [ADD_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data.push(action.payload.data);
+//       }),
+//     [REMOVE_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data = action.payload.data;
+//       }),
+//   },
+//   initialState
+// );
+
 const parts = {
   getPartMiddleware,
   addPartMiddleware,
+  updatePartMiddleware,
   deletePartMiddleware,
 };
 

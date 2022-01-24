@@ -52,7 +52,7 @@ export default function Sidebar(props) {
     <List className={classes.list}>
     
       <NavLink
-        to={"/admin/dashboard"}
+        to={"/dental/dashboard"}
         //className={activePro + classes.item}
         activeClassName="active"
         key={0}
@@ -74,7 +74,7 @@ export default function Sidebar(props) {
       </ListItem>
         
       <NavLink
-        to={"/admin/partRegister"}
+        to={"/dental/partRegister"}
         key={1}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -90,7 +90,7 @@ export default function Sidebar(props) {
       </NavLink> 
 
       <NavLink
-        to={"/admin/itemRegister"}
+        to={"/dental/itemRegister"}
         key={2}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -106,7 +106,7 @@ export default function Sidebar(props) {
       </NavLink>
 
       <NavLink
-        to={"/admin/dentalRegister"}
+        to={"/dental/dentalRegister"}
         key={3}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -122,7 +122,7 @@ export default function Sidebar(props) {
       </NavLink>
        
       <NavLink
-        to={"/admin/priceRegister"}
+        to={"/dental/priceRegister"}
         key={4}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -138,7 +138,7 @@ export default function Sidebar(props) {
       </NavLink>
 
       <NavLink
-        to={"/admin/userRegister"}
+        to={"/dental/userRegister"}
         //className={activePro + classes.item}
         activeClassName="active"
         key={5}

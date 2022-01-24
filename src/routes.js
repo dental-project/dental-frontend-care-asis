@@ -14,49 +14,49 @@ const dashboardRoutes = [
     name: "접수 리스트",
     icon: DvrIcon,
     component: DashboardPage,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/dashboardDetail",
     name: "접수상세 리스트",
     icon: DvrIcon,
     component: DashboardDetailPage,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/partRegister",
     name: "파트 등록",
     icon: DvrIcon,
     component: PartRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/itemRegister",
     name: "장치 등록",
     icon: DvrIcon,
     component: ItemRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/dentalRegister",
     name: "치과 등록",
     icon: DvrIcon,
     component: DentalRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/priceRegister",
     name: "단가 등록",
     icon: DvrIcon,
     component: PriceRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/userRegister",
     name: "유저 회원가입",
     icon: DvrIcon,
     component: UserRegister,
-    layout: "/admin"
+    layout: "/dental"
   }
 ];
 

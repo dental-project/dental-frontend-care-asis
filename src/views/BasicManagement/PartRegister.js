@@ -25,7 +25,7 @@ import TextField from "@material-ui/core/TextField";
 import { parts } from 'modules/parts';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { connect } from 'react-redux'
+
 
 
 import PartModalContainer from "containers/PartModalContainer";
@@ -62,96 +62,79 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function PartRegister({part}) {
+function PartRegister() {
 
   const classes = useStyles();
-  const { watch,  handleSubmit, control } = useForm();
+  //const { watch,  handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
-  //const aa = useSelector((part) => part);
+  const partData = useSelector(({part}) => part.data);
 
- // console.log(part);
-
-  
-
-
-
-  const [partData, setPartData] = useState([]);
- 
-  //
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    setPartData(part.data);
-  }, [] );
-  console.log(partData);
-  //console.log(aa);
-  //setPartData(part.data)
-  //console.log(partData);
-
-
-    const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"} ];
-
-    const filterOptions = createFilterOptions({
-      matchFrom: 'start',
-      stringify: (option) => option.title,
-    });
-
-    
-    const [registerType, setRegisterType] = useState("");
-    const [rowSeqId, setRowSeqId] = useState("");
-    const [rowPartName, setRowPartName] = useState("");
-
-    // 모달
-    const [openPartAddModal, setOpenPartModal] = useState(false);
-    const handlePartModalOpen = () => {
-      setOpenPartModal(true);
-    };
-    const handlePartModalClose = () => {
-      setOpenPartModal(false);
-    };
-
-    const partModalOpen = (e) => {
-      setRegisterType("추가");
-      handlePartModalOpen();
-    }
-
-    const onUpdateButtonClicked = (seqId,partName) => {
-      setRegisterType("수정");
-      setRowSeqId(seqId);
-      setRowPartName(partName);
-      handlePartModalOpen();
-    };
+    console.log("렌더링");
+  }, [partData.length] );
  
-    const onRemoveButtonClicked = (seqId) => {
+  const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"} ];
 
-      console.log(seqId);
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.title,
+  });
 
-      setRegisterType("삭제");
-      setRowSeqId(seqId);
-      handlePartModalOpen();
-    };
+  
+  const [registerType, setRegisterType] = useState("");
+  const [seqId, setSeqId] = useState("");
+  const [partName, setPartName] = useState("");
 
-    // Toast Grid options value
-    const columns = ([
-      {name: "seq_id", header: "CodeNo", align: "center"},
-      {name: "part_name", header: "파트명", align: "center"},
-      { name: "update", header: "수정", align: "center",
-        renderer: {
-          type: UpdateButtonRenderer,
-          options: {
-            onUpdateButtonClicked
-          }
-        }
-      },
-      { name: "remove", header: "삭제", align: "center",
-        renderer: {
-          type: RemoveButtonRenderer,
-          options: {
-            onRemoveButtonClicked
-          }
+  // 모달
+  const [openPartAddModal, setOpenPartModal] = useState(false);
+  const handlePartModalOpen = () => {
+    setOpenPartModal(true);
+  };
+  const handlePartModalClose = () => {
+    setOpenPartModal(false);
+  };
+
+  const partModalOpen = (e) => {
+    setRegisterType("추가");
+    handlePartModalOpen();
+  }
+
+  const onUpdateButtonClicked = (seqId,partName) => {
+    setRegisterType("수정");
+    setSeqId(seqId);
+    setPartName(partName);
+    handlePartModalOpen();
+  };
+
+  const onRemoveButtonClicked = (seqId) => {
+    setRegisterType("삭제");
+    setSeqId(seqId);
+    handlePartModalOpen();
+  };
+
+  // Toast Grid options value
+  const columns = ([
+    {name: "seq_id", header: "CodeNo", align: "center"},
+    {name: "part_name", header: "파트명", align: "center"},
+    { name: "update", header: "수정", align: "center",
+      renderer: {
+        type: UpdateButtonRenderer,
+        options: {
+          onUpdateButtonClicked
         }
       }
-    ]);
+    },
+    { name: "remove", header: "삭제", align: "center",
+      renderer: {
+        type: RemoveButtonRenderer,
+        options: {
+          onRemoveButtonClicked
+        }
+      }
+    }
+  ]);
 
   return (
     <>
@@ -192,7 +175,7 @@ function PartRegister({part}) {
               <BasicGrid 
                 type={"part"}
                 columns={columns}
-                data={part.data}
+                data={partData}
                 //hoc={highFuc}
               />
 
@@ -204,8 +187,8 @@ function PartRegister({part}) {
       <PartModalContainer      
         //type={"part"}         
         modalType={registerType}
-        rowSeqId={rowSeqId}
-        //rowValue={rowPartName}
+        seqId={seqId}
+        partName={partName}
         open={openPartAddModal}
         close={handlePartModalClose}
       />
@@ -214,13 +197,13 @@ function PartRegister({part}) {
   );
 }
 
-//export default PartRegister;
+export default PartRegister;
 
-const mapStateToProps = ({part}) => {
-  return {
-    part: part
-  }
-}
+// const mapStateToProps = ({part}) => {
+//   return {
+//     part: part
+//   }
+// }
 
-export default connect(mapStateToProps)(PartRegister)
+// export default connect(mapStateToProps)(PartRegister)
 

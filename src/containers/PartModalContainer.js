@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Modal from 'components/Modal/Modal'
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from "react-hook-form";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { connect } from 'react-redux'
+
 import { parts } from 'modules/parts';
 
 // api
@@ -42,19 +42,39 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const PartModalContainer = ({ part, modalType, open, close, rowSeqId }) => {
+const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     const dispatch = useDispatch();
+  
+
+    const [inputs, setInputs] = useState('');
+   
 
 
-    // useEffect(() => {
-    //   dispatch(parts.getPartMiddleware());
-    // }, []);
 
-    //console.log(rowSeqId);
 
+    // const onChange  = (e) => {
+      
+    //   //setInputPartName(e.target.value);
+    //   //console.log(e.target.value);
+
+    //   const { value, name } = e.target;
+    //   setInputs({
+    //     ...inputs,
+    //     [name]: value,
+    //   });
+
+
+    //   // const handleChange = (e) => {
+    //   //   const { value, name } = e.target;
+    //   //   setInputs({
+    //   //     ...inputs,
+    //   //     [name]: value,
+    //   //   });
+    //   // };
+    // }
 
     const onSubmit = (data) => {
 
@@ -65,17 +85,23 @@ const PartModalContainer = ({ part, modalType, open, close, rowSeqId }) => {
     
         dispatch(parts.addPartMiddleware(content));
       } else if(modalType === "수정") {
-        
-      } else if(modalType === "삭제") {
-        const content = {
-          seq_id: rowSeqId
+
+        const contents = {
+          part_name: data.partName
         };
-    
-        dispatch(parts.deletePartMiddleware(rowSeqId));
+        
+        dispatch(parts.updatePartMiddleware(seqId, contents))
+
+      } else if(modalType === "삭제") {
+        dispatch(parts.deletePartMiddleware(seqId));
       }
       
-
     }
+
+
+
+
+
 
     return (
       <Modal open={open} modalType={modalType}>
@@ -94,6 +120,7 @@ const PartModalContainer = ({ part, modalType, open, close, rowSeqId }) => {
                       className={classes.textField} 
                       label="파트명"
                       variant="outlined"
+                      value={value}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -127,12 +154,12 @@ const PartModalContainer = ({ part, modalType, open, close, rowSeqId }) => {
     )
 }
 
-const mapStateToProps = ({part}) => {
-  return {
-    part: part.data
-  }
-}
+// const mapStateToProps = ({part}) => {
+//   return {
+//     part: part.data
+//   }
+// }
 
-export default connect(mapStateToProps)(PartModalContainer)
+// export default connect(mapStateToProps)(PartModalContainer)
 
-//export default PartModalContainer;
+export default PartModalContainer;
