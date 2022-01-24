@@ -58,7 +58,9 @@ const updatePartMiddleware = (seqId, contents) => {
       .patchPart(seqId, contents)
       .then((result) => {
 
-        dispatch(updatePart(seqId,contents));
+        const data = { seq_id: seqId, contents: contents }
+
+        dispatch(updatePart(data));
         alert("파트명을 수정 했습니다.");
       })
       .catch((err) => {
@@ -97,19 +99,20 @@ export default handleActions(
         draft.data.push(action.payload.data);
       }),
     
-    [UPDATE_PART]: (state, action) =>
+    [UPDATE_PART]: (state, action) => {(
+      state.data.map((seq_id) => {
+        if(seq_id === action.payload.data.contents.seq_id) {
+          //console.log(state.seq_id);
+        }
+      })
+    )},
       
     
-    produce(state, (draft) => {
-      //if(state.seq_id === )
+    
 
-
-
-
-        // console.log(state);
-        // console.log(action);
-        // console.log(draft);
-      }),
+    // produce(state, (draft) => {
+     
+    //   }),
 
     [REMOVE_PART]: (state, action) =>
       produce(state, (draft) => {
