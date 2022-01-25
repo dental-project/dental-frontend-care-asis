@@ -9,7 +9,6 @@ import Container from '@material-ui/core/Container';
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
@@ -21,14 +20,17 @@ import TextField from "@material-ui/core/TextField";
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
 
-// api
-import axios from 'axios';
-
-import Modal from "components/Modal/Modal.js"
+import ItemModalContainer from "containers/ItemModalContainer";
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
+
+
+import { items } from 'modules/items';
+import { useDispatch, useSelector } from 'react-redux';
+
+
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -68,15 +70,45 @@ export default function ItemRegister() {
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
 
+
+    const dispatch = useDispatch();
+    const itemData = useSelector(({item}) => item.data);
+  
+    useEffect(() => {
+      dispatch(items.getItemMiddleware());
+      console.log("렌더링");
+    }, [itemData.length] );
+
+
+
+    const [seqId, setSeqId] = useState('');
+    const [partName, setPartName] = useState('');
+    const [itemName, setItemName] = useState('');
+
+  //   useEffect( () => {
+  //     axios
+  //       .get("http://localhost:8000/api/code/item/")
+  //       .then((result) => {
+  //         console.log(result);
+  //         setItemData(result.data);
+  //       })
+  //       .catch((error) => {
+  //         throw new Error(error);
+  //       });
+  // }, []);
+
+
+
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.title,
     });
 
+    
     // 모달
     const [openItemAddModal, setOpenItemModal] = useState(false);
     const [registerType, setRegisterType] = useState("");
-    const [rowSeqId, setRowSeqId] = useState("");
+    
     const [rowItemName, setRowItemName] = useState("");
 
     const handleItemModalOpen = () => {
@@ -101,7 +133,7 @@ export default function ItemRegister() {
       console.log(rowIndex);
     };
 
-    const [itemData, setItemData] = useState([]);
+    
     const columns = ([
         // {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "part_name", header: "파트명", align: "center"},
@@ -133,19 +165,9 @@ export default function ItemRegister() {
     const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
     const auto2 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
-    useEffect( () => {
-        axios
-          .get("http://localhost:8000/api/code/item/")
-          .then((result) => {
-            console.log(result);
-            setItemData(result.data);
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-    }, []);
-
   
+
+
     return (
         <>
           <Grid container>
@@ -204,13 +226,24 @@ export default function ItemRegister() {
             </Grid>
           </Grid>
   
-          <Modal      
-            type={"item"}         
+
+          {/* <PartModalContainer      
+            //type={"part"}         
             modalType={registerType}
-            rowSeqId={rowSeqId}
-            rowValue={rowItemName}
+            seqId={seqId}
+            partName={partName}
+            open={openPartAddModal}
+            close={handlePartModalClose}
+          /> */}
+
+
+          <ItemModalContainer    
+            modalType={registerType}
             open={openItemAddModal}
             close={handleItemModalClose}
+            seqId={seqId}
+            partName={partName}
+            itemName={itemName}
           />
       </>
     );

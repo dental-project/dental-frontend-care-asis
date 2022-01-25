@@ -15,8 +15,6 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-// Form 양식
-import { useForm, Controller } from "react-hook-form";
 
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
@@ -148,20 +146,19 @@ function PartRegister() {
 
   const [value, setValue] = useState('');
 
-  const [searchData, setSearchData] = useState([]);
+  const [searchData, setSearchData] = useState(["전체"]);
 
   //const result = partData.filter(v => v.part_name === value);
 
   //partData.filter(v => console.log(v));
 
-  console.log(partData);
-  console.log([searchData]);
-
+  //console.log(partData);
+  //console.log([searchData]);
+  console.log(value.part_name);
 
   const onClickSearch = (e) => {
     partData.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
 
-    
   }
 
 
@@ -190,21 +187,24 @@ function PartRegister() {
                   id="filter-demo"
                   className={classes.grid}
                   options={auto1}
+                  defaultValue={auto1[0]}
                   getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
                   style={{float: "left", width: "300px"}}
                   
                   onChange={(event, newValue) => {
-                    //setValue(newValue);
-                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
-
-                    
-                    //console.log(newValue);
                     setValue(newValue);
+                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
+                    //console.log(event);
+                    //console.log(newValue);
+                    //setValue(newValue);
                     //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
                     
                   }}
-
+                 
+                  getOptionSelected={(option, value) => {
+                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                  }}
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />
                 <Button
@@ -221,26 +221,23 @@ function PartRegister() {
                 type={"part"}
                 columns={columns}
                 data={
-                  value.part_name === "전체" ? partData : [searchData]
+                  //value.part_name === "전체" ? partData : [searchData]
+                  partData
                 }
                 //hoc={highFuc}
               />
-
-
-
 
             </CardBody>
           </Card>
         </Grid>
       </Grid>
 
-      <PartModalContainer      
-        //type={"part"}         
+      <PartModalContainer           
         modalType={registerType}
-        seqId={seqId}
-        partName={partName}
         open={openPartAddModal}
         close={handlePartModalClose}
+        seqId={seqId}
+        partName={partName}
       />
 
     </>

@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import Modal from 'components/Modal/Modal'
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from "react-hook-form";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { parts } from 'modules/parts';
 
-// api
-import axios from "axios";
 const useStyles = makeStyles((theme) => ({
     textField: {
       width: "95%",
@@ -48,8 +46,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
     const { watch,  handleSubmit, control } = useForm();
     const dispatch = useDispatch();
   
-
-
     const onSubmit = (data) => {
 
       if(modalType === "추가") {
@@ -121,13 +117,5 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
       </Modal>
     )
 }
-
-// const mapStateToProps = ({part}) => {
-//   return {
-//     part: part.data
-//   }
-// }
-
-// export default connect(mapStateToProps)(PartModalContainer)
 
 export default PartModalContainer;

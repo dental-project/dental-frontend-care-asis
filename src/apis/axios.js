@@ -11,12 +11,22 @@ const instance = axios.create({
 });
 
 export const apis = {
-  // 게시물 불러오기
+  // 파트 불러오기
   getPart: () => instance.get('api/code/part/'),
-  // 게시물 작성하기
+  // 파트 추가
   createPart: (contents) => instance.post('api/code/part/', contents),
-  // 게시물 수정하기
+  // 게시물 수정
   patchPart: (seq_id, contents) => instance.patch(`api/code/part/${seq_id}/`, contents),
-  // 게시물 삭제하기
+  // 게시물 삭제
   deletePart: (seq_id) => instance.delete(`api/code/part/${seq_id}/`),
+
+  
+  getItem: () => instance.get('api/code/item/'),
+
+  createItem: (contents) => instance.post('api/code/item/', contents),
+
+  patchPart: (seq_id, contents) => instance.patch(`api/code/item/${seq_id}/`, contents),
+
+  deleteItem: (seq_id) => instance.delete(`api/code/item/${seq_id}/`),
+
 };
