@@ -75,7 +75,7 @@ const deleteItemMiddleware = (seqId) => {
       .deleteItem(seqId)
       .then((result) => {
         dispatch(removeItem(seqId));
-        alert("파트명을 삭제 했습니다.");
+        alert("장치를 삭제 했습니다.");
       })
       .catch((err) => {
         console.log(err);

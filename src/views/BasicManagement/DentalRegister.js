@@ -62,29 +62,28 @@ export default function DentalRegister() {
 
     const classes = useStyles();
 
-
-
     const dispatch = useDispatch();
     const dentalData = useSelector(({dental}) => dental.data);
   
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
      
-    }, [] );
+    }, [dentalData.length] );
    
-
-
-
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.title,
     });
 
+
+    const [modalType, setModalType] = useState("");
+    const [seqId, setSeqId] = useState("");
+
+
     // 모달
     const [openDentalAddModal, setOpenDentalModal] = useState(false);
-    const [modalType, setModalType] = useState("");
-  
+    
     const handleDentalModalOpen = () => {
         setOpenDentalModal(true);
     };
@@ -97,15 +96,16 @@ export default function DentalRegister() {
       handleDentalModalOpen();
     }
 
-
-
-
-    const onUpdateButtonClicked = (seqId,partName) => {
-      //console.log(rowIndex);
+    const onUpdateButtonClicked = (seqId) => {
+      setModalType("수정");
+      setSeqId(seqId);
+      handleDentalModalOpen();
     };
   
-    const onRemoveButtonClicked = (rowIndex) => {
-      console.log(rowIndex);
+    const onRemoveButtonClicked = (seqId) => {
+      setModalType("삭제");
+      setSeqId(seqId);
+      handleDentalModalOpen();
     };
 
     const columns = ([
@@ -226,11 +226,11 @@ export default function DentalRegister() {
             /> */}
 
             <DentalModalContainer           
-                modalType={modalType}
-                open={openDentalAddModal}
-                close={handleDentalModalClose}
-                //rowSeqId={rowSeqId}
-                //rowValue={rowItemName}
+              modalType={modalType}
+              open={openDentalAddModal}
+              close={handleDentalModalClose}
+              seqId={seqId}
+              //rowValue={rowItemName}
                
             />
       </>

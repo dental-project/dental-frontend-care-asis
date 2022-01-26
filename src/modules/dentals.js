@@ -7,16 +7,12 @@ const READ_DENTAL = 'READ_DENTAL';
 const ADD_DENTAL = 'ADD_DENTAL';
 const UPDATE_DENTAL = 'UPDATE_DENTAL';
 const REMOVE_DENTAL = 'REMOVE_DENTAL';
-const READ_BUSINESSTYPE = 'READ_BUSINESSTYPE';
-const READ_BUSINESSSECTOR = 'READ_BUSINESSSECTOR';
 
 // action creators
 const readDental = createAction(READ_DENTAL, (data) => ({ data }));
 const addDental = createAction(ADD_DENTAL, (data) => ({ data }));
 const updateDental = createAction(UPDATE_DENTAL, (data) => ({ data }));
 const removeDental = createAction(REMOVE_DENTAL, (data) => ({ data }));
-const readBusinessType = createAction(READ_BUSINESSTYPE, (data) => ({ data }));
-const readBusinessSector = createAction(READ_BUSINESSSECTOR, (data) => ({ data }));
 
 // initialState
 const initialState = {
@@ -65,7 +61,7 @@ const updateDentalMiddleware = (seqId, contents) => {
         const data = { seq_id: seqId, contents: contents }
 
         dispatch(updateDental(data));
-        alert("장치를 수정 했습니다.");
+        alert("수정 했습니다.");
       })
       .catch((err) => {
         console.log(err);
@@ -79,7 +75,7 @@ const deleteDentalMiddleware = (seqId) => {
       .deleteDental(seqId)
       .then((result) => {
         dispatch(removeDental(seqId));
-        alert("파트명을 삭제 했습니다.");
+        alert("삭제 했습니다.");
       })
       .catch((err) => {
         console.log(err);

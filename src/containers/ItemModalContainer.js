@@ -68,9 +68,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
 
     const onSubmit = (data) => {
 
-      console.log(autoSeqId);
-      console.log(data);
-       
       if(modalType === "추가") {
         const content = {
           part_seq_id: autoSeqId,
@@ -78,17 +75,21 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
         };
     
         dispatch(items.addItemMiddleware(content));
+      } else if(modalType === "수정") {
+
+        const contents = {
+          item_name: "update",
+          part_seq_id: "5"
+          //part_name: data.partName
+        };
+        //console.log(contents);
+        //console.log(seqId);
+
+        dispatch(items.updateItemMiddleware(9, contents))
       } else if(modalType === "삭제") {
         dispatch(items.deleteItemMiddleware(seqId));
       }
-    //   } else if(modalType === "수정") {
-
-    //     const contents = {
-    //       part_name: data.partName
-    //     };
-        
-    //     dispatch(parts.updateItemMiddleware(seqId, contents))
-
+       
       
       
     }
@@ -96,9 +97,9 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
 
 
     const filterOptions = createFilterOptions({
-        matchFrom: 'start',
-        stringify: (option) => option.part_name,
-      });
+      matchFrom: 'start',
+      stringify: (option) => option.part_name,
+    });
 
 
 

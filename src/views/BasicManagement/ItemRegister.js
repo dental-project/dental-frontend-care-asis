@@ -167,9 +167,6 @@ export default function ItemRegister() {
     const auto1 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
     const auto2 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
-  
-
-
     return (
         <>
           <Grid container>

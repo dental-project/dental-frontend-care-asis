@@ -15,7 +15,7 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 // api
 import axios from 'axios';
 
-import Modal from "components/Modal/Modal.js"
+import PriceModalContainer from "containers/PriceModalContainer";
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
@@ -65,31 +65,38 @@ export default function PriceRegister() {
       stringify: (option) => option.title,
     });
 
+
+
+    const [seqId, setSeqId] = useState("");
+    
+
+
     // 모달
     const [openPriceAddModal, setOpenPriceModal] = useState(false);
-    const [registerType, setRegisterType] = useState("");
-    const [rowSeqId, setRowSeqId] = useState("");
-    const [rowItemName, setRowItemName] = useState("");
-
+    const [modalType, setModalType] = useState("");
+   
     const handlePriceModalOpen = () => {
-        setOpenPriceModal(true);
+      setOpenPriceModal(true);
     };
     const handlePriceModalClose = () => {
-        setOpenPriceModal(false);
+      setOpenPriceModal(false);
     };
 
     const priceModalOpen = (e) => {
-        setRegisterType("추가");
-        handlePriceModalOpen();
+      setModalType("추가");
+      handlePriceModalOpen();
     }
 
-
-    const onUpdateButtonClicked = (seqId,partName) => {
-      //console.log(rowIndex);
+    const onUpdateButtonClicked = (seqId) => {
+      setModalType("수정");
+      setSeqId(seqId);
+      handlePriceModalOpen();
     };
   
-    const onRemoveButtonClicked = (rowIndex) => {
-      console.log(rowIndex);
+    const onRemoveButtonClicked = (seqId) => {
+      setModalType("삭제");
+      setSeqId(seqId);
+      handlePriceModalOpen();
     };
 
     const [priceData, setPriceData] = useState([]);
@@ -204,14 +211,14 @@ export default function PriceRegister() {
                     </Card>
                 </Grid>
             </Grid>
-            
-            <Modal      
-                type={"price"}         
-                modalType={registerType}
-                rowSeqId={rowSeqId}
-                rowValue={rowItemName}
+
+            <PriceModalContainer       
+                modalType={modalType}
                 open={openPriceAddModal}
                 close={handlePriceModalClose}
+                seqId={seqId}
+                //partName={partName}
+                
             />
       </>
     );
