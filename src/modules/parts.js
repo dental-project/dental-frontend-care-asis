@@ -53,6 +53,7 @@ const addPartMiddleware = (part) => {
 };
 
 const updatePartMiddleware = (seqId, contents) => {
+  console.log(seqId);
   return (dispatch) => {
     apis
       .patchPart(seqId, contents)
@@ -68,9 +69,6 @@ const updatePartMiddleware = (seqId, contents) => {
       });
   }
 }
-
-
-
 
 const deletePartMiddleware = (seqId) => {
   console.log(seqId);
@@ -102,7 +100,7 @@ export default handleActions(
     [UPDATE_PART]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
-          //console.log(state.seq_id);
+          console.log(state.seq_id);
         }
       })
     )},

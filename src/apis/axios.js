@@ -15,18 +15,39 @@ export const apis = {
   getPart: () => instance.get('api/code/part/'),
   // 파트 추가
   createPart: (contents) => instance.post('api/code/part/', contents),
-  // 게시물 수정
+  // 파트 수정
   patchPart: (seq_id, contents) => instance.patch(`api/code/part/${seq_id}/`, contents),
-  // 게시물 삭제
+  // 파트 삭제
   deletePart: (seq_id) => instance.delete(`api/code/part/${seq_id}/`),
 
-  
+
+  // 장치 불러오기
   getItem: () => instance.get('api/code/item/'),
-
+  // 장치 추가
   createItem: (contents) => instance.post('api/code/item/', contents),
-
-  patchPart: (seq_id, contents) => instance.patch(`api/code/item/${seq_id}/`, contents),
-
+  // 장치 수정
+  patchItem: (seq_id, contents) => instance.patch(`api/code/item/${seq_id}/`, contents),
+  // 장치 삭제
   deleteItem: (seq_id) => instance.delete(`api/code/item/${seq_id}/`),
+
+
+  // 치과 불러오기
+  getDental: () => instance.get('api/vendor/'),
+  // 치과 추가
+  createDental: (contents) => instance.post('api/vendor/', contents),
+  // 치과 수정
+  patchDental: (vendor_id, contents) => instance.patch(`api/vendor/${vendor_id}/`, contents),
+  // 치과 삭제
+  deleteDental: (vendor_id) => instance.delete(`api/vendor/${vendor_id}/`),
+
+
+  // 업태 불러오기
+  getBusinessType: () => instance.get('api/code/businessType/'),
+
+  // 업종 불러오기
+  getBusinessSector: () => instance.get('api/code/businessSector/'),
+
+  // 치과 불러오기
+  getBank: () => instance.get('api/code/bank/'),
 
 };

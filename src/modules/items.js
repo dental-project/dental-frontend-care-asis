@@ -1,4 +1,3 @@
-
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { apis } from 'apis/axios'
@@ -39,7 +38,6 @@ const getItemMiddleware = () => {
 };
 
 const addItemMiddleware = (contents) => {
-  console.log(contents);
   return (dispatch) => {
     apis
       .createItem(contents)

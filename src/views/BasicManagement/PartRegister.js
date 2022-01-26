@@ -70,7 +70,7 @@ function PartRegister() {
 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    console.log("렌더링");
+    //console.log("렌더링");
   }, [partData.length] );
  
 
@@ -89,7 +89,7 @@ function PartRegister() {
   });
 
   
-  const [registerType, setRegisterType] = useState("");
+  const [modalType, setModalType] = useState("");
   const [seqId, setSeqId] = useState("");
   const [partName, setPartName] = useState("");
 
@@ -103,26 +103,26 @@ function PartRegister() {
   };
 
   const partModalOpen = (e) => {
-    setRegisterType("추가");
+    setModalType("추가");
     handlePartModalOpen();
   }
 
   const onUpdateButtonClicked = (seqId,partName) => {
-    setRegisterType("수정");
+    setModalType("수정");
     setSeqId(seqId);
     setPartName(partName);
     handlePartModalOpen();
   };
 
   const onRemoveButtonClicked = (seqId) => {
-    setRegisterType("삭제");
+    setModalType("삭제");
     setSeqId(seqId);
     handlePartModalOpen();
   };
 
   // Toast Grid options value
   const columns = ([
-    { name: "seq_id", header: "CodeNo", align: "center"},
+    { name: "seq_id", header: "CodeNo", align: "center", hidden: true},
     { name: "part_name", header: "파트명", align: "center"},
     { name: "update", header: "수정", align: "center",
       renderer: {
@@ -154,7 +154,6 @@ function PartRegister() {
 
   //console.log(partData);
   //console.log([searchData]);
-  console.log(value.part_name);
 
   const onClickSearch = (e) => {
     partData.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
@@ -233,7 +232,7 @@ function PartRegister() {
       </Grid>
 
       <PartModalContainer           
-        modalType={registerType}
+        modalType={modalType}
         open={openPartAddModal}
         close={handlePartModalClose}
         seqId={seqId}

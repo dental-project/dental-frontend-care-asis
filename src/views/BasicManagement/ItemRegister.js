@@ -26,7 +26,7 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-
+import { parts } from 'modules/parts';
 import { items } from 'modules/items';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -73,13 +73,12 @@ export default function ItemRegister() {
 
     const dispatch = useDispatch();
     const itemData = useSelector(({item}) => item.data);
-  
+    
     useEffect(() => {
       dispatch(items.getItemMiddleware());
-      console.log("렌더링");
+      console.log("asfsf");
+      
     }, [itemData.length] );
-
-
 
     const [seqId, setSeqId] = useState('');
     const [partName, setPartName] = useState('');
@@ -107,30 +106,33 @@ export default function ItemRegister() {
     
     // 모달
     const [openItemAddModal, setOpenItemModal] = useState(false);
-    const [registerType, setRegisterType] = useState("");
+    const [modalType, setModalType] = useState("");
     
-    const [rowItemName, setRowItemName] = useState("");
-
     const handleItemModalOpen = () => {
-        setOpenItemModal(true);
+      setOpenItemModal(true);
     };
     const handleItemModalClose = () => {
-        setOpenItemModal(false);
+      setOpenItemModal(false);
     };
 
     const itemModalOpen = (e) => {
-        setRegisterType("추가");
-        handleItemModalOpen();
+      setModalType("추가");
+      handleItemModalOpen();
     }
 
-
-
     const onUpdateButtonClicked = (seqId,partName) => {
-      //console.log(rowIndex);
+      setModalType("수정");
+      setSeqId();
+      setPartName();
+      setItemName();
+      handleItemModalOpen();
     };
   
-    const onRemoveButtonClicked = (rowIndex) => {
-      console.log(rowIndex);
+    const onRemoveButtonClicked = (seqId) => {
+      setModalType("삭제");
+      setSeqId(seqId);
+      console.log(seqId);
+      handleItemModalOpen();
     };
 
     
@@ -184,7 +186,6 @@ export default function ItemRegister() {
                   </Button>
                 </CardHeader>
                 <CardBody>
-
                   <Grid item xs={6} className={classes.grid}>
                     <Autocomplete
                       id="filter-demo"
@@ -195,7 +196,6 @@ export default function ItemRegister() {
                       style={{float: "left", width: "300px", marginLeft: "20px"}}
                       renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                     />
-
                     <Autocomplete
                       id="filter-demo"
                       className={classes.grid}
@@ -205,7 +205,6 @@ export default function ItemRegister() {
                       style={{float: "left", width: "300px"}}
                       renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                     />
-
                     <Button
                       type="submit"
                       color="primary" 
@@ -215,7 +214,6 @@ export default function ItemRegister() {
                     >검색
                     </Button>
                   </Grid>    
-
                   <BasicGrid 
                     type={"item"}
                     columns={columns}
@@ -238,7 +236,7 @@ export default function ItemRegister() {
 
 
           <ItemModalContainer    
-            modalType={registerType}
+            modalType={modalType}
             open={openItemAddModal}
             close={handleItemModalClose}
             seqId={seqId}

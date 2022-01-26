@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from 'components/Modal/Modal'
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from "react-hook-form";
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { parts } from 'modules/parts';
 import { items } from 'modules/items';
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -47,23 +49,37 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     const dispatch = useDispatch();
-  
-    const [autoPartName, setAutoPartName] = useState('');
+    const itemData = useSelector(({item}) => item.data);
+    const partData = useSelector(({part}) => part.data);
+   
+    const [autoSeqId, setAutoSeqId] = useState('');
 
+    useEffect(() => {
+      dispatch(items.getItemMiddleware());
+      dispatch(parts.getPartMiddleware());
+
+      console.log("렌더링");
+    
+    }, [itemData.length] );
+
+
+    const auto = [];
+    partData.map( (data) => auto.push({ part_name: data.part_name}) );
 
     const onSubmit = (data) => {
 
-        console.log(autoPartName);
-        console.log(data);
+      console.log(autoSeqId);
+      console.log(data);
        
-
       if(modalType === "추가") {
         const content = {
-          part_seq_id: 1,
+          part_seq_id: autoSeqId,
           item_name: data.itemName
         };
     
-         dispatch(items.addItemMiddleware(content));
+        dispatch(items.addItemMiddleware(content));
+      } else if(modalType === "삭제") {
+        dispatch(items.deleteItemMiddleware(seqId));
       }
     //   } else if(modalType === "수정") {
 
@@ -73,38 +89,18 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
         
     //     dispatch(parts.updateItemMiddleware(seqId, contents))
 
-    //   } else if(modalType === "삭제") {
-    //     dispatch(parts.deleteItemMiddleware(seqId));
-    //   }
+      
       
     }
 
 
 
-
-
-
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
-        stringify: (option) => option.partName,
+        stringify: (option) => option.part_name,
       });
 
 
-
-    const aaa = [
-        { partName: "Removale App" },
-        { partName: "Fixed App" },
-        { partName: "Functional App" },
-        { partName: "Splints" },
-        { partName: "Diagnostic Study Models" },
-        { partName: "Tooth Positioner" },
-        { partName: "Indirect Bonding System" },
-        { partName: "Distalizing" },
-        { partName: "Sample" },
-        { partName: "test" },
-        { partName: "test1" },
-        { partName: "ㄴㅇㅎㄴㅇㅎㄴㅇㅎ" }
-    ];
 
 
 
@@ -127,15 +123,20 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
                     className={classes.textField}
                     name="partName"
                     control={control}
-                    options={aaa}
-                    getOptionLabel={(option) => option.partName}
+                    options={auto}
+                    getOptionLabel={(option) => option.part_name}
                     filterOptions={filterOptions}
                     onChange={(event, newValue) => {
-                        setAutoPartName(newValue);
+                     
+                        const index = partData.findIndex(obj => obj.part_name === newValue.part_name);
+                        const partSeqId = partData[index].seq_id;
+
+                        setAutoSeqId(partSeqId);
+
                     }}
                     
                     getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                      return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                     }}
                     renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />

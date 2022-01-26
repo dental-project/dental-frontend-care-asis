@@ -12,16 +12,18 @@ import Button from "components/CustomButtons/Button.js";
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
-// api
-import axios from 'axios';
-
-import Modal from "components/Modal/Modal.js"
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
+import DentalModalContainer from "containers/DentalModalContainer";
+
+import { dentals } from 'modules/dentals';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -60,6 +62,20 @@ export default function DentalRegister() {
 
     const classes = useStyles();
 
+
+
+    const dispatch = useDispatch();
+    const dentalData = useSelector(({dental}) => dental.data);
+  
+    useEffect(() => {
+      dispatch(dentals.getDentalMiddleware());
+     
+    }, [] );
+   
+
+
+
+
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.title,
@@ -67,10 +83,8 @@ export default function DentalRegister() {
 
     // 모달
     const [openDentalAddModal, setOpenDentalModal] = useState(false);
-    const [registerType, setRegisterType] = useState("");
-    const [rowSeqId, setRowSeqId] = useState("");
-    const [rowItemName, setRowItemName] = useState("");
-
+    const [modalType, setModalType] = useState("");
+  
     const handleDentalModalOpen = () => {
         setOpenDentalModal(true);
     };
@@ -79,8 +93,8 @@ export default function DentalRegister() {
     };
 
     const dentalModalOpen = (e) => {
-        setRegisterType("추가");
-        handleDentalModalOpen();
+      setModalType("추가");
+      handleDentalModalOpen();
     }
 
 
@@ -94,7 +108,6 @@ export default function DentalRegister() {
       console.log(rowIndex);
     };
 
-    const [dentalData, setDentalData] = useState([]);
     const columns = ([
       {name: "vendor_name", header: "거래처명", align: "center" },
       {name: "ceo", header: "대표", align: "center" },
@@ -135,18 +148,6 @@ export default function DentalRegister() {
     const auto1 = [ {title: "전체"}, {title: "Dental.A 치과기공소"}];
     const auto2 = [ {title: "전체"}, {title: "김남규"}];
     const auto3 = [ {title: "전체"}, {title: "070-4147-6452"}];
-
-    useEffect( () => {
-        axios
-          .get("http://localhost:8000/api/vendor/")
-          .then((result) => {
-              console.log(result);
-            setDentalData(result.data);
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-    }, []);
 
     return (
         <>
@@ -216,13 +217,21 @@ export default function DentalRegister() {
                 </Grid>
             </Grid>
             
-            <Modal      
-                type={"dental"}         
-                modalType={registerType}
-                rowSeqId={rowSeqId}
-                rowValue={rowItemName}
+            {/* <PartModalContainer           
+              modalType={modalType}
+              open={openPartAddModal}
+              close={handlePartModalClose}
+              seqId={seqId}
+              partName={partName}
+            /> */}
+
+            <DentalModalContainer           
+                modalType={modalType}
                 open={openDentalAddModal}
                 close={handleDentalModalClose}
+                //rowSeqId={rowSeqId}
+                //rowValue={rowItemName}
+               
             />
       </>
     );

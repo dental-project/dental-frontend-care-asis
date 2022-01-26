@@ -10,33 +10,33 @@ const BasicGrid = ({
   hoc
 }) => {
 
-  TuiGrid.applyTheme('default', {
+  TuiGrid.applyTheme('striped', {
     
-    scrollbar: {
-      background: '#f5f5f5',
-      thumb: '#339BD8'
-    },
-    row: {
-      even: {
-        background: '#272833'
-      },
-      hover: {
-        background: '#339BD8'
-      }
-    },
-    cell: {
-      normal: {
-        text: '#fff',
-        background: '#272833',
-        border: '#272833'
-      },
-      header: {
-        text: '#339BD8',
-        background: '#173C4F',
-        border: '#173C4F'
-      },
+    // scrollbar: {
+    //   background: '#f5f5f5',
+    //   thumb: '#339BD8'
+    // },
+    // row: {
+    //   even: {
+    //     background: '#272833'
+    //   },
+    //   hover: {
+    //     background: '#339BD8'
+    //   }
+    // },
+    // cell: {
+    //   normal: {
+    //     text: '#fff',
+    //     background: '#272833',
+    //     border: '#272833'
+    //   },
+    //   header: {
+    //     text: '#339BD8',
+    //     background: '#173C4F',
+    //     border: '#173C4F'
+    //   },
      
-    }
+    // }
 
     // cell: {
     //   normal: {
@@ -65,6 +65,7 @@ const BasicGrid = ({
       bodyHeight={500}
       virtualScrolling={true}
       heightResizable={true}
+      hidden
       //onClick={check}
     />
   );
