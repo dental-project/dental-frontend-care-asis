@@ -36,17 +36,25 @@ export const apis = {
   // 치과 추가
   createDental: (contents) => instance.post('api/vendor/', contents),
   // 치과 수정
-  patchDental: (vendor_id, contents) => instance.patch(`api/vendor/${vendor_id}/`, contents),
+  patchDental: (seq_id, contents) => instance.patch(`api/vendor/${seq_id}/`, contents),
   // 치과 삭제
-  deleteDental: (vendor_id) => instance.delete(`api/vendor/${vendor_id}/`),
+  deleteDental: (seq_id) => instance.delete(`api/vendor/${seq_id}/`),
 
 
+  // 단가 불러오기
+  getPrice: () => instance.get('api/sell/price/'),
+  // 단가 추가
+  createPrice: (contents) => instance.post('api/sell/price/', contents),
+  // 단가 수정
+  patchPrice: (seq_id, contents) => instance.patch(`api/sell/price/${seq_id}/`, contents),
+  // 단가 삭제
+  deletePrice: (seq_id) => instance.delete(`api/sell/price/${seq_id}/`),
+
+  
   // 업태 불러오기
   getBusinessType: () => instance.get('api/code/businessType/'),
-
   // 업종 불러오기
   getBusinessSector: () => instance.get('api/code/businessSector/'),
-
   // 치과 불러오기
   getBank: () => instance.get('api/code/bank/'),
 

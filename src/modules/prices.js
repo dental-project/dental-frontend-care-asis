@@ -3,16 +3,16 @@ import { produce } from 'immer';
 import { apis } from 'apis/axios'
 
 // action 생성
-const READ_DENTAL = 'READ_DENTAL';
-const ADD_DENTAL = 'ADD_DENTAL';
-const UPDATE_DENTAL = 'UPDATE_DENTAL';
-const REMOVE_DENTAL = 'REMOVE_DENTAL';
+const READ_PRICE = 'READ_PRICE';
+const ADD_PRICE = 'ADD_PRICEL';
+const UPDATE_PRICE = 'UPDATE_PRICE';
+const REMOVE_PRICE = 'REMOVE_PRICE';
 
 // action creators
-const readDental = createAction(READ_DENTAL, (data) => ({ data }));
-const addDental = createAction(ADD_DENTAL, (data) => ({ data }));
-const updateDental = createAction(UPDATE_DENTAL, (data) => ({ data }));
-const removeDental = createAction(REMOVE_DENTAL, (data) => ({ data }));
+const readPrice = createAction(READ_PRICE, (data) => ({ data }));
+const addPrice = createAction(ADD_PRICE, (data) => ({ data }));
+const updatePrice = createAction(UPDATE_PRICE, (data) => ({ data }));
+const removePrice = createAction(REMOVE_PRICE, (data) => ({ data }));
 
 // initialState
 const initialState = {
@@ -23,13 +23,13 @@ const initialState = {
 };
 
 // middleware
-const getDentalMiddleware = () => {
+const getPriceMiddleware = () => {
   return (dispatch) => {
     apis
-      .getDental()
+      .getPrice()
       .then((result) => {        
-        const dentalData = result.data;
-        dispatch(readDental(dentalData));
+        const priceData = result.data;
+        dispatch(readPrice(priceData));
       })
       .catch((err) => {
         console.error(err);
@@ -37,13 +37,13 @@ const getDentalMiddleware = () => {
   };
 };
 
-const addDentalMiddleware = (contents) => {
+const addPriceMiddleware = (contents) => {
   return (dispatch) => {
     apis
-      .createDental(contents)
+      .createPrice(contents)
       .then((result) => {
-        dispatch(addDental(contents));
-        alert("장치를 추가 하였습니다.");
+        dispatch(addPrice(contents));
+        alert("단가를 추가 하였습니다.");
       })
       .catch((err) => {
         console.error(err);
@@ -51,16 +51,16 @@ const addDentalMiddleware = (contents) => {
   };
 };
 
-const updateDentalMiddleware = (seqId, contents) => {
+const updatePriceMiddleware = (seqId, contents) => {
   return (dispatch) => {
     apis
-      .patchDental(seqId, contents)
+      .patchPrice(seqId, contents)
       .then((result) => {
 
         const data = { seq_id: seqId, contents: contents }
 
-        dispatch(updateDental(data));
-        alert("수정 했습니다.");
+        dispatch(updatePrice(data));
+        alert("단가를 수정 했습니다.");
       })
       .catch((err) => {
         console.log(err);
@@ -68,13 +68,13 @@ const updateDentalMiddleware = (seqId, contents) => {
   }
 }
 
-const deleteDentalMiddleware = (seqId) => {
+const deletePriceMiddleware = (seqId) => {
   return (dispatch) => {
     apis
-      .deleteDental(seqId)
+      .deletePrice(seqId)
       .then((result) => {
-        dispatch(removeDental(seqId));
-        alert("삭제 했습니다.");
+        dispatch(removePrice(seqId));
+        alert("단가를 삭제 했습니다.");
       })
       .catch((err) => {
         console.log(err);
@@ -85,16 +85,16 @@ const deleteDentalMiddleware = (seqId) => {
 // reducer
 export default handleActions(
   {
-    [READ_DENTAL]: (state, action) =>
+    [READ_PRICE]: (state, action) =>
       produce(state, (draft) => {
         draft.data = action.payload.data;
       }),
-    [ADD_DENTAL]: (state, action) =>
+    [ADD_PRICE]: (state, action) =>
       produce(state, (draft) => {
         draft.data.push(action.payload.data);
       }),
     
-    [UPDATE_DENTAL]: (state, action) => {(
+    [UPDATE_PRICE]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
           //console.log(state.seq_id);
@@ -102,7 +102,7 @@ export default handleActions(
       })
     )},
     
-    [REMOVE_DENTAL]: (state, action) =>
+    [REMOVE_PRICE]: (state, action) =>
       produce(state, (draft) => {
         draft.data = []
     }),
@@ -114,11 +114,11 @@ export default handleActions(
   initialState
 );
 
-const dentals = {
-  getDentalMiddleware,
-  addDentalMiddleware,
-  updateDentalMiddleware,
-  deleteDentalMiddleware,
+const prices = {
+  getPriceMiddleware,
+  addPriceMiddleware,
+  updatePriceMiddleware,
+  deletePriceMiddleware,
 };
 
-export { dentals };
+export { prices };

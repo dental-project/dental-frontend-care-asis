@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import part from './parts';
 import item from './items';
 import dental from './dentals';
+import price from './prices';
 import businessType from './businessTypes';
 import businessSector from './businessSectors';
 import bank from './banks';
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   part,
   item,
   dental,
+  price,
   businessType,
   businessSector,
   bank,

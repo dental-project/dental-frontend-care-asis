@@ -12,9 +12,6 @@ import Button from "components/CustomButtons/Button.js";
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
-// api
-import axios from 'axios';
-
 import PriceModalContainer from "containers/PriceModalContainer";
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
@@ -22,6 +19,10 @@ import TextField from "@material-ui/core/TextField";
 
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { prices } from 'modules/prices';
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -59,6 +60,17 @@ const useStyles = makeStyles((theme) => ({
 export default function PriceRegister() {
 
     const classes = useStyles();
+
+
+    const dispatch = useDispatch();
+    const priceData = useSelector(({price}) => price.data);
+  
+    useEffect(() => {
+      dispatch(prices.getPriceMiddleware());
+     
+    }, [priceData.length] );
+
+
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -99,7 +111,6 @@ export default function PriceRegister() {
       handlePriceModalOpen();
     };
 
-    const [priceData, setPriceData] = useState([]);
     const columns = ([
         {name: "vendor_name", header: "거래처명", align: "center" },
         {name: "part_name", header: "파트명", align: "center" },
@@ -134,17 +145,17 @@ export default function PriceRegister() {
     const auto2 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
     const auto3 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
-    useEffect( () => {
-        axios
-          .get("http://localhost:8000/api/sell/price/")
-          .then((result) => {
-              console.log(result);
-            setPriceData(result.data);
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-    }, []);
+    // useEffect( () => {
+    //     axios
+    //       .get("http://localhost:8000/api/sell/price/")
+    //       .then((result) => {
+    //           //console.log(result);
+    //         setPriceData(result.data);
+    //       })
+    //       .catch((error) => {
+    //         throw new Error(error);
+    //       });
+    // }, []);
 
     return (
         <>

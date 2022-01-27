@@ -273,9 +273,13 @@ const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemNam
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
                   onChange={(event, newValue) => {
-                    const index = businessTypeData.findIndex(obj => obj.type_name === newValue.type_name);
-                    const typeIndex = businessTypeData[index].type_no;
-                    setTypeNo(typeIndex);
+                    if(newValue === null) {
+                      setTypeNo("");
+                    } else {
+                      const index = businessTypeData.findIndex(obj => obj.type_name === newValue.type_name);
+                      const typeIndex = businessTypeData[index].type_no;
+                      setTypeNo(typeIndex);
+                    }
                   }}
                 />
                 <Autocomplete
@@ -290,9 +294,13 @@ const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemNam
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
                   onChange={(event, newValue) => {
-                    const index = businessSectorData.findIndex(obj => obj.sector_name === newValue.sector_name);
-                    const sectorIndex = businessSectorData[index].sector_no;
-                    setSectorNo(sectorIndex);
+                    if(newValue === null) {
+                      setSectorNo("");
+                    } else {
+                      const index = businessSectorData.findIndex(obj => obj.sector_name === newValue.sector_name);
+                      const sectorIndex = businessSectorData[index].sector_no;
+                      setSectorNo(sectorIndex);
+                    }
                   }}
                 />
                 <Controller
@@ -343,9 +351,13 @@ const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemNam
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
                   onChange={(event, newValue) => {
-                    const index = bankData.findIndex(obj => obj.bank_name === newValue.bank_name);
-                    const bankIndex = bankData[index].bank_no;
-                    setBankNo(bankIndex);
+                    if(newValue === null) {
+                      setBankNo("");
+                    } else {
+                      const index = bankData.findIndex(obj => obj.bank_name === newValue.bank_name);
+                      const bankIndex = bankData[index].bank_no;
+                      setBankNo(bankIndex);
+                    }
                   }}
                 />
                 <Controller

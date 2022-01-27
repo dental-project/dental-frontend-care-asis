@@ -21,7 +21,9 @@ import TextField from "@material-ui/core/TextField";
 import axios from 'axios';
 
 import FullModal from "components/Modal/FullModal.js"
-import PrintModal from "components/Modal/PrintModal.js"
+//import PrintModal from "components/Modal/PrintModal.js"
+
+import PrintModalContainer from "containers/PrintModalContainer";
 
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
@@ -293,7 +295,7 @@ export default function Dashboard() {
         handleClose={handleClose}
       />
 
-      <PrintModal
+      <PrintModalContainer
         open={openPrint}
         close={handleClosePrint}
       />

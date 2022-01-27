@@ -127,17 +127,15 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
                     options={auto}
                     getOptionLabel={(option) => option.part_name}
                     filterOptions={filterOptions}
-                    onChange={(event, newValue) => {
-                     
-                        const index = partData.findIndex(obj => obj.part_name === newValue.part_name);
-                        const partSeqId = partData[index].seq_id;
-
-                        setAutoSeqId(partSeqId);
-
-                    }}
-                    
-                    getOptionSelected={(option, value) => {
-                      return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                    onChange={(event, newValue) => { 
+                      if(newValue === null) {
+                          setAutoSeqId("");
+                      } else {
+                          const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
+                          const partSeqId = partData[index].seq_id
+                          setAutoSeqId(partSeqId)
+                      }
+                      
                     }}
                     renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />

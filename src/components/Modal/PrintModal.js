@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function DashModal(props) {
+export default function PrintModal(props) {
 
   const classes = useStyles();
   const { watch,  handleSubmit, control } = useForm();
@@ -60,15 +60,14 @@ export default function DashModal(props) {
   });
   
 
+  const vendor = [{ title: "Dental.A 치과기공소" }, { title: "거래처명" }, { title: "거래처명2" }];
   const dash1 = [ { title: "시간별완성현황" }, { title: "일생산현황" }, { title: "치과매출현황" }, { title: "파트별매출현황" }, { title: "치과별월매출현황" },{ title: "월생산현황표" }];
-              
 
   useEffect( () => {
       
+  console.log("렌더링");
   }, []);
 
-  console.log(props);
-  
   // const onSubmit = (data) => {
   //   axios
   //     .post("http://localhost:8000/api/report/",{
@@ -87,45 +86,54 @@ export default function DashModal(props) {
     
   // }
 
+  const [vendorName, setVendorName] = useState('');
+  const [type, setType] = useState('');
+
+
   const onSubmit = (data) => {
-    axios({
-      method:"POST",
-      url:"http://localhost:8000/api/sell/report/",
-      responseType: 'blob',
-      data:{
-        receipt_date: "2022-01-15",
-        completion_date: "2022-01-22",
-        vendor_id: 1,
-        day: "day"
-      }
 
-    })
-      // .post("http://localhost:8000/api/sell/report/",{
-      //   receipt_date: "2022-01-15",
-      //   completion_date: "2022-01-22",
-      //   vendor_id: 1,
-      //   day: "day"
-      // })
-      .then((result) => {
-        console.log(result);
-        // var BOM = new Uint8Array([0xEF,0xBB,0xBF]);
-        // const file = new Blob([BOM,result.data], { type: "application/pdf;charset=utf-18" });
-        // // const file = new Blob(["\ufeff"+result.data], { type: "application/pdf;charset=utf-8" });
-        // //Build a URL from the file
-        // const fileURL = URL.createObjectURL(file);
-        
-        // //Open the URL on new Window
-        //  const pdfWindow = window.open();
-        //  pdfWindow.location.href = fileURL;    
-        
-        var b = new Blob([result.data],{type:"application/pdf;"});
-        var url = URL.createObjectURL(b);
-        window.open(url,"_blank","");
+    console.log(data);
+    console.log(vendorName);
+    console.log(type);
 
-        })
-      .catch((error) => {
-        throw new Error(error);
-    })
+    // axios({
+    //   method:"POST",
+    //   url:"http://localhost:8000/api/sell/report/",
+    //   responseType: 'blob',
+    //   data:{
+    //     receipt_date: "2022-01-15",
+    //     completion_date: "2022-01-22",
+    //     vendor_id: 1,
+    //     day: "day"
+    //   }
+
+    // })
+    //   // .post("http://localhost:8000/api/sell/report/",{
+    //   //   receipt_date: "2022-01-15",
+    //   //   completion_date: "2022-01-22",
+    //   //   vendor_id: 1,
+    //   //   day: "day"
+    //   // })
+    //   .then((result) => {
+    //     console.log(result);
+    //     // var BOM = new Uint8Array([0xEF,0xBB,0xBF]);
+    //     // const file = new Blob([BOM,result.data], { type: "application/pdf;charset=utf-18" });
+    //     // // const file = new Blob(["\ufeff"+result.data], { type: "application/pdf;charset=utf-8" });
+    //     // //Build a URL from the file
+    //     // const fileURL = URL.createObjectURL(file);
+        
+    //     // //Open the URL on new Window
+    //     //  const pdfWindow = window.open();
+    //     //  pdfWindow.location.href = fileURL;    
+        
+    //     var b = new Blob([result.data],{type:"application/pdf;"});
+    //     var url = URL.createObjectURL(b);
+    //     window.open(url,"_blank","");
+
+    //     })
+    //   .catch((error) => {
+    //     throw new Error(error);
+    // })
     
   }
 
@@ -141,35 +149,63 @@ export default function DashModal(props) {
             ? null
             : (
               <>
-                <TextField
-                  id="date"
-                  label="시작일자"
-                  type="date"
-                  defaultValue="2022-01-11"
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                <Controller
+                  name="startDate"
+                  control={control}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="시작일자"
+                      type="date"
+                      className={classes.textField}
+                      onChange={onChange}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
                 />
-                <TextField
-                  id="date"
-                  label="종료일자"
-                  type="date"
-                  defaultValue="2022-01-11"
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={dash1}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  renderInput={(params) => <TextField {...params} label="항목선택" variant="outlined" />}
-                />
-              </>
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    label="종료일자"
+                    type="date"
+
+                    className={classes.textField}
+                    onChange={onChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                )}
+              />
+              
+              <Autocomplete
+                className={classes.textField}
+                name="ab"
+                options={vendor}
+                getOptionLabel={(option) => option.title}
+                filterOptions={filterOptions}
+                renderInput={(params) => <TextField {...params} label="거래처선택" variant="outlined" />}
+                onChange={(event, newValue) => {
+                  console.log(newValue.title);
+                  setVendorName(newValue.title);
+
+                }}
+              />
+              <Autocomplete
+                className={classes.textField}
+                name="aa"
+                options={dash1}
+                getOptionLabel={(option) => option.title}
+                filterOptions={filterOptions}
+                renderInput={(params) => <TextField {...params} label="항목선택" variant="outlined" />}
+                onChange={(event, newValue) => {
+                  //setType(newValue.title);
+                }}
+              />
+            </>
             )
           }
           <Button
