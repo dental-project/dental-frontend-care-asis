@@ -76,26 +76,11 @@ export default function ItemRegister() {
     
     useEffect(() => {
       dispatch(items.getItemMiddleware());
-      console.log("asfsf");
       
     }, [itemData.length] );
 
-    const [seqId, setSeqId] = useState('');
-    const [partName, setPartName] = useState('');
-    const [itemName, setItemName] = useState('');
 
-  //   useEffect( () => {
-  //     axios
-  //       .get("http://localhost:8000/api/code/item/")
-  //       .then((result) => {
-  //         console.log(result);
-  //         setItemData(result.data);
-  //       })
-  //       .catch((error) => {
-  //         throw new Error(error);
-  //       });
-  // }, []);
-
+    const [itemObj, setItemObj] = useState({});
 
 
     const filterOptions = createFilterOptions({
@@ -120,11 +105,10 @@ export default function ItemRegister() {
       handleItemModalOpen();
     }
 
-    const onUpdateButtonClicked = (seqId,partName) => {
+    const onUpdateButtonClicked = (seqId,itemObj) => {
+      console.log(itemObj);
       setModalType("수정");
-      setSeqId();
-      setPartName();
-      setItemName();
+      setItemObj(itemObj);
       handleItemModalOpen();
     };
   
@@ -142,7 +126,7 @@ export default function ItemRegister() {
         {name: "item_name", header: "장치명", align: "center"},
         {
           name: "update",
-          header: "수정",
+          header: "장치수정",
           align: "center",
           renderer: {
             type: UpdateButtonRenderer,
@@ -237,8 +221,7 @@ export default function ItemRegister() {
             open={openItemAddModal}
             close={handleItemModalClose}
             seqId={seqId}
-            partName={partName}
-            itemName={itemName}
+            itemObj={itemObj}
           />
       </>
     );

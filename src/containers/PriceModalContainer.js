@@ -59,7 +59,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
     const { watch,  handleSubmit, control } = useForm();
     
     const [autoVendorSeqId, setAutoVendorSeqId] = useState('');
-    const [itemSeqId, setItemSeqId] = useState('');
+    const [autoItemSeqId, setAutoItemSeqId] = useState('');
 
 
     const dispatch = useDispatch();
@@ -102,16 +102,16 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
   });
 
     const onSubmit = (data) => {
-      console.log(data);
-
 
       if(modalType === "추가") {
         const content = {
           vendor_seq_id: autoVendorSeqId,
-          item_seq_id: itemSeqId,
+          item_seq_id: autoItemSeqId,
           price: data.price
         };
         dispatch(prices.addPriceMiddleware(content));
+      } else if(modalType === "삭제") {
+        dispatch(prices.deletePriceMiddleware(seqId));
       }
     
     //     
@@ -174,11 +174,11 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
                 }}
                 onChange={(event, newValue) => {
                   if(newValue === null) {
-                    setItemSeqId("");
+                    setAutoItemSeqId("");
                   } else {
                     const index = itemData.findIndex(obj => obj.item_name === newValue.item_name);
-                    const itemIndex = itemData[index].item_name;
-                    setItemSeqId(itemIndex);
+                    const itemSeqId = itemData[index].seq_id;
+                    setAutoItemSeqId(itemSeqId);
                   }
                 }}
 

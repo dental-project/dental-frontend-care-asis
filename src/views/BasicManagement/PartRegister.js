@@ -73,13 +73,6 @@ function PartRegister() {
     //console.log("렌더링");
   }, [partData.length] );
  
-
-  
-  
-  
-
-
-
   const auto1 = [ {part_name: "전체"} ];
   partData.map( (data) => auto1.push({ part_name: data.part_name}) );
 
@@ -107,7 +100,7 @@ function PartRegister() {
     handlePartModalOpen();
   }
 
-  const onUpdateButtonClicked = (seqId,partName) => {
+  const onUpdateButtonClicked = (obj) => {
     setModalType("수정");
     setSeqId(seqId);
     setPartName(partName);
@@ -124,7 +117,7 @@ function PartRegister() {
   const columns = ([
     { name: "seq_id", header: "CodeNo", align: "center", hidden: true},
     { name: "part_name", header: "파트명", align: "center"},
-    { name: "update", header: "수정", align: "center",
+    { name: "update", header: "파트수정", align: "center",
       renderer: {
         type: UpdateButtonRenderer,
         options: {

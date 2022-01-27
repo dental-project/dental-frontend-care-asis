@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName }) => {
+const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -62,7 +62,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
     
     }, [itemData.length] );
 
-
     const auto = [];
     partData.map( (data) => auto.push({ part_name: data.part_name}) );
 
@@ -78,8 +77,8 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
       } else if(modalType === "수정") {
 
         const contents = {
-          item_name: "update",
-          part_seq_id: "5"
+          part_seq_id: "5",
+          item_name: itemObj.itemName
           //part_name: data.partName
         };
         //console.log(contents);
@@ -139,22 +138,22 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
                     renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />
                 <Controller
-                    name="itemName"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                            className={classes.textField} 
-                            label="장치명"
-                            variant="outlined"
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                        />
-                    )}
-                    rules={{ 
-                        required: "장치명을 입력하세요."
-                    }}
+                  name="itemName"
+                  control={control}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      className={classes.textField} 
+                      label="장치명"
+                      variant="outlined"
+                      defaultValue={itemObj.itemName?itemObj.itemName:""}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ 
+                      required: "장치명을 입력하세요."
+                  }}
                 />     
             </>
             )

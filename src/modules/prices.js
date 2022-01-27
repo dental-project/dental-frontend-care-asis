@@ -42,6 +42,7 @@ const addPriceMiddleware = (contents) => {
     apis
       .createPrice(contents)
       .then((result) => {
+        console.log(result);
         dispatch(addPrice(contents));
         alert("단가를 추가 하였습니다.");
       })

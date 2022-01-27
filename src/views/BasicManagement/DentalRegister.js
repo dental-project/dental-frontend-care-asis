@@ -67,9 +67,10 @@ export default function DentalRegister() {
   
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
-     
+      console.log(dentalData);
     }, [dentalData.length] );
    
+    
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
