@@ -73,9 +73,7 @@ const PrintModalContainer = ({ open, close}) => {
 
 const onSubmit = (data) => {
 
-    console.log(data);
-    console.log(vendorName);
-    console.log(type);
+   
 
     let vendor_seq_id = 0;
 
@@ -93,6 +91,11 @@ const onSubmit = (data) => {
         vendor_seq_id = 4;
     }
     
+    console.log(data.startDate);
+    console.log(data.endDate);
+    console.log(vendor_seq_id);
+    console.log(type);
+
     axios({
       method:"POST",
       url:"http://localhost:8000/api/sell/report/",
@@ -101,7 +104,7 @@ const onSubmit = (data) => {
         receipt_date: data.startDate,
         completion_date: data.endDate,
         vendor_seq_id: vendor_seq_id,
-        day: type
+        report_type: type
       }
 
     })

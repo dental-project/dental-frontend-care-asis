@@ -138,8 +138,6 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
             <>
 
               <Autocomplete
-                multiple
-                id="checkboxes-tags-demo"
                 options={auto1}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.vendor_name}
