@@ -70,7 +70,7 @@ export default function PriceRegister() {
      
     }, [priceData.length] );
 
-
+    console.log(priceData);
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',

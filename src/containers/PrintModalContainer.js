@@ -188,7 +188,6 @@ const onSubmit = (data) => {
                 onChange={(event, newValue) => {
                   console.log(newValue.title);
                   setVendorName(newValue.title);
-
                 }}
               />
               <Autocomplete

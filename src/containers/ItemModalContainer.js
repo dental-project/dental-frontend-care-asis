@@ -135,7 +135,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, partName, itemName 
                           const partSeqId = partData[index].seq_id
                           setAutoSeqId(partSeqId)
                       }
-                      
                     }}
                     renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                 />

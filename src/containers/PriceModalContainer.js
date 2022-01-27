@@ -12,7 +12,10 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { prices } from 'modules/prices';
 import { dentals } from 'modules/dentals';
+import { items } from 'modules/items';
+import checkboxAdnRadioStyle from 'assets/jss/material-dashboard-react/checkboxAdnRadioStyle';
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -55,47 +58,36 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     
-  
+    const [autoVendorSeqId, setAutoVendorSeqId] = useState('');
+    const [itemSeqId, setItemSeqId] = useState('');
+
 
     const dispatch = useDispatch();
-    const priceData = useSelector(({price}) => price.data);
+    //const priceData = useSelector(({price}) => price.data);
     const dentalData = useSelector(({dental}) => dental.data);
-    //const businessSectorData = useSelector(({businessSector}) => businessSector.data);
-    //const bankData = useSelector(({bank}) => bank.data);
-
-    const [typeNo, setTypeNo] = useState('');
-    const [sectorNo, setSectorNo] = useState('');
-    const [bankNo, setBankNo] = useState('');
-
+    const itemData = useSelector(({item}) => item.data);
+   
 
     useEffect(() => {
       
       dispatch(dentals.getDentalMiddleware());
-      //dispatch(businessSectors.getBusinessSectorMiddleware());
-      //dispatch(banks.getBankMiddleware());
+      dispatch(items.getItemMiddleware());
+  
     
     }, [] );
 
 
 
-    console.log(priceData);
-    console.log(dentalData);
+    //console.log(priceData);
+    console.log(itemData);
 
 
 
     const auto1 = [];
-    dentalData.map( (data) => auto1.push({ vendor_name: data.vendor_name + " / " + data.ceo}) );
+    dentalData.map( (data) => auto1.push({ vendor_name: data.vendor_name + "/" + data.ceo}) );
 
-
-
-
-    const dash1 = [ { title: "마포한그루" }, { title: "연세유라인" }, { title: "미소유" }, { title: "연세미엘치과" }, { title: "연세키즈사랑" }, { title: "연세윤치과" }, 
-                    { title: "군포 에미담치과" }, { title: "연세키즈투틴치과" }, { title: "중구강약안면외과" }, { title: "라임프로" }, { title: "연세후" }, 
-                    { title: "스노우화이트" }, { title: "과천 연세스위트" }, { title: "연세두리치과" }, { title: "서울늘편한" }, { title: "이바른치과" }, { title: "약수 연세치과" }, ];
-
-    const dash2 = [ { title: "파트명1" }, { title: "파트명2" }, { title: "파트명3" }, { title: "파트명4" }, { title: "파트명5" }, { title: "파트명6" }, { title: "파트명7" } ];
-    const dash3 = [ { title: "CRS" }, { title: "장치명1" }, { title: "장치명2" }, { title: "장치명3" }, { title: "장치명4" }, { title: "장치명5" } ];
-    
+    const auto2 = [];
+    itemData.map( (data) => auto2.push({ item_name: data.item_name }) );
 
 
 
@@ -104,16 +96,25 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
     matchFrom: 'start',
     stringify: (option) => option.vendor_name,
   });
-
+  const filterOptions2 = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.item_name,
+  });
 
     const onSubmit = (data) => {
+      console.log(data);
 
-    //   if(modalType === "추가") {
-    //     const content = {
-    //       part_name: data.partName
-    //     };
+
+      if(modalType === "추가") {
+        const content = {
+          vendor_seq_id: autoVendorSeqId,
+          item_seq_id: itemSeqId,
+          price: data.price
+        };
+        dispatch(prices.addPriceMiddleware(content));
+      }
     
-    //     dispatch(parts.addPartMiddleware(content));
+    //     
     //   } else if(modalType === "수정") {
 
     //     const contents = {
@@ -136,70 +137,70 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
           ? null
           : (
             <>
-
               <Autocomplete
                 options={auto1}
-                disableCloseOnSelect
                 getOptionLabel={(option) => option.vendor_name}
-                renderOption={(option, { selected }) => (
-                  <React.Fragment>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.vendor_name}
-                  </React.Fragment>
-                )}
+                filterOptions={filterOptions}
                 style={{ width: 500 }}
                 renderInput={(params) => (
-                  <TextField {...params} variant="outlined" label="Checkboxes" placeholder="Favorites" />
+                  <TextField {...params} variant="outlined" label="거래처명" placeholder="Favorites" />
                 )}
-              />
+                getOptionSelected={(option, value) => {
+                  return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                }}
+                onChange={(event, newValue) => {
 
-                {/* <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={auto1}
-                  getOptionLabel={(option) => option.vendor_name}
-                  filterOptions={filterOptions}
-                  renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
-                /> */}
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={dash2}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                />
-                <Autocomplete
-                  className={classes.textField}
-                  id="filter-demo"
-                  options={dash3}
-                  getOptionLabel={(option) => option.title}
-                  filterOptions={filterOptions}
-                  renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
-                />  
-                <Controller
-                  name="itemName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                        className={classes.textField} 
-                        label="단가"
-                        variant="outlined"
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "단가를 입력하세요."
-                  }}
-                />  
+                  const vendorNameArr = newValue.vendor_name.split('/');
+
+                  if(newValue === null) {
+                    setAutoVendorSeqId("");
+                  } else {
+                      const index = dentalData.findIndex(obj => obj.vendor_name === vendorNameArr[0]);
+                      const vendorSeqId = dentalData[index].seq_id;
+                      setAutoVendorSeqId(vendorSeqId);
+                  }
+                }}
+              />
+              <Autocomplete
+                options={auto2}
+                getOptionLabel={(option) => option.item_name}
+                filterOptions={filterOptions2}
+                style={{ width: 500 }}
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" label="장치명" placeholder="Favorites"  />
+                )}
+                getOptionSelected={(option, value) => {
+                  return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                }}
+                onChange={(event, newValue) => {
+                  if(newValue === null) {
+                    setItemSeqId("");
+                  } else {
+                    const index = itemData.findIndex(obj => obj.item_name === newValue.item_name);
+                    const itemIndex = itemData[index].item_name;
+                    setItemSeqId(itemIndex);
+                  }
+                }}
+
+              />
+              <Controller
+                name="price"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    className={classes.textField} 
+                    label="단가"
+                    variant="outlined"
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{ 
+                  required: "단가를 입력하세요."
+                }}
+              />  
             </>
             )
         }
