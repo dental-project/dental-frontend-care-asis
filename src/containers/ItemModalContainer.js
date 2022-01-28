@@ -67,6 +67,9 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
     const onSubmit = (data) => {
 
+      console.log(data);
+      console.log(autoSeqId);
+
       if(modalType === "추가") {
         const content = {
           part_seq_id: autoSeqId,
@@ -77,38 +80,22 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
       } else if(modalType === "수정") {
 
         const contents = {
-          part_seq_id: "5",
-          item_name: itemObj.itemName
-          //part_name: data.partName
+          seq_id: itemObj.seqId,
+          part_seq_id: autoSeqId,
+          item_name: data.itemName
         };
-        //console.log(contents);
-        //console.log(seqId);
-
-        dispatch(items.updateItemMiddleware(9, contents))
+      
+        dispatch(items.updateItemMiddleware(itemObj.seqId, contents))
       } else if(modalType === "삭제") {
         dispatch(items.deleteItemMiddleware(seqId));
       }
        
-      
-      
     }
-
-
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.part_name,
     });
-
-
-
-
-
-
-
-
-
-
 
 
     return (
@@ -126,12 +113,14 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
                     options={auto}
                     getOptionLabel={(option) => option.part_name}
                     filterOptions={filterOptions}
+
                     onChange={(event, newValue) => { 
                       if(newValue === null) {
                           setAutoSeqId("");
                       } else {
                           const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
                           const partSeqId = partData[index].seq_id
+                        
                           setAutoSeqId(partSeqId)
                       }
                     }}

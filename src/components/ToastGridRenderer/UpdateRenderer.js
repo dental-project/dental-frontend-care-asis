@@ -13,20 +13,20 @@ class UpdateRenderer {
     const seqId = props.grid.store.data.rawData[rowKey].seq_id;
     let partName = "";
     let itemName = "";
-    let price = "";
-    let vendor_name = "";
-    let ceo = "";
-    let tel = "";
-    let mobile = "";
-    let fax = "";
-    let business_number = "";
-    let business_type_name = "";
-    let business_sector_name = "";
-    let post_number = "";
-    let address = "";
-    let bank_name = "";
-    let bank_account = "";
-    let description = "";
+    // let price = "";
+    // let vendor_name = "";
+    // let ceo = "";
+    // let tel = "";
+    // let mobile = "";
+    // let fax = "";
+    // let business_number = "";
+    // let business_type_name = "";
+    // let business_sector_name = "";
+    // let post_number = "";
+    // let address = "";
+    // let bank_name = "";
+    // let bank_account = "";
+    // let description = "";
     
     let obj;
     //let itemObj;
@@ -53,8 +53,8 @@ class UpdateRenderer {
         mobile: props.grid.store.data.rawData[rowKey].mobile,
         fax: props.grid.store.data.rawData[rowKey].fax,
         businessNumber: props.grid.store.data.rawData[rowKey].business_number,
-        businessType_name: props.grid.store.data.rawData[rowKey].business_type_name,
-        businessSector_name: props.grid.store.data.rawData[rowKey].business_sector_name,
+        businessTypeName: props.grid.store.data.rawData[rowKey].business_type_name,
+        businessSectorName: props.grid.store.data.rawData[rowKey].business_sector_name,
         postNumber: props.grid.store.data.rawData[rowKey].post_number,
         address: props.grid.store.data.rawData[rowKey].address,
         bankName: props.grid.store.data.rawData[rowKey].bank_name,

@@ -68,9 +68,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ItemRegister() {
 
     const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
-
-
+ 
     const dispatch = useDispatch();
     const itemData = useSelector(({item}) => item.data);
     
@@ -79,7 +77,7 @@ export default function ItemRegister() {
       
     }, [itemData.length] );
 
-
+    const [seqId, setSeqId] = useState();
     const [itemObj, setItemObj] = useState({});
 
 
@@ -105,8 +103,7 @@ export default function ItemRegister() {
       handleItemModalOpen();
     }
 
-    const onUpdateButtonClicked = (seqId,itemObj) => {
-      console.log(itemObj);
+    const onUpdateButtonClicked = (itemObj) => {
       setModalType("수정");
       setItemObj(itemObj);
       handleItemModalOpen();
@@ -115,7 +112,6 @@ export default function ItemRegister() {
     const onRemoveButtonClicked = (seqId) => {
       setModalType("삭제");
       setSeqId(seqId);
-      console.log(seqId);
       handleItemModalOpen();
     };
 
@@ -205,17 +201,6 @@ export default function ItemRegister() {
             </Grid>
           </Grid>
   
-
-          {/* <PartModalContainer      
-            //type={"part"}         
-            modalType={registerType}
-            seqId={seqId}
-            partName={partName}
-            open={openPartAddModal}
-            close={handlePartModalClose}
-          /> */}
-
-
           <ItemModalContainer    
             modalType={modalType}
             open={openItemAddModal}

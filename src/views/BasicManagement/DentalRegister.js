@@ -78,13 +78,14 @@ export default function DentalRegister() {
     });
 
 
-    const [modalType, setModalType] = useState("");
+    
     const [seqId, setSeqId] = useState("");
-
+    const [dentalObj, setDentalObj] = useState({});
 
     // 모달
     const [openDentalAddModal, setOpenDentalModal] = useState(false);
-    
+    const [modalType, setModalType] = useState("");
+
     const handleDentalModalOpen = () => {
         setOpenDentalModal(true);
     };
@@ -97,9 +98,9 @@ export default function DentalRegister() {
       handleDentalModalOpen();
     }
 
-    const onUpdateButtonClicked = (seqId) => {
-      setModalType("수정");
-      setSeqId(seqId);
+    const onUpdateButtonClicked = (dentalObj) => {
+      setModalType("치과수정");
+      setDentalObj(dentalObj);
       handleDentalModalOpen();
     };
   
@@ -217,22 +218,13 @@ export default function DentalRegister() {
                     </Card>
                 </Grid>
             </Grid>
-            
-            {/* <PartModalContainer           
-              modalType={modalType}
-              open={openPartAddModal}
-              close={handlePartModalClose}
-              seqId={seqId}
-              partName={partName}
-            /> */}
 
             <DentalModalContainer           
               modalType={modalType}
               open={openDentalAddModal}
               close={handleDentalModalClose}
               seqId={seqId}
-              //rowValue={rowItemName}
-               
+              dentalObj={dentalObj}
             />
       </>
     );

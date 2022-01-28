@@ -45,14 +45,12 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemName }) => {
+const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     const dispatch = useDispatch();
-    //const itemData = useSelector(({item}) => item.data);
-    //const partData = useSelector(({part}) => part.data);
-   
+
     const businessTypeData = useSelector(({businessType}) => businessType.data);
     const businessSectorData = useSelector(({businessSector}) => businessSector.data);
     const bankData = useSelector(({bank}) => bank.data);
@@ -82,14 +80,14 @@ const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemNam
 
     const autoBank = [];
     bankData.map( (data) => autoBank.push({ bank_name: data.bank_name}) );
-
+console.log(dentalObj);
 
     const onSubmit = (data) => {
 
       console.log(data);
 
       if(modalType === "추가") {
-        const content = {
+        const contents = {
           vendor_name: data.vendorName,
           ceo: data.ceo,
           tel: data.tel,
@@ -105,10 +103,31 @@ const DentalModalContainer = ({ modalType, open, close, seqId, partName, itemNam
           description: data.description
         };
     
-        dispatch(dentals.addDentalMiddleware(content));
+        dispatch(dentals.addDentalMiddleware(contents));
 
+      } else if(modalType === "수정") {
+        
+        const contents = {
+          seq_id: dentalObj.seqId,
+          vendor_name: data.vendorName,
+          ceo: data.ceo,
+          tel: data.tel,
+          mobile: data.mobile,
+          fax: data.fax,
+          business_number: data.businessNumber,
+          business_type_no: typeNo,
+          business_sector_no: sectorNo,
+          post_number: data.postNumber,
+          address: data.address,
+          bank_no: bankNo,
+          bank_account: data.bankAccount,
+          description: data.description
+        };
+        console.log(contents);
+        //dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents))
+      
       } else if(modalType === "삭제") {
-          dispatch(dentals.deleteDentalMiddleware(seqId));
+        dispatch(dentals.deleteDentalMiddleware(seqId));
       }
 
     //   } else if(modalType === "수정") {
