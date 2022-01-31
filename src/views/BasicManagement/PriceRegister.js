@@ -80,7 +80,7 @@ export default function PriceRegister() {
 
 
     const [seqId, setSeqId] = useState("");
-    
+    const [priceObj, setPriceObj] = useState({});
 
 
     // 모달
@@ -99,9 +99,9 @@ export default function PriceRegister() {
       handlePriceModalOpen();
     }
 
-    const onUpdateButtonClicked = (seqId) => {
-      setModalType("수정");
-      setSeqId(seqId);
+    const onUpdateButtonClicked = (priceObj) => {
+      setModalType("단가수정");
+      setPriceObj(priceObj);
       handlePriceModalOpen();
     };
   
@@ -112,126 +112,111 @@ export default function PriceRegister() {
     };
 
     const columns = ([
-        {name: "vendor_name", header: "거래처명", align: "center" },
-        {name: "part_name", header: "파트명", align: "center" },
-        {name: "item_name", header: "장치명", align: "center" },
-        {name: "price", header: "단가", align: "center" },
-        {
-          name: "update",
-          header: "수정",
-          align: "center",
-          renderer: {
-            type: UpdateButtonRenderer,
-            options: {
-              onUpdateButtonClicked
-            }
-          }
-        },
-        {
-          name: 'remove',
-          header: '삭제',
-          align: "center",
-          renderer: {
-            type: RemoveButtonRenderer,
-            options: {
-              onRemoveButtonClicked
-            }
+      {name: "vendor_name", header: "거래처명", align: "center" },
+      {name: "part_name", header: "파트명", align: "center" },
+      {name: "item_name", header: "장치명", align: "center" },
+      {name: "price", header: "단가", align: "center" },
+      {
+        name: "update",
+        header: "단가수정",
+        align: "center",
+        renderer: {
+          type: UpdateButtonRenderer,
+          options: {
+            onUpdateButtonClicked
           }
         }
+      },
+      {
+        name: 'remove',
+        header: '삭제',
+        align: "center",
+        renderer: {
+          type: RemoveButtonRenderer,
+          options: {
+            onRemoveButtonClicked
+          }
+        }
+      }
     ]);
-
 
     const auto1 = [ {title: "전체"}, {title: "Dental.A 치과기공소"}];
     const auto2 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
     const auto3 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
-    // useEffect( () => {
-    //     axios
-    //       .get("http://localhost:8000/api/sell/price/")
-    //       .then((result) => {
-    //           //console.log(result);
-    //         setPriceData(result.data);
-    //       })
-    //       .catch((error) => {
-    //         throw new Error(error);
-    //       });
-    // }, []);
-
     return (
         <>
-            <Grid container>
-                <Grid item xs={12} className={classes.grid}>
-                    <Card>
-                        <CardHeader>
-                            <Button
-                                type="submit"
-                                className={classes.button} 
-                                color="info" 
-                                round
-                                onClick={(e) => priceModalOpen(e)}
-                            >추가
-                            </Button>
-                        </CardHeader>
-                        <CardBody>
-                          <Grid item xs={12} className={classes.grid}>
-                              <Autocomplete
-                                id="filter-demo"
-                                className={classes.grid}
-                                options={auto1}
-                                getOptionLabel={(option) => option.title}
-                                filterOptions={filterOptions}
-                                style={{float: "left", width: "200px", marginLeft: "20px"}}
-                                renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
-                              />
+          <Grid container>
+            <Grid item xs={12} className={classes.grid}>
+              <Card>
+                <CardHeader>
+                  <Button
+                      type="submit"
+                      className={classes.button} 
+                      color="info" 
+                      round
+                      onClick={(e) => priceModalOpen(e)}
+                  >추가
+                  </Button>
+                </CardHeader>
+                <CardBody>
+                  <Grid item xs={12} className={classes.grid}>
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto1}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px", marginLeft: "20px"}}
+                      renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                    />
 
-                              <Autocomplete
-                                id="filter-demo"
-                                className={classes.grid}
-                                options={auto2}
-                                getOptionLabel={(option) => option.title}
-                                filterOptions={filterOptions}
-                                style={{float: "left", width: "200px"}}
-                                renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                              />
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto2}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px"}}
+                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                    />
 
-                              <Autocomplete
-                                id="filter-demo"
-                                className={classes.grid}
-                                options={auto3}
-                                getOptionLabel={(option) => option.title}
-                                filterOptions={filterOptions}
-                                style={{float: "left", width: "200px"}}
-                                renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
-                              />
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto3}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px"}}
+                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                    />
 
-                              <Button
-                                type="submit"
-                                color="primary" 
-                                round
-                                style={{float: "left", width: "100px"}}
-                                //onClick={(e) => partModalOpen(e)}
-                              >검색
-                              </Button>
-                            </Grid>   
-                          <BasicGrid 
-                              type={"price"}
-                              columns={columns}
-                              data={priceData}
-                          />
-                        </CardBody>
-                    </Card>
-                </Grid>
+                    <Button
+                      type="submit"
+                      color="primary" 
+                      round
+                      style={{float: "left", width: "100px"}}
+                      //onClick={(e) => partModalOpen(e)}
+                    >검색
+                    </Button>
+                  </Grid>   
+                  <BasicGrid 
+                    type={"price"}
+                    columns={columns}
+                    data={priceData}
+                  />
+                </CardBody>
+              </Card>
             </Grid>
+          </Grid>
 
-            <PriceModalContainer       
-                modalType={modalType}
-                open={openPriceAddModal}
-                close={handlePriceModalClose}
-                seqId={seqId}
-                //partName={partName}
-                
-            />
+          <PriceModalContainer       
+            modalType={modalType}
+            open={openPriceAddModal}
+            close={handlePriceModalClose}
+            seqId={seqId}
+            priceObj={priceObj}
+          />
       </>
     );
-
 }

@@ -125,7 +125,7 @@ export default function DentalRegister() {
       {name: "description", header: "비고", align: "center" },
       {
         name: "update",
-        header: "수정",
+        header: "치과수정",
         align: "center",
         renderer: {
           type: UpdateButtonRenderer,
@@ -153,80 +153,76 @@ export default function DentalRegister() {
 
     return (
         <>
-            <Grid container>
-                <Grid item xs={12} className={classes.grid}>
-                    <Card>
-                        <CardHeader>
-                            <Button
-                                type="submit"
-                                className={classes.button} 
-                                color="info" 
-                                round
-                                onClick={(e) => dentalModalOpen(e)}
-                            >추가
-                            </Button>
-                        </CardHeader>
-                        <CardBody>
+          <Grid container>
+            <Grid item xs={12} className={classes.grid}>
+              <Card>
+                <CardHeader>
+                  <Button
+                      type="submit"
+                      className={classes.button} 
+                      color="info" 
+                      round
+                      onClick={(e) => dentalModalOpen(e)}
+                  >추가
+                  </Button>
+                </CardHeader>
+                <CardBody>
 
-                        <Grid item xs={12} className={classes.grid}>
-                        <Autocomplete
-                          id="filter-demo"
-                          className={classes.grid}
-                          options={auto1}
-                          getOptionLabel={(option) => option.title}
-                          filterOptions={filterOptions}
-                          style={{float: "left", width: "200px", marginLeft: "20px"}}
-                          renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
-                        />
+                  <Grid item xs={12} className={classes.grid}>
+                  <Autocomplete
+                    id="filter-demo"
+                    className={classes.grid}
+                    options={auto1}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    style={{float: "left", width: "200px", marginLeft: "20px"}}
+                    renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                  />
+                  <Autocomplete
+                    id="filter-demo"
+                    className={classes.grid}
+                    options={auto2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    style={{float: "left", width: "200px"}}
+                    renderInput={(params) => <TextField {...params} label="대표" variant="outlined" />}
+                  />
+                  <Autocomplete
+                    id="filter-demo"
+                    className={classes.grid}
+                    options={auto3}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    style={{float: "left", width: "200px"}}
+                    renderInput={(params) => <TextField {...params} label="전화번호" variant="outlined" />}
+                  />
 
-                        <Autocomplete
-                          id="filter-demo"
-                          className={classes.grid}
-                          options={auto2}
-                          getOptionLabel={(option) => option.title}
-                          filterOptions={filterOptions}
-                          style={{float: "left", width: "200px"}}
-                          renderInput={(params) => <TextField {...params} label="대표" variant="outlined" />}
-                        />
-
-                        <Autocomplete
-                          id="filter-demo"
-                          className={classes.grid}
-                          options={auto3}
-                          getOptionLabel={(option) => option.title}
-                          filterOptions={filterOptions}
-                          style={{float: "left", width: "200px"}}
-                          renderInput={(params) => <TextField {...params} label="전화번호" variant="outlined" />}
-                        />
-
-                        <Button
-                          type="submit"
-                          color="primary" 
-                          round
-                          style={{float: "left", width: "100px"}}
-                          //onClick={(e) => partModalOpen(e)}
-                        >검색
-                        </Button>
-                      </Grid>    
-
-                        <BasicGrid 
-                            type={"dental"}
-                            columns={columns}
-                            data={dentalData}
-                        />
-                        </CardBody>
-                    </Card>
-                </Grid>
+                  <Button
+                    type="submit"
+                    color="primary" 
+                    round
+                    style={{float: "left", width: "100px"}}
+                    //onClick={(e) => partModalOpen(e)}
+                  >검색
+                  </Button>
+                </Grid>    
+                <BasicGrid 
+                    type={"dental"}
+                    columns={columns}
+                    data={dentalData}
+                />
+                </CardBody>
+              </Card>
             </Grid>
+          </Grid>
 
-            <DentalModalContainer           
-              modalType={modalType}
-              open={openDentalAddModal}
-              close={handleDentalModalClose}
-              seqId={seqId}
-              dentalObj={dentalObj}
-            />
+          <DentalModalContainer           
+            modalType={modalType}
+            open={openDentalAddModal}
+            close={handleDentalModalClose}
+            seqId={seqId}
+            dentalObj={dentalObj}
+          />
       </>
     );
-
 }

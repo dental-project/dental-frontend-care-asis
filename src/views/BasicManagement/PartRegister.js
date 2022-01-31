@@ -84,8 +84,9 @@ function PartRegister() {
   
   const [modalType, setModalType] = useState("");
   const [seqId, setSeqId] = useState("");
-  const [partName, setPartName] = useState("");
-
+  const [partObj, setPartObj] = useState({});
+  //const [partName, setPartName] = useState("");
+  
   // 모달
   const [openPartAddModal, setOpenPartModal] = useState(false);
   const handlePartModalOpen = () => {
@@ -100,10 +101,9 @@ function PartRegister() {
     handlePartModalOpen();
   }
 
-  const onUpdateButtonClicked = (obj) => {
-    setModalType("수정");
-    setSeqId(seqId);
-    setPartName(partName);
+  const onUpdateButtonClicked = (partObj) => {
+    setModalType("파트수정");
+    setPartObj(partObj);
     handlePartModalOpen();
   };
 
@@ -152,11 +152,6 @@ function PartRegister() {
     partData.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
 
   }
-
-
-
-
-
 
   return (
     <>
@@ -229,7 +224,7 @@ function PartRegister() {
         open={openPartAddModal}
         close={handlePartModalClose}
         seqId={seqId}
-        partName={partName}
+        partObj={partObj}
       />
 
     </>

@@ -53,20 +53,21 @@ const useStyles = makeStyles((theme) => ({
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   
 
-const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
+const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
     
-    const [autoVendorSeqId, setAutoVendorSeqId] = useState('');
-    const [autoItemSeqId, setAutoItemSeqId] = useState('');
-
+   
 
     const dispatch = useDispatch();
     //const priceData = useSelector(({price}) => price.data);
     const dentalData = useSelector(({dental}) => dental.data);
     const itemData = useSelector(({item}) => item.data);
    
+    const [autoVendorSeqId, setAutoVendorSeqId] = useState('');
+    const [autoItemSeqId, setAutoItemSeqId] = useState('');
+
 
     useEffect(() => {
       
@@ -110,22 +111,20 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
           price: data.price
         };
         dispatch(prices.addPriceMiddleware(content));
+      } else if(modalType === "단가수정") {
+
+        const contents = {
+          seq_id: priceObj.seqId,
+          vendor_seq_id: autoVendorSeqId,
+          item_seq_id: autoItemSeqId,
+          price: priceObj.price
+        };
+        
+        dispatch(prices.updatePriceMiddleware(priceObj.seqId, contents))
+
       } else if(modalType === "삭제") {
         dispatch(prices.deletePriceMiddleware(seqId));
-      }
-    
-    //     
-    //   } else if(modalType === "수정") {
-
-    //     const contents = {
-    //       part_name: data.partName
-    //     };
-        
-    //     dispatch(parts.updatePartMiddleware(seqId, contents))
-
-    //   } else if(modalType === "삭제") {
-    //     dispatch(parts.deletePartMiddleware(seqId));
-    //   }
+      } 
       
     }
 
@@ -138,6 +137,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
           : (
             <>
               <Autocomplete
+                name="vendorName"
                 options={auto1}
                 getOptionLabel={(option) => option.vendor_name}
                 filterOptions={filterOptions}
@@ -162,6 +162,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
                 }}
               />
               <Autocomplete
+                name="itemName"
                 options={auto2}
                 getOptionLabel={(option) => option.item_name}
                 filterOptions={filterOptions2}
@@ -192,6 +193,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, partName }) => {
                     className={classes.textField} 
                     label="단가"
                     variant="outlined"
+                    defaultValue={priceObj.price ? priceObj.price:""}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}

@@ -106,44 +106,43 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
           ? null
           : (
             <>
-                <Autocomplete
-                    className={classes.textField}
-                    name="partName"
-                    control={control}
-                    options={auto}
-                    getOptionLabel={(option) => option.part_name}
-                    filterOptions={filterOptions}
-
-                    onChange={(event, newValue) => { 
-                      if(newValue === null) {
-                          setAutoSeqId("");
-                      } else {
-                          const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
-                          const partSeqId = partData[index].seq_id
-                        
-                          setAutoSeqId(partSeqId)
-                      }
-                    }}
-                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                />
-                <Controller
-                  name="itemName"
+              <Autocomplete
+                  className={classes.textField}
+                  name="partName"
                   control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="장치명"
-                      variant="outlined"
-                      defaultValue={itemObj.itemName?itemObj.itemName:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                      required: "장치명을 입력하세요."
+                  options={auto}
+                  getOptionLabel={(option) => option.part_name}
+                  filterOptions={filterOptions}
+                  onChange={(event, newValue) => { 
+                    if(newValue === null) {
+                        setAutoSeqId("");
+                    } else {
+                        const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
+                        const partSeqId = partData[index].seq_id
+                      
+                        setAutoSeqId(partSeqId)
+                    }
                   }}
-                />     
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+              />
+              <Controller
+                name="itemName"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    className={classes.textField} 
+                    label="장치명"
+                    variant="outlined"
+                    defaultValue={itemObj.itemName?itemObj.itemName:""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{ 
+                    required: "장치명을 입력하세요."
+                }}
+              />     
             </>
             )
         }

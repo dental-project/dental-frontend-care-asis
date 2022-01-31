@@ -65,7 +65,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       dispatch(businessSectors.getBusinessSectorMiddleware());
       dispatch(banks.getBankMiddleware());
       // console.log("렌더링");
-      
+      console.log(dentalObj);
       //console.log(businessSectorData);
     }, [] );
    
@@ -80,7 +80,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
     const autoBank = [];
     bankData.map( (data) => autoBank.push({ bank_name: data.bank_name}) );
-console.log(dentalObj);
+
 
     const onSubmit = (data) => {
 
@@ -105,7 +105,7 @@ console.log(dentalObj);
     
         dispatch(dentals.addDentalMiddleware(contents));
 
-      } else if(modalType === "수정") {
+      } else if(modalType === "치과수정") {
         
         const contents = {
           seq_id: dentalObj.seqId,
@@ -124,8 +124,8 @@ console.log(dentalObj);
           description: data.description
         };
         console.log(contents);
-        //dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents))
-      
+        dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents))
+    
       } else if(modalType === "삭제") {
         dispatch(dentals.deleteDentalMiddleware(seqId));
       }
@@ -180,6 +180,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="거래처명"
                       variant="outlined"
+                      defaultValue={dentalObj.vendorName ? dentalObj.vendorName:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -199,6 +200,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="대표명"
                       variant="outlined"
+                      defaultValue={dentalObj.ceo ? dentalObj.ceo:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -217,6 +219,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="전화번호"
                       variant="outlined"
+                      defaultValue={dentalObj.tel ? dentalObj.tel:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -235,6 +238,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="휴대폰번호"
                       variant="outlined"
+                      defaultValue={dentalObj.mobile ? dentalObj.mobile:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -253,6 +257,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="팩스번호"
                       variant="outlined"
+                      defaultValue={dentalObj.fax ? dentalObj.fax:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -271,6 +276,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="사업자번호"
                       variant="outlined"
+                      defaultValue={dentalObj.businessNumber ? dentalObj.businessNumber:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -331,6 +337,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="우편번호"
                       variant="outlined"
+                      defaultValue={dentalObj.postNumber ? dentalObj.postNumber:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -349,6 +356,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="주소"
                       variant="outlined"
+                      defaultValue={dentalObj.address ? dentalObj.address:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -388,6 +396,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="계좌번호"
                       variant="outlined"
+                      defaultValue={dentalObj.bankAccount ? dentalObj.bankAccount:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
@@ -406,6 +415,7 @@ console.log(dentalObj);
                       className={classes.textField} 
                       label="비고"
                       variant="outlined"
+                      defaultValue={dentalObj.description ? dentalObj.description:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}

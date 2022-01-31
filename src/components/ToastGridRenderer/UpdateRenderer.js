@@ -47,7 +47,7 @@ class UpdateRenderer {
     } else if(updateType === "치과수정") {
       obj = {
         seqId: seqId,
-        vendor_name: props.grid.store.data.rawData[rowKey].vendor_name,
+        vendorName: props.grid.store.data.rawData[rowKey].vendor_name,
         ceo: props.grid.store.data.rawData[rowKey].ceo,
         tel: props.grid.store.data.rawData[rowKey].tel,
         mobile: props.grid.store.data.rawData[rowKey].mobile,

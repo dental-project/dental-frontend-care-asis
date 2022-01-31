@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
+const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
 
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
@@ -54,13 +54,14 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
         };
     
         dispatch(parts.addPartMiddleware(content));
-      } else if(modalType === "수정") {
+      } else if(modalType === "파트수정") {
 
         const contents = {
+          seq_id: partObj.seqId,
           part_name: data.partName
         };
         
-        dispatch(parts.updatePartMiddleware(seqId, contents))
+        dispatch(parts.updatePartMiddleware(partObj.seqId, contents))
 
       } else if(modalType === "삭제") {
         dispatch(parts.deletePartMiddleware(seqId));
@@ -84,7 +85,7 @@ const PartModalContainer = ({ modalType, open, close, seqId, partName }) => {
                       className={classes.textField} 
                       label="파트명"
                       variant="outlined"
-                      defaultValue={partName?partName:""}
+                      defaultValue={partObj.partName ? partObj.partName:""}
                       onChange={onChange}
                       error={!!error}
                       helperText={error ? error.message : null}
