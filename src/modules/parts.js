@@ -96,7 +96,6 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data.push(action.payload.data);
       }),
-    
     [UPDATE_PART]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
@@ -104,14 +103,6 @@ export default handleActions(
         }
       })
     )},
-      
-    
-    
-
-    // produce(state, (draft) => {
-     
-    //   }),
-
     [REMOVE_PART]: (state, action) =>
       produce(state, (draft) => {
         draft.data = []
@@ -119,25 +110,6 @@ export default handleActions(
   },
   initialState
 );
-
-// // reducer
-// export default handleActions(
-//   {
-//     [READ_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data = action.payload.data;
-//       }),
-//     [ADD_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data.push(action.payload.data);
-//       }),
-//     [REMOVE_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data = action.payload.data;
-//       }),
-//   },
-//   initialState
-// );
 
 const parts = {
   getPartMiddleware,

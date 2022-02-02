@@ -178,17 +178,9 @@ function PartRegister() {
                   getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
                   style={{float: "left", width: "300px"}}
-                  
                   onChange={(event, newValue) => {
                     setValue(newValue);
-                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
-                    //console.log(event);
-                    //console.log(newValue);
-                    //setValue(newValue);
-                    //partData.filter(v => v.part_name === newValue.part_name ? setSearchData(v) : null );
-                    
                   }}
-                 
                   getOptionSelected={(option, value) => {
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
@@ -232,12 +224,3 @@ function PartRegister() {
 }
 
 export default PartRegister;
-
-// const mapStateToProps = ({part}) => {
-//   return {
-//     part: part
-//   }
-// }
-
-// export default connect(mapStateToProps)(PartRegister)
-

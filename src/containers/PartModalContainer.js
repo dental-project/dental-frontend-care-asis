@@ -95,7 +95,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
                     required: "파트명을 입력하세요."
                   }}
                 />
-                
               </>
             )
         }
