@@ -171,13 +171,13 @@ export default function Dashboard() {
     const config = {
       withCredentials: true,
     }   
-
+    
     axios
-      .get("http://localhost:8000/api/sell/master/")
+      .get("http://localhost:8000/api/sell/master/",config)
       .then((result) => {
           console.log(result);
           setDentalData(result.data);
-      },config)
+      })
       .catch((error) => {
         throw new Error(error);
     });
