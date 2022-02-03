@@ -18,7 +18,7 @@ const removePrice = createAction(REMOVE_PRICE, (data) => ({ data }));
 const initialState = {
   data: [],
   loading: false,
-  modal: "false",
+  modal: false,
   err: null
 };
 
@@ -92,9 +92,8 @@ export default handleActions(
       }),
     [ADD_PRICE]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.data);
+        draft.data.push(action.payload);
       }),
-    
     [UPDATE_PRICE]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
@@ -102,15 +101,10 @@ export default handleActions(
         }
       })
     )},
-    
     [REMOVE_PRICE]: (state, action) =>
       produce(state, (draft) => {
         draft.data = []
     }),
-    // produce(state, (draft) => {
-     
-    //   }),
-
   },
   initialState
 );

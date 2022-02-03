@@ -84,7 +84,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
           part_seq_id: autoSeqId,
           item_name: data.itemName
         };
-      
+        
         dispatch(items.updateItemMiddleware(itemObj.seqId, contents))
       } else if(modalType === "삭제") {
         dispatch(items.deleteItemMiddleware(seqId));

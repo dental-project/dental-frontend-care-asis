@@ -66,15 +66,19 @@ function PartRegister() {
   //const { watch,  handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
-  const partData = useSelector(({part}) => part.data);
+  const part = useSelector(({part}) => part);
+
+  console.log(part);
 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    //console.log("렌더링");
-  }, [partData.length] );
+
+    setOpenPartModal(part.modal);
+    
+  }, [part.data.length] );
  
   const auto1 = [ {part_name: "전체"} ];
-  partData.map( (data) => auto1.push({ part_name: data.part_name}) );
+  part.data.map( (data) => auto1.push({ part_name: data.part_name}) );
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
@@ -149,7 +153,7 @@ function PartRegister() {
   //console.log([searchData]);
 
   const onClickSearch = (e) => {
-    partData.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+    part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
 
   }
 
@@ -201,7 +205,7 @@ function PartRegister() {
                 columns={columns}
                 data={
                   //value.part_name === "전체" ? partData : [searchData]
-                  partData
+                  part.data
                 }
                 //hoc={highFuc}
               />

@@ -63,12 +63,12 @@ export default function DentalRegister() {
     const classes = useStyles();
 
     const dispatch = useDispatch();
-    const dentalData = useSelector(({dental}) => dental.data);
+    const dental = useSelector(({dental}) => dental);
   
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
-      console.log(dentalData);
-    }, [dentalData.length] );
+      setOpenDentalModal(dental.modal);
+    }, [dental.data.length] );
    
     
 
@@ -167,50 +167,49 @@ export default function DentalRegister() {
                   </Button>
                 </CardHeader>
                 <CardBody>
-
                   <Grid item xs={12} className={classes.grid}>
-                  <Autocomplete
-                    id="filter-demo"
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    style={{float: "left", width: "200px", marginLeft: "20px"}}
-                    renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
-                  />
-                  <Autocomplete
-                    id="filter-demo"
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    style={{float: "left", width: "200px"}}
-                    renderInput={(params) => <TextField {...params} label="대표" variant="outlined" />}
-                  />
-                  <Autocomplete
-                    id="filter-demo"
-                    className={classes.grid}
-                    options={auto3}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    style={{float: "left", width: "200px"}}
-                    renderInput={(params) => <TextField {...params} label="전화번호" variant="outlined" />}
-                  />
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto1}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px", marginLeft: "20px"}}
+                      renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                    />
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto2}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px"}}
+                      renderInput={(params) => <TextField {...params} label="대표" variant="outlined" />}
+                    />
+                    <Autocomplete
+                      id="filter-demo"
+                      className={classes.grid}
+                      options={auto3}
+                      getOptionLabel={(option) => option.title}
+                      filterOptions={filterOptions}
+                      style={{float: "left", width: "200px"}}
+                      renderInput={(params) => <TextField {...params} label="전화번호" variant="outlined" />}
+                    />
 
-                  <Button
-                    type="submit"
-                    color="primary" 
-                    round
-                    style={{float: "left", width: "100px"}}
-                    //onClick={(e) => partModalOpen(e)}
-                  >검색
-                  </Button>
-                </Grid>    
-                <BasicGrid 
-                    type={"dental"}
-                    columns={columns}
-                    data={dentalData}
-                />
+                    <Button
+                      type="submit"
+                      color="primary" 
+                      round
+                      style={{float: "left", width: "100px"}}
+                      //onClick={(e) => partModalOpen(e)}
+                    >검색
+                    </Button>
+                  </Grid>    
+                  <BasicGrid 
+                      type={"dental"}
+                      columns={columns}
+                      data={dental.data}
+                  />
                 </CardBody>
               </Card>
             </Grid>

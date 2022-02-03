@@ -18,7 +18,7 @@ const removeItem = createAction(REMOVE_ITEM, (data) => ({ data }));
 const initialState = {
   data: [],
   loading: false,
-  modal: "false",
+  modal: false,
   err: null
 };
 
@@ -92,9 +92,8 @@ export default handleActions(
       }),
     [ADD_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.data);
+        draft.data.push(action.payload);
       }),
-    
     [UPDATE_ITEM]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
@@ -102,11 +101,6 @@ export default handleActions(
         }
       })
     )},
-      
-    // produce(state, (draft) => {
-     
-    //   }),
-
     [REMOVE_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.data = []

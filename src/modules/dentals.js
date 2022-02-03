@@ -18,7 +18,7 @@ const removeDental = createAction(REMOVE_DENTAL, (data) => ({ data }));
 const initialState = {
   data: [],
   loading: false,
-  modal: "false",
+  modal: false,
   err: null
 };
 
@@ -91,9 +91,8 @@ export default handleActions(
       }),
     [ADD_DENTAL]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.data);
+        draft.data.push(action.payload);
       }),
-    
     [UPDATE_DENTAL]: (state, action) => {(
       state.data.map((seq_id) => {
         if(seq_id === action.payload.data.contents.seq_id) {
@@ -101,7 +100,6 @@ export default handleActions(
         }
       })
     )},
-    
     [REMOVE_DENTAL]: (state, action) =>
       produce(state, (draft) => {
         draft.data = []

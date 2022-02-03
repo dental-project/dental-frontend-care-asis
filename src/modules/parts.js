@@ -19,7 +19,7 @@ const removePart = createAction(REMOVE_PART, (data) => ({ data }));
 const initialState = {
   data: [],
   loading: false,
-  modal: "false",
+  modal: false,
   err: null
 };
 
@@ -85,6 +85,7 @@ const deletePartMiddleware = (seqId) => {
   };
 };
 
+// 나중에 손봐야 함
 // reducer
 export default handleActions(
   {
@@ -94,7 +95,7 @@ export default handleActions(
       }),
     [ADD_PART]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload.data);
+        draft.data.push(action.payload);
       }),
     [UPDATE_PART]: (state, action) => {(
       state.data.map((seq_id) => {

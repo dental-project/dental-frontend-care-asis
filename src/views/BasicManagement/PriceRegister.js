@@ -63,14 +63,13 @@ export default function PriceRegister() {
 
 
     const dispatch = useDispatch();
-    const priceData = useSelector(({price}) => price.data);
+    const price = useSelector(({price}) => price);
   
     useEffect(() => {
       dispatch(prices.getPriceMiddleware());
-     
-    }, [priceData.length] );
+      setOpenPriceModal(price.modal);
+    }, [price.data.length] );
 
-    console.log(priceData);
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -203,7 +202,7 @@ export default function PriceRegister() {
                   <BasicGrid 
                     type={"price"}
                     columns={columns}
-                    data={priceData}
+                    data={price.data}
                   />
                 </CardBody>
               </Card>

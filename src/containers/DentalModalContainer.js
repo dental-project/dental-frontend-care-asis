@@ -67,11 +67,8 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       // console.log("렌더링");
       console.log(dentalObj);
       //console.log(businessSectorData);
-    }, [] );
+    }, [bankData.length] );
    
-    
-
-  
     const autoType = [];
     businessTypeData.map( (data) => autoType.push({ type_name: data.type_name}) );
 
@@ -123,7 +120,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
           bank_account: data.bankAccount,
           description: data.description
         };
-        console.log(contents);
+       
         dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents))
     
       } else if(modalType === "삭제") {
@@ -174,7 +171,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="vendorName"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -190,11 +186,9 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                     required: "거래처명을 입력하세요."
                   }}
                 />
-              
                 <Controller
                   name="ceo"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -213,7 +207,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="tel"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -232,7 +225,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="mobile"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -251,7 +243,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="fax"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -270,7 +261,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="businessNumber"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -331,7 +321,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="postNumber"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -350,7 +339,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="address"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -390,7 +378,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="bankAccount"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
@@ -409,7 +396,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 <Controller
                   name="description"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       className={classes.textField} 
