@@ -168,12 +168,16 @@ export default function Dashboard() {
   const auto2 = [ { title: "전체" }, { title: "최진실" }, { title: "전윤화" }, { title: "정보경" }, { title: "이유림" }, { title: "조유나" }]
 
   useEffect( () => { 
+    const config = {
+      withCredentials: true,
+    }   
+
     axios
       .get("http://localhost:8000/api/sell/master/")
       .then((result) => {
           console.log(result);
           setDentalData(result.data);
-      })
+      },config)
       .catch((error) => {
         throw new Error(error);
     });

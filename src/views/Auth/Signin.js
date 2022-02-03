@@ -9,6 +9,8 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Typography from '@material-ui/core/Typography';
+import CSRFToken from "components/CSRF/CSRFToken";
+
 // Material
 import TextField from "@material-ui/core/TextField";
 
@@ -97,13 +99,19 @@ export default function Signin() {
 
     // const result = dbAxios(url,param);
          
-    
+    const xtoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const config = {
+      withCredentials: true,
+      headers:{
+        'X-CSRFToken':xtoken
+      }
+    }      
 
     axios
       .post("http://localhost:8000/api/users/login/", {
         userid: inputs.userid,
         password: inputs.passwd,
-      })
+      },config)
       .then((result) => {
         result.data.status === "SUCCESS"
           ? history.push("/dental")
@@ -132,6 +140,7 @@ export default function Signin() {
             <Typography className={classes.titleText}>Dental Clinic</Typography>
           </CardHeader>
           <CardBody>
+            <CSRFToken />
             <TextField
               className={classes.textField}
               name="userid"
