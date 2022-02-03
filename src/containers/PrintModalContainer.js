@@ -98,7 +98,7 @@ const onSubmit = (data) => {
 
     axios({
       method:"POST",
-      url:"http://localhost:8000/api/sell/report/",
+      url:"/api/sell/report/",
       responseType: 'blob',
       data:{
         receipt_date: data.startDate,

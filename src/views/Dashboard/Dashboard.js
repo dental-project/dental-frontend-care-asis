@@ -173,7 +173,7 @@ export default function Dashboard() {
     }   
     
     axios
-      .get("http://localhost:8000/api/sell/master/",config)
+      .get("/api/sell/master/",config)
       .then((result) => {
           console.log(result);
           setDentalData(result.data);

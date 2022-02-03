@@ -23,7 +23,7 @@ const CSRFToken = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await axios.get('http://localhost:8000/api/users/csrf_cookie/');
+                await axios.get('/api/users/csrf_cookie/');
             } catch (error) {
                 console.log(error)
             }
