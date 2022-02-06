@@ -26,11 +26,8 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-import { parts } from 'modules/parts';
 import { items } from 'modules/items';
 import { useDispatch, useSelector } from 'react-redux';
-
-
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -115,9 +112,7 @@ export default function ItemRegister() {
       handleItemModalOpen();
     };
 
-    
     const columns = ([
-        // {name: "seq_id", header: "CodeNo", align: "center"},
         {name: "part_name", header: "파트명", align: "center"},
         {name: "item_name", header: "장치명", align: "center"},
         {

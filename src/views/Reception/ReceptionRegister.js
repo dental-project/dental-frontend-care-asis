@@ -17,10 +17,7 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 // Material
 import TextField from "@material-ui/core/TextField";
 
-// api
-import axios from 'axios';
-
-import FullModal from "components/Modal/FullModal.js"
+import ReceptionModalContainer from "containers/ReceptionModalContainer";
 //import PrintModal from "components/Modal/PrintModal.js"
 
 import PrintModalContainer from "containers/PrintModalContainer";
@@ -31,9 +28,8 @@ import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-
-import { connect } from 'react-redux'
-
+import { receptions } from 'modules/receptions';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,23 +65,42 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Dashboard() {
+export default function ReceptionRegister() {
 
   const classes = useStyles();
   let history = useHistory();
 
-  // 모달
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
+
+  const dispatch = useDispatch();
+  const reception = useSelector(({reception}) => reception);
+  
+  useEffect(() => {
+    dispatch(receptions.getReceptionMiddleware());
+    //setOpenItemModal(item.modal);
+    
+  }, [reception.data.length] );
+
+  const [seqId, setSeqId] = useState();
+  const [receptionObj, setReceptionObj] = useState({});
+
+  // 추가 모달
+  const [openReceptionAddModal, setOpenReceptionAddModal] = React.useState(false);
+  const [modalType, setModalType] = useState("");
+  
+  const handleReceptionModalOpen = () => {
+    setOpenReceptionAddModal(true);
   };
-  const handleClose = () => {
-    setOpen(false);
+  const handleReceptionModalClose = () => {
+    setOpenReceptionAddModal(false);
   };
+ 
 
 
 
-  // 모달
+
+
+
+  // 출력 모달
   const [openPrint, setOpenPrint] = React.useState(false);
   const handleClickOpenPrint = () => {
     setOpenPrint(true);
@@ -97,20 +112,28 @@ export default function Dashboard() {
 
 
   const onDetailButtonClicked = () => {
-    history.push("/admin/dashboardDetail");
+    history.push("/dental/receptionDetail");
   };
 
-  const onUpdateButtonClicked = (seqId,partName) => {
-    //console.log(rowIndex);
+  const receptionModalOpen = (e) => {
+    setModalType("추가");
+    handleReceptionModalOpen();
+  }
+
+  const onUpdateButtonClicked = (receptionObj) => {
+    setModalType("수정");
+    setReceptionObj(receptionObj);
+    handleReceptionModalOpen();
   };
 
-  const onRemoveButtonClicked = (rowIndex) => {
-    console.log(rowIndex);
+  const onRemoveButtonClicked = (seqId) => {
+    setModalType("삭제");
+    setSeqId(seqId);
+    handleReceptionModalOpen();
   };
 
-  const [dashData, setDentalData] = useState([]);
   const columns = [
-    // { name: "seq_id", header: "codeNo" },
+    { name: "seq_id", header: "codeNo" },
     { name: "receipt_date", header: "접수일자", align: "center" },
     { name: "completion_date", header: "완성일자", align: "center" },
     { name: "delivery_date", header: "배달일자", align: "center" },
@@ -167,34 +190,26 @@ export default function Dashboard() {
   const auto1 = [ { title: "전체" }, { title: "리더스탑치과" }, { title: "이바른치과" }, { title: "연세두리치과" }, { title: "서울스위트치과" }, { title: "연세바로치과" }, { title: "서울시카고" }];
   const auto2 = [ { title: "전체" }, { title: "최진실" }, { title: "전윤화" }, { title: "정보경" }, { title: "이유림" }, { title: "조유나" }]
 
-  useEffect( () => { 
-    const config = {
-      withCredentials: true,
-    }   
-    
-    axios
-      .get("/api/sell/master/",config)
-      .then((result) => {
-          console.log(result);
-          setDentalData(result.data);
-      })
-      .catch((error) => {
-        throw new Error(error);
-    });
-  },[]);
-   
 
-  const [number, setNumber] = useState(2);
+    // const config = {
+    //   withCredentials: true,
+    // }   
+    
+    // axios
+    //   .get("/api/sell/master/",config)
+    //   .then((result) => {
+    //       console.log(result);
+    //       setDentalData(result.data);
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error);
+    // });
+ 
+   
 
   return (
     <>
       <Grid container>
-
-        {/* <h2>{count}</h2>
-        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
-        <button onClick={ () => addSubscriber(number)}></button> */}
-
-
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
@@ -203,7 +218,7 @@ export default function Dashboard() {
                 className={classes.button} 
                 color="info" 
                 round
-                onClick={(e) => handleClickOpen(e)}
+                onClick={(e) => receptionModalOpen(e)}
               >추가
               </Button>
             </CardHeader>
@@ -263,7 +278,6 @@ export default function Dashboard() {
                     color="primary" 
                     round
                     style={{float: "left", width: "100px"}}
-                    //onClick={(e) => partModalOpen(e)}
                   >검색
                   </Button>
                 </Grid>   
@@ -279,24 +293,22 @@ export default function Dashboard() {
                 </Grid>
               </form>
            
-           
-
-
-
               <BasicGrid 
-                type={"dash"}
+                type={"reception"}
                 columns={columns}
-                data={dashData}
+                data={reception.data}
               />
             </CardBody>
           </Card>
         </Grid>
       </Grid>
 
-      <FullModal      
-        open={open}
-        handleClickOpen={handleClickOpen}
-        handleClose={handleClose}
+      <ReceptionModalContainer      
+        modalType={modalType}
+        open={openReceptionAddModal}
+        close={handleReceptionModalClose}
+        seqId={seqId}
+        receptionObj={receptionObj}
       />
 
       <PrintModalContainer

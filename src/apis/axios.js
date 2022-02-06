@@ -3,7 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
   // 기본적으로 우리가 바라볼 서버의 주소
   baseURL: 'http://localhost:8000/',
-  withCredentials: false,
+  withCredentials: true,
   // headers: {
   //   'content-type': 'application/json;charset=UTF-8',
   //   accept: 'application/json',
@@ -11,6 +11,17 @@ const instance = axios.create({
 });
 
 export const apis = {
+
+  // 접수 리스트
+  getReception: () => instance.get('api/sell/master/'),
+  // 접수 추가
+  createReception: (contents) => instance.post('api/sell/master/', contents),
+  // 접수 수정
+  patchReception: (seq_id, contents) => instance.patch(`api/sell/master/${seq_id}/`, contents),
+  // 접수 삭제
+  deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
+
+  
   // 파트 불러오기
   getPart: () => instance.get('api/code/part/'),
   // 파트 추가

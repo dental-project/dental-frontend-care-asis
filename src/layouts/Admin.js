@@ -29,7 +29,7 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/dental" to="/dental/dashboard" />
+    <Redirect from="/dental" to="/dental/receptionRegister" />
   </Switch>
 );
 

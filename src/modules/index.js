@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import reception from './receptions';
 import part from './parts';
 import item from './items';
 import dental from './dentals';
@@ -11,6 +12,7 @@ import bank from './banks';
 const middleware = [thunk];
 const enhancer = applyMiddleware(...middleware);
 const rootReducer = combineReducers({
+  reception,
   part,
   item,
   dental,

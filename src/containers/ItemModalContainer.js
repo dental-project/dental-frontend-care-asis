@@ -67,9 +67,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
     const onSubmit = (data) => {
 
-      console.log(data);
-      console.log(autoSeqId);
-
       if(modalType === "추가") {
         const content = {
           part_seq_id: autoSeqId,
@@ -99,7 +96,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
 
     return (
-      <Modal open={open} modalType={modalType}>
+      <Modal open={open}>
         <form onSubmit={handleSubmit(onSubmit)}>
         { 
           modalType === "삭제"

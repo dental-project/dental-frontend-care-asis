@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function DashboardDetail(props) {
+export default function ReceptionDetail(props) {
 
   const classes = useStyles();
  

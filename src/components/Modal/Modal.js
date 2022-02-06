@@ -4,12 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles } from '@material-ui/core/styles';
 
-// api
-import axios from "axios";
-
-import { connect } from 'react-redux'
 
 
 
@@ -639,13 +634,13 @@ import { connect } from 'react-redux'
   // )
 
 
-  const Modal = ({ modalType ,open, children}) => {
+  const Modal = ({ modalType ,open, children }) => {
 
   return (
     <Dialog open={open}>
       <DialogTitle id="form-dialog-title">{modalType}</DialogTitle>
       <DialogContent>
-          {children}
+        {children}
       </DialogContent>
     </Dialog>
   );

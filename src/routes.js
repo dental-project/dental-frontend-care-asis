@@ -1,7 +1,7 @@
 // @material-ui/icons
 import DvrIcon from '@material-ui/icons/Dvr';
-import DashboardPage from "views/Dashboard/Dashboard.js";
-import DashboardDetailPage from "views/Dashboard/DashboardDetail.js";
+import ReceptionRegister from "views/Reception/ReceptionRegister.js";
+import ReceptionDetail from "views/Reception/ReceptionDetail.js";
 import PartRegister from "views/BasicManagement/PartRegister.js";
 import ItemRegister from "views/BasicManagement/ItemRegister.js";
 import DentalRegister from "views/BasicManagement/DentalRegister.js";
@@ -10,17 +10,17 @@ import UserRegister from "views/Users/UserRegister.js";
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
+    path: "/receptionRegister",
     name: "접수 리스트",
     icon: DvrIcon,
-    component: DashboardPage,
+    component: ReceptionRegister,
     layout: "/dental"
   },
   {
-    path: "/dashboardDetail",
+    path: "/receptionDetail",
     name: "접수상세 리스트",
     icon: DvrIcon,
-    component: DashboardDetailPage,
+    component: ReceptionDetail,
     layout: "/dental"
   },
   {
