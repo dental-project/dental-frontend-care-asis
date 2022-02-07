@@ -67,6 +67,10 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
     const onSubmit = (data) => {
 
+
+      console.log(data);
+      return;
+
       if(modalType === "추가") {
         const content = {
           part_seq_id: autoSeqId,
@@ -96,7 +100,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
 
     return (
-      <Modal open={open}>
+      <Modal open={open} modalType={modalType}>
         <form onSubmit={handleSubmit(onSubmit)}>
         { 
           modalType === "삭제"
@@ -104,23 +108,23 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
           : (
             <>
               <Autocomplete
-                  className={classes.textField}
-                  name="partName"
-                  control={control}
-                  options={auto}
-                  getOptionLabel={(option) => option.part_name}
-                  filterOptions={filterOptions}
-                  onChange={(event, newValue) => { 
-                    if(newValue === null) {
-                        setAutoSeqId("");
-                    } else {
-                        const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
-                        const partSeqId = partData[index].seq_id
-                      
-                        setAutoSeqId(partSeqId)
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                className={classes.textField}
+                name="partName"
+                control={control}
+                options={auto}
+                getOptionLabel={(option) => option.part_name}
+                filterOptions={filterOptions}
+                onChange={(event, newValue) => { 
+                  if(newValue === null) {
+                      setAutoSeqId("");
+                  } else {
+                      const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
+                      const partSeqId = partData[index].seq_id
+                    
+                      setAutoSeqId(partSeqId)
+                  }
+                }}
+                renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
               />
               <Controller
                 name="itemName"
@@ -137,7 +141,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
                   />
                 )}
                 rules={{ 
-                    required: "장치명을 입력하세요."
+                  required: "장치명을 입력하세요."
                 }}
               />     
             </>

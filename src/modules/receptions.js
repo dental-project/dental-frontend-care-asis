@@ -38,12 +38,12 @@ const getReceptionMiddleware = () => {
   };
 };
 
-const addReceptionMiddleware = (part) => {
+const addReceptionMiddleware = (contents) => {
   return (dispatch) => {
     apis
-      .createReceptionData(part)
+      .createReception(contents)
       .then((result) => {
-        dispatch(addReception(part));
+        dispatch(addReception(contents));
         alert("접수 정보를 추가 하였습니다.");
       })
       .catch((err) => {
@@ -53,7 +53,6 @@ const addReceptionMiddleware = (part) => {
 };
 
 const updateReceptionMiddleware = (seqId, contents) => {
-  console.log(seqId);
   return (dispatch) => {
     apis
       .patchPart(seqId, contents)
@@ -71,13 +70,12 @@ const updateReceptionMiddleware = (seqId, contents) => {
 }
 
 const deleteReceptionMiddleware = (seqId) => {
-  console.log(seqId);
   return (dispatch) => {
     apis
       .deleteReception(seqId)
       .then((result) => {
         dispatch(removeReception(seqId));
-        alert("파트명을 삭제 했습니다.");
+        alert("접수 정보를 삭제 했습니다.");
       })
       .catch((err) => {
         console.log(err);

@@ -65,7 +65,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       dispatch(businessSectors.getBusinessSectorMiddleware());
       dispatch(banks.getBankMiddleware());
       // console.log("렌더링");
-      console.log(dentalObj);
+      //console.log(dentalObj);   -- 봐야함
       //console.log(businessSectorData);
     }, [bankData.length] );
    

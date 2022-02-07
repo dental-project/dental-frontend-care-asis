@@ -78,9 +78,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
             <Typography variant="h6" className={classes.title}>
               접수 추가
             </Typography>
-            <Button autoFocus color="inherit" onClick={close}>
+            {/* <Button autoFocus color="inherit" onClick={close}>
               저장
-            </Button>
+            </Button> */}
           </Toolbar>
         </AppBar>
 

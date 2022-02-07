@@ -69,7 +69,6 @@ const updateItemMiddleware = (seqId, contents) => {
 }
 
 const deleteItemMiddleware = (seqId) => {
-  console.log(seqId);
   return (dispatch) => {
     apis
       .deleteItem(seqId)

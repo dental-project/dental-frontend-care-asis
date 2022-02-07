@@ -637,7 +637,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
   const Modal = ({ modalType ,open, children }) => {
 
   return (
-    <Dialog open={open}>
+    <Dialog fullScreen open={open}>
       <DialogTitle id="form-dialog-title">{modalType}</DialogTitle>
       <DialogContent>
         {children}

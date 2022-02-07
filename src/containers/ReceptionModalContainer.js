@@ -1,7 +1,7 @@
- import React from 'react'
+ import React, { useState, useEffect } from 'react'
  import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
- import FullModal from 'components/Modal/FullModal'
+ import Button from "components/CustomButtons/Button.js";
+ import Modal from 'components/Modal/Modal'
  import ListItemText from '@material-ui/core/ListItemText';
  import ListItem from '@material-ui/core/ListItem';
  import List from '@material-ui/core/List';
@@ -9,9 +9,16 @@ import Button from '@material-ui/core/Button';
  import FormControlLabel from '@material-ui/core/FormControlLabel';
  import Checkbox from '@material-ui/core/Checkbox';
  import Grid from '@material-ui/core/Grid';
- import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
  import TextField from "@material-ui/core/TextField";
  import { useForm, Controller } from "react-hook-form";
+
+ import { useDispatch, useSelector } from 'react-redux';
+
+ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
+ import { receptions } from 'modules/receptions';
+ import { dentals } from 'modules/dentals';
 
  const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,6 +73,7 @@ import Button from '@material-ui/core/Button';
     button: {
       width: "100%",
       background: '#26c6da',
+      marginTop: '20px',
     }
   }));
   
@@ -74,83 +82,165 @@ import Button from '@material-ui/core/Button';
     
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
+    const dispatch = useDispatch();
     const [spacing, setSpacing] = React.useState(2);
    
+    const receptionData = useSelector(({reception}) => reception.data);
+    const dentalData = useSelector(({dental}) => dental.data);
+
+    useEffect(() => {
+      dispatch(receptions.getReceptionMiddleware());
+      dispatch(dentals.getDentalMiddleware());
+
+    }, [receptionData.length] );
+
+    const vendorNameAuto = [];
+    dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
+
+    const onSubmit = (data) => {
+
+      if(modalType === "추가") {
+
+        let upper = false;
+        let lower = false;
+        let bite = false;
+        let appliance = false;
+
+        if(data.upper === true) upper = true;
+        if(data.lower === true) lower = true;
+        if(data.bite === true) bite = true;
+        if(data.appliance === true) appliance = true;
+
+        const contents = {
+          receipt_date: data.receiptDate,
+          completion_date: data.completionDate,
+          delivery_date: data.deliveryDate,
+          chart_number: parseInt(data.chartNumber),
+          upper: upper,
+          lower: lower,
+          bite: bite,
+          appliance: appliance,
+          patient_name: data.patientName,
+          request_form: "/test/test.png",
+          description: "비고",
+          vendor_seq_id: 1
+        }
+    
+        dispatch(receptions.addReceptionMiddleware(contents));
+
+      } else if(modalType === "접수수정") {
+       
+      } else if(modalType === "삭제") {
+        dispatch(receptions.deleteReceptionMiddleware(seqId));
+      }
+
+
+    }
+
+
+console.log(receptionObj);
+
+
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
-        stringify: (option) => option.title,
+        stringify: (option) => option.vendor_name,
     });
     
-    
-    
-    
-    const dash1 = [ { title: "마포한그루" }, { title: "연세유라인" }, { title: "미소유" }, { title: "연세미엘치과" }, { title: "연세키즈사랑" }, { title: "연세윤치과" }, 
-                    { title: "군포 에미담치과" }, { title: "연세키즈투틴치과" }, { title: "중구강약안면외과" }, { title: "라임프로" }, { title: "연세후" }, 
-                    { title: "스노우화이트" }, { title: "과천 연세스위트" }, { title: "연세두리치과" }, { title: "서울늘편한" }, { title: "이바른치과" }, { title: "약수 연세치과" }, ];
-    
-    const dash2 = [ { title: "파트명1" }, { title: "파트명2" }, { title: "파트명3" }, { title: "파트명4" }, { title: "파트명5" }, { title: "파트명6" }, { title: "파트명7" } ];
-    const dash3 = [ { title: "CRS" }, { title: "장치명1" }, { title: "장치명2" }, { title: "장치명3" }, { title: "장치명4" }, { title: "장치명5" } ];
-      
-
     return (
-        <FullModal open={open} >
-        
-            <Grid container spacing={1} >
+      <Modal open={open} modalType={modalType}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+        { 
+          modalType === "삭제"
+          ? null
+          : (
+            <>
+              <Grid container spacing={1} >
                 <Grid item xs={4}>
-                  <TextField
-                    id="date"
-                    label="접수일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
+                  <Controller
+                    name="receiptDate"
+                    control={control}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <TextField
+                        className={classes.textField} 
+                        label="접수일자"
+                        type="date"
+                        defaultValue="2022-01-11"
+                        defaultValue={receptionObj.receiptDate?receptionObj.receiptDate:""}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        //InputLabelProps={{ shrink: true, }}
+                      />
+                    )}
+                    rules={{ 
+                      required: "접수일자를 선택하세요."
                     }}
                   />
                 </Grid>
                 <Grid item xs={4}>
-                  <TextField
-                    id="date"
-                    label="완성일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
+                  <Controller
+                    name="completionDate"
+                    control={control}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <TextField
+                        className={classes.textField} 
+                        label="완성일자"
+                        type="date"
+                        defaultValue="2022-01-11"
+                        defaultValue={receptionObj.completionDate?receptionObj.completionDate:""}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        //InputLabelProps={{ shrink: true, }}
+                      />
+                    )}
+                    rules={{ 
+                      required: "접수일자를 선택하세요."
                     }}
                   />
                 </Grid>
                 <Grid item xs={4}>
-                  <TextField
-                    id="date"
-                    label="배달일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
+                  <Controller
+                    name="deliveryDate"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <TextField
+                        className={classes.textField} 
+                        label="배달일자"
+                        type="date"
+                        defaultValue="2022-01-11"
+                        defaultValue={receptionObj.deliveryDate?receptionObj.deliveryDate:""}
+                        onChange={onChange}
+                      />
+                    )}
+                    rules={{ 
+                      required: "접수일자를 선택하세요."
                     }}
                   />
                 </Grid>
                 <Grid item xs={4}>
                   <Autocomplete
                     className={classes.textField}
-                    id="filter-demo"
-                    options={dash1}
-                    getOptionLabel={(option) => option.title}
+                    name="vendorName"
+                    control={control}
+                    options={vendorNameAuto}
+                    getOptionLabel={(option) => option.vendor_name}
                     filterOptions={filterOptions}
+                    onChange={(event, newValue) => {
+
+                    }}
                     renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
                   />  
                 </Grid>
                 <Grid item xs={4}>
                   <Controller
-                    name="partName"
+                    name="chartNumber"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         className={classes.textField} 
                         label="차트번호"
+                        defaultValue={receptionObj.chartNumber?receptionObj.chartNumber:""}
                         variant="outlined"
                         onChange={onChange}
                       />
@@ -159,14 +249,14 @@ import Button from '@material-ui/core/Button';
                 </Grid>
                 <Grid item xs={4}>
                   <Controller
-                    name="partName"
+                    name="patientName"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         className={classes.textField} 
                         label="환자명"
                         variant="outlined"
+                        defaultValue={receptionObj.patientName?receptionObj.patientName:""}
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -182,18 +272,16 @@ import Button from '@material-ui/core/Button';
 
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="upper"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value } }) => (
                       <FormControlLabel
                         control={
                           <Checkbox
                             className={classes.textField} 
-                            checked={true}
                             onChange={onChange}
-                            name="upper"
                             color="primary"
+                            checked={receptionObj.upper?receptionObj.upper:""}
                           />
                         }
                         label="Upper"
@@ -203,59 +291,52 @@ import Button from '@material-ui/core/Button';
                 </Grid>
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="lower"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value } }) => (
                       <FormControlLabel
                         control={
                           <Checkbox
                             className={classes.textField} 
-                            checked={true}
                             onChange={onChange}
-                            name="lower"
                             color="primary"
+                            checked={receptionObj.lower?receptionObj.lower:""}
                           />
                         }
                         label="Lower"
                       />
                     )}
                   />
-                 </Grid>
+                </Grid>
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="bite"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value } }) => (
                       <FormControlLabel
                         control={
                           <Checkbox
                             className={classes.textField} 
-                            checked={true}
                             onChange={onChange}
-                            name="bite"
                             color="primary"
+                            checked={receptionObj.bite?receptionObj.bite:""}
                           />
                         }
                         label="Bite"
                       />
                     )}
                   />
-                 </Grid>
+                </Grid>
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="appliance"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value } }) => (
                       <FormControlLabel
                         control={
                           <Checkbox
                             className={classes.textField}
-                            checked={true}
                             onChange={onChange}
-                            name="appliance"
                             color="primary"
                           />
                         }                 
@@ -267,37 +348,42 @@ import Button from '@material-ui/core/Button';
 
                 <Grid item xs={2}></Grid>  
 
-                <Grid item xs={2}>
+                {/* <Grid item xs={2}>
                   <Autocomplete
-                      className={classes.textField}
-                      id="filter-demo"
-                      options={dash2}
-                      getOptionLabel={(option) => option.title}
-                      filterOptions={filterOptions}
-                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                    className={classes.textField}
+                    name="partName"
+                    control={control}
+                    options={dash2}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    onChange={(event, newValue) => { 
+
+                    }}
+                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                   /> 
                 </Grid>    
                 <Grid item xs={2}>
                   <Autocomplete
-                      className={classes.textField}
-                      id="filter-demo"
-                      options={dash3}
-                      getOptionLabel={(option) => option.title}
-                      filterOptions={filterOptions}
-                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                    className={classes.textField}
+                    name="itemName"
+                    control={control}
+                    options={dash3}
+                    getOptionLabel={(option) => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                   />                  
                 </Grid>  
 
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="price"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         className={classes.textField} 
                         label="단가"
                         variant="outlined"
+                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -311,14 +397,14 @@ import Button from '@material-ui/core/Button';
 
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="amount"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         className={classes.textField} 
                         label="수량"
                         variant="outlined"
+                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -332,14 +418,14 @@ import Button from '@material-ui/core/Button';
 
                 <Grid item xs={2}>
                   <Controller
-                    name="partName"
+                    name="discount"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                       <TextField
                         className={classes.textField} 
                         label="할인율 (%)"
                         variant="outlined"
+                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -349,32 +435,49 @@ import Button from '@material-ui/core/Button';
                       required: "할인율을 입력하세요."
                   }}
                 />
-                </Grid>                                     
+                </Grid>                                      */}
 
                 <Grid item xs={1}>
-                  <Button variant="outlined" color="secondary" style={{width: "100%",height: "74%", marginTop: "8px"}}>
+                  <Button variant="outlined" color="primary" >
                     삭제
                   </Button>
                 </Grid> 
 
                 <Grid item xs={1}>
-                  <Button variant="outlined" color="primary" style={{width: "100%",height: "74%", marginTop: "8px"}}>
+                  <Button variant="outlined" color="primary" >
                     +
                   </Button>
                 </Grid>
 
               </Grid>
 
-                <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
-                    {"image.png"}
-                </Grid>
+              <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
+                  {"image.png"}
+              </Grid>
 
-            <Button className={classes.button} style={{marginTop: "30px"}} >
-              이미지 업로드
-            </Button>
-        
-       
-        </FullModal>
+              <Button className={classes.button}  color="info" >
+                이미지 업로드
+              </Button>
+           </>
+          )
+        }
+          <Button
+            type="submit"
+            className={classes.button} 
+            color="info" 
+            round
+          >
+            {modalType}
+          </Button>
+        </form>
+        <Button
+          className={classes.button} 
+          color="danger" 
+          round
+          onClick={close}
+        >취소
+        </Button>
+      </Modal>
     )
  }
 

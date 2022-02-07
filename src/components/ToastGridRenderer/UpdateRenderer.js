@@ -6,34 +6,32 @@ class UpdateRenderer {
 
   constructor(props) {
     this.element = document.createElement("div");
-    
+      
     const { onUpdateButtonClicked } = props.columnInfo.renderer.options;
     const { rowKey } = props;
     const updateType = props.columnInfo.header;
     const seqId = props.grid.store.data.rawData[rowKey].seq_id;
     let partName = "";
     let itemName = "";
-    // let price = "";
-    // let vendor_name = "";
-    // let ceo = "";
-    // let tel = "";
-    // let mobile = "";
-    // let fax = "";
-    // let business_number = "";
-    // let business_type_name = "";
-    // let business_sector_name = "";
-    // let post_number = "";
-    // let address = "";
-    // let bank_name = "";
-    // let bank_account = "";
-    // let description = "";
-    
     let obj;
-    //let itemObj;
-    //let dentalObj;
-    //let priceObj;
-
-    if(updateType === "파트수정") {
+   
+    if(updateType === "접수수정") {
+      obj = {
+        seqId: seqId,
+        receiptDate: props.grid.store.data.rawData[rowKey].receipt_date,
+        completionDate: props.grid.store.data.rawData[rowKey].completion_date,
+        deliveryDate: props.grid.store.data.rawData[rowKey].delivery_date,
+        vendorName: props.grid.store.data.rawData[rowKey].vendor_name,
+        chartNumber: props.grid.store.data.rawData[rowKey].chart_number,
+        upper: props.grid.store.data.rawData[rowKey].upper,
+        lower: props.grid.store.data.rawData[rowKey].lower,
+        bite: props.grid.store.data.rawData[rowKey].bite,
+        appliance: props.grid.store.data.rawData[rowKey].appliance,
+        patientName: props.grid.store.data.rawData[rowKey].patient_name,
+        requestForm: props.grid.store.data.rawData[rowKey].request_form,
+        desciption: props.grid.store.data.rawData[rowKey].desciption
+      }
+    } else if(updateType === "파트수정") {
       obj = {
         seqId: seqId,
         partName: partName = props.grid.store.data.rawData[rowKey].part_name

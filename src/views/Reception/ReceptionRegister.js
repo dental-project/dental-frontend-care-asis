@@ -94,7 +94,7 @@ export default function ReceptionRegister() {
     setOpenReceptionAddModal(false);
   };
  
-
+console.log(reception);
 
 
 
@@ -121,7 +121,7 @@ export default function ReceptionRegister() {
   }
 
   const onUpdateButtonClicked = (receptionObj) => {
-    setModalType("수정");
+    setModalType("접수수정");
     setReceptionObj(receptionObj);
     handleReceptionModalOpen();
   };
@@ -158,7 +158,7 @@ export default function ReceptionRegister() {
     },
     {
       name: "update",
-      header: "수정",
+      header: "접수수정",
       align: "center",
       renderer: {
         type: UpdateButtonRenderer,

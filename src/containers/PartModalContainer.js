@@ -47,7 +47,7 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
     const dispatch = useDispatch();
   
     const onSubmit = (data) => {
-
+  
       if(modalType === "추가") {
         const content = {
           part_name: data.partName
