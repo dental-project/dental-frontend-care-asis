@@ -18,7 +18,11 @@
  import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
  import { receptions } from 'modules/receptions';
+ import { receptionDetails } from 'modules/receptionDetails'
  import { dentals } from 'modules/dentals';
+ import { parts } from 'modules/parts';
+import ToastGrid from 'components/ToastGrid/ToastGrid';
+
 
  const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,20 +86,50 @@
     
     const classes = useStyles();
     const { watch,  handleSubmit, control } = useForm();
-    const dispatch = useDispatch();
+    
     const [spacing, setSpacing] = React.useState(2);
    
-    const receptionData = useSelector(({reception}) => reception.data);
-    const dentalData = useSelector(({dental}) => dental.data);
+    const dispatch = useDispatch();
+    const receptionData = useSelector(({ reception }) => reception.data);
+    const dentalData = useSelector(({ dental }) => dental.data);
+    const partData = useSelector(({ part }) => part.data);
+    const selectItemData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
     useEffect(() => {
       dispatch(receptions.getReceptionMiddleware());
-      dispatch(dentals.getDentalMiddleware());
-
+      
     }, [receptionData.length] );
+
+    useEffect(() => {
+      dispatch(dentals.getDentalMiddleware());
+      dispatch(parts.getPartMiddleware());
+      
+    }, [] );
+
+    console.log(selectItemData);
+    
+    const filterVendorName = createFilterOptions({
+      matchFrom: 'start',
+      stringify: (option) => option.vendor_name,
+    });
+
+    const filterPartName = createFilterOptions({
+      matchFrom: 'start',
+      stringify: (option) => option.part_name,
+    });
+
+    // const filterOptions = createFilterOptions({
+    //   matchFrom: 'start',
+    //   stringify: (option) => option.vendor_name,
+    // });
 
     const vendorNameAuto = [];
     dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
+
+    const partNameAuto = [];
+    partData.map( (data) => partNameAuto.push({ part_name: data.part_name }))
+
+    
 
     const onSubmit = (data) => {
 
@@ -138,14 +172,54 @@
     }
 
 
-console.log(receptionObj);
+  
 
 
-    const filterOptions = createFilterOptions({
-        matchFrom: 'start',
-        stringify: (option) => option.vendor_name,
-    });
     
+    
+    const [receptionDetailData, setReceptionDetailData] = useState([0]);
+
+    const addReceptionDetail = () => {
+      setReceptionDetailData([...receptionDetailData, 0])
+    }
+
+    const removeReceptionDetail = (index) => {
+      //console.log(index);
+      //setReceptionDetailData([receptionDetailData.filter => receptionDetailData.length])
+    }
+
+
+    
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
       <Modal open={open} modalType={modalType}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -155,6 +229,18 @@ console.log(receptionObj);
           : (
             <>
               <Grid container spacing={1} >
+
+
+                <Grid item xs={12}>
+                  <ToastGrid/>
+                </Grid>
+
+               
+
+
+
+
+
                 <Grid item xs={4}>
                   <Controller
                     name="receiptDate"
@@ -225,7 +311,7 @@ console.log(receptionObj);
                     control={control}
                     options={vendorNameAuto}
                     getOptionLabel={(option) => option.vendor_name}
-                    filterOptions={filterOptions}
+                    filterOptions={filterVendorName}
                     onChange={(event, newValue) => {
 
                     }}
@@ -281,7 +367,8 @@ console.log(receptionObj);
                             className={classes.textField} 
                             onChange={onChange}
                             color="primary"
-                            checked={receptionObj.upper?receptionObj.upper:""}
+                            //onChange={upperChange}
+                            defaultChecked={receptionObj.upper?receptionObj.upper:false}
                           />
                         }
                         label="Upper"
@@ -300,7 +387,7 @@ console.log(receptionObj);
                             className={classes.textField} 
                             onChange={onChange}
                             color="primary"
-                            checked={receptionObj.lower?receptionObj.lower:""}
+                            defaultChecked={receptionObj.lower?receptionObj.lower:false}
                           />
                         }
                         label="Lower"
@@ -319,7 +406,7 @@ console.log(receptionObj);
                             className={classes.textField} 
                             onChange={onChange}
                             color="primary"
-                            checked={receptionObj.bite?receptionObj.bite:""}
+                            defaultChecked={receptionObj.bite?receptionObj.bite:false}
                           />
                         }
                         label="Bite"
@@ -338,6 +425,7 @@ console.log(receptionObj);
                             className={classes.textField}
                             onChange={onChange}
                             color="primary"
+                            defaultChecked={receptionObj.appliance?receptionObj.appliance:false}
                           />
                         }                 
                         label="장치"
@@ -348,114 +436,137 @@ console.log(receptionObj);
 
                 <Grid item xs={2}></Grid>  
 
-                {/* <Grid item xs={2}>
-                  <Autocomplete
-                    className={classes.textField}
-                    name="partName"
-                    control={control}
-                    options={dash2}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    onChange={(event, newValue) => { 
+                {/* { 
+                  receptionDetailData.map( (data, index) => {
+                    return (
+                      <Grid container spacing={1} key={index}>
+                        <Grid item xs={2}>
+                          <Autocomplete
+                            className={classes.textField}
+                            name="partName"
+                            control={control}
+                            options={partNameAuto}
+                            getOptionLabel={(option) => option.part_name}
+                            filterOptions={filterPartName}
+                            onChange={(event, newValue) => { 
+                              const partNameArr = newValue.part_name.split('/');
 
-                    }}
-                    renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                  /> 
-                </Grid>    
-                <Grid item xs={2}>
-                  <Autocomplete
-                    className={classes.textField}
-                    name="itemName"
-                    control={control}
-                    options={dash3}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
-                  />                  
-                </Grid>  
+                              if(newValue === null) {
+                                //setAutoVendorSeqId("");
+                              } else {
+                                  const index = partData.findIndex(obj => obj.part_name === partNameArr[0]);
+                                  const partSeqId = partData[index].seq_id;
 
-                <Grid item xs={2}>
-                  <Controller
-                    name="price"
-                    control={control}
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        className={classes.textField} 
-                        label="단가"
-                        variant="outlined"
-                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                      />
-                    )}
-                    rules={{ 
-                      required: "단가를 입력하세요."
-                    }}
-                />
-                </Grid> 
+                                  console.log(partSeqId);
+                                  dispatch(receptionDetails.getSelectItemMiddleware(partSeqId));
+                                  //dispatch(receptionDetails.getSelectItemMiddleware(partSeqId));
+                                  
+                              }
+                            }}
+                            renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                          /> 
+                        </Grid>    
+                        <Grid item xs={2}>
+                          <Autocomplete
+                            className={classes.textField}
+                            name="itemName"
+                            control={control}
+                            options={vendorNameAuto}
+                            getOptionLabel={(option) => option.vendor_name}
+                            filterOptions={filterPartName}
+                            renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
+                          />                  
+                        </Grid>  
 
-                <Grid item xs={2}>
-                  <Controller
-                    name="amount"
-                    control={control}
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        className={classes.textField} 
-                        label="수량"
-                        variant="outlined"
-                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                      />
-                    )}
-                    rules={{ 
-                      required: "수량을 입력하세요."
-                  }}
-                />
-                </Grid>    
+                        <Grid item xs={2}>
+                          <Controller
+                            name="price"
+                            control={control}
+                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                              <TextField
+                                className={classes.textField} 
+                                label="단가"
+                                variant="outlined"
+                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                              />
+                            )}
+                            rules={{ 
+                              required: "단가를 입력하세요."
+                            }}
+                        />
+                        </Grid> 
 
-                <Grid item xs={2}>
-                  <Controller
-                    name="discount"
-                    control={control}
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        className={classes.textField} 
-                        label="할인율 (%)"
-                        variant="outlined"
-                        //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                      />
-                    )}
-                    rules={{ 
-                      required: "할인율을 입력하세요."
-                  }}
-                />
-                </Grid>                                      */}
+                        <Grid item xs={2}>
+                          <Controller
+                            name="amount"
+                            control={control}
+                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                              <TextField
+                                className={classes.textField} 
+                                label="수량"
+                                variant="outlined"
+                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                              />
+                            )}
+                            rules={{ 
+                              required: "수량을 입력하세요."
+                          }}
+                        />
+                        </Grid>    
 
-                <Grid item xs={1}>
-                  <Button variant="outlined" color="primary" >
-                    삭제
-                  </Button>
-                </Grid> 
+                        <Grid item xs={2}>
+                          <Controller
+                            name="discount"
+                            control={control}
+                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                              <TextField
+                                className={classes.textField} 
+                                label="할인율 (%)"
+                                variant="outlined"
+                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                              />
+                            )}
+                            rules={{ 
+                              required: "할인율을 입력하세요."
+                          }}
+                        />
+                        </Grid>
 
-                <Grid item xs={1}>
-                  <Button variant="outlined" color="primary" >
+                        
+
+                        <Grid item xs={1}>
+                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
+                            삭제
+                          </Button>
+                        </Grid> 
+                      
+                      </Grid>
+                    );
+                  })
+                } */}
+                
+              </Grid>
+
+              <Grid item xs={12}>
+                  <Button variant="outlined" color="primary" onClick={addReceptionDetail} style={{width: "100%"}}>
                     +
                   </Button>
                 </Grid>
-
-              </Grid>
 
               <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
                   {"image.png"}
               </Grid>
 
-              <Button className={classes.button}  color="info" >
+              <Button className={classes.button}  color="info" round >
                 이미지 업로드
               </Button>
            </>

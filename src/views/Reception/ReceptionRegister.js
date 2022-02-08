@@ -94,8 +94,6 @@ export default function ReceptionRegister() {
     setOpenReceptionAddModal(false);
   };
  
-console.log(reception);
-
 
 
 

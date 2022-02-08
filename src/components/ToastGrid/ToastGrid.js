@@ -13,32 +13,58 @@ export default function ToastGrid() {
     console.log(rowIndex);
   };
 
-  const columns = [
-    { name: 'customerName', header: '거래처명' },
-    { name: 'phoneNumber', header: '전화번호' },
-    { name: 'patientName', header: '환자명' },
-    { name: 'receiptDate', header: '접수일자' },
-    { name: 'completeDate', header: '완성일자' },
-    { name: 'time', header: '시간'},
-    { name: 'ModU', header: 'ModU'},
-    { name: 'ModL', header: 'ModL'},
-    { name: 'Bite', header: 'Bite'},
-    { name: 'App', header: 'App'},
-    { name: 'price', header: '기공금액(원)', align: 'center'},
-    { name: 'classification', header: '구분'},
+
+  const data = [
     {
-      name: 'remove',
-      header: '삭제',
-      align: "center",
-      renderer: {
-        type: RemoveButtonRenderer,
+      name: "aaa",
+      typeCode: "Deluxe",
+    },
+    {
+      name: "bbb",
+    },
+    {
+      name: "ccc",
+    },
+    {
+      name: "ddd",
+    },
+    {
+      name: "eee",
+    },
+    {
+      name: "fff",
+    }
+  ]
+
+  const columns = [
+    {
+      header: 'Name',
+      name: 'name',
+      editor: 'text'
+    },
+    {
+      header: 'Type',
+      name: 'typeCode',
+      formatter: 'listItemText',
+      editor: {
+        type: 'select',
         options: {
-          onRemoveButtonClicked
+          listItems: [
+            { text: 'Deluxe', value: '1' },
+            { text: 'EP', value: '2' },
+            { text: 'Single', value: '3' }
+          ]
         }
       }
     }
   ];
   
+
+  const onChange = (e) => {
+    console.log(e);
+  };
+
+
   return(
     <Grid
       data={data}
@@ -48,6 +74,8 @@ export default function ToastGrid() {
       virtualScrolling={true}
       heightResizable={true}
       rowHeaders={['rowNum']}
+      //onClick={onChange}
+      onAfterChange={onChange}
     />
   );
 }

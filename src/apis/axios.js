@@ -20,8 +20,10 @@ export const apis = {
   patchReception: (seq_id, contents) => instance.patch(`api/sell/master/${seq_id}/`, contents),
   // 접수 삭제
   deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
+  // 선택한 장치 불러오기
+  getSelectItem: (seq_id) => instance.get(`api/code/item/${seq_id}/`),
 
-  
+
   // 파트 불러오기
   getPart: () => instance.get('api/code/part/'),
   // 파트 추가

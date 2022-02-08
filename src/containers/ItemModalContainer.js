@@ -67,10 +67,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
     const onSubmit = (data) => {
 
-
-      console.log(data);
-      return;
-
       if(modalType === "추가") {
         const content = {
           part_seq_id: autoSeqId,
