@@ -1,50 +1,72 @@
 import React, { useCallback } from "react";
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
-import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-//import DataTable from "components/Table/DataTable.js";
+import { render } from "react-dom";
 
 export default function ToastGrid() {
 
+  const gridRef = React.createRef();
+
+  const data = [
+    
+  ]
+
+
+
+
+
+  class RemoveButtonRenderer {
+    element;
   
+    constructor(props) {
+      this.element = document.createElement("div");
   
-  const onRemoveButtonClicked = (rowIndex) => {
-    console.log(rowIndex);
+      const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
+      const { rowKey } = props;
+      const seq_id = props.grid.store.data.rawData[rowKey].seq_id;
+  
+      render(
+        <button type="button" onClick={() => onRemoveButtonClicked(seq_id)}>삭제</button>,
+        this.element
+      );
+    }
+  
+    getElement() {
+      return this.element;
+    }
+  }
+
+
+
+  const onUpdateButtonClicked = () => {
+    
   };
 
 
-  const data = [
-    {
-      name: "aaa",
-      typeCode: "Deluxe",
-    },
-    {
-      name: "bbb",
-    },
-    {
-      name: "ccc",
-    },
-    {
-      name: "ddd",
-    },
-    {
-      name: "eee",
-    },
-    {
-      name: "fff",
-    }
-  ]
+
+
+
+
 
   const columns = [
     {
-      header: 'Name',
-      name: 'name',
-      editor: 'text'
+      header: '파트명 (선택)',
+      name: 'partName',
+      editor: {
+        type: 'select',
+        options: {
+          listItems: [
+            { text: 'Deluxe', value: '1' },
+            { text: 'EP', value: '2' },
+            { text: 'Single', value: '3' }
+          ]
+        }
+      }
     },
     {
-      header: 'Type',
-      name: 'typeCode',
+      header: '장치명 (선택)',
+      name: 'itemName',
       formatter: 'listItemText',
       editor: {
         type: 'select',
@@ -56,7 +78,33 @@ export default function ToastGrid() {
           ]
         }
       }
-    }
+    },
+    {
+      header: '단가 (입력)',
+      name: 'price',
+      editor: 'text',
+    },
+    {
+      header: 'tnfid (입력)',
+      name: 'amount',
+      editor: 'text'
+    },
+    {
+      header: '할인율 (입력)',
+      name: 'discount',
+      editor: 'text'
+    },
+    {
+      name: "update",
+      header: "삭제",
+      align: "center",
+      renderer: {
+        type: RemoveButtonRenderer,
+        options: {
+          onUpdateButtonClicked
+        }
+      }
+    },
   ];
   
 
@@ -64,18 +112,36 @@ export default function ToastGrid() {
     console.log(e);
   };
 
+ 
+
+
+  const handleAppendRow = () => {
+    gridRef.current.getInstance().appendRow({});
+    console.log(gridRef.current.props.data);
+  };
+
+  const aaa = () => {
+    gridRef.current.getInstance().getData();
+    console.log(gridRef.current.getInstance().getData());
+  }
 
   return(
-    <Grid
-      data={data}
-      columns={columns}
-      rowHeight={20}
-      bodyHeight={700}
-      virtualScrolling={true}
-      heightResizable={true}
-      rowHeaders={['rowNum']}
-      //onClick={onChange}
-      onAfterChange={onChange}
-    />
+    <>
+     <button onClick={handleAppendRow}>행추가</button>
+     <button onClick={aaa}>저장</button>
+      <Grid
+        ref={gridRef}
+        data={data}
+        columns={columns}
+        rowHeight={20}
+        bodyHeight={200}
+        virtualScrolling={true}
+        heightResizable={true}
+        rowHeaders={['rowNum']}
+        onAfterChange={onChange}
+      />
+
+     
+    </>
   );
 }

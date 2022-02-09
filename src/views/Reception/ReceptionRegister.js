@@ -77,8 +77,8 @@ export default function ReceptionRegister() {
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     //setOpenItemModal(item.modal);
-    
-  }, [reception.data.length] );
+    console.log(reception.data);
+  }, [] );
 
   const [seqId, setSeqId] = useState();
   const [receptionObj, setReceptionObj] = useState({});

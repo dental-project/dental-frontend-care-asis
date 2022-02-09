@@ -21,7 +21,7 @@
  import { receptionDetails } from 'modules/receptionDetails'
  import { dentals } from 'modules/dentals';
  import { parts } from 'modules/parts';
-import ToastGrid from 'components/ToastGrid/ToastGrid';
+ import ToastGrid from 'components/ToastGrid/ToastGrid';
 
 
  const useStyles = makeStyles((theme) => ({
@@ -96,9 +96,9 @@ import ToastGrid from 'components/ToastGrid/ToastGrid';
     const selectItemData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
     useEffect(() => {
-      dispatch(receptions.getReceptionMiddleware());
+      //dispatch(receptions.getReceptionMiddleware());
       
-    }, [receptionData.length] );
+    }, [] );
 
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
@@ -106,7 +106,7 @@ import ToastGrid from 'components/ToastGrid/ToastGrid';
       
     }, [] );
 
-    console.log(selectItemData);
+    console.log(receptionData);
     
     const filterVendorName = createFilterOptions({
       matchFrom: 'start',
@@ -117,11 +117,6 @@ import ToastGrid from 'components/ToastGrid/ToastGrid';
       matchFrom: 'start',
       stringify: (option) => option.part_name,
     });
-
-    // const filterOptions = createFilterOptions({
-    //   matchFrom: 'start',
-    //   stringify: (option) => option.vendor_name,
-    // });
 
     const vendorNameAuto = [];
     dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
@@ -189,39 +184,11 @@ import ToastGrid from 'components/ToastGrid/ToastGrid';
     }
 
 
-    
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return (
       <Modal open={open} modalType={modalType}>
+        <Grid item xs={12}>
+          <ToastGrid/>
+        </Grid>
         <form onSubmit={handleSubmit(onSubmit)}>
         { 
           modalType === "삭제"
@@ -229,17 +196,6 @@ import ToastGrid from 'components/ToastGrid/ToastGrid';
           : (
             <>
               <Grid container spacing={1} >
-
-
-                <Grid item xs={12}>
-                  <ToastGrid/>
-                </Grid>
-
-               
-
-
-
-
 
                 <Grid item xs={4}>
                   <Controller
