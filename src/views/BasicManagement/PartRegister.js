@@ -119,15 +119,15 @@ function PartRegister() {
 
   // Toast Grid options value
   const columns = ([
-    { name: "seq_id", header: "CodeNo", align: "center", hidden: true},
-    { name: "part_name", header: "파트명", align: "center"},
+    { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
+    { name: "part_name", header: "파트명", align: "center", sortable: true, filter: 'select' },
     { name: "update", header: "파트수정", align: "center",
       renderer: {
         type: UpdateButtonRenderer,
         options: {
           onUpdateButtonClicked
         }
-      }
+      }, 
     },
     { name: "remove", header: "삭제", align: "center",
       renderer: {
@@ -184,6 +184,7 @@ function PartRegister() {
                   style={{float: "left", width: "300px"}}
                   onChange={(event, newValue) => {
                     setValue(newValue);
+                    console.log(newValue);
                   }}
                   getOptionSelected={(option, value) => {
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();

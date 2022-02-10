@@ -18,9 +18,9 @@
  import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
  import { receptions } from 'modules/receptions';
- import { receptionDetails } from 'modules/receptionDetails'
  import { dentals } from 'modules/dentals';
  import { parts } from 'modules/parts';
+ import { items } from 'modules/items'
  import ToastGrid from 'components/ToastGrid/ToastGrid';
 
 
@@ -93,7 +93,7 @@
     const receptionData = useSelector(({ reception }) => reception.data);
     const dentalData = useSelector(({ dental }) => dental.data);
     const partData = useSelector(({ part }) => part.data);
-    const selectItemData = useSelector(({ receptionDetail }) => receptionDetail.data);
+    
 
     useEffect(() => {
       //dispatch(receptions.getReceptionMiddleware());
@@ -103,11 +103,11 @@
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
       dispatch(parts.getPartMiddleware());
-      
     }, [] );
 
-    console.log(receptionData);
     
+   
+
     const filterVendorName = createFilterOptions({
       matchFrom: 'start',
       stringify: (option) => option.vendor_name,
@@ -121,8 +121,8 @@
     const vendorNameAuto = [];
     dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
 
-    const partNameAuto = [];
-    partData.map( (data) => partNameAuto.push({ part_name: data.part_name }))
+    //const partNameAuto = [];
+    //partData.map( (data) => partNameAuto.push({ part_name: data.part_name }))
 
     
 
@@ -163,7 +163,6 @@
         dispatch(receptions.deleteReceptionMiddleware(seqId));
       }
 
-
     }
 
 
@@ -172,11 +171,11 @@
 
     
     
-    const [receptionDetailData, setReceptionDetailData] = useState([0]);
+    // const [receptionDetailData, setReceptionDetailData] = useState([0]);
 
-    const addReceptionDetail = () => {
-      setReceptionDetailData([...receptionDetailData, 0])
-    }
+    // const addReceptionDetail = () => {
+    //   setReceptionDetailData([...receptionDetailData, 0])
+    // }
 
     const removeReceptionDetail = (index) => {
       //console.log(index);
@@ -186,9 +185,6 @@
 
     return (
       <Modal open={open} modalType={modalType}>
-        <Grid item xs={12}>
-          <ToastGrid/>
-        </Grid>
         <form onSubmit={handleSubmit(onSubmit)}>
         { 
           modalType === "삭제"
@@ -196,7 +192,6 @@
           : (
             <>
               <Grid container spacing={1} >
-
                 <Grid item xs={4}>
                   <Controller
                     name="receiptDate"
@@ -262,6 +257,7 @@
                 </Grid>
                 <Grid item xs={4}>
                   <Autocomplete
+                    freeSolo
                     className={classes.textField}
                     name="vendorName"
                     control={control}
@@ -269,7 +265,13 @@
                     getOptionLabel={(option) => option.vendor_name}
                     filterOptions={filterVendorName}
                     onChange={(event, newValue) => {
-
+                      if(newValue !== null) {
+                          const index = dentalData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
+                          const vendorSeqId = dentalData[index].seq_id
+                        
+                         
+                          dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                      }
                     }}
                     renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
                   />  
@@ -512,11 +514,11 @@
                 
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                   <Button variant="outlined" color="primary" onClick={addReceptionDetail} style={{width: "100%"}}>
                     +
                   </Button>
-                </Grid>
+                </Grid> */}
 
               <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
                   {"image.png"}
@@ -537,6 +539,14 @@
             {modalType}
           </Button>
         </form>
+
+        <Grid item xs={12}>
+          <ToastGrid
+            partData={partData}
+          >
+          </ToastGrid>
+        </Grid>
+
         <Button
           className={classes.button} 
           color="danger" 

@@ -1,5 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
 
 class DetailButtonRenderer {
   element;
@@ -13,7 +15,9 @@ class DetailButtonRenderer {
     //const partName = props.grid.store.data.rawData[rowKey].part_name;
  
     render(
-      <button type="button" onClick={() => onDetailButtonClicked()}>상세보기</button>,
+      <IconButton size="small" onClick={() => onDetailButtonClicked()}>
+        <SearchIcon />
+      </IconButton>,
       this.element
     );
   }

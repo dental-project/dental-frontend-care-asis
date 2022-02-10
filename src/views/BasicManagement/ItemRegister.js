@@ -73,7 +73,7 @@ export default function ItemRegister() {
       dispatch(items.getItemMiddleware());
       setOpenItemModal(item.modal);
     }, [item.data.length] );
-
+    
     const [seqId, setSeqId] = useState();
     const [itemObj, setItemObj] = useState({});
 
@@ -113,8 +113,8 @@ export default function ItemRegister() {
     };
 
     const columns = ([
-        {name: "part_name", header: "파트명", align: "center"},
-        {name: "item_name", header: "장치명", align: "center"},
+        { name: "part_name", header: "파트명", align: "center", sortable: true, filter: 'select' },
+        { name: "item_name", header: "장치명", align: "center", sortable: true, filter: 'select' },
         {
           name: "update",
           header: "장치수정",

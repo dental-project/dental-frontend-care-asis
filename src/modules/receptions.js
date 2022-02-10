@@ -5,13 +5,17 @@ import { apis } from 'apis/axios'
 
 // action 생성
 const READ_RECEPTION = 'READ_RECEPTION';
+const READ_VENDOR_PART = 'READ_VENDOR_PART';
 const ADD_RECEPTION = 'ADD_RECEPTION';
+const ADD_RECEPTION_PRICE = 'ADD_RECEPTION_PRICE';
 const UPDATE_RECEPTION = 'UPDATE_RECEPTION';
 const REMOVE_RECEPTION = 'REMOVE_RECEPTION';
 
 // action creators
 const readReception = createAction(READ_RECEPTION, (data) => ({ data }));
+const readVendorPart = createAction(READ_VENDOR_PART, (data) => ({ data }));
 const addReception = createAction(ADD_RECEPTION, (data) => ({ data }));
+const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, (data) => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, (data) => ({ data }));
 const removeReception = createAction(REMOVE_RECEPTION, (data) => ({ data }));
 
@@ -38,6 +42,20 @@ const getReceptionMiddleware = () => {
   };
 };
 
+const getVendorPartMiddleware = () => {
+  return (dispatch) => {
+    apis
+      .getVendorPart()
+      .then((result) => {        
+        const vendorPartData = result.data;
+        dispatch(readVendorPart(vendorPartData));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+};
+
 const addReceptionMiddleware = (contents) => {
   return (dispatch) => {
     apis
@@ -45,6 +63,20 @@ const addReceptionMiddleware = (contents) => {
       .then((result) => {
         dispatch(addReception(contents));
         alert("접수 정보를 추가 하였습니다.");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+};
+
+const addReceptionPriceMiddleware = (contents) => {
+  return (dispatch) => {
+    apis
+      .createReceptionPrice(contents)
+      .then((result) => {
+        dispatch(addReceptionPrice(contents));
+        alert("접수단가 정보를 추가 하였습니다.");
       })
       .catch((err) => {
         console.error(err);
@@ -91,7 +123,15 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data = action.payload.data;
       }),
+    [READ_VENDOR_PART]: (state, action) =>
+      produce(state, (draft) => {
+        draft.data = action.payload.data;
+      }),
     [ADD_RECEPTION]: (state, action) =>
+      produce(state, (draft) => {
+        draft.data.push(action.payload);
+      }),
+    [ADD_RECEPTION_PRICE]: (state, action) =>
       produce(state, (draft) => {
         draft.data.push(action.payload);
       }),
@@ -112,7 +152,9 @@ export default handleActions(
 
 const receptions = {
   getReceptionMiddleware,
+  getVendorPartMiddleware,
   addReceptionMiddleware,
+  addReceptionPriceMiddleware,
   updateReceptionMiddleware,
   deleteReceptionMiddleware,
 };
