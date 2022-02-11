@@ -153,7 +153,8 @@ function PartRegister() {
   //console.log([searchData]);
 
   const onClickSearch = (e) => {
-    part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+    // part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+    console.log(value)
 
   }
 
@@ -176,12 +177,17 @@ function PartRegister() {
               <Grid item xs={6} className={classes.grid}>
                 <Autocomplete
                   id="filter-demo"
+                  freeSolo
                   className={classes.grid}
                   options={auto1}
                   defaultValue={auto1[0]}
                   getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
                   style={{float: "left", width: "300px"}}
+                  onKeyUp={(event, newValue) => {
+                    setValue(newValue);
+                    console.log(value)
+                  }}
                   onChange={(event, newValue) => {
                     setValue(newValue);
                   }}
