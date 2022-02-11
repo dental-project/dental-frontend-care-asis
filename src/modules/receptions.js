@@ -47,7 +47,6 @@ const getVendorPartMiddleware = (seqId) => {
     apis
       .getSelectVendorPart(seqId)
       .then((result) => {
-        console.log(result);
         const vendorPartData = result.data;
         dispatch(readVendorPart(vendorPartData));
       })

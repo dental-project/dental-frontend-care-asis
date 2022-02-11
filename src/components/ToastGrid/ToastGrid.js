@@ -1,58 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { items } from 'modules/items'
 import { receptions } from 'modules/receptions';
 import { render } from "react-dom";
+
+class RemoveButtonRenderer {
+  element;
+
+  constructor(props) {
+    this.element = document.createElement("div");
+
+    const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
+    const { rowKey } = props;
+    const seq_id = props.grid.store.data.rawData[rowKey].seq_id;
+
+    render(
+      <Button variant="outlined" color="secondary" onClick={() => onRemoveButtonClicked(seq_id)}>삭제</Button>,
+      this.element
+    );
+  }
+
+  getElement() {
+    return this.element;
+  }
+}
 
 const ToastGrid = () => {
 
   const gridRef = React.createRef();
   
   const dispatch = useDispatch();
-  const selectItemData = useSelector(({ item }) => item.data);
+  const receptionData = useSelector(({ reception }) => reception.data);
+
+
+  
 
   useEffect(() => {
-    //dispatch(dentals.getDentalMiddleware());
-    //dispatch(parts.getPartMiddleware());
-    //dispatch(items.getSelectItemMiddleware(8));
+    console.log("렌더링");
+    
   }, [] );
 
-  //console.log(selectItemData);
+ 
+  console.log(receptionData);
 
-  // const partList = [];
-  // partData.map( (data,index) => {
-  //   partList.push({ text: data.part_name, value: data.seq_id })
+
+  
+
+  
+  // receptionData.map( (data,index) => {
+  //   partList.push({ text: data.part_name, value: data.part_seq_id })
+  //   itemList.push({ text: data.item_name, value: data.item_seq_id})
+  //   //price = data.normal_price;
+  //   console.log(data.normal_price);
   // });
-
-
-
-
-
-  
-
-  class RemoveButtonRenderer {
-    element;
-  
-    constructor(props) {
-      this.element = document.createElement("div");
-  
-      const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
-      const { rowKey } = props;
-      const seq_id = props.grid.store.data.rawData[rowKey].seq_id;
-  
-      render(
-        <Button variant="outlined" color="secondary" onClick={() => onRemoveButtonClicked(seq_id)}>삭제</Button>,
-        this.element
-      );
-    }
-  
-    getElement() {
-      return this.element;
-    }
+  const partList = [];
+  const itemList = [];
+  //const price = 0;
+  for(let i=0; i<receptionData.length; i++) {
+    
+    
+    partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
+    itemList.push({ text: receptionData[i].item_name, value: receptionData[i].item_seq_id})
+    //price = receptionData[i].normal_price;
   }
+
+  //console.log(price);
+
+  
+
+  
 
   const onUpdateButtonClicked = () => {
     
@@ -61,15 +79,7 @@ const ToastGrid = () => {
 
 
 
-  // const data = [
-  //   {
-  //     partName: 'Deluxe',
-  //     itemName: 'EP',
-  //     price: 'asd',
-  //     amount: '1000',
-  //     discount: '10'
-  //   }
-  // ]
+  
 
 
   const columns = [
@@ -80,12 +90,12 @@ const ToastGrid = () => {
         type: 'select',
         options: {
           listItems: 
-            //partList
-            [
-              { text: 'Deluxe', value: '1' },
-              { text: 'EP', value: '2' },
-              { text: 'Single', value: '3' }
-            ]
+            partList
+            // [
+            //   { text: 'Deluxe', value: '1' },
+            //   { text: 'EP', value: '2' },
+            //   { text: 'Single', value: '3' }
+            // ]
 
         }
       }
@@ -93,22 +103,25 @@ const ToastGrid = () => {
     {
       header: '장치명 (선택)',
       name: 'itemName',
-      formatter: 'listItemText',
       editor: {
         type: 'select',
         options: {
-          listItems: [
-            { text: 'Deluxe', value: '1' },
-            { text: 'EP', value: '2' },
-            { text: 'Single', value: '3' }
-          ]
+          listItems: 
+            itemList
+          // [
+          //   { text: 'Deluxe', value: '1' },
+          //   { text: 'EP', value: '2' },
+          //   { text: 'Single', value: '3' }
+          // ]
         }
       }
     },
     {
       header: '단가 (입력)',
       name: 'price',
-      editor: 'text',
+      _attributes: {
+        disabled: true // A current row is disabled
+      }
     },
     {
       header: '수량 (입력)',
@@ -133,26 +146,47 @@ const ToastGrid = () => {
     },
   ];
   
+ 
+  //const [data, setData] = useState([]);
+
+  const data = [
+    
+  ];
+  let gridData;
 
   const onChange = (e) => {
     console.log(e);
+    const gridArr = gridRef.current.getInstance().getData();
+    console.log(gridArr);
 
-    if(e.changes[0].columnName === "partName")
-
-
-
-
-    if(e.changes[0].columnName === "partName") {
+    
 
 
 
-      console.log("파트명 선택");
+
+    if(e.changes[0].columnName === "itemName") {
+
+      // gridData = data.concat({
+      //   price: 777
+      // })
+
+      gridData = [{
+        price: 777
+      }]
+
+
+      console.log(gridData);
+
+      //data.push(data[0].price = 1111)
+      
     }
+
+   
 
   };
 
- 
-
+  
+  
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -206,7 +240,7 @@ const ToastGrid = () => {
      <button onClick={aaa}>저장</button>
       <Grid
         ref={gridRef}
-        //data={data}
+        data={gridData}
         columns={columns}
         rowHeight={20}
         bodyHeight={200}

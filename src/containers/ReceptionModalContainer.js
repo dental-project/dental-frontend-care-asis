@@ -19,8 +19,6 @@
 
  import { receptions } from 'modules/receptions';
  import { dentals } from 'modules/dentals';
- import { parts } from 'modules/parts';
- import { items } from 'modules/items'
  import ToastGrid from 'components/ToastGrid/ToastGrid';
 
 
@@ -90,23 +88,16 @@
     const [spacing, setSpacing] = React.useState(2);
    
     const dispatch = useDispatch();
-    const receptionData = useSelector(({ reception }) => reception.data);
     const dentalData = useSelector(({ dental }) => dental.data);
-    //const partData = useSelector(({ part }) => part.data);
-    
+    //const receptionData = useSelector(({ reception }) => reception.data);
 
-    useEffect(() => {
-      //dispatch(receptions.getReceptionMiddleware());
-      
-    }, [] );
 
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
-      //dispatch(parts.getPartMiddleware());
     }, [] );
 
     //console.log(receptionData);
-   
+
 
     const filterVendorName = createFilterOptions({
       matchFrom: 'start',
@@ -264,13 +255,17 @@
                     options={vendorNameAuto}
                     getOptionLabel={(option) => option.vendor_name}
                     filterOptions={filterVendorName}
+                    getOptionSelected={(option, value) => {
+                      //console.log(value);
+                      return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                    }}
                     onChange={(event, newValue) => {
                       if(newValue !== null) {
                           const index = dentalData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
                           const vendorSeqId = dentalData[index].seq_id
-                          console.log(vendorSeqId);
                          
                           dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                          
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
