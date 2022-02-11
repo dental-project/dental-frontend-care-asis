@@ -7,7 +7,7 @@ import { items } from 'modules/items'
 import { receptions } from 'modules/receptions';
 import { render } from "react-dom";
 
-const ToastGrid = ({partData}) => {
+const ToastGrid = () => {
 
   const gridRef = React.createRef();
   
@@ -17,15 +17,15 @@ const ToastGrid = ({partData}) => {
   useEffect(() => {
     //dispatch(dentals.getDentalMiddleware());
     //dispatch(parts.getPartMiddleware());
-    dispatch(items.getSelectItemMiddleware(8));
+    //dispatch(items.getSelectItemMiddleware(8));
   }, [] );
 
   //console.log(selectItemData);
 
-  const partList = [];
-  partData.map( (data,index) => {
-    partList.push({ text: data.part_name, value: data.seq_id })
-  });
+  // const partList = [];
+  // partData.map( (data,index) => {
+  //   partList.push({ text: data.part_name, value: data.seq_id })
+  // });
 
 
 
@@ -80,13 +80,13 @@ const ToastGrid = ({partData}) => {
         type: 'select',
         options: {
           listItems: 
-            partList
-            
+            //partList
+            [
+              { text: 'Deluxe', value: '1' },
+              { text: 'EP', value: '2' },
+              { text: 'Single', value: '3' }
+            ]
 
-            // { text: 'Deluxe', value: '1' },
-            // { text: 'EP', value: '2' },
-            // { text: 'Single', value: '3' }
-          
         }
       }
     },

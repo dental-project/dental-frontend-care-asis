@@ -42,11 +42,12 @@ const getReceptionMiddleware = () => {
   };
 };
 
-const getVendorPartMiddleware = () => {
+const getVendorPartMiddleware = (seqId) => {
   return (dispatch) => {
     apis
-      .getVendorPart()
-      .then((result) => {        
+      .getSelectVendorPart(seqId)
+      .then((result) => {
+        console.log(result);
         const vendorPartData = result.data;
         dispatch(readVendorPart(vendorPartData));
       })

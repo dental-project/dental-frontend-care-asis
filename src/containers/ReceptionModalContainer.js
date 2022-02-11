@@ -92,7 +92,7 @@
     const dispatch = useDispatch();
     const receptionData = useSelector(({ reception }) => reception.data);
     const dentalData = useSelector(({ dental }) => dental.data);
-    const partData = useSelector(({ part }) => part.data);
+    //const partData = useSelector(({ part }) => part.data);
     
 
     useEffect(() => {
@@ -102,10 +102,10 @@
 
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
-      dispatch(parts.getPartMiddleware());
+      //dispatch(parts.getPartMiddleware());
     }, [] );
 
-    
+    //console.log(receptionData);
    
 
     const filterVendorName = createFilterOptions({
@@ -268,7 +268,7 @@
                       if(newValue !== null) {
                           const index = dentalData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
                           const vendorSeqId = dentalData[index].seq_id
-                        
+                          console.log(vendorSeqId);
                          
                           dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                       }
@@ -542,7 +542,7 @@
 
         <Grid item xs={12}>
           <ToastGrid
-            partData={partData}
+            //partData={partData}
           >
           </ToastGrid>
         </Grid>
