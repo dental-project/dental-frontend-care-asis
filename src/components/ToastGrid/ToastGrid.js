@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import TuiGrid from 'tui-grid';
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
 import Button from '@material-ui/core/Button';
@@ -118,10 +119,10 @@ const ToastGrid = () => {
     },
     {
       header: '단가 (입력)',
-      name: 'price',
-      _attributes: {
-        disabled: true // A current row is disabled
-      }
+      name: 'price'
+      // _attributes: {
+      //   disabled: true // A current row is disabled
+      // }
     },
     {
       header: '수량 (입력)',
@@ -144,13 +145,16 @@ const ToastGrid = () => {
         }
       }
     },
+    
   ];
   
  
   //const [data, setData] = useState([]);
 
   const data = [
-    
+    {
+
+    }
   ];
   let gridData;
 
@@ -170,12 +174,14 @@ const ToastGrid = () => {
       //   price: 777
       // })
 
-      gridData = [{
-        price: 777
-      }]
+      // gridData = [{
+      //   price: 777
+      // }]
 
-
-      console.log(gridData);
+      //TuiGrid.setColumnValues('price',777,false);
+      TuiGrid.setColumnValues('price','asf',false);
+      //TuiGrid.applyTheme('default');
+      //console.log(gridData);
 
       //data.push(data[0].price = 1111)
       
