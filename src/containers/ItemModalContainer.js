@@ -111,6 +111,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
                 getOptionLabel={(option) => option.part_name}
                 filterOptions={filterOptions}
                 onChange={(event, newValue) => { 
+                  console.log(newValue);
                   if(newValue === null) {
                       setAutoSeqId("");
                   } else {

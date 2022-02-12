@@ -4,12 +4,14 @@ import { apis } from 'apis/axios'
 
 // action 생성
 const READ_ITEM = 'READ_ITEM';
+//const READ_SELECT_ITEM = 'READ_SELECT_ITEM';
 const ADD_ITEM = 'ADD_ITEM';
 const UPDATE_ITEM = 'UPDATE_ITEM';
 const REMOVE_ITEM = 'REMOVE_ITEM';
 
 // action creators
 const readItem = createAction(READ_ITEM, (data) => ({ data }));
+//const readSelectItem = createAction(READ_SELECT_ITEM, (data) => ({ data }));
 const addItem = createAction(ADD_ITEM, (data) => ({ data }));
 const updateItem = createAction(UPDATE_ITEM, (data) => ({ data }));
 const removeItem = createAction(REMOVE_ITEM, (data) => ({ data }));
@@ -36,6 +38,20 @@ const getItemMiddleware = () => {
       });
   };
 };
+
+// const getSelectItemMiddleware = (partSeqId) => {
+//   return (dispatch) => {
+//     apis
+//       .getSelectItem(partSeqId)
+//       .then((result) => {   
+//         const itemData = result.data;
+//         dispatch(readSelectItem(itemData));
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
+//   };
+// };
 
 const addItemMiddleware = (contents) => {
   return (dispatch) => {
@@ -89,6 +105,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data = action.payload.data;
       }),
+    // [READ_SELECT_ITEM]: (state, action) =>
+    //   produce(state, (draft) => {
+    //     draft.data = action.payload.data;
+    //   }),
     [ADD_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.data.push(action.payload);
@@ -110,6 +130,7 @@ export default handleActions(
 
 const items = {
   getItemMiddleware,
+  //getSelectItemMiddleware,
   addItemMiddleware,
   updateItemMiddleware,
   deleteItemMiddleware,

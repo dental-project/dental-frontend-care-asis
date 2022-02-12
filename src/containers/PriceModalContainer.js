@@ -80,7 +80,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
 
 
     //console.log(priceData);
-    console.log(itemData);
+    //console.log(itemData);
 
 
 

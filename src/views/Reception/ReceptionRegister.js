@@ -131,18 +131,18 @@ export default function ReceptionRegister() {
   };
 
   const columns = [
-    { name: "seq_id", header: "codeNo" },
-    { name: "receipt_date", header: "접수일자", align: "center" },
-    { name: "completion_date", header: "완성일자", align: "center" },
-    { name: "delivery_date", header: "배달일자", align: "center" },
-    { name: "vendor_name", header: "거래처", align: "center" },
-    { name: "chart_number", header: "차트번호", align: "center" },
-    { name: "upper", header: "Upper", align: "center" },
-    { name: "lower", header: "Lower", align: "center" },
-    { name: "bite", header: "Bite", align: "center" },
-    { name: "appliance", header: "장치", align: "center" },
-    { name: "patient_name", header: "환자명", align: "center" },
-    { name: "description", header: "비고", align: "center" },
+    { name: "seq_id", header: "codeNo", align: "center", hidden: true },
+    { name: "receipt_date", header: "접수일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }} },
+    { name: "completion_date", header: "완성일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }}},
+    { name: "delivery_date", header: "배달일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }} },
+    { name: "vendor_name", header: "거래처", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "chart_number", header: "차트번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "upper", header: "Upper", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "lower", header: "Lower", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "bite", header: "Bite", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "appliance", header: "장치", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "patient_name", header: "환자명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    { name: "description", header: "비고", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
     {
       name: "detail",
       header: "상세보기",
@@ -252,17 +252,15 @@ export default function ReceptionRegister() {
 
                 <Grid item xs={6} className={classes.grid} style={{float: "left"}}>
                   <Autocomplete
-                    id="filter-demo"
                     className={classes.grid}
                     options={auto1}
                     getOptionLabel={(option) => option.title}
                     filterOptions={filterOptions}
-                    style={{float: "left", width: "200px", marginLeft: "20px"}}
+                    style={{float: "left", width: "200px", marginLeft: "20px"}}           
                     renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
                   />
 
                   <Autocomplete
-                    id="filter-demo"
                     className={classes.grid}
                     options={auto2}
                     getOptionLabel={(option) => option.title}

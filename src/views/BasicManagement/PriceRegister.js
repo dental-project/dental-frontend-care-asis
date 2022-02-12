@@ -70,6 +70,7 @@ export default function PriceRegister() {
       setOpenPriceModal(price.modal);
     }, [price.data.length] );
 
+      console.log(price);
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -111,10 +112,10 @@ export default function PriceRegister() {
     };
 
     const columns = ([
-      {name: "vendor_name", header: "거래처명", align: "center" },
-      {name: "part_name", header: "파트명", align: "center" },
-      {name: "item_name", header: "장치명", align: "center" },
-      {name: "price", header: "단가", align: "center" },
+      {name: "vendor_name", header: "거래처명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "part_name", header: "파트명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "item_name", header: "장치명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "price", header: "단가", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'number' },
       {
         name: "update",
         header: "단가수정",
