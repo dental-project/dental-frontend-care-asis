@@ -4,7 +4,6 @@ import Grid from "@toast-ui/react-grid";
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { receptions } from 'modules/receptions';
-import { items } from 'modules/items';
 import { render } from "react-dom";
 
 class RemoveButtonRenderer {
@@ -34,12 +33,12 @@ const ToastGrid = () => {
   
   const dispatch = useDispatch();
   const receptionData = useSelector(({ reception }) => reception.data);
-  const itemData = useSelector(({item}) => item.data);
+
   
- 
+
   useEffect(() => {
     console.log("렌더링");
-    dispatch(items.getItemMiddleware());
+  
   }, [] );
 
  
@@ -56,14 +55,14 @@ const ToastGrid = () => {
   //   //price = data.normal_price;
   //   console.log(data.normal_price);
   // });
-  const partList = [ { text: "Select", value: ''}];
-  const itemList = [];
+  const partList = [];
+  //const itemList = [];
 
 
   //const price = 0;
   for(let i=0; i<receptionData.length; i++) {
     
-    partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
+    partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
     //let a = partList.concat({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
     //console.log(a);
     //itemList.push({ text: receptionData[i].item_name, value: receptionData[i].item_seq_id})
@@ -72,34 +71,8 @@ const ToastGrid = () => {
 
 
 
-  const twoDepthData = {
-    '01': [
-      { text: 'Select', value: '' },
-      { text: 'Balad/Dance/Pop', value: '01_01' },
-      { text: 'Hiphop/R&B', value: '01_02' },
-      { text: 'Indie', value: '01_03' }
-    ],
-    '02': [
-      { text: 'Select', value: '' },
-      { text: 'Pop', value: '02_01' },
-      { text: 'Hiphop', value: '02_02' },
-      { text: 'R&B', value: '02_03' }
-    ],
-    '03': [
-      { text: 'Select', value: '' },
-      { text: 'OST', value: '03_01' },
-      { text: 'Classic', value: '03_02' },
-      { text: 'New Age', value: '03_03' }
-    ]
-  };
 
-
-
-
-
-
-
-
+  const[itemList, setItemList] = useState([]);
 
 
 
@@ -121,7 +94,9 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: [...new Set(partList.map(JSON.stringify))].map(JSON.parse)
+          listItems: [
+            ...new Set(partList.map(JSON.stringify))
+          ].map(JSON.parse)
         }
       },
       
@@ -180,51 +155,57 @@ const ToastGrid = () => {
   ];
   
   const onChange = (e) => {
-     console.log(e);
+   
      const gridArr = gridRef.current.getInstance().getData();
      console.log(gridArr);
 
-
-    if(e.changes[0].columnName === "partName") {
-      const arr = itemData.filter( (data) => data.part_seq_id === parseInt(gridArr[0].partName) );
-    
-      gridRef.current.getInstance().setColumnValues('itemName',"선택",false);
-      for(let i=0; i<arr.length; i++) {
-        
-        itemList.push( { text: arr[i].item_name, value: arr[i].seq_id} )
-        //gridRef.current.getInstance().setColumnValues('itemName',arr[i].item_name,false)
-      }
-      
-    } else if(e.changes[0].columnName === "itemName") {
-      
-      const a = receptionData.filter( (data) => data.part_seq_id === 1 && data.item_seq_id === 4 );
-      //console.log(a);
-      gridRef.current.getInstance().setColumnValues('unitPrice',a[0].unit_price,false);
-    
-    } else if(e.changes[0].columnName === "amount") {
-
-      gridRef.current.getInstance().setColumnValues('normalPrice', (gridArr[0].unitPrice * parseInt(gridArr[0].amount)) ,false);
-    } else if(e.changes[0].columnName === "discountPrice") {
-      
-      gridRef.current.getInstance().setColumnValues('finalPrice', (gridArr[0].normalPrice - parseInt(gridArr[0].discountPrice)) ,false);
-      gridRef.current.getInstance().setColumnValues('discount', (gridArr[0].discountPrice / gridArr[0].normalPrice * 100) + "%" ,false);
-    } 
-
+     const rowCount = gridRef.current.getInstance().getRowCount();
+     let i = rowCount-1;
    
+      if(e.changes[0].columnName === "partName") {
 
+        let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
+   
+        for(let j=0; j<arr.length; j++) {
+          itemList.push( { text: arr[j].item_name, value: arr[j].item_name} )
+        }
+        setItemList(itemList);
+
+      } else if(e.changes[0].columnName === "itemName") {
+        
+        let price = receptionData.filter( (data) => 
+          data.part_name === gridArr[i].partName && data.item_name === gridArr[i].itemName 
+        );
+        gridRef.current.getInstance().setValue(i,'unitPrice',price[0].unit_price,false);
+      
+      } else if(e.changes[0].columnName === "amount") {
+  
+        gridRef.current.getInstance().setValue(i,'normalPrice', (gridArr[i].unitPrice * parseInt(gridArr[i].amount)) ,false);
+  
+      } else if(e.changes[0].columnName === "discountPrice") {
+        
+        gridRef.current.getInstance().setValue(i,'finalPrice', (gridArr[i].normalPrice - parseInt(gridArr[i].discountPrice)) ,false);
+        gridRef.current.getInstance().setValue(i,'discount', (gridArr[i].discountPrice / gridArr[i].normalPrice * 100) + "%" ,false);
+      } 
+   
   };
 
   
+  
+
   
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
-    console.log(gridRef.current.props.data);
+    setItemList([]);
   };
 
-  const aaa = () => {
-    gridRef.current.getInstance().getData();
+  const save = () => {
+    //gridRef.current.getInstance().getData();
     //console.log(gridRef.current.getInstance().getData());
+
+    //console.log(gridRef.current.getInstance().getElement());
+
 
     const gridArr = gridRef.current.getInstance().getData();
     
@@ -233,9 +214,12 @@ const ToastGrid = () => {
         return alert((i+1) + "번째 행 파트명을 입력하세요.");
       } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
         return alert((i+1) + "번째 행 장치명을 입력하세요.");
-      } else if(gridArr[i].price == null || gridArr[i].price == "") {
-        return alert((i+1) + "번째 행 단가를 입력하세요.");
-      } else if(gridArr[i].amount == null || gridArr[i].amount == "") {
+      } 
+      // else if(gridArr[i].price == null || gridArr[i].price == "") {
+      //   return alert((i+1) + "번째 행 단가를 입력하세요.");
+      // } 
+      
+      else if(gridArr[i].amount == null || gridArr[i].amount == "") {
         return alert((i+1) + "번째 행 수량을 입력하세요.");
       } else if(gridArr[i].discount == null || gridArr[i].discount == "") {
         return alert((i+1) + "번째 행 할인율(%)을 입력하세요.");
@@ -266,7 +250,7 @@ const ToastGrid = () => {
   return(
     <>
      <button onClick={handleAppendRow}>행추가</button>
-     <button onClick={aaa}>저장</button>
+     <button onClick={save}>저장</button>
       <Grid
         ref={gridRef}
         //data={gridData}

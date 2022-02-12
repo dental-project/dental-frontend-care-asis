@@ -154,7 +154,6 @@ function PartRegister() {
 
   const onClickSearch = (e) => {
     part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
-
   }
 
   return (
