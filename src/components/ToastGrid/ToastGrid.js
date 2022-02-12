@@ -140,7 +140,7 @@ const ToastGrid = () => {
       },
     },
     {
-      header: '단가 (입력)',
+      header: '단가',
       name: 'unitPrice'
     },
     {
@@ -153,7 +153,7 @@ const ToastGrid = () => {
       name: 'normalPrice'
     },
     {
-      header: '할인금액',
+      header: '할인금액 (입력)',
       name: 'discountPrice',
       editor: 'text'
     },
@@ -162,7 +162,7 @@ const ToastGrid = () => {
       name: 'finalPrice'
     },
     {
-      header: '할인율 (입력)',
+      header: '할인율 ',
       name: 'discount',
     },
     {
@@ -180,7 +180,7 @@ const ToastGrid = () => {
   ];
   
   const onChange = (e) => {
-     //console.log(e);
+     console.log(e);
      const gridArr = gridRef.current.getInstance().getData();
      console.log(gridArr);
 
@@ -197,13 +197,18 @@ const ToastGrid = () => {
       
     } else if(e.changes[0].columnName === "itemName") {
       
-      const a = receptionData.filter( (data) => data.part_seq_id === 10 && data.item_seq_id === 10 );
-      
+      const a = receptionData.filter( (data) => data.part_seq_id === 1 && data.item_seq_id === 4 );
+      //console.log(a);
       gridRef.current.getInstance().setColumnValues('unitPrice',a[0].unit_price,false);
     
-    } else if(e.changes[0].columnName === "unitPrice") {
-      gridRef.current.getInstance().setColumnValues('amount', ( gridArr[0].unitPrice * parseInt(gridArr[0].amount) ),false);
-    }
+    } else if(e.changes[0].columnName === "amount") {
+
+      gridRef.current.getInstance().setColumnValues('normalPrice', (gridArr[0].unitPrice * parseInt(gridArr[0].amount)) ,false);
+    } else if(e.changes[0].columnName === "discountPrice") {
+      
+      gridRef.current.getInstance().setColumnValues('finalPrice', (gridArr[0].normalPrice - parseInt(gridArr[0].discountPrice)) ,false);
+      gridRef.current.getInstance().setColumnValues('discount', (gridArr[0].discountPrice / gridArr[0].normalPrice * 100) + "%" ,false);
+    } 
 
    
 
