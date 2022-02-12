@@ -70,7 +70,7 @@ export default function Signup() {
       }   
 
       axios
-        .post("/api/users/register/",
+        .post("/api/users/user/",
           { 
             userid: data.userid, 
             password: data.passwd,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import TuiGrid from 'tui-grid';
 import "tui-grid/dist/tui-grid.css";
 import Grid from "@toast-ui/react-grid";
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { receptions } from 'modules/receptions';
+import { items } from 'modules/items';
 import { render } from "react-dom";
 
 class RemoveButtonRenderer {
@@ -34,18 +34,18 @@ const ToastGrid = () => {
   
   const dispatch = useDispatch();
   const receptionData = useSelector(({ reception }) => reception.data);
-
-
+  const itemData = useSelector(({item}) => item.data);
   
-
+ 
   useEffect(() => {
     console.log("렌더링");
-    
+    dispatch(items.getItemMiddleware());
   }, [] );
 
  
-  console.log(receptionData);
 
+  
+  console.log(receptionData);
 
   
 
@@ -56,31 +56,62 @@ const ToastGrid = () => {
   //   //price = data.normal_price;
   //   console.log(data.normal_price);
   // });
-  const partList = [];
+  const partList = [ { text: "Select", value: ''}];
   const itemList = [];
+
+
   //const price = 0;
   for(let i=0; i<receptionData.length; i++) {
     
-    
     partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
-    itemList.push({ text: receptionData[i].item_name, value: receptionData[i].item_seq_id})
-    //price = receptionData[i].normal_price;
+    //let a = partList.concat({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
+    //console.log(a);
+    //itemList.push({ text: receptionData[i].item_name, value: receptionData[i].item_seq_id})
+    
   }
 
-  //console.log(price);
 
-  
 
-  
-
-  const onUpdateButtonClicked = () => {
-    
+  const twoDepthData = {
+    '01': [
+      { text: 'Select', value: '' },
+      { text: 'Balad/Dance/Pop', value: '01_01' },
+      { text: 'Hiphop/R&B', value: '01_02' },
+      { text: 'Indie', value: '01_03' }
+    ],
+    '02': [
+      { text: 'Select', value: '' },
+      { text: 'Pop', value: '02_01' },
+      { text: 'Hiphop', value: '02_02' },
+      { text: 'R&B', value: '02_03' }
+    ],
+    '03': [
+      { text: 'Select', value: '' },
+      { text: 'OST', value: '03_01' },
+      { text: 'Classic', value: '03_02' },
+      { text: 'New Age', value: '03_03' }
+    ]
   };
 
 
 
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+  const onUpdateButtonClicked = () => {
+    
+  };
+
 
 
   const columns = [
@@ -90,16 +121,10 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: 
-            partList
-            // [
-            //   { text: 'Deluxe', value: '1' },
-            //   { text: 'EP', value: '2' },
-            //   { text: 'Single', value: '3' }
-            // ]
-
+          listItems: [...new Set(partList.map(JSON.stringify))].map(JSON.parse)
         }
-      }
+      },
+      
     },
     {
       header: '장치명 (선택)',
@@ -107,22 +132,16 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: 
-            itemList
-          // [
-          //   { text: 'Deluxe', value: '1' },
-          //   { text: 'EP', value: '2' },
-          //   { text: 'Single', value: '3' }
-          // ]
+          listItems: itemList
+           
+
+            //itemData.filter( (data) => data.part_seq_id === 10 )
         }
-      }
+      },
     },
     {
       header: '단가 (입력)',
-      name: 'price'
-      // _attributes: {
-      //   disabled: true // A current row is disabled
-      // }
+      name: 'unitPrice'
     },
     {
       header: '수량 (입력)',
@@ -130,9 +149,21 @@ const ToastGrid = () => {
       editor: 'text'
     },
     {
+      header: '정상가',
+      name: 'normalPrice'
+    },
+    {
+      header: '할인금액',
+      name: 'discountPrice',
+      editor: 'text'
+    },
+    {
+      header: '최종금액',
+      name: 'finalPrice'
+    },
+    {
       header: '할인율 (입력)',
       name: 'discount',
-      editor: 'text'
     },
     {
       name: "update",
@@ -148,43 +179,30 @@ const ToastGrid = () => {
     
   ];
   
- 
-  //const [data, setData] = useState([]);
-
-  const data = [
-    {
-
-    }
-  ];
-  let gridData;
-
   const onChange = (e) => {
-    console.log(e);
-    const gridArr = gridRef.current.getInstance().getData();
-    console.log(gridArr);
+     //console.log(e);
+     const gridArr = gridRef.current.getInstance().getData();
+     console.log(gridArr);
 
+
+    if(e.changes[0].columnName === "partName") {
+      const arr = itemData.filter( (data) => data.part_seq_id === parseInt(gridArr[0].partName) );
     
-
-
-
-
-    if(e.changes[0].columnName === "itemName") {
-
-      // gridData = data.concat({
-      //   price: 777
-      // })
-
-      // gridData = [{
-      //   price: 777
-      // }]
-
-      //TuiGrid.setColumnValues('price',777,false);
-      TuiGrid.setColumnValues('price','asf',false);
-      //TuiGrid.applyTheme('default');
-      //console.log(gridData);
-
-      //data.push(data[0].price = 1111)
+      gridRef.current.getInstance().setColumnValues('itemName',"선택",false);
+      for(let i=0; i<arr.length; i++) {
+        
+        itemList.push( { text: arr[i].item_name, value: arr[i].seq_id} )
+        //gridRef.current.getInstance().setColumnValues('itemName',arr[i].item_name,false)
+      }
       
+    } else if(e.changes[0].columnName === "itemName") {
+      
+      const a = receptionData.filter( (data) => data.part_seq_id === 10 && data.item_seq_id === 10 );
+      
+      gridRef.current.getInstance().setColumnValues('unitPrice',a[0].unit_price,false);
+    
+    } else if(e.changes[0].columnName === "unitPrice") {
+      gridRef.current.getInstance().setColumnValues('amount', ( gridArr[0].unitPrice * parseInt(gridArr[0].amount) ),false);
     }
 
    
@@ -225,8 +243,8 @@ const ToastGrid = () => {
         item_seq_id: 9,
         vendor_seq_id: 3
       }
-
-
+      console.log(gridArr);
+      return;
 
       dispatch(receptions.addReceptionPriceMiddleware(contents));
 
@@ -246,7 +264,7 @@ const ToastGrid = () => {
      <button onClick={aaa}>저장</button>
       <Grid
         ref={gridRef}
-        data={gridData}
+        //data={gridData}
         columns={columns}
         rowHeight={20}
         bodyHeight={200}
