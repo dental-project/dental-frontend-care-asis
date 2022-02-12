@@ -68,8 +68,6 @@ function PartRegister() {
   const dispatch = useDispatch();
   const part = useSelector(({part}) => part);
 
-  console.log(part);
-
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
 
@@ -154,8 +152,10 @@ function PartRegister() {
 
   const onClickSearch = (e) => {
     // part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+    console.log(part.data)
     console.log(value)
-
+    part.data.filter(v => v.part_name.indexOf(value.part_name)!==-1 ? setSearchData(v) : null );
+    console.log(searchData);
   }
 
   return (
@@ -183,19 +183,29 @@ function PartRegister() {
                   defaultValue={auto1[0]}
                   getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
+                  
                   style={{float: "left", width: "300px"}}
                   onKeyUp={(event, newValue) => {
-                    setValue(newValue);
-                    console.log(value)
+                    setValue(event.target.value);
                   }}
                   onChange={(event, newValue) => {
                     setValue(newValue);
-                    console.log(newValue);
                   }}
                   getOptionSelected={(option, value) => {
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
                   renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                  // disableClearable
+                  // renderInput={(params) => 
+                  //   <TextField
+                  //   {...params}
+                  //   label="Search input"
+                  //   InputProps={{
+                  //     ...params.InputProps,
+                  //     type: 'search',
+                  //   }}
+                  // />
+                  // }
                 />
                 <Button
                   type="submit"
