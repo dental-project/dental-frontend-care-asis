@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { receptions } from 'modules/receptions';
 import { render } from "react-dom";
+import { createNoSubstitutionTemplateLiteral } from "typescript";
 
 class RemoveButtonRenderer {
   element;
@@ -34,36 +35,32 @@ const ToastGrid = () => {
   const dispatch = useDispatch();
   const receptionData = useSelector(({ reception }) => reception.data);
 
-  const[itemList, setItemList] = useState([]);
-
-  let a = [];
+  const [rowIndex, setRowIndex] = useState(0);
+  console.log(rowIndex);
 
   useEffect(() => {
     console.log("렌더링");
-    
-    //setItemList([]);
+  
   }, [] );
 
  
-  console.log(itemList);
+
   
   console.log(receptionData);
 
   
 
   const partList = [];
-  
+ 
+  //const itemList = [];
+
+
   //const price = 0;
   for(let i=0; i<receptionData.length; i++) {
     
     partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
   
   }
-  console.log(partList);
-
-
-
- 
 
 
 
@@ -75,6 +72,49 @@ const ToastGrid = () => {
   const onUpdateButtonClicked = () => {
     
   };
+
+ 
+ 
+  const newArray = partList.filter(
+    (arr, index, callback) => index === callback.findIndex(t => t.value === arr.value)
+  )
+
+  
+
+  const deduplication = (name, val) => {
+    typeof(Storage) !== 'undefined' && localStorage.setItem(name, JSON.stringify(val));
+  }
+  
+  deduplication('name',newArray)
+
+  console.log(newArray);
+
+
+  var something = {};
+
+  for(let i=0; i<newArray.length; i++) {
+      something[newArray[i].value] = receptionData.filter( (data) => 
+        data.part_name === partList[i].value 
+      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+  }
+
+  console.log(something);
+  //console.log(something.fileter((data) => data.part_name === partList[key].value)
+
+  
+
+  // const twoDepthData = {
+  //   'Removale App': [
+  //     {text: "테스트 기공", value: "테스트 기공"},
+  //     {text: "asdfsadfsdf", value: "asdfsadfsdf"}
+  //   ],
+  //   'Fixed App': [
+  //     {text: "테스트 기공2", value: "테스트 기공2"},
+  //     {text: "기공4", value: "기공4"}
+  //   ]
+  // }
+
+  
 
   const columns = [
     {
@@ -88,7 +128,18 @@ const ToastGrid = () => {
           ].map(JSON.parse)
         }
       },
-      validation: { required: true }
+      validation: { required: true },
+      relations: [
+        {
+          targetNames: ['itemName'],
+          listItems({ value }) {
+            return something[value];
+          },
+          disabled({ value }) {
+            return !value;
+          }
+        }
+      ]
     },
     {
       header: '장치명 (선택)',
@@ -96,11 +147,7 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: 
-            //receptionData.filter( (data) => data.part_name === partList[0].value ).map( (data) => { return {text: data.item_name, value: data.item_name} }  )
-            itemList
-            //{ return {text: data.item_name, value: data.item_name} }
-          
+          listItems: []
         }
       },
       validation: { required: true }
@@ -157,31 +204,31 @@ const ToastGrid = () => {
 
      //const rowCount = gridRef.current.getInstance().getRowCount();
      //let i = rowCount-1;
-     
+     //console.log(rowIndex);
 
      let i = e.changes[0].rowKey;
 
     if(e.changes[0].columnName === "partName") {
+      //reset();
+      //let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
+  
+      //const list = arr.map( (data) =>{ return {text: data.item_name, value: data.item_name} } )
+     
+      
+      //setItemList(aaa)
+      //gridRef.current.getInstance().setValue(i,'itemName',aaa,false);
 
-      let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
+      // for(let j=0; j<arr.length; j++) {
+      //   itemList.concat( { text: arr[j].item_name, value: arr[j].item_name}  )
+      // }
+      // setItemList(itemList);
 
-     for(let j=0; j<arr.length; j++) {
-        itemList.push( { text: arr[j].item_name, value: arr[j].item_name} )
-        // const newItem = itemList.concat(
-        //   { text: arr[j].item_name, value: arr[j].item_name }
-        // );
-
-        //setItemList([{ text: arr[j].item_name, value: arr[j].item_name}])
-
-
-        //newItemList.push(newItem[0]);
-        
-     }
-      //console.log(newItemList);
-      //setItemList(newItemList);
+      
 
     } else if(e.changes[0].columnName === "itemName") {
-      
+     
+      resetColumn(i);
+
       let price = receptionData.filter( (data) => 
         data.part_name === gridArr[i].partName && data.item_name === gridArr[i].itemName 
       );
@@ -189,7 +236,9 @@ const ToastGrid = () => {
     
     } else if(e.changes[0].columnName === "amount") {
       
-      validationCheck(gridArr[i].amount);
+      gridRef.current.getInstance().setValue(i,'discountPrice',"",false);
+      gridRef.current.getInstance().setValue(i,'finalPrice',"",false);
+      gridRef.current.getInstance().setValue(i,'discount',"",false);
 
       gridRef.current.getInstance().setValue(i,'normalPrice', (gridArr[i].unitPrice * parseInt(gridArr[i].amount)) ,false);
 
@@ -200,7 +249,7 @@ const ToastGrid = () => {
       gridRef.current.getInstance().setValue(i,'finalPrice', (gridArr[i].normalPrice - parseInt(gridArr[i].discountPrice)) ,false);
       gridRef.current.getInstance().setValue(i,'discount', (gridArr[i].discountPrice / gridArr[i].normalPrice * 100) + "%" ,false);
     }
-   
+    
   };
 
   
@@ -221,6 +270,16 @@ const ToastGrid = () => {
 
   }
 
+
+  const resetColumn = (i) => {
+    gridRef.current.getInstance().setValue(i,'unitPrice',"",false);
+    gridRef.current.getInstance().setValue(i,'amount',"",false);
+    gridRef.current.getInstance().setValue(i,'normalPrice',"",false);
+
+    gridRef.current.getInstance().setValue(i,'discountPrice',"",false);
+    gridRef.current.getInstance().setValue(i,'finalPrice',"",false);
+    gridRef.current.getInstance().setValue(i,'discount',"",false);
+  }
   
 
   
