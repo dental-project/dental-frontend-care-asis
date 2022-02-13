@@ -99,7 +99,7 @@ const ToastGrid = () => {
           ].map(JSON.parse)
         }
       },
-      
+      validation: { required: true }
     },
     {
       header: '장치명 (선택)',
@@ -108,37 +108,41 @@ const ToastGrid = () => {
         type: 'select',
         options: {
           listItems: itemList
-           
-
-            //itemData.filter( (data) => data.part_seq_id === 10 )
         }
       },
+      validation: { required: true }
     },
     {
       header: '단가',
-      name: 'unitPrice'
+      name: 'unitPrice',
+      validation: { required: true }
     },
     {
       header: '수량 (입력)',
       name: 'amount',
-      editor: 'text'
+      editor: 'text',
+      validation: { required: true }
     },
     {
       header: '정상가',
-      name: 'normalPrice'
+      name: 'normalPrice',
+      validation: { required: true }
     },
     {
       header: '할인금액 (입력)',
       name: 'discountPrice',
-      editor: 'text'
+      editor: 'text',
+      validation: { required: true }
     },
     {
       header: '최종금액',
-      name: 'finalPrice'
+      name: 'finalPrice',
+      validation: { required: true }
     },
     {
       header: '할인율 ',
       name: 'discount',
+      validation: { required: true }
     },
     {
       name: "update",
@@ -191,6 +195,17 @@ const ToastGrid = () => {
   };
 
   
+
+  const validationCheck = () => {
+
+
+
+
+
+
+
+  }
+
   
 
   
