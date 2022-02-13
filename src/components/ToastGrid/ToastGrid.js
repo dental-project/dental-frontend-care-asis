@@ -34,45 +34,36 @@ const ToastGrid = () => {
   const dispatch = useDispatch();
   const receptionData = useSelector(({ reception }) => reception.data);
 
-  
+  const[itemList, setItemList] = useState([]);
+
+  let a = [];
 
   useEffect(() => {
     console.log("렌더링");
-  
+    
+    //setItemList([]);
   }, [] );
 
  
-
+  console.log(itemList);
   
   console.log(receptionData);
 
   
 
-  
-  // receptionData.map( (data,index) => {
-  //   partList.push({ text: data.part_name, value: data.part_seq_id })
-  //   itemList.push({ text: data.item_name, value: data.item_seq_id})
-  //   //price = data.normal_price;
-  //   console.log(data.normal_price);
-  // });
   const partList = [];
-  //const itemList = [];
-
-
+  
   //const price = 0;
   for(let i=0; i<receptionData.length; i++) {
     
     partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
-    //let a = partList.concat({ text: receptionData[i].part_name, value: receptionData[i].part_seq_id })
-    //console.log(a);
-    //itemList.push({ text: receptionData[i].item_name, value: receptionData[i].item_seq_id})
-    
+  
   }
+  console.log(partList);
 
 
 
-
-  const[itemList, setItemList] = useState([]);
+ 
 
 
 
@@ -84,8 +75,6 @@ const ToastGrid = () => {
   const onUpdateButtonClicked = () => {
     
   };
-
-
 
   const columns = [
     {
@@ -107,7 +96,11 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: itemList
+          listItems: 
+            //receptionData.filter( (data) => data.part_name === partList[0].value ).map( (data) => { return {text: data.item_name, value: data.item_name} }  )
+            itemList
+            //{ return {text: data.item_name, value: data.item_name} }
+          
         }
       },
       validation: { required: true }
@@ -161,48 +154,70 @@ const ToastGrid = () => {
   const onChange = (e) => {
    
      const gridArr = gridRef.current.getInstance().getData();
-     console.log(gridArr);
 
-     const rowCount = gridRef.current.getInstance().getRowCount();
-     let i = rowCount-1;
-   
-      if(e.changes[0].columnName === "partName") {
+     //const rowCount = gridRef.current.getInstance().getRowCount();
+     //let i = rowCount-1;
+     
 
-        let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
-   
-        for(let j=0; j<arr.length; j++) {
-          itemList.push( { text: arr[j].item_name, value: arr[j].item_name} )
-        }
-        setItemList(itemList);
+     let i = e.changes[0].rowKey;
 
-      } else if(e.changes[0].columnName === "itemName") {
+    if(e.changes[0].columnName === "partName") {
+
+      let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
+
+     for(let j=0; j<arr.length; j++) {
+        itemList.push( { text: arr[j].item_name, value: arr[j].item_name} )
+        // const newItem = itemList.concat(
+        //   { text: arr[j].item_name, value: arr[j].item_name }
+        // );
+
+        //setItemList([{ text: arr[j].item_name, value: arr[j].item_name}])
+
+
+        //newItemList.push(newItem[0]);
         
-        let price = receptionData.filter( (data) => 
-          data.part_name === gridArr[i].partName && data.item_name === gridArr[i].itemName 
-        );
-        gridRef.current.getInstance().setValue(i,'unitPrice',price[0].unit_price,false);
+     }
+      //console.log(newItemList);
+      //setItemList(newItemList);
+
+    } else if(e.changes[0].columnName === "itemName") {
       
-      } else if(e.changes[0].columnName === "amount") {
-  
-        gridRef.current.getInstance().setValue(i,'normalPrice', (gridArr[i].unitPrice * parseInt(gridArr[i].amount)) ,false);
-  
-      } else if(e.changes[0].columnName === "discountPrice") {
-        
-        gridRef.current.getInstance().setValue(i,'finalPrice', (gridArr[i].normalPrice - parseInt(gridArr[i].discountPrice)) ,false);
-        gridRef.current.getInstance().setValue(i,'discount', (gridArr[i].discountPrice / gridArr[i].normalPrice * 100) + "%" ,false);
-      } 
+      let price = receptionData.filter( (data) => 
+        data.part_name === gridArr[i].partName && data.item_name === gridArr[i].itemName 
+      );
+      gridRef.current.getInstance().setValue(i,'unitPrice',price[0].unit_price,false);
+    
+    } else if(e.changes[0].columnName === "amount") {
+      
+      validationCheck(gridArr[i].amount);
+
+      gridRef.current.getInstance().setValue(i,'normalPrice', (gridArr[i].unitPrice * parseInt(gridArr[i].amount)) ,false);
+
+    } else if(e.changes[0].columnName === "discountPrice") {
+      
+      if(parseInt(gridArr[i].discountPrice) > gridArr[i].normalPrice) return alert("할인금액이 정상가보다 금액이 큽니다.");
+
+      gridRef.current.getInstance().setValue(i,'finalPrice', (gridArr[i].normalPrice - parseInt(gridArr[i].discountPrice)) ,false);
+      gridRef.current.getInstance().setValue(i,'discount', (gridArr[i].discountPrice / gridArr[i].normalPrice * 100) + "%" ,false);
+    }
    
   };
 
   
 
-  const validationCheck = () => {
+  const validationCheck = (value) => {
 
+    var regNumber = /^[0-9]*$/;
+    //var reg = /^\d+\.?\d*$/;
 
+    // 숫자 체크
+    if(regNumber.test(value) === false) return alert("숫자만 입력 가능합니다.");
 
+    // 1~100 입력
+    //if(value < 1 || value > 100) return alert("1 ~ 100 까지 입력 가능합니다.");
 
-
-
+    //공백 : /^\s+|\s+$/g
+    // 숫자 1~9 : ^[1-9]\d*$
 
   }
 
@@ -212,7 +227,6 @@ const ToastGrid = () => {
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
-    setItemList([]);
   };
 
   const save = () => {
@@ -229,24 +243,18 @@ const ToastGrid = () => {
         return alert((i+1) + "번째 행 파트명을 입력하세요.");
       } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
         return alert((i+1) + "번째 행 장치명을 입력하세요.");
-      } 
-      // else if(gridArr[i].price == null || gridArr[i].price == "") {
-      //   return alert((i+1) + "번째 행 단가를 입력하세요.");
-      // } 
-      
-      else if(gridArr[i].amount == null || gridArr[i].amount == "") {
+      } else if(gridArr[i].amount == null || gridArr[i].amount == "") {
         return alert((i+1) + "번째 행 수량을 입력하세요.");
-      } else if(gridArr[i].discount == null || gridArr[i].discount == "") {
-        return alert((i+1) + "번째 행 할인율(%)을 입력하세요.");
+      } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice == "") {
+        return alert((i+1) + "번째 행 할인금액을 입력하세요.");
       }
-      console.log("완료");
-
-      
+   
       const contents = {
         price: 5000,
         item_seq_id: 9,
         vendor_seq_id: 3
       }
+   
       console.log(gridArr);
       return;
 
@@ -258,8 +266,11 @@ const ToastGrid = () => {
   }
 
 
-
-
+  const onClick = (e) => {
+    //setRowIndex(e.rowKey);
+    //console.log(e);
+  }
+  
 
 
   return(
@@ -275,6 +286,9 @@ const ToastGrid = () => {
         virtualScrolling={true}
         heightResizable={true}
         rowHeaders={['rowNum']}
+
+        onClick={onClick}
+
         onAfterChange={onChange}
       />
 
