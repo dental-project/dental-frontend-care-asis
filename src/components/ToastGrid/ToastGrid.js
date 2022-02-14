@@ -50,18 +50,58 @@ const ToastGrid = () => {
 
   
 
-  const partList = [];
+  const [partList, setPartList] = useState([]);
  
-  //const itemList = [];
-
-
-  //const price = 0;
   for(let i=0; i<receptionData.length; i++) {
-    
+    // setPartList([
+    //   ...partList,
+    //   { text: receptionData[i].part_name, value: receptionData[i].part_name }
+    // ])
     partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
   
   }
+  
+  // receptionData.map((data) => setPartList(
+  //   [
+      
+  //   ]
+  // ))
 
+
+  //let aaa = receptionData.filter( (data) => data.part_name
+
+  //console.log(  [...new Set(receptionData.map(JSON.stringify))].map(JSON.parse)  )
+  
+
+
+
+  // receptionData.map((data) => setPartList(
+  //   [
+  //     ...partList,
+  //     { text: data.part_name, value: data.part_name }
+  //   ]
+  // ))
+
+  const newArray = partList.filter(
+    (arr, index, callback) => index === callback.findIndex(t => t.value === arr.value)
+  )
+
+  console.log(partList)
+  console.log(newArray);
+
+  const deduplication = (name, val) => {
+    typeof(Storage) !== 'undefined' && localStorage.setItem(name, JSON.stringify(val));
+  }
+  
+  deduplication('name',newArray)
+
+  var something = {};
+
+  for(let i=0; i<newArray.length; i++) {
+      something[newArray[i].value] = receptionData.filter( (data) => 
+        data.part_name === partList[i].value 
+      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+  }
 
 
 
@@ -72,49 +112,6 @@ const ToastGrid = () => {
   const onUpdateButtonClicked = () => {
     
   };
-
- 
- 
-  const newArray = partList.filter(
-    (arr, index, callback) => index === callback.findIndex(t => t.value === arr.value)
-  )
-
-  
-
-  const deduplication = (name, val) => {
-    typeof(Storage) !== 'undefined' && localStorage.setItem(name, JSON.stringify(val));
-  }
-  
-  deduplication('name',newArray)
-
-  console.log(newArray);
-
-
-  var something = {};
-
-  for(let i=0; i<newArray.length; i++) {
-      something[newArray[i].value] = receptionData.filter( (data) => 
-        data.part_name === partList[i].value 
-      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
-  }
-
-  console.log(something);
-  //console.log(something.fileter((data) => data.part_name === partList[key].value)
-
-  
-
-  // const twoDepthData = {
-  //   'Removale App': [
-  //     {text: "테스트 기공", value: "테스트 기공"},
-  //     {text: "asdfsadfsdf", value: "asdfsadfsdf"}
-  //   ],
-  //   'Fixed App': [
-  //     {text: "테스트 기공2", value: "테스트 기공2"},
-  //     {text: "기공4", value: "기공4"}
-  //   ]
-  // }
-
-  
 
   const columns = [
     {
@@ -200,88 +197,64 @@ const ToastGrid = () => {
   
   const onChange = (e) => {
    
-     const gridArr = gridRef.current.getInstance().getData();
+    const gridArr = gridRef.current.getInstance().getData();
 
-     //const rowCount = gridRef.current.getInstance().getRowCount();
-     //let i = rowCount-1;
-     //console.log(rowIndex);
-
-     let i = e.changes[0].rowKey;
+    let rowId = e.changes[0].rowKey;
+    var regNumber = /^[0-9]*$/;
 
     if(e.changes[0].columnName === "partName") {
-      //reset();
-      //let arr = receptionData.filter( (data) => data.part_name === gridArr[i].partName );
-  
-      //const list = arr.map( (data) =>{ return {text: data.item_name, value: data.item_name} } )
-     
-      
-      //setItemList(aaa)
-      //gridRef.current.getInstance().setValue(i,'itemName',aaa,false);
-
-      // for(let j=0; j<arr.length; j++) {
-      //   itemList.concat( { text: arr[j].item_name, value: arr[j].item_name}  )
-      // }
-      // setItemList(itemList);
-
-      
+    
+      resetColumn(rowId,"select");
 
     } else if(e.changes[0].columnName === "itemName") {
      
-      resetColumn(i);
-
       let price = receptionData.filter( (data) => 
-        data.part_name === gridArr[i].partName && data.item_name === gridArr[i].itemName 
+        data.part_name === gridArr[rowId].partName && data.item_name === gridArr[rowId].itemName 
       );
-      gridRef.current.getInstance().setValue(i,'unitPrice',price[0].unit_price,false);
-    
+
+      resetColumn(rowId,"select");
+      setColumnValue(rowId, "unitPrice", price[0].unit_price);
+
     } else if(e.changes[0].columnName === "amount") {
       
-      gridRef.current.getInstance().setValue(i,'discountPrice',"",false);
-      gridRef.current.getInstance().setValue(i,'finalPrice',"",false);
-      gridRef.current.getInstance().setValue(i,'discount',"",false);
+      if(regNumber.test(gridArr[rowId].amount) === false) return alert("정수만 입력 가능합니다.");
 
-      gridRef.current.getInstance().setValue(i,'normalPrice', (gridArr[i].unitPrice * parseInt(gridArr[i].amount)) ,false);
-
+      resetColumn(rowId);
+      setColumnValue(rowId, "normalPrice", (gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)));
+    
     } else if(e.changes[0].columnName === "discountPrice") {
-      
-      if(parseInt(gridArr[i].discountPrice) > gridArr[i].normalPrice) return alert("할인금액이 정상가보다 금액이 큽니다.");
 
-      gridRef.current.getInstance().setValue(i,'finalPrice', (gridArr[i].normalPrice - parseInt(gridArr[i].discountPrice)) ,false);
-      gridRef.current.getInstance().setValue(i,'discount', (gridArr[i].discountPrice / gridArr[i].normalPrice * 100) + "%" ,false);
+      if(regNumber.test(gridArr[rowId].discountPrice) === false) return alert("정수만 입력 가능합니다.");
+      if(parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) return alert("할인금액이 정상가보다 금액이 큽니다.");
+
+      setColumnValue(rowId, "finalPrice", (gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice)));
+      setColumnValue(rowId, "discount", (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice * 100).toFixed(1) + "%");
+     
     }
     
   };
 
-  
-
-  const validationCheck = (value) => {
-
-    var regNumber = /^[0-9]*$/;
-    //var reg = /^\d+\.?\d*$/;
-
-    // 숫자 체크
-    if(regNumber.test(value) === false) return alert("숫자만 입력 가능합니다.");
-
-    // 1~100 입력
-    //if(value < 1 || value > 100) return alert("1 ~ 100 까지 입력 가능합니다.");
-
-    //공백 : /^\s+|\s+$/g
-    // 숫자 1~9 : ^[1-9]\d*$
-
+  const setColumnValue = (rowId, columnName, value) => {
+    gridRef.current.getInstance().setValue(rowId, columnName, value, false);
   }
 
+  const resetColumn = (rowId, type) => {
 
-  const resetColumn = (i) => {
-    gridRef.current.getInstance().setValue(i,'unitPrice',"",false);
-    gridRef.current.getInstance().setValue(i,'amount',"",false);
-    gridRef.current.getInstance().setValue(i,'normalPrice',"",false);
+    if(type === "select") {
+      gridRef.current.getInstance().setValue(rowId,'unitPrice',"",false);
+      gridRef.current.getInstance().setValue(rowId,'amount',"",false);
+      gridRef.current.getInstance().setValue(rowId,'normalPrice',"",false);      
+    } 
 
-    gridRef.current.getInstance().setValue(i,'discountPrice',"",false);
-    gridRef.current.getInstance().setValue(i,'finalPrice',"",false);
-    gridRef.current.getInstance().setValue(i,'discount',"",false);
+    gridRef.current.getInstance().setValue(rowId,'discountPrice',"",false);
+    gridRef.current.getInstance().setValue(rowId,'finalPrice',"",false);
+    gridRef.current.getInstance().setValue(rowId,'discount',"",false);
+
   }
   
 
+
+  
   
 
   const handleAppendRow = () => {
