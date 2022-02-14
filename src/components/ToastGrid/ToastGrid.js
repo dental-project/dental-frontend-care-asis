@@ -35,9 +35,6 @@ const ToastGrid = () => {
   const dispatch = useDispatch();
   const receptionData = useSelector(({ reception }) => reception.data);
 
-  const [rowIndex, setRowIndex] = useState(0);
-  console.log(rowIndex);
-
   useEffect(() => {
     console.log("렌더링");
   
@@ -57,7 +54,7 @@ const ToastGrid = () => {
     //   ...partList,
     //   { text: receptionData[i].part_name, value: receptionData[i].part_name }
     // ])
-    partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
+    //partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
   
   }
   
@@ -82,11 +79,11 @@ const ToastGrid = () => {
   //   ]
   // ))
 
-  const newArray = partList.filter(
-    (arr, index, callback) => index === callback.findIndex(t => t.value === arr.value)
-  )
+  const newArray = receptionData.filter(
+    (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
+  ).map( (data) => { return { text: data.part_name, value: data.part_name }} )
 
-  console.log(partList)
+  //console.log(partList)
   console.log(newArray);
 
   const deduplication = (name, val) => {
@@ -98,14 +95,27 @@ const ToastGrid = () => {
   var something = {};
 
   for(let i=0; i<newArray.length; i++) {
-      something[newArray[i].value] = receptionData.filter( (data) => 
-        data.part_name === partList[i].value 
-      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+    something[newArray[i].value] = receptionData.filter( (data) => 
+           data.part_name === newArray[i].value 
+         ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+      
+   
   }
 
+  // for(let i=0; i<newArray.length; i++) {
+  //     something[newArray[i].value] = receptionData.filter( (data) => 
+  //       data.part_name === partList[i].value 
+  //     ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+  // }
 
+  console.log(something);
 
-
+//  const twoDepthData = {
+//     'Removal App': [
+//       { text: 'aaa', value: 'aaa' },
+    
+//     ],
+//   }
 
 
 
@@ -120,9 +130,10 @@ const ToastGrid = () => {
       editor: {
         type: 'select',
         options: {
-          listItems: [
-            ...new Set(partList.map(JSON.stringify))
-          ].map(JSON.parse)
+          listItems: newArray
+          // listItems: [
+          //   ...new Set(partList.map(JSON.stringify))
+          // ].map(JSON.parse)
         }
       },
       validation: { required: true },
