@@ -22,7 +22,7 @@ export const apis = {
   deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
 
   // 접수 리스트 단가 추가
-  createReceptionPrice: (contents) => instance.post('/sell/detail/', contents),
+  createReceptionPrice: (contents) => instance.post('api/sell/detail/', contents),
 
 
   // 파트 불러오기

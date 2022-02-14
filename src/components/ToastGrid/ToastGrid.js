@@ -41,50 +41,9 @@ const ToastGrid = () => {
   }, [] );
 
  
-
-  
-  console.log(receptionData);
-
-  
-
-  //const [partList, setPartList] = useState([]);
- 
-  //for(let i=0; i<receptionData.length; i++) {
-    // setPartList([
-    //   ...partList,
-    //   { text: receptionData[i].part_name, value: receptionData[i].part_name }
-    // ])
-    //partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
-  
-  //}
-  
-  // receptionData.map((data) => setPartList(
-  //   [
-      
-  //   ]
-  // ))
-
-
-  //let aaa = receptionData.filter( (data) => data.part_name
-
-  //console.log(  [...new Set(receptionData.map(JSON.stringify))].map(JSON.parse)  )
-  
-
-
-
-  // receptionData.map((data) => setPartList(
-  //   [
-  //     ...partList,
-  //     { text: data.part_name, value: data.part_name }
-  //   ]
-  // ))
-
   const newArray = receptionData.filter(
     (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
   ).map( (data) => { return { text: data.part_name, value: data.part_name }} )
-
-  //console.log(partList)
-  console.log(newArray);
 
   const deduplication = (name, val) => {
     typeof(Storage) !== 'undefined' && localStorage.setItem(name, JSON.stringify(val));
@@ -100,21 +59,6 @@ const ToastGrid = () => {
     ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
   }
 
-  // for(let i=0; i<newArray.length; i++) {
-  //     something[newArray[i].value] = receptionData.filter( (data) => 
-  //       data.part_name === partList[i].value 
-  //     ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
-  // }
-
-//  const twoDepthData = {
-//     'Removal App': [
-//       { text: 'aaa', value: 'aaa' },
-    
-//     ],
-//   }
-
-
-
   const onUpdateButtonClicked = () => {
     
   };
@@ -127,9 +71,6 @@ const ToastGrid = () => {
         type: 'select',
         options: {
           listItems: newArray
-          // listItems: [
-          //   ...new Set(partList.map(JSON.stringify))
-          // ].map(JSON.parse)
         }
       },
       validation: { required: true },
@@ -270,29 +211,18 @@ const ToastGrid = () => {
   
 
   const handleAppendRow = () => {
-
     gridRef.current.getInstance().appendRow({});
   };
 
   const save = () => {
-    //gridRef.current.getInstance().getData();
-    //console.log(gridRef.current.getInstance().getData());
-
-    //console.log(gridRef.current.getInstance().getElement());
-
-
+    
     const gridArr = gridRef.current.getInstance().getData();
 
-    console.log(gridArr);
-
     for(let i=0; i<gridArr.length; i++) {
-
-      console.log(i);
-
       if(gridArr[i].partName == null || gridArr[i].partName == "") {
-        return alert((i+1) + "번째 행 파트명을 입력하세요.");
+        return alert((i+1) + "번째 행 파트명을 선택하세요.");
       } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
-        return alert((i+1) + "번째 행 장치명을 입력하세요.");
+        return alert((i+1) + "번째 행 장치명을 선택하세요.");
       } else if(gridArr[i].amount == null || gridArr[i].amount == "") {
         return alert((i+1) + "번째 행 수량을 입력하세요.");
       } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice == "") {
@@ -300,16 +230,42 @@ const ToastGrid = () => {
       }
     }
 
-      const contents = {
-        price: 5000,
-        item_seq_id: 9,
-        vendor_seq_id: 3
-      }
-   
-      console.log("asf");
-      return;
 
-      dispatch(receptions.addReceptionPriceMiddleware(contents));
+    //console.log(gridArr);
+    
+
+
+    const newArray = receptionData.filter(
+      (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
+    ).map( (data) => { return { text: data.part_name, value: data.part_name }} )
+
+
+    const contents = gridArr.map((data) =>  
+      ({
+        sell_master_id: 1,
+        item_seq_id: 1,
+        sell_count: parseInt(data.amount),
+        normar_price: data.normalPrice,
+        real_sell_price: parseInt(data.discountPrice),
+        discount: parseFloat(data.discount),
+      })
+    );
+
+
+    console.log(contents);
+   
+    
+
+    // const contents = {
+    //   price: 5000,
+    //   item_seq_id: 9,
+    //   vendor_seq_id: 3
+    // }
+  
+    console.log("asf");
+    //return;
+
+    dispatch(receptions.addReceptionPriceMiddleware(contents));
 
 
     
@@ -322,7 +278,6 @@ const ToastGrid = () => {
      <button onClick={save}>저장</button>
       <Grid
         ref={gridRef}
-        //data={gridData}
         columns={columns}
         rowHeight={20}
         bodyHeight={200}
@@ -332,7 +287,6 @@ const ToastGrid = () => {
         onAfterChange={onChange}
       />
 
-     
     </>
   );
 }
