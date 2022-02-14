@@ -231,44 +231,63 @@ const ToastGrid = () => {
     }
 
 
-    //console.log(gridArr);
+    // const testArra = receptionData.map((data, index) => 
+    //   data.item_name
+    // )
+
+
+    //const testArr = gridArr.filter((element) => )
+
     
+    //console.log(testArr);
 
 
-    const newArray = receptionData.filter(
-      (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
-    ).map( (data) => { return { text: data.part_name, value: data.part_name }} )
+    // for(let i=0; i<gridArr.length; i++) {
+    //   const a = receptionData.filter((data) => {
+    //     data.item_name === gridArr[i].itemName
+    //   }
+        
+    //   )
+    //   console.log(a)
+    // }
 
 
-    const contents = gridArr.map((data) =>  
-      ({
+    // const map = gridArr.map((element) => 
+    //   element.itemName
+    // )
+    const contents = [];
+    for(let i=0; i<gridArr.length; i++) {
+  
+      let a = receptionData.filter((data) => 
+        data.item_name === gridArr[i].itemName
+      )
+      console.log(a);
+      contents.push({
         sell_master_id: 1,
-        item_seq_id: 1,
-        sell_count: parseInt(data.amount),
-        normar_price: data.normalPrice,
-        real_sell_price: parseInt(data.discountPrice),
-        discount: parseFloat(data.discount),
+        item_seq_id: a[0].item_seq_id,
+        sell_count: parseInt(gridArr[i].amount),
+        normar_price: gridArr[i].normalPrice,
+        real_sell_price: parseInt(gridArr[i].discountPrice),
+        discount: parseFloat(gridArr[i].discount),
       })
-    );
-
+      
+    }
+    
+    // const contents = gridArr.map((data, index) =>  
+    //   ({
+    //     sell_master_id: 1,
+    //     item_seq_id: a[index].item_seq_id,
+    //     sell_count: parseInt(data.amount),
+    //     normar_price: data.normalPrice,
+    //     real_sell_price: parseInt(data.discountPrice),
+    //     discount: parseFloat(data.discount),
+    //   })
+    // );
 
     console.log(contents);
    
-    
-
-    // const contents = {
-    //   price: 5000,
-    //   item_seq_id: 9,
-    //   vendor_seq_id: 3
-    // }
-  
-    console.log("asf");
-    //return;
-
     dispatch(receptions.addReceptionPriceMiddleware(contents));
 
-
-    
     
   }
 
