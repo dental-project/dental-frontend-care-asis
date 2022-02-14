@@ -96,10 +96,8 @@ const ToastGrid = () => {
 
   for(let i=0; i<newArray.length; i++) {
     something[newArray[i].value] = receptionData.filter( (data) => 
-           data.part_name === newArray[i].value 
-         ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
-      
-   
+      data.part_name === newArray[i].value 
+    ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
   }
 
   // for(let i=0; i<newArray.length; i++) {
@@ -233,11 +231,16 @@ const ToastGrid = () => {
     
     } else if(e.changes[0].columnName === "discountPrice") {
 
-      if(regNumber.test(gridArr[rowId].discountPrice) === false) return alert("정수만 입력 가능합니다.");
-      if(parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) return alert("할인금액이 정상가보다 금액이 큽니다.");
-
+      if(regNumber.test(gridArr[rowId].discountPrice) === false) {
+        resetColumn(rowId);
+        return alert("정수만 입력 가능합니다.");
+      }
+      if(parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) {
+        resetColumn(rowId);
+        return alert("할인금액이 정상가보다 금액이 큽니다.");
+      }
       setColumnValue(rowId, "finalPrice", (gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice)));
-      setColumnValue(rowId, "discount", (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice * 100).toFixed(1) + "%");
+      setColumnValue(rowId, "discount", (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice * 100).toFixed(2) + "%");
      
     }
     
