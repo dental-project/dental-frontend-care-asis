@@ -47,16 +47,16 @@ const ToastGrid = () => {
 
   
 
-  const [partList, setPartList] = useState([]);
+  //const [partList, setPartList] = useState([]);
  
-  for(let i=0; i<receptionData.length; i++) {
+  //for(let i=0; i<receptionData.length; i++) {
     // setPartList([
     //   ...partList,
     //   { text: receptionData[i].part_name, value: receptionData[i].part_name }
     // ])
     //partList.push({ text: receptionData[i].part_name, value: receptionData[i].part_name })
   
-  }
+  //}
   
   // receptionData.map((data) => setPartList(
   //   [
@@ -107,8 +107,6 @@ const ToastGrid = () => {
   //       data.part_name === partList[i].value 
   //     ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
   // }
-
-  console.log(something);
 
 //  const twoDepthData = {
 //     'Removal App': [
