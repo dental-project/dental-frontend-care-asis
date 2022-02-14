@@ -270,6 +270,7 @@ const ToastGrid = () => {
   
 
   const handleAppendRow = () => {
+
     gridRef.current.getInstance().appendRow({});
   };
 
@@ -281,8 +282,13 @@ const ToastGrid = () => {
 
 
     const gridArr = gridRef.current.getInstance().getData();
-    
+
+    console.log(gridArr);
+
     for(let i=0; i<gridArr.length; i++) {
+
+      console.log(i);
+
       if(gridArr[i].partName == null || gridArr[i].partName == "") {
         return alert((i+1) + "번째 행 파트명을 입력하세요.");
       } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
@@ -292,30 +298,23 @@ const ToastGrid = () => {
       } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice == "") {
         return alert((i+1) + "번째 행 할인금액을 입력하세요.");
       }
-   
+    }
+
       const contents = {
         price: 5000,
         item_seq_id: 9,
         vendor_seq_id: 3
       }
    
-      console.log(gridArr);
+      console.log("asf");
       return;
 
       dispatch(receptions.addReceptionPriceMiddleware(contents));
 
 
-    }
+    
     
   }
-
-
-  const onClick = (e) => {
-    //setRowIndex(e.rowKey);
-    //console.log(e);
-  }
-  
-
 
   return(
     <>
@@ -330,9 +329,6 @@ const ToastGrid = () => {
         virtualScrolling={true}
         heightResizable={true}
         rowHeaders={['rowNum']}
-
-        onClick={onClick}
-
         onAfterChange={onChange}
       />
 
