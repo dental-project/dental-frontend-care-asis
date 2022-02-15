@@ -4,29 +4,8 @@ import Grid from "@toast-ui/react-grid";
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { receptions } from 'modules/receptions';
-import { render } from "react-dom";
-import { createNoSubstitutionTemplateLiteral } from "typescript";
 
-class RemoveButtonRenderer {
-  element;
-
-  constructor(props) {
-    this.element = document.createElement("div");
-
-    const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
-    const { rowKey } = props;
-    const seq_id = props.grid.store.data.rawData[rowKey].seq_id;
-
-    render(
-      <Button variant="outlined" color="secondary" onClick={() => onRemoveButtonClicked(seq_id)}>삭제</Button>,
-      this.element
-    );
-  }
-
-  getElement() {
-    return this.element;
-  }
-}
+import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
 
 const ToastGrid = () => {
 
@@ -59,9 +38,15 @@ const ToastGrid = () => {
     ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
   }
 
-  const onUpdateButtonClicked = () => {
-    
+  const onRemoveButtonClicked = (rowKey) => {
+    gridRef.current.getInstance().removeRow({rowKey});
+    console.log(rowKey);
+
+    //gridRef.current.getInstance().appendRow({});
+
+    //console.log(gridRef.current.getInstance());
   };
+
 
   const columns = [
     {
@@ -134,9 +119,9 @@ const ToastGrid = () => {
       header: "삭제",
       align: "center",
       renderer: {
-        type: RemoveButtonRenderer,
+        type: RowRemoveRenderer,
         options: {
-          onUpdateButtonClicked
+          onRemoveButtonClicked
         }
       }
     },
@@ -292,7 +277,7 @@ const ToastGrid = () => {
   }
 
   return(
-    <>
+    <div>
      <button onClick={handleAppendRow}>행추가</button>
      <button onClick={save}>저장</button>
       <Grid
@@ -306,7 +291,7 @@ const ToastGrid = () => {
         onAfterChange={onChange}
       />
 
-    </>
+</div>
   );
 }
 

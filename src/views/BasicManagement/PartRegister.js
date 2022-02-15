@@ -15,16 +15,12 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-
-
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
 import { parts } from 'modules/parts';
 
 import { useDispatch, useSelector } from 'react-redux';
-
-
 
 import PartModalContainer from "containers/PartModalContainer";
 

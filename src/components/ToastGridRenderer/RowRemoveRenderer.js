@@ -11,10 +11,9 @@ class RemoveButtonRenderer {
 
     const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
     const { rowKey } = props;
-    const seq_id = props.grid.store.data.rawData[rowKey].seq_id;
     
     render(
-      <IconButton size="small" color="secondary" onClick={() => onRemoveButtonClicked(seq_id)}>
+      <IconButton size="small" color="secondary" onClick={() => onRemoveButtonClicked(rowKey)}>
         <HighlightOffRoundedIcon/>
       </IconButton>,
       this.element

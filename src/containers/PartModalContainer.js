@@ -77,8 +77,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
           ? null
           : (
               <>
-                
-
                 <Controller
                   name="partName"
                   control={control}
