@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import IconButton from '@material-ui/core/IconButton';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
 class UpdateRenderer {
@@ -71,9 +70,7 @@ class UpdateRenderer {
     }
 
     render(
-      <IconButton size="small" color="primary" onClick={() => onUpdateButtonClicked(obj)}>
-        <EditOutlinedIcon />
-      </IconButton>,
+      <EditOutlinedIcon size="small" color="primary" onClick={() => onUpdateButtonClicked(obj)} />,
       this.element
     );
   }

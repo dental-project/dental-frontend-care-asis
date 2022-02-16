@@ -19,7 +19,11 @@
 
  import { receptions } from 'modules/receptions';
  import { dentals } from 'modules/dentals';
- import ToastGrid from 'components/ToastGrid/ToastGrid';
+
+
+ import "tui-grid/dist/tui-grid.css";
+ import ToastGrid from "@toast-ui/react-grid";
+ import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
 
 
  const useStyles = makeStyles((theme) => ({
@@ -83,21 +87,27 @@
  const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }) => {
     
     const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
-    
-    const [spacing, setSpacing] = React.useState(2);
-   
+    const gridRef = React.createRef();
+    const { handleSubmit, control } = useForm();
     const dispatch = useDispatch();
     const dentalData = useSelector(({ dental }) => dental.data);
-    //const receptionData = useSelector(({ reception }) => reception.data);
-
+    const receptionData = useSelector(({ reception }) => reception.data);
 
     useEffect(() => {
       dispatch(dentals.getDentalMiddleware());
     }, [] );
 
-    //console.log(receptionData);
+    const handleAppendRow = () => {
+      gridRef.current.getInstance().appendRow({});
+    };
 
+    const onRemoveButtonClicked = (rowKey) => {
+      gridRef.current.getInstance().removeRow(rowKey);
+    };
+
+    const removeReceptionDetail = (index) => {
+  
+    }
 
     const filterVendorName = createFilterOptions({
       matchFrom: 'start',
@@ -112,10 +122,113 @@
     const vendorNameAuto = [];
     dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
 
-    //const partNameAuto = [];
-    //partData.map( (data) => partNameAuto.push({ part_name: data.part_name }))
 
+
+
+
+
+    const newArray = receptionData.filter(
+      (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
+    ).map( (data) => { return { text: data.part_name, value: data.part_name }} )
+  
+    const deduplication = (name, val) => {
+      typeof(Storage) !== 'undefined' && localStorage.setItem(name, JSON.stringify(val));
+    }
     
+    deduplication('name',newArray)
+  
+    var something = {};
+  
+    for(let i=0; i<newArray.length; i++) {
+      something[newArray[i].value] = receptionData.filter( (data) => 
+        data.part_name === newArray[i].value 
+      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
+    }
+
+
+
+
+
+
+    const columns = [
+      {
+        header: '파트명 (선택)',
+        name: 'partName',
+        editor: {
+          type: 'select',
+          options: {
+            listItems: newArray
+          }
+        },
+        validation: { required: true },
+        relations: [
+          {
+            targetNames: ['itemName'],
+            listItems({ value }) {
+              return something[value];
+            },
+            disabled({ value }) {
+              return !value;
+            }
+          }
+        ]
+      },
+      {
+        header: '장치명 (선택)',
+        name: 'itemName',
+        editor: {
+          type: 'select',
+          options: {
+            listItems: []
+          }
+        },
+        validation: { required: true }
+      },
+      {
+        header: '단가',
+        name: 'unitPrice',
+        validation: { required: true }
+      },
+      {
+        header: '수량 (입력)',
+        name: 'amount',
+        editor: 'text',
+        validation: { required: true }
+      },
+      {
+        header: '정상가',
+        name: 'normalPrice',
+        validation: { required: true }
+      },
+      {
+        header: '할인금액 (입력)',
+        name: 'discountPrice',
+        editor: 'text',
+        validation: { required: true }
+      },
+      {
+        header: '최종금액',
+        name: 'finalPrice',
+        validation: { required: true }
+      },
+      {
+        header: '할인율 ',
+        name: 'discount',
+        validation: { required: true }
+      },
+      {
+        name: "update",
+        header: "삭제",
+        align: "center",
+        renderer: {
+          type: RowRemoveRenderer,
+          options: {
+            onRemoveButtonClicked
+          }
+        }
+      },
+      
+    ];
 
     const onSubmit = (data) => {
 
@@ -148,6 +261,40 @@
     
         dispatch(receptions.addReceptionMiddleware(contents));
 
+        const gridArr = gridRef.current.getInstance().getData();
+  
+        for(let i=0; i<gridArr.length; i++) {
+          if(gridArr[i].partName == null || gridArr[i].partName == "") {
+            return alert((i+1) + "번째 행 파트명을 선택하세요.");
+          } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
+            return alert((i+1) + "번째 행 장치명을 선택하세요.");
+          } else if(gridArr[i].amount == null || gridArr[i].amount == "") {
+            return alert((i+1) + "번째 행 수량을 입력하세요.");
+          } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice == "") {
+            return alert((i+1) + "번째 행 할인금액을 입력하세요.");
+          }
+        }
+    
+        const priceContents = [];
+        for(let i=0; i<gridArr.length; i++) {
+      
+          let a = receptionData.filter((data) => 
+            data.item_name === gridArr[i].itemName
+          )
+    
+          priceContents.push({
+            sell_master_id: 1,
+            item_seq_id: a[0].item_seq_id,
+            sell_count: parseInt(gridArr[i].amount),
+            normar_price: gridArr[i].normalPrice,
+            real_sell_price: parseInt(gridArr[i].discountPrice),
+            discount: parseFloat(gridArr[i].discount),
+          })
+          
+        }
+        
+        dispatch(receptions.addReceptionPriceMiddleware(priceContents));
+
       } else if(modalType === "접수수정") {
        
       } else if(modalType === "삭제") {
@@ -156,21 +303,70 @@
 
     }
 
-
+    const onChange = (e) => {
+   
+      const gridArr = gridRef.current.getInstance().getData();
   
-
-
-    
-    
-    // const [receptionDetailData, setReceptionDetailData] = useState([0]);
-
-    // const addReceptionDetail = () => {
-    //   setReceptionDetailData([...receptionDetailData, 0])
-    // }
-
-    const removeReceptionDetail = (index) => {
-      //console.log(index);
-      //setReceptionDetailData([receptionDetailData.filter => receptionDetailData.length])
+      let rowId = e.changes[0].rowKey;
+      var regNumber = /^[0-9]*$/;
+  
+      if(e.changes[0].columnName === "partName") {
+      
+        resetColumn(rowId,"gridSelect");
+  
+      } else if(e.changes[0].columnName === "itemName") {
+       
+        let price = receptionData.filter( (data) => 
+          data.part_name === gridArr[rowId].partName && data.item_name === gridArr[rowId].itemName 
+        );
+  
+        resetColumn(rowId,"gridSelect");
+        setColumnValue(rowId, "unitPrice", price[0].unit_price);
+  
+      } else if(e.changes[0].columnName === "amount") {
+        
+        if(regNumber.test(gridArr[rowId].amount) === false) return alert("정수만 입력 가능합니다.");
+  
+        resetColumn(rowId);
+        setColumnValue(rowId, "normalPrice", (gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)));
+      
+      } else if(e.changes[0].columnName === "discountPrice") {
+  
+        if(regNumber.test(gridArr[rowId].discountPrice) === false) {
+          resetColumn(rowId);
+          return alert("정수만 입력 가능합니다.");
+        }
+        if(parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) {
+          resetColumn(rowId);
+          return alert("할인금액이 정상가보다 금액이 큽니다.");
+        }
+        setColumnValue(rowId, "finalPrice", (gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice)));
+        setColumnValue(rowId, "discount", (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice * 100).toFixed(2) + "%");
+       
+      }
+      
+    };
+  
+    const setColumnValue = (rowId, columnName, value) => {
+      gridRef.current.getInstance().setValue(rowId, columnName, value, false);
+    }
+  
+    const resetColumn = (rowId, type) => {
+  
+      if(type === "vendorSelect") {
+        gridRef.current.getInstance().setValue(rowId,'partName',"",false);
+        gridRef.current.getInstance().setValue(rowId,'itemName',"",false);
+      }
+      if(type === "gridSelect") {
+        gridRef.current.getInstance().setValue(rowId,'unitPrice',"",false);
+        gridRef.current.getInstance().setValue(rowId,'amount',"",false);
+        gridRef.current.getInstance().setValue(rowId,'normalPrice',"",false);      
+      } 
+  
+      gridRef.current.getInstance().setValue(rowId,'discountPrice',"",false);
+      gridRef.current.getInstance().setValue(rowId,'finalPrice',"",false);
+      gridRef.current.getInstance().setValue(rowId,'discount',"",false);
+  
     }
 
 
@@ -182,7 +378,7 @@
           ? null
           : (
             <>
-              <Grid container spacing={1} >
+              <Grid container>
                 <Grid item xs={4}>
                   <Controller
                     name="receiptDate"
@@ -197,7 +393,7 @@
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
-                        //InputLabelProps={{ shrink: true, }}
+                        InputLabelProps={{ shrink: true, }}
                       />
                     )}
                     rules={{ 
@@ -219,7 +415,7 @@
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
-                        //InputLabelProps={{ shrink: true, }}
+                        InputLabelProps={{ shrink: true, }}
                       />
                     )}
                     rules={{ 
@@ -239,6 +435,7 @@
                         defaultValue="2022-01-11"
                         defaultValue={receptionObj.deliveryDate?receptionObj.deliveryDate:""}
                         onChange={onChange}
+                        InputLabelProps={{ shrink: true, }}
                       />
                     )}
                     rules={{ 
@@ -263,7 +460,7 @@
                       if(newValue !== null) {
                           const index = dentalData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
                           const vendorSeqId = dentalData[index].seq_id
-                         
+                          resetColumn("vendorSelect");
                           dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                           
                       }
@@ -389,133 +586,9 @@
 
                 <Grid item xs={2}></Grid>  
 
-                {/* { 
-                  receptionDetailData.map( (data, index) => {
-                    return (
-                      <Grid container spacing={1} key={index}>
-                        <Grid item xs={2}>
-                          <Autocomplete
-                            className={classes.textField}
-                            name="partName"
-                            control={control}
-                            options={partNameAuto}
-                            getOptionLabel={(option) => option.part_name}
-                            filterOptions={filterPartName}
-                            onChange={(event, newValue) => { 
-                              const partNameArr = newValue.part_name.split('/');
-
-                              if(newValue === null) {
-                                //setAutoVendorSeqId("");
-                              } else {
-                                  const index = partData.findIndex(obj => obj.part_name === partNameArr[0]);
-                                  const partSeqId = partData[index].seq_id;
-
-                                  console.log(partSeqId);
-                                  dispatch(receptionDetails.getSelectItemMiddleware(partSeqId));
-                                  //dispatch(receptionDetails.getSelectItemMiddleware(partSeqId));
-                                  
-                              }
-                            }}
-                            renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-                          /> 
-                        </Grid>    
-                        <Grid item xs={2}>
-                          <Autocomplete
-                            className={classes.textField}
-                            name="itemName"
-                            control={control}
-                            options={vendorNameAuto}
-                            getOptionLabel={(option) => option.vendor_name}
-                            filterOptions={filterPartName}
-                            renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
-                          />                  
-                        </Grid>  
-
-                        <Grid item xs={2}>
-                          <Controller
-                            name="price"
-                            control={control}
-                            render={({ field: { onChange, value }, fieldState: { error } }) => (
-                              <TextField
-                                className={classes.textField} 
-                                label="단가"
-                                variant="outlined"
-                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                              />
-                            )}
-                            rules={{ 
-                              required: "단가를 입력하세요."
-                            }}
-                        />
-                        </Grid> 
-
-                        <Grid item xs={2}>
-                          <Controller
-                            name="amount"
-                            control={control}
-                            render={({ field: { onChange, value }, fieldState: { error } }) => (
-                              <TextField
-                                className={classes.textField} 
-                                label="수량"
-                                variant="outlined"
-                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                              />
-                            )}
-                            rules={{ 
-                              required: "수량을 입력하세요."
-                          }}
-                        />
-                        </Grid>    
-
-                        <Grid item xs={2}>
-                          <Controller
-                            name="discount"
-                            control={control}
-                            render={({ field: { onChange, value }, fieldState: { error } }) => (
-                              <TextField
-                                className={classes.textField} 
-                                label="할인율 (%)"
-                                variant="outlined"
-                                //defaultValue={itemObj.itemName?itemObj.itemName:""}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                              />
-                            )}
-                            rules={{ 
-                              required: "할인율을 입력하세요."
-                          }}
-                        />
-                        </Grid>
-
-                        
-
-                        <Grid item xs={1}>
-                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
-                            삭제
-                          </Button>
-                        </Grid> 
-                      
-                      </Grid>
-                    );
-                  })
-                } */}
-                
               </Grid>
 
-              {/* <Grid item xs={12}>
-                  <Button variant="outlined" color="primary" onClick={addReceptionDetail} style={{width: "100%"}}>
-                    +
-                  </Button>
-                </Grid> */}
-
-              <Grid container justifyContent="center" spacing={spacing} style={{marginTop: "30px", fontSize: "30px"}}>
+              <Grid container justifyContent="center" style={{marginTop: "30px", fontSize: "30px"}}>
                   {"image.png"}
               </Grid>
 
@@ -525,6 +598,25 @@
            </>
           )
         }
+
+
+        <Grid item xs={12}>
+          
+          <Button className={classes.button}  color="info" round  onClick={handleAppendRow}>그리드 행추가</Button>
+          {/* <Button className={classes.button}  color="info" round  onClick={save}>저장</Button> */}
+          <ToastGrid
+            ref={gridRef}
+            columns={columns}
+            rowHeight={20}
+            bodyHeight={200}
+            virtualScrolling={true}
+            heightResizable={true}
+            rowHeaders={['rowNum']}
+            onAfterChange={onChange}
+          />
+          
+        </Grid>
+
           <Button
             type="submit"
             className={classes.button} 
@@ -534,13 +626,6 @@
             {modalType}
           </Button>
         </form>
-
-        <Grid item xs={12}>
-          <ToastGrid
-            //partData={partData}
-          >
-          </ToastGrid>
-        </Grid>
 
         <Button
           className={classes.button} 

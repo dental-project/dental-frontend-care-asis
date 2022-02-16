@@ -24,6 +24,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PartModalContainer from "containers/PartModalContainer";
 
+
+import "tui-grid/dist/tui-grid.css";
+import ToastGrid from "@toast-ui/react-grid";
+
 const useStyles = makeStyles((theme) => ({
     grid: {
       padding: theme.spacing(1)
@@ -59,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 function PartRegister() {
 
   const classes = useStyles();
+  const gridRef = React.createRef();
   //const { watch,  handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
@@ -135,21 +140,13 @@ function PartRegister() {
     }
   ]);
 
+        
 
-
-  const [value, setValue] = useState('');
-
-  const [searchData, setSearchData] = useState(["전체"]);
-
-  //const result = partData.filter(v => v.part_name === value);
-
-  //partData.filter(v => console.log(v));
-
-  //console.log(partData);
-  //console.log([searchData]);
+  //const [value, setValue] = useState('');
 
   const onClickSearch = (e) => {
-    part.data.filter(v => v.part_name === value.part_name ? setSearchData(v) : null );
+    console.log(gridRef.current.getInstance());
+    gridRef.current.getInstance().filter('name', {part_name:"Removale App"});
   }
 
   return (
@@ -177,10 +174,10 @@ function PartRegister() {
                   getOptionLabel={(option) => option.part_name}
                   filterOptions={filterOptions}
                   style={{float: "left", width: "300px"}}
-                  onChange={(event, newValue) => {
-                    setValue(newValue);
-                    console.log(newValue);
-                  }}
+                  // onChange={(event, newValue) => {
+                  //   setValue(newValue);
+                  //   console.log(newValue);
+                  // }}
                   getOptionSelected={(option, value) => {
                     return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                   }}
@@ -196,13 +193,11 @@ function PartRegister() {
                 </Button>
               </Grid>                     
 
-              <BasicGrid 
-                type={"part"}
+              <ToastGrid 
+                ref={gridRef}
                 columns={columns}
-                data={
-                  //value.part_name === "전체" ? partData : [searchData]
-                  part.data
-                }
+                data={part.data}
+                
                 //hoc={highFuc}
               />
 

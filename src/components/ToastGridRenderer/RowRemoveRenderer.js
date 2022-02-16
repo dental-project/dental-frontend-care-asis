@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import IconButton from '@material-ui/core/IconButton';
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 
 class RemoveButtonRenderer {
@@ -13,9 +12,7 @@ class RemoveButtonRenderer {
     const { rowKey } = props;
     
     render(
-      <IconButton size="small" color="secondary" onClick={() => onRemoveButtonClicked(rowKey)}>
-        <HighlightOffRoundedIcon/>
-      </IconButton>,
+      <HighlightOffRoundedIcon size="small" color="secondary" onClick={() => onRemoveButtonClicked(rowKey)} />,
       this.element
     );
   }

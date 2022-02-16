@@ -4,6 +4,7 @@ import Grid from "@toast-ui/react-grid";
 import TuiGrid from 'tui-grid';
 
 const BasicGrid = ({
+ 
   data,
   columns,
   type,
@@ -58,6 +59,7 @@ const BasicGrid = ({
  
   return(
     <Grid
+      //ref={ref}
       data={data}
       columns={columns}
       rowHeaders={['rowNum']}
