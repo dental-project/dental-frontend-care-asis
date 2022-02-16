@@ -42,27 +42,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
  const FullModal = ({  open, close, children }) => {
    const classes = useStyles();
-//   const { watch,  handleSubmit, control } = useForm();
-
-//   const [spacing, setSpacing] = React.useState(2);
-   //const [open, setOpen] = React.useState(false);
-
-//   const filterOptions = createFilterOptions({
-//     matchFrom: 'start',
-//     stringify: (option) => option.title,
-//   });
-
-
-
-
-//   const dash1 = [ { title: "마포한그루" }, { title: "연세유라인" }, { title: "미소유" }, { title: "연세미엘치과" }, { title: "연세키즈사랑" }, { title: "연세윤치과" }, 
-//                   { title: "군포 에미담치과" }, { title: "연세키즈투틴치과" }, { title: "중구강약안면외과" }, { title: "라임프로" }, { title: "연세후" }, 
-//                   { title: "스노우화이트" }, { title: "과천 연세스위트" }, { title: "연세두리치과" }, { title: "서울늘편한" }, { title: "이바른치과" }, { title: "약수 연세치과" }, ];
-
-//   const dash2 = [ { title: "파트명1" }, { title: "파트명2" }, { title: "파트명3" }, { title: "파트명4" }, { title: "파트명5" }, { title: "파트명6" }, { title: "파트명7" } ];
-//   const dash3 = [ { title: "CRS" }, { title: "장치명1" }, { title: "장치명2" }, { title: "장치명3" }, { title: "장치명4" }, { title: "장치명5" } ];
-
-  console.log(children);
 
   return (
     <>

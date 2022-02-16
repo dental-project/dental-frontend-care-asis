@@ -78,10 +78,10 @@
     },
     button: {
       width: "100%",
-      background: '#26c6da',
       marginTop: '20px',
     }
-  }));
+  }
+));
   
 
  const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }) => {
@@ -227,7 +227,6 @@
           }
         }
       },
-      
     ];
 
     const onSubmit = (data) => {
@@ -371,7 +370,7 @@
 
 
     return (
-      <Modal open={open} modalType={modalType}>
+      <Modal open={open} modalType={modalType} screen={true}>
         <form onSubmit={handleSubmit(onSubmit)}>
         { 
           modalType === "삭제"
