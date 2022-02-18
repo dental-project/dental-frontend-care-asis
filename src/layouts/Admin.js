@@ -84,7 +84,7 @@ export default function Admin({ ...rest }) {
         routes={routes}
         logoText={"Dental Clinic"}
         logo={toothImg}
-        image={image}
+        //image={image}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={color}

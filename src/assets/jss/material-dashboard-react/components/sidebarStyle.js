@@ -296,6 +296,38 @@ const sidebarStyle = (theme) => ({
       bottom: "13px",
     },
   },
+
+
+  cssPys03g: {
+    color: "rgba(0, 0, 5, 0.54)",
+    flexShrink: 0,
+    minWidth: "2rem",
+    minHeight: "2rem",
+    borderRadius: "0.5rem",
+    display: "grid",
+    placeItems: "center",
+    boxShadow: "rgb(20 20 20 / 30%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(20 20 20 / 7%) 0rem 0.125rem 0.25rem -0.0625rem",
+    transition: "margin 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    background: "rgb(23, 193, 232)"
+  },
+
+
+  cssPys04g: {
+    color: "rgba(0, 0, 5, 0.54)",
+    flexShrink: 0,
+    minWidth: "2rem",
+    minHeight: "2rem",
+    borderRadius: "0.5rem",
+    display: "grid",
+    placeItems: "center",
+    boxShadow: "rgb(20 20 20 / 30%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(20 20 20 / 7%) 0rem 0.125rem 0.25rem -0.0625rem",
+    transition: "margin 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    background: "rgb(233, 236, 239)"
+  }
+
+
+
+
 });
 
 export default sidebarStyle;

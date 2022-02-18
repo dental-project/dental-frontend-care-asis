@@ -5,11 +5,32 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 
 // core components
-import Grid from '@material-ui/core/Grid';
+// import Grid from '@material-ui/core/Grid';
+// import Card from "components/Card/Card.js";
+// import CardHeader from "components/Card/CardHeader.js";
+// import CardBody from "components/Card/CardBody.js";
+// import Button from "components/CustomButtons/Button.js";
+
+
+
+// core components
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
+import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
-import Button from "components/CustomButtons/Button.js";
+import CardFooter from "components/Card/CardFooter.js";
+
+
+
+
+
+
+
+
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
@@ -30,6 +51,8 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 
 import { receptions } from 'modules/receptions';
 import { useDispatch, useSelector } from 'react-redux';
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +85,35 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     width: "100%"
-  }
+  },
+
+  cardCategoryWhite: {
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0",
+    },
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF",
+    },
+  },
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1",
+    },
+  },
 }));
 
 export default function ReceptionRegister() {
@@ -207,140 +258,238 @@ export default function ReceptionRegister() {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} className={classes.grid}>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button} 
-                color="info" 
-                round
-                onClick={(e) => receptionModalOpen(e)}
-              >추가
-              </Button>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
+              <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
-
-              <form className={classes.container} noValidate>
-                <Grid item xs={4} className={classes.grid} style={{float: "left"}}>
-                  <TextField
-                    id="date"
-                    label="접수일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    style={{width: "45%"}}
-                    InputLabelProps={{
-                      shrink: true,
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={5}>
+                  <CustomInput
+                    labelText="Company (disabled)"
+                    id="company-disabled"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      disabled: true,
                     }}
                   />
-                
-                  <TextField
-                    id="date"
-                    label="완성일자"
-                    type="date"
-                    defaultValue="2022-01-12"
-                    className={classes.textField}
-                    style={{width: "45%"}}
-                    InputLabelProps={{
-                      shrink: true,
+                </GridItem>
+                <GridItem xs={12} sm={12} md={3}>
+                  <CustomInput
+                    labelText="Username"
+                    id="username"
+                    formControlProps={{
+                      fullWidth: true,
                     }}
                   />
-               
-                </Grid>
-
-                <Grid item xs={6} className={classes.grid} style={{float: "left"}}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    style={{float: "left", width: "200px", marginLeft: "20px"}}           
-                    renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                </GridItem>
+                <GridItem xs={12} sm={12} md={4}>
+                  <CustomInput
+                    labelText="Email address"
+                    id="email-address"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
                   />
-
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={(option) => option.title}
-                    filterOptions={filterOptions}
-                    style={{float: "left", width: "200px"}}
-                    renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    labelText="First Name"
+                    id="first-name"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
                   />
-
-                  <Button
-                    type="submit"
-                    color="primary" 
-                    round
-                    style={{float: "left", width: "100px"}}
-                  >검색
-                  </Button>
-                </Grid>   
-                
-                <Grid item xs={2} className={classes.grid} style={{float: "right"}}>
-                  <Button
-                    color="danger" 
-                    round
-                    style={{width: "100%"}}
-                    onClick={(e) => handleClickOpenPrint(e)}
-                  >출력
-                  </Button>
-                </Grid>
-              </form>
-           
-              <BasicGrid 
-                type={"reception"}
-                columns={columns}
-                data={reception.data}
-              />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    labelText="Last Name"
+                    id="last-name"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={4}>
+                  <CustomInput
+                    labelText="City"
+                    id="city"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={4}>
+                  <CustomInput
+                    labelText="Country"
+                    id="country"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={4}>
+                  <CustomInput
+                    labelText="Postal Code"
+                    id="postal-code"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  
+                  <CustomInput
+                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
+                    id="about-me"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 5,
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
             </CardBody>
+            <CardFooter>
+              <Button color="primary">Update Profile</Button>
+            </CardFooter>
           </Card>
-        </Grid>
-      </Grid>
-
-      <ReceptionModalContainer      
-        modalType={modalType}
-        open={openReceptionAddModal}
-        close={handleReceptionModalClose}
-        seqId={seqId}
-        receptionObj={receptionObj}
-      />
-
-      <PrintModalContainer
-        open={openPrint}
-        close={handleClosePrint}
-      />
-
-      {/* <Modal      
-        type={"dash"}         
-        modalType={registerType}
-        rowSeqId={rowSeqId}
-        rowValue={rowItemName}
-        open={openDashAddModal}
-        close={handleDashModalClose}
-      /> */}
-
+        </GridItem>
+        
+      </GridContainer>
+    
+    
     </>
+
+
+
+
+
+
+
+
+
+
+    // <>
+    //   <Grid container>
+    //     <Grid item xs={12} className={classes.grid}>
+    //       <Card>
+    //         <CardHeader>
+    //           <Button
+    //             type="submit"
+    //             className={classes.button} 
+    //             color="info" 
+    //             round
+    //             onClick={(e) => receptionModalOpen(e)}
+    //           >추가
+    //           </Button>
+    //         </CardHeader>
+    //         <CardBody>
+
+    //           <form className={classes.container} noValidate>
+    //             <Grid item xs={4} className={classes.grid} style={{float: "left"}}>
+    //               <TextField
+    //                 id="date"
+    //                 label="접수일자"
+    //                 type="date"
+    //                 defaultValue="2022-01-11"
+    //                 className={classes.textField}
+    //                 style={{width: "45%"}}
+    //                 InputLabelProps={{
+    //                   shrink: true,
+    //                 }}
+    //               />
+                
+    //               <TextField
+    //                 id="date"
+    //                 label="완성일자"
+    //                 type="date"
+    //                 defaultValue="2022-01-12"
+    //                 className={classes.textField}
+    //                 style={{width: "45%"}}
+    //                 InputLabelProps={{
+    //                   shrink: true,
+    //                 }}
+    //               />
+               
+    //             </Grid>
+
+    //             <Grid item xs={6} className={classes.grid} style={{float: "left"}}>
+    //               <Autocomplete
+    //                 className={classes.grid}
+    //                 options={auto1}
+    //                 getOptionLabel={(option) => option.title}
+    //                 filterOptions={filterOptions}
+    //                 style={{float: "left", width: "200px", marginLeft: "20px"}}           
+    //                 renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+    //               />
+
+    //               <Autocomplete
+    //                 className={classes.grid}
+    //                 options={auto2}
+    //                 getOptionLabel={(option) => option.title}
+    //                 filterOptions={filterOptions}
+    //                 style={{float: "left", width: "200px"}}
+    //                 renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
+    //               />
+
+    //               <Button
+    //                 type="submit"
+    //                 color="primary" 
+    //                 round
+    //                 style={{float: "left", width: "100px"}}
+    //               >검색
+    //               </Button>
+    //             </Grid>   
+                
+    //             <Grid item xs={2} className={classes.grid} style={{float: "right"}}>
+    //               <Button
+    //                 color="danger" 
+    //                 round
+    //                 style={{width: "100%"}}
+    //                 onClick={(e) => handleClickOpenPrint(e)}
+    //               >출력
+    //               </Button>
+    //             </Grid>
+    //           </form>
+           
+    //           <BasicGrid 
+    //             type={"reception"}
+    //             columns={columns}
+    //             data={reception.data}
+    //           />
+    //         </CardBody>
+    //       </Card>
+    //     </Grid>
+    //   </Grid>
+
+    //   <ReceptionModalContainer      
+    //     modalType={modalType}
+    //     open={openReceptionAddModal}
+    //     close={handleReceptionModalClose}
+    //     seqId={seqId}
+    //     receptionObj={receptionObj}
+    //   />
+
+    //   <PrintModalContainer
+    //     open={openPrint}
+    //     close={handleClosePrint}
+    //   />
+
+    // </>
   );
 }
-
-// const mapStateToProps = ({subscribers}) => {
-
-//   return {
-//     count: subscribers.count
-//   }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addSubscriber: () => dispatch(addSubscriber())
-//   }
-// }
-// ==>
-
-// const mapDispatchToProps = {
-//   addSubscriber: (number) => addSubscriber(number)
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

@@ -27,6 +27,15 @@ import StarBorder from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles(styles);
 
+
+
+
+
+
+
+
+
+
 export default function Sidebar(props) {
   const classes = useStyles();
   let location = useLocation();
@@ -59,18 +68,31 @@ export default function Sidebar(props) {
       >
         <ListItem button >
           <ListItemIcon>
-            <AssignmentOutlinedIcon style={{ color: "#FFFFFF" }} />
+
+
+        <div className={classes.cssPys03g}>
+          <AssignmentOutlinedIcon fontSize="small" style={{ color: "#fff" }} />
+        </div>
+
+
+
+            
+
+
+
           </ListItemIcon>
-          <ListItemText primary="접수 리스트" style={{ color: "#FFFFFF" }} />
+          <ListItemText primary="접수 리스트" fontSize="small" style={{ color: "rgb(52, 71, 103)" }} />
         </ListItem>
       </NavLink>
       
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <StarsIcon style={{ color: "#FFFFFF" }} />
+        <div className={classes.cssPys04g}>
+          <StarsIcon style={{ color: "#000" }} />
+        </div>
         </ListItemIcon>
-        <ListItemText primary="기초관리" style={{ color: "#FFFFFF" }} />
-        {open ? <ExpandLess style={{ color: "#FFFFFF" }} /> : <ExpandMore style={{ color: "#FFFFFF" }} />}
+        <ListItemText primary="기초관리" style={{ color: "#000" }} />
+        {open ? <ExpandLess style={{ color: "#000" }} /> : <ExpandMore style={{ color: "#000" }} />}
       </ListItem>
         
       <NavLink
@@ -80,10 +102,10 @@ export default function Sidebar(props) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding style={{marginLeft: "20px"}}>
             <ListItem button className={classes.nested}>
-              <ListItemIcon style={{ color: "#FFFFFF" }}>
-                <StarBorder style={{ color: "#FFFFFF" }} />
+              <ListItemIcon style={{ color: "#000" }}>
+                <StarBorder style={{ color: "#000" }} />
               </ListItemIcon >
-              <ListItemText primary="파트등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="파트등록" style={{ color: "#000" }} />
             </ListItem>
           </List>
         </Collapse>
@@ -96,10 +118,10 @@ export default function Sidebar(props) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding style={{marginLeft: "20px"}}>
             <ListItem button className={classes.nested}>
-              <ListItemIcon style={{ color: "#FFFFFF" }}>
-                <StarBorder style={{ color: "#FFFFFF" }} />
+              <ListItemIcon style={{ color: "#000" }}>
+                <StarBorder style={{ color: "#000" }} />
               </ListItemIcon >
-              <ListItemText primary="장치등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="장치등록" style={{ color: "#000" }} />
             </ListItem>
           </List>
         </Collapse>
@@ -112,10 +134,10 @@ export default function Sidebar(props) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding style={{marginLeft: "20px"}}>
             <ListItem button className={classes.nested}>
-              <ListItemIcon style={{ color: "#FFFFFF" }}>
-                <StarBorder style={{ color: "#FFFFFF" }} />
+              <ListItemIcon style={{ color: "#000" }}>
+                <StarBorder style={{ color: "#000" }} />
               </ListItemIcon >
-              <ListItemText primary="치과등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="치과등록" style={{ color: "#000" }} />
             </ListItem>
           </List>
         </Collapse>
@@ -128,10 +150,10 @@ export default function Sidebar(props) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding style={{marginLeft: "20px"}}>
             <ListItem button className={classes.nested}>
-              <ListItemIcon style={{ color: "#FFFFFF" }}>
-                <StarBorder style={{ color: "#FFFFFF" }} />
+              <ListItemIcon style={{ color: "#000" }}>
+                <StarBorder style={{ color: "#000" }} />
               </ListItemIcon >
-              <ListItemText primary="단가등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="단가등록" style={{ color: "#000" }} />
             </ListItem>
           </List>
         </Collapse>
@@ -145,9 +167,9 @@ export default function Sidebar(props) {
       >
         <ListItem button >
           <ListItemIcon>
-            <PersonAddIcon style={{ color: "#FFFFFF" }} />
+            <PersonAddIcon style={{ color: "#000" }} />
           </ListItemIcon>
-          <ListItemText primary="유저 회원가입" style={{ color: "#FFFFFF" }} />
+          <ListItemText primary="유저 회원가입" style={{ color: "#000" }} />
         </ListItem>
       </NavLink>
 

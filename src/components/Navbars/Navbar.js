@@ -21,9 +21,11 @@ import styles from "assets/jss/material-dashboard-react/components/headerStyle.j
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
+ 
   const classes = useStyles();
   const routeName = useRouteName();
   const { color } = props;
+ 
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
