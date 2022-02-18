@@ -84,6 +84,11 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       console.log(data);
 
       if(modalType === "추가") {
+
+        if(typeNo === "") return alert("업태를 선택하세요");
+        if(sectorNo === "") return alert("업종을 선택하세요");
+        if(bankNo === "") return alert("은행을 선택하세요");
+
         const contents = {
           vendor_name: data.vendorName,
           ceo: data.ceo,
@@ -104,6 +109,10 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
       } else if(modalType === "치과수정") {
         
+        if(typeNo === "") return alert("업태를 선택하세요");
+        if(sectorNo === "") return alert("업종을 선택하세요");
+        if(bankNo === "") return alert("은행을 선택하세요");
+
         const contents = {
           seq_id: dentalObj.seqId,
           vendor_name: data.vendorName,

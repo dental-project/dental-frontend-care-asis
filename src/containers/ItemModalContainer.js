@@ -68,6 +68,9 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
     const onSubmit = (data) => {
 
       if(modalType === "추가") {
+
+        if(autoSeqId == "") return alert("파트명을 선택하세요.");
+
         const content = {
           part_seq_id: autoSeqId,
           item_name: data.itemName
@@ -76,6 +79,8 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
         dispatch(items.addItemMiddleware(content));
       } else if(modalType === "수정") {
 
+        if(autoSeqId == "") return alert("파트명을 선택하세요.");
+        
         const contents = {
           seq_id: itemObj.seqId,
           part_seq_id: autoSeqId,

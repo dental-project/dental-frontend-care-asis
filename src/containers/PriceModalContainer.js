@@ -105,6 +105,10 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
     const onSubmit = (data) => {
 
       if(modalType === "추가") {
+
+        if(autoVendorSeqId == "") return alert("거래처명을 선택하세요."); 
+        if(autoItemSeqId == "") return alert("단가를 선택하세요.");
+
         const content = {
           vendor_seq_id: autoVendorSeqId,
           item_seq_id: autoItemSeqId,
