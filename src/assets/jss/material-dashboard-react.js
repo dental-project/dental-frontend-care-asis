@@ -161,6 +161,11 @@ const roseBoxShadow = {
     ",.4)",
 };
 
+const sidebarBoxShadow = {
+  boxShadow:
+  "rgb(0 0 0 / 5%) 0rem 1.25rem 1.6875rem 0rem",
+};
+
 const warningCardHeader = {
   background:
     "linear-gradient(60deg, " + warningColor[1] + ", " + warningColor[2] + ")",
@@ -300,6 +305,7 @@ export {
   successBoxShadow,
   warningBoxShadow,
   dangerBoxShadow,
+  sidebarBoxShadow,
   roseBoxShadow,
   warningCardHeader,
   successCardHeader,

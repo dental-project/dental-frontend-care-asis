@@ -1,3 +1,4 @@
+import { sidebarBoxShadow } from "assets/jss/material-dashboard-react";
 import {
   drawerWidth,
   transition,
@@ -19,16 +20,17 @@ const sidebarStyle = (theme) => ({
   drawerPaper: {
     border: "none",
     position: "fixed",
-    top: "0",
+    top: "1rem",
     bottom: "0",
-    left: "0",
+    left: "1rem",
     zIndex: "1",
-    ...boxShadow,
+    borderRadius: "1rem",
+    ...sidebarBoxShadow,
     width: drawerWidth,
     [theme.breakpoints.up("md")]: {
       width: drawerWidth,
       position: "fixed",
-      height: "100%",
+      height: "calc(100vh - 2rem)",
     },
     [theme.breakpoints.down("sm")]: {
       width: drawerWidth,
@@ -87,7 +89,8 @@ const sidebarStyle = (theme) => ({
     textDecoration: "none",
     backgroundColor: "transparent",
     "&,&:hover": {
-      color: whiteColor,
+      // color: whiteColor,
+      color: blackColor,
     },
   },
   logoLinkRTL: {

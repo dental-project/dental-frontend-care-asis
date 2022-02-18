@@ -71,7 +71,7 @@ export default function Sidebar(props) {
 
 
         <div className={classes.cssPys03g}>
-          <AssignmentOutlinedIcon fontSize="small" style={{ color: "#fff" }} />
+          <AssignmentOutlinedIcon fontSize="small" style={{ color: "#eee" }} />
         </div>
 
 
