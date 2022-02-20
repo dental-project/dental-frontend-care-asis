@@ -1,46 +1,62 @@
 // @material-ui/icons
 import DvrIcon from '@material-ui/icons/Dvr';
-import DashboardPage from "views/Dashboard/Dashboard.js";
+import ReceptionRegister from "views/Reception/ReceptionRegister.js";
+import ReceptionDetail from "views/Reception/ReceptionDetail.js";
 import PartRegister from "views/BasicManagement/PartRegister.js";
 import ItemRegister from "views/BasicManagement/ItemRegister.js";
 import DentalRegister from "views/BasicManagement/DentalRegister.js";
+import PriceRegister from "views/BasicManagement/PriceRegister.js";
 import UserRegister from "views/Users/UserRegister.js";
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
-    name: "기공물대장",
+    path: "/receptionRegister",
+    name: "접수 리스트",
     icon: DvrIcon,
-    component: DashboardPage,
-    layout: "/admin"
+    component: ReceptionRegister,
+    layout: "/dental"
+  },
+  {
+    path: "/receptionDetail",
+    name: "접수상세 리스트",
+    icon: DvrIcon,
+    component: ReceptionDetail,
+    layout: "/dental"
   },
   {
     path: "/partRegister",
     name: "파트 등록",
     icon: DvrIcon,
     component: PartRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/itemRegister",
-    name: "종목 등록",
+    name: "장치 등록",
     icon: DvrIcon,
     component: ItemRegister,
-    layout: "/admin"
+    layout: "/dental"
   },
   {
     path: "/dentalRegister",
     name: "치과 등록",
     icon: DvrIcon,
     component: DentalRegister,
-    layout: "/admin"
+    layout: "/dental"
+  },
+  {
+    path: "/priceRegister",
+    name: "단가 등록",
+    icon: DvrIcon,
+    component: PriceRegister,
+    layout: "/dental"
   },
   {
     path: "/userRegister",
     name: "유저 회원가입",
     icon: DvrIcon,
     component: UserRegister,
-    layout: "/admin"
+    layout: "/dental"
   }
 ];
 

@@ -12,18 +12,17 @@ import Button from "components/CustomButtons/Button.js";
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
+import PriceModalContainer from "containers/PriceModalContainer";
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
-import DentalModalContainer from "containers/DentalModalContainer";
-
-import { dentals } from 'modules/dentals';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { prices } from 'modules/prices';
 
 const useStyles = makeStyles((theme) => ({
     grid: {
@@ -58,19 +57,20 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function DentalRegister() {
+export default function PriceRegister() {
 
     const classes = useStyles();
 
+
     const dispatch = useDispatch();
-    const dental = useSelector(({dental}) => dental);
+    const price = useSelector(({price}) => price);
   
     useEffect(() => {
-      dispatch(dentals.getDentalMiddleware());
-      setOpenDentalModal(dental.modal);
-    }, [dental.data.length] );
-   
-    
+      dispatch(prices.getPriceMiddleware());
+      setOpenPriceModal(price.modal);
+    }, [price.data.length] );
+
+      console.log(price);
 
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
@@ -78,54 +78,47 @@ export default function DentalRegister() {
     });
 
 
-    
+
     const [seqId, setSeqId] = useState("");
-    const [dentalObj, setDentalObj] = useState({});
+    const [priceObj, setPriceObj] = useState({});
+
 
     // 모달
-    const [openDentalAddModal, setOpenDentalModal] = useState(false);
+    const [openPriceAddModal, setOpenPriceModal] = useState(false);
     const [modalType, setModalType] = useState("");
-
-    const handleDentalModalOpen = () => {
-        setOpenDentalModal(true);
+   
+    const handlePriceModalOpen = () => {
+      setOpenPriceModal(true);
     };
-    const handleDentalModalClose = () => {
-        setOpenDentalModal(false);
+    const handlePriceModalClose = () => {
+      setOpenPriceModal(false);
     };
 
-    const dentalModalOpen = (e) => {
+    const priceModalOpen = (e) => {
       setModalType("추가");
-      handleDentalModalOpen();
+      handlePriceModalOpen();
     }
 
-    const onUpdateButtonClicked = (dentalObj) => {
-      setModalType("치과수정");
-      setDentalObj(dentalObj);
-      handleDentalModalOpen();
+    const onUpdateButtonClicked = (priceObj) => {
+      setModalType("단가수정");
+      setPriceObj(priceObj);
+      handlePriceModalOpen();
     };
   
     const onRemoveButtonClicked = (seqId) => {
       setModalType("삭제");
       setSeqId(seqId);
-      handleDentalModalOpen();
+      handlePriceModalOpen();
     };
-    
+
     const columns = ([
-      { name: "vendor_name", header: "거래처명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "ceo", header: "대표", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "tel", header: "전화번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "fax", header: "팩스번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "business_number", header: "사업자번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "business_type_name", header: "업태", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "business_sector_name", header: "업종", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "post_number", header: "우편번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' }, 
-      { name: "address", header: "주소", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' }, 
-      { name: "bank_name", header: "은행", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "bank_account", header: "계좌번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-      { name: "description", header: "비고", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "vendor_name", header: "거래처명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "part_name", header: "파트명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "item_name", header: "장치명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+      {name: "price", header: "단가", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'number' },
       {
         name: "update",
-        header: "치과수정",
+        header: "단가수정",
         align: "center",
         renderer: {
           type: UpdateButtonRenderer,
@@ -144,12 +137,12 @@ export default function DentalRegister() {
             onRemoveButtonClicked
           }
         }
-      }   
+      }
     ]);
 
     const auto1 = [ {title: "전체"}, {title: "Dental.A 치과기공소"}];
-    const auto2 = [ {title: "전체"}, {title: "김남규"}];
-    const auto3 = [ {title: "전체"}, {title: "070-4147-6452"}];
+    const auto2 = [ {title: "전체"}, {title: "Diagnostic Study Models"}, {title: "Removale App"}, {title: "Fixed App"},{title: "Functional App"}];
+    const auto3 = [ {title: "전체"}, {title: "asdasdasd"}, {title: "테스트 기공"}, {title: "테스트 기공2"},{title: "테스트 기공3"}];
 
     return (
         <>
@@ -162,7 +155,7 @@ export default function DentalRegister() {
                       className={classes.button} 
                       color="info" 
                       round
-                      onClick={(e) => dentalModalOpen(e)}
+                      onClick={(e) => priceModalOpen(e)}
                   >추가
                   </Button>
                 </CardHeader>
@@ -177,6 +170,7 @@ export default function DentalRegister() {
                       style={{float: "left", width: "200px", marginLeft: "20px"}}
                       renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
                     />
+
                     <Autocomplete
                       id="filter-demo"
                       className={classes.grid}
@@ -184,8 +178,9 @@ export default function DentalRegister() {
                       getOptionLabel={(option) => option.title}
                       filterOptions={filterOptions}
                       style={{float: "left", width: "200px"}}
-                      renderInput={(params) => <TextField {...params} label="대표" variant="outlined" />}
+                      renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
                     />
+
                     <Autocomplete
                       id="filter-demo"
                       className={classes.grid}
@@ -193,7 +188,7 @@ export default function DentalRegister() {
                       getOptionLabel={(option) => option.title}
                       filterOptions={filterOptions}
                       style={{float: "left", width: "200px"}}
-                      renderInput={(params) => <TextField {...params} label="전화번호" variant="outlined" />}
+                      renderInput={(params) => <TextField {...params} label="장치명" variant="outlined" />}
                     />
 
                     <Button
@@ -204,23 +199,23 @@ export default function DentalRegister() {
                       //onClick={(e) => partModalOpen(e)}
                     >검색
                     </Button>
-                  </Grid>    
+                  </Grid>   
                   <BasicGrid 
-                      type={"dental"}
-                      columns={columns}
-                      data={dental.data}
+                    type={"price"}
+                    columns={columns}
+                    data={price.data}
                   />
                 </CardBody>
               </Card>
             </Grid>
           </Grid>
 
-          <DentalModalContainer           
+          <PriceModalContainer       
             modalType={modalType}
-            open={openDentalAddModal}
-            close={handleDentalModalClose}
+            open={openPriceAddModal}
+            close={handlePriceModalClose}
             seqId={seqId}
-            dentalObj={dentalObj}
+            priceObj={priceObj}
           />
       </>
     );

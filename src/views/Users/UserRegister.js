@@ -11,7 +11,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import CSRFToken from "components/CSRF/CSRFToken"; 
 // Material
 import TextField from '@material-ui/core/TextField';
 
@@ -61,16 +61,24 @@ export default function Signup() {
         return alert("비밀번호가 서로 일치하지 않습니다.");
       }
 
+      const xtoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const config = {
+        withCredentials: true,
+        headers:{
+          'X-CSRFToken':xtoken
+        }
+      }   
 
       axios
-        .post("http://localhost:8000/api/users/register/",
+        .post("/api/users/user/",
           { 
             userid: data.userid, 
             password: data.passwd,
             username: data.userName,
             tel: data.tel,
             vendor_id: data.vendorid
-          }
+          },
+          config
         
         )
         .then((result) => {
@@ -120,6 +128,7 @@ export default function Signup() {
             <CardBody>
             
               <form onSubmit={handleSubmit(onSubmit)}>
+                <CSRFToken />
                 <Controller
                   name="userid"
                   control={control}

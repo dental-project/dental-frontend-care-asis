@@ -1,31 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
-
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
-import Container from '@material-ui/core/Container';
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
 import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
-import PartGrid from "components/Grid/PartGrid.js";
+import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
+import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-// Material
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
 
-// Form 양식
-import { useForm, Controller } from "react-hook-form";
+import { parts } from 'modules/parts';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import PartModalContainer from "containers/PartModalContainer";
+
+
+import "tui-grid/dist/tui-grid.css";
+import ToastGrid from "@toast-ui/react-grid";
 
 const useStyles = makeStyles((theme) => ({ 
     grid: {
       padding: theme.spacing(1)
     },
-  
     textFieldDate: {
       width: "100%"
     },
@@ -54,95 +59,162 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function PartRegister() {
+function PartRegister() {
 
-    const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
+  const classes = useStyles();
+  const gridRef = React.createRef();
+  //const { watch,  handleSubmit, control } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-    };
+  const dispatch = useDispatch();
+  const part = useSelector(({part}) => part);
 
+  console.log(part);
 
+  useEffect(() => {
+    dispatch(parts.getPartMiddleware());
 
-   
+    setOpenPartModal(part.modal);
+    
+  }, [part.data.length] );
+ 
+  const auto1 = [ {part_name: "전체"} ];
+  part.data.map( (data) => auto1.push({ part_name: data.part_name}) );
 
-    return (
-        <Container 
-            fixed
-            style={{maxWidth: "100%", background:"#E4E4E4"}}
-            >
-            <Grid container>
-                <Grid item xs={3} className={classes.grid}>
-                    <Card>
-                        <CardHeader>
-                            <Typography>추가,수정</Typography>
-                        </CardHeader>
-                        <CardBody>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Controller
-                                    name="codeNumber"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                        <TextField
-                                            className={classes.textField} 
-                                            label="번호"
-                                            variant="outlined"
-                                            value={value}
-                                            onChange={onChange}
-                                            error={!!error}
-                                            helperText={error ? error.message : null}
-                                        />
-                                    )}
-                                    rules={{ 
-                                        required: '번호를 입력 해주세요.',
-                                    }}
-                                />
-                                <Controller
-                                    name="partName"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                        <TextField
-                                            className={classes.textField} 
-                                            label="파트명"
-                                            variant="outlined"
-                                            value={value}
-                                            onChange={onChange}
-                                            error={!!error}
-                                            helperText={error ? error.message : null}
-                                        />
-                                    )}
-                                    rules={{ required: '파트명을 입력 해주세요.' }}
-                                />  
-                                <Button
-                                    type="submit"
-                                    className={classes.button} 
-                                    color="info" 
-                                    round
-                                >
-                                    저장
-                                </Button>
-                            </form>
-                        
-                        </CardBody>
-                    </Card>
-                </Grid>
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.part_name,
+  });
 
-                <Grid item xs={9} className={classes.grid}>
-                <Card>
-                    <CardHeader>
-                        <Typography>추가,수정</Typography>
-                    </CardHeader>
-                    <CardBody>
-                        <PartGrid />
-                    </CardBody>
-                </Card>
-                </Grid>
+  
+  const [modalType, setModalType] = useState("");
+  const [seqId, setSeqId] = useState("");
+  const [partObj, setPartObj] = useState({});
+  //const [partName, setPartName] = useState("");
+  
+  // 모달
+  const [openPartAddModal, setOpenPartModal] = useState(false);
+  const handlePartModalOpen = () => {
+    setOpenPartModal(true);
+  };
+  const handlePartModalClose = () => {
+    setOpenPartModal(false);
+  };
 
-            </Grid>
-        </Container>
-    );
+  const partModalOpen = (e) => {
+    setModalType("추가");
+    handlePartModalOpen();
+  }
 
+  const onUpdateButtonClicked = (partObj) => {
+    setModalType("파트수정");
+    setPartObj(partObj);
+    handlePartModalOpen();
+  };
+
+  const onRemoveButtonClicked = (seqId) => {
+    setModalType("삭제");
+    setSeqId(seqId);
+    handlePartModalOpen();
+  };
+
+  // Toast Grid options value
+  const columns = ([
+    { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
+    { name: "part_name", header: "파트명", align: "center", sortable: true, filter: 'select' },
+    { name: "update", header: "파트수정", align: "center",
+      renderer: {
+        type: UpdateButtonRenderer,
+        options: {
+          onUpdateButtonClicked
+        }
+      }, 
+    },
+    { name: "remove", header: "삭제", align: "center",
+      renderer: {
+        type: RemoveButtonRenderer,
+        options: {
+          onRemoveButtonClicked
+        }
+      }
+    }
+  ]);
+
+        
+
+  //const [value, setValue] = useState('');
+
+  const onClickSearch = (e) => {
+    console.log(gridRef.current.getInstance());
+    gridRef.current.getInstance().filter('name', {part_name:"Removale App"});
+  }
+
+  return (
+    <>
+      <Grid container>
+        <Grid item xs={12} className={classes.grid}>
+          <Card>
+            <CardHeader>
+              <Button
+                type="submit"
+                className={classes.button} 
+                color="info" 
+                round
+                onClick={(e) => partModalOpen(e)}
+              >추가
+              </Button>
+            </CardHeader>
+            <CardBody>
+              <Grid item xs={6} className={classes.grid}>
+                <Autocomplete
+                  id="filter-demo"
+                  className={classes.grid}
+                  options={auto1}
+                  defaultValue={auto1[0]}
+                  getOptionLabel={(option) => option.part_name}
+                  filterOptions={filterOptions}
+                  style={{float: "left", width: "300px"}}
+                  // onChange={(event, newValue) => {
+                  //   setValue(newValue);
+                  //   console.log(newValue);
+                  // }}
+                  getOptionSelected={(option, value) => {
+                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                  }}
+                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                />
+                <Button
+                  type="submit"
+                  color="primary" 
+                  round
+                  style={{float: "left", width: "100px"}}
+                  onClick={(e) => onClickSearch(e)}
+                >검색
+                </Button>
+              </Grid>                     
+
+              <ToastGrid 
+                ref={gridRef}
+                columns={columns}
+                data={part.data}
+                
+                //hoc={highFuc}
+              />
+
+            </CardBody>
+          </Card>
+        </Grid>
+      </Grid>
+
+      <PartModalContainer           
+        modalType={modalType}
+        open={openPartAddModal}
+        close={handlePartModalClose}
+        seqId={seqId}
+        partObj={partObj}
+      />
+
+    </>
+  );
 }
+
+export default PartRegister;

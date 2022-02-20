@@ -52,7 +52,7 @@ export default function Sidebar(props) {
     <List className={classes.list}>
     
       <NavLink
-        to={"/admin/dashboard"}
+        to={"/dental/dashboard"}
         //className={activePro + classes.item}
         activeClassName="active"
         key={0}
@@ -61,7 +61,7 @@ export default function Sidebar(props) {
           <ListItemIcon>
             <AssignmentOutlinedIcon style={{ color: "#FFFFFF" }} />
           </ListItemIcon>
-          <ListItemText primary="기공물대장" style={{ color: "#FFFFFF" }} />
+          <ListItemText primary="접수 리스트" style={{ color: "#FFFFFF" }} />
         </ListItem>
       </NavLink>
       
@@ -74,7 +74,7 @@ export default function Sidebar(props) {
       </ListItem>
         
       <NavLink
-        to={"/admin/partRegister"}
+        to={"/dental/partRegister"}
         key={1}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -90,7 +90,7 @@ export default function Sidebar(props) {
       </NavLink> 
 
       <NavLink
-        to={"/admin/itemRegister"}
+        to={"/dental/itemRegister"}
         key={2}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -99,14 +99,14 @@ export default function Sidebar(props) {
               <ListItemIcon style={{ color: "#FFFFFF" }}>
                 <StarBorder style={{ color: "#FFFFFF" }} />
               </ListItemIcon >
-              <ListItemText primary="종목등록" style={{ color: "#FFFFFF" }} />
+              <ListItemText primary="장치등록" style={{ color: "#FFFFFF" }} />
             </ListItem>
           </List>
         </Collapse>
       </NavLink>
 
       <NavLink
-        to={"/admin/dentalRegister"}
+        to={"/dental/dentalRegister"}
         key={3}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -122,10 +122,26 @@ export default function Sidebar(props) {
       </NavLink>
        
       <NavLink
-        to={"/admin/userRegister"}
+        to={"/dental/priceRegister"}
+        key={4}
+      >
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding style={{marginLeft: "20px"}}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon style={{ color: "#FFFFFF" }}>
+                <StarBorder style={{ color: "#FFFFFF" }} />
+              </ListItemIcon >
+              <ListItemText primary="단가등록" style={{ color: "#FFFFFF" }} />
+            </ListItem>
+          </List>
+        </Collapse>
+      </NavLink>
+
+      <NavLink
+        to={"/dental/userRegister"}
         //className={activePro + classes.item}
         activeClassName="active"
-        key={4}
+        key={5}
       >
         <ListItem button >
           <ListItemIcon>
