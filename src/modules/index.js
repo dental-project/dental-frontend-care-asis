@@ -1,4 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import logger from "redux-logger";
+import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from 'redux-thunk';
 import reception from './receptions';
 import part from './parts';
@@ -21,6 +23,6 @@ const rootReducer = combineReducers({
   businessSector,
   bank,
 });
-const store = createStore(rootReducer, enhancer);
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logger)));
 
 export default store;

@@ -63,22 +63,26 @@ function PartRegister() {
 
   const classes = useStyles();
   const gridRef = React.createRef();
-  //const { watch,  handleSubmit, control } = useForm();
 
+  const { data, loading, err } = useSelector(({part}) => part.data);
   const dispatch = useDispatch();
-  const part = useSelector(({part}) => part);
+  
 
-  console.log(part);
 
   useEffect(() => {
-    dispatch(parts.getPartMiddleware());
-
-    setOpenPartModal(part.modal);
     
-  }, [part.data.length] );
+    dispatch(parts.getPartMiddleware());
+    
+    //setOpenPartModal(part.modal);
+    
+  }, [dispatch] );
  
+  console.log(data);
+  
+
+
   const auto1 = [ {part_name: "전체"} ];
-  part.data.map( (data) => auto1.push({ part_name: data.part_name}) );
+  //part.map( (data) => auto1.push({ part_name: data.part_name}) );
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
@@ -89,8 +93,7 @@ function PartRegister() {
   const [modalType, setModalType] = useState("");
   const [seqId, setSeqId] = useState("");
   const [partObj, setPartObj] = useState({});
-  //const [partName, setPartName] = useState("");
-  
+
   // 모달
   const [openPartAddModal, setOpenPartModal] = useState(false);
   const handlePartModalOpen = () => {
@@ -138,10 +141,6 @@ function PartRegister() {
       }
     }
   ]);
-
-        
-
-  //const [value, setValue] = useState('');
 
   const onClickSearch = (e) => {
     console.log(gridRef.current.getInstance());
@@ -191,15 +190,11 @@ function PartRegister() {
                 >검색
                 </Button>
               </Grid>                     
-
               <ToastGrid 
                 ref={gridRef}
                 columns={columns}
-                data={part.data}
-                
-                //hoc={highFuc}
+                data={data}
               />
-
             </CardBody>
           </Card>
         </Grid>

@@ -85,32 +85,62 @@ const deletePartMiddleware = (seqId) => {
   };
 };
 
+
+/* 리듀서 */
+export default function part(state = initialState, action) {
+    switch(action.type) {
+        case READ_PART:
+          return {
+            ...state,
+            data: {
+              data: action.payload.data,
+              loading: true,
+              error: null
+            }
+          };
+        case ADD_PART:
+          return {
+            ...state,
+          };
+        case UPDATE_PART:
+          return {
+            ...state,
+          };
+        case REMOVE_PART:
+          return {
+            ...state,
+          };
+        default:
+            return state;
+    }
+}
+
 // 나중에 손봐야 함
 // reducer
-export default handleActions(
-  {
-    [READ_PART]: (state, action) =>
-      produce(state, (draft) => {
-        draft.data = action.payload.data;
-      }),
-    [ADD_PART]: (state, action) =>
-      produce(state, (draft) => {
-        draft.data.push(action.payload);
-      }),
-    [UPDATE_PART]: (state, action) => {(
-      state.data.map((seq_id) => {
-        if(seq_id === action.payload.data.contents.seq_id) {
-          console.log(state.seq_id);
-        }
-      })
-    )},
-    [REMOVE_PART]: (state, action) =>
-      produce(state, (draft) => {
-        draft.data = []
-      }),
-  },
-  initialState
-);
+// export default handleActions(
+//   {
+//     [READ_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data = action.payload.data;
+//       }),
+//     [ADD_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data.push(action.payload);
+//       }),
+//     [UPDATE_PART]: (state, action) => {(
+//       state.data.map((seq_id) => {
+//         if(seq_id === action.payload.data.contents.seq_id) {
+//           console.log(state.seq_id);
+//         }
+//       })
+//     )},
+//     [REMOVE_PART]: (state, action) =>
+//       produce(state, (draft) => {
+//         draft.data = []
+//       }),
+//   },
+//   initialState
+// );
 
 const parts = {
   getPartMiddleware,
