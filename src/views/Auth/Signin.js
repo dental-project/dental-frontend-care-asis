@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
+import Switch from "@mui/material/Switch";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
@@ -13,17 +14,18 @@ import SuiInput from "components/Sui/SuiInput";
 import SuiButton from "components/Sui/SuiButton";
 
 // Authentication layout components
-import BasicLayout from "layouts/authentication/components/BasicLayout";
-import Socials from "layouts/authentication/components/Socials";
-import Separator from "layouts/authentication/components/Separator";
+import LoginLayout from "layouts/LoginLayout";
 
 // Images
-import curved6 from "assets/images/curved-images/curved14.jpg";
+import curved6 from "assets/img/curved-images/curved14.jpg";
 
 // Axios
 import axios from "axios";
 
 function SignIn() {
+    const [rememberMe, setRememberMe] = useState(true);
+
+  const handleSetRememberMe = () => setRememberMe(!rememberMe);
   //  const [agreement, setAgremment] = useState(true);
 
   //  const handleSetAgremment = () => setAgremment(!agreement);
@@ -60,7 +62,7 @@ function SignIn() {
   };
 
   return (
-    <BasicLayout
+    <LoginLayout
       title="Welcome!"
       description="Use these awesome forms to login or create new account in your project for free."
       image={curved6}
@@ -72,9 +74,9 @@ function SignIn() {
           </SuiTypography>
         </SuiBox>
         <SuiBox mb={2}>
-          <Socials />
+          {/* <Socials /> */}
         </SuiBox>
-        <Separator />
+        {/* <Separator /> */}
         <SuiBox pt={2} pb={3} px={3}>
           <SuiBox component="form" role="form">
             <SuiBox mb={2}>
@@ -88,44 +90,27 @@ function SignIn() {
                 onChange={handleChange}
               />
             </SuiBox>
-            {/* <SuiBox display="flex" alignItems="center">
-              <Checkbox checked={agreement} onChange={handleSetAgremment} />
+            <SuiBox display="flex" alignItems="center">
+              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
               <SuiTypography
                 variant="button"
                 fontWeight="regular"
-                onClick={handleSetAgremment}
-                sx={{ cursor: "poiner", userSelect: "none" }}
+                onClick={handleSetRememberMe}
+                sx={{ cursor: "pointer", userSelect: "none" }}
               >
-                &nbsp;&nbsp;I agree the&nbsp;
+                &nbsp;&nbsp;Remember me
               </SuiTypography>
-              <SuiTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
-                Terms and Conditions
-              </SuiTypography>
-            </SuiBox> */}
+            </SuiBox>
             <SuiBox mt={4} mb={1}>
               <SuiButton variant="gradient" color="dark" fullWidth onClick={() => loginBtn()}>
                 sign in
               </SuiButton>
             </SuiBox>
-            {/* <SuiBox mt={3} textAlign="center">
-              <SuiTypography variant="button" color="text" fontWeight="regular">
-                Already have an account?&nbsp;
-                <SuiTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="dark"
-                  fontWeight="bold"
-                  textGradient
-                >
-                  Sign in
-                </SuiTypography>
-              </SuiTypography>
-            </SuiBox> */}
+            
           </SuiBox>
         </SuiBox>
       </Card>
-    </BasicLayout>
+    </LoginLayout>
   );
 }
 

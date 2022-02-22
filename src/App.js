@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 
 // react-router components
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import Admin from "layouts/Admin.js";
+import Signin from "views/Auth/Signin.js";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -104,26 +106,18 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          {/* <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName="Soft UI Dashboard"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          /> */}
-          {/* <Configurator /> */}
-          {configsButton}
-        </>
-      )}
-      {/* {layout === "vr" && <Configurator />} */}
-      {layout === "vr"}
       <Switch>
         {getRoutes(routes)}
-        <Redirect from="*" to="authentication/sign-in" />
+        <Route path="/auth/signin" component={Signin} /> 
+        <Route path="/dental" component={Admin} />
+        <Redirect from="/" to="/auth/signin" />
+        
       </Switch>
+      {/* <Switch>
+        <Route path="/auth/signin" component={Signin} /> 
+        <Route path="/dental" component={Admin} />
+        <Redirect path="/" to="/auth/signin" />
+      </Switch> */}
     </ThemeProvider>
   );
 }
