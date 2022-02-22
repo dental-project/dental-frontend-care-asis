@@ -1,106 +1,100 @@
-
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import { apis } from 'apis/axios'
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import { apis } from "apis/axios";
 
 // action 생성
-const READ_PART = 'READ_PART';
-const ADD_PART = 'ADD_PART';
-const UPDATE_PART = 'UPDATE_PART';
-const REMOVE_PART = 'REMOVE_PART';
+const READ_PART = "READ_PART";
+const ADD_PART = "ADD_PART";
+const UPDATE_PART = "UPDATE_PART";
+const REMOVE_PART = "REMOVE_PART";
 
 // action creators
-const readPart = createAction(READ_PART, (data) => ({ data }));
-const addPart = createAction(ADD_PART, (data) => ({ data }));
-const updatePart = createAction(UPDATE_PART, (data) => ({ data }));
-const removePart = createAction(REMOVE_PART, (seqId) => ({ seqId }));
+const readPart = createAction(READ_PART, data => ({ data }));
+const addPart = createAction(ADD_PART, data => ({ data }));
+const updatePart = createAction(UPDATE_PART, data => ({ data }));
+const removePart = createAction(REMOVE_PART, seqId => ({ seqId }));
 
 // initialState
 const initialState = {
   data: [],
   loading: false,
   modal: false,
-  err: null
+  err: null,
 };
 
 // middleware
 const getPartMiddleware = () => {
-  return (dispatch) => {
+  return dispatch => {
     apis
       .getPart()
-      .then((result) => {        
+      .then(result => {
         const partData = result.data;
         dispatch(readPart(partData));
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   };
 };
 
-const addPartMiddleware = (part) => {
-  return (dispatch) => {
+const addPartMiddleware = part => {
+  return dispatch => {
     apis
       .createPart(part)
-      .then((result) => {
+      .then(result => {
         dispatch(addPart(part));
         alert("파트명을 추가 하였습니다.");
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   };
 };
 
 const updatePartMiddleware = (seqId, contents) => {
-  return (dispatch) => {
+  return dispatch => {
     apis
       .patchPart(seqId, contents)
-      .then((result) => {
-
-        const data = { seq_id: seqId, contents: contents }
+      .then(result => {
+        const data = { seq_id: seqId, contents: contents };
 
         dispatch(updatePart(data));
         alert("파트명을 수정 했습니다.");
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-
-const deletePartMiddleware = (seqId) => {
-  console.log(seqId);
-  return (dispatch) => {
-    apis
-      .deletePart(seqId)
-      .then((result) => {
-        dispatch(removePart(seqId));
-        alert("파트명을 삭제 했습니다.");
-      })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 };
 
+const deletePartMiddleware = seqId => {
+  console.log(seqId);
+  return dispatch => {
+    apis
+      .deletePart(seqId)
+      .then(result => {
+        dispatch(removePart(seqId));
+        alert("파트명을 삭제 했습니다.");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
 
 // reducer
 // state -> 초기값, draft -> 상태를 어떻게 업데이트 할지 정의
 export default handleActions(
   {
     [READ_PART]: (state, action) =>
-      produce(state, (draft) => {
+      produce(state, draft => {
         draft.data = action.payload.data;
       }),
     [ADD_PART]: (state, action) =>
-      produce(state, (draft) => {
+      produce(state, draft => {
         draft.data.push(action.payload.data);
       }),
     [UPDATE_PART]: (state, action) => {
-    
-      
-
       //(
       // state.data.map((contents) => {
       //   if(seqId === action.payload.data.seq_id) {
@@ -111,25 +105,24 @@ export default handleActions(
       //)
     },
     [REMOVE_PART]: (state, action) =>
-      produce(state, (draft) => {
+      produce(state, draft => {
+        // const filterData = state.data.filter(
+        //   element => element.seq_id !== action.payload.seqId
+        // );
+
+        // draft.data.push(filterData);
+
         //console.log(state);
         //console.log(action);
 
         //console.log(draft.data[0].seq_id);
-        //console.log(action.payload.seqId);
+        //console.log(action);
 
-        
-        const index = draft.data.findIndex(element => element.seq_id === action.payload.seqId);
+        const index = draft.data.findIndex(
+          element => element.seq_id === action.payload.seqId
+        );
         console.log(index);
         draft.data.splice(index, 1);
-
-        //const a = draft.data.filter(element => element.seq_id === action.payload.seqId);
-        //console.log(a);
-
-        //console.log(draft.data);
-        //data.seq_id === action.payload.data.seq_id
-        //const index = draft.data.findIndex((e) => console.log(e));
-        //console.log(index);
       }),
   },
   initialState
@@ -143,23 +136,6 @@ const parts = {
 };
 
 export { parts };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // /* 액션 타입 */
 // const PART_CREATE = 'part/PART_CREATE';
@@ -203,12 +179,6 @@ export { parts };
 //             return state;
 //     }
 // }
-
-
-
-
-
-
 
 // import { AXIOS_PART_REQUEST, AXIOS_PART_SUCCESS, AXIOS_PART_FAILURE } from './types'
 // import axios from "axios";

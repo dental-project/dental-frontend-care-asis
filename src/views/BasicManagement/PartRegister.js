@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -14,81 +14,77 @@ import Button from "components/CustomButtons/Button.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
-import { parts } from 'modules/parts';
+import { parts } from "modules/parts";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 import PartModalContainer from "containers/PartModalContainer";
-
 
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 
-const useStyles = makeStyles((theme) => ({
-    grid: {
-      padding: theme.spacing(1)
+const useStyles = makeStyles(theme => ({
+  grid: {
+    padding: theme.spacing(1),
+  },
+  textFieldDate: {
+    width: "100%",
+  },
+  textField: {
+    width: "100%",
+    margin: theme.spacing(1),
+    "& label.Mui-focused": {
+      color: "#00acc1",
     },
-    textFieldDate: {
-      width: "100%"
-    },
-    textField: {
-      width: "100%",
-      margin: theme.spacing(1),
-      '& label.Mui-focused': {
-          color: '#00acc1',
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#00acc1",
       },
-      '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-              borderColor: '#00acc1',
-          },
-      },
     },
-    customText: {
-      color: "#26c6da",
-      fontWeight: "bold",
-      cursor:"pointer",
-      "&:hover": {
-        color: "#1993A8"
-      }
+  },
+  customText: {
+    color: "#26c6da",
+    fontWeight: "bold",
+    cursor: "pointer",
+    "&:hover": {
+      color: "#1993A8",
     },
-    button: {
-      width: "100%"
-    }
-  }));
+  },
+  button: {
+    width: "100%",
+  },
+}));
 
 function PartRegister() {
-
   const classes = useStyles();
   const gridRef = React.createRef();
 
-  const { data, loading, err } = useSelector(({part}) => part);
+  const { data, loading, err } = useSelector(({ part }) => part);
   const dispatch = useDispatch();
-  
-  
 
   useEffect(() => {
-    
     dispatch(parts.getPartMiddleware());
-    
+
     //setOpenPartModal(part.modal);
-    
-  }, [data.length] );
+    console.log("렌더링");
+  }, [data.length]);
   //console.log(data);
   //console.log(data);
   //console.log(loading);
 
-  const auto1 = [ {part_name: "전체"} ];
+  const auto1 = [{ part_name: "전체" }];
   //part.map( (data) => auto1.push({ part_name: data.part_name}) );
 
   const filterOptions = createFilterOptions({
-    matchFrom: 'start',
-    stringify: (option) => option.part_name,
+    matchFrom: "start",
+    stringify: option => option.part_name,
   });
 
-  
   const [modalType, setModalType] = useState("");
   const [seqId, setSeqId] = useState("");
   const [partObj, setPartObj] = useState({});
@@ -102,49 +98,61 @@ function PartRegister() {
     setOpenPartModal(false);
   };
 
-  const partModalOpen = (e) => {
+  const partModalOpen = e => {
     setModalType("추가");
     handlePartModalOpen();
-  }
+  };
 
-  const onUpdateButtonClicked = (partObj) => {
+  const onUpdateButtonClicked = partObj => {
     setModalType("파트수정");
     setPartObj(partObj);
     handlePartModalOpen();
   };
 
-  const onRemoveButtonClicked = (seqId) => {
+  const onRemoveButtonClicked = seqId => {
     setModalType("삭제");
     setSeqId(seqId);
     handlePartModalOpen();
   };
 
   // Toast Grid options value
-  const columns = ([
+  const columns = [
     { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
-    { name: "part_name", header: "파트명", align: "center", sortable: true, filter: 'select' },
-    { name: "update", header: "파트수정", align: "center",
+    {
+      name: "part_name",
+      header: "파트명",
+      align: "center",
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "update",
+      header: "파트수정",
+      align: "center",
       renderer: {
         type: UpdateButtonRenderer,
         options: {
-          onUpdateButtonClicked
-        }
-      }, 
+          onUpdateButtonClicked,
+        },
+      },
     },
-    { name: "remove", header: "삭제", align: "center",
+    {
+      name: "remove",
+      header: "삭제",
+      align: "center",
       renderer: {
         type: RemoveButtonRenderer,
         options: {
-          onRemoveButtonClicked
-        }
-      }
-    }
-  ]);
+          onRemoveButtonClicked,
+        },
+      },
+    },
+  ];
 
-  const onClickSearch = (e) => {
+  const onClickSearch = e => {
     console.log(gridRef.current.getInstance());
-    gridRef.current.getInstance().filter('name', {part_name:"Removale App"});
-  }
+    gridRef.current.getInstance().filter("name", { part_name: "Removale App" });
+  };
 
   return (
     <>
@@ -154,11 +162,12 @@ function PartRegister() {
             <CardHeader>
               <Button
                 type="submit"
-                className={classes.button} 
-                color="info" 
+                className={classes.button}
+                color="info"
                 round
-                onClick={(e) => partModalOpen(e)}
-              >추가
+                onClick={e => partModalOpen(e)}
+              >
+                추가
               </Button>
             </CardHeader>
             <CardBody>
@@ -168,45 +177,46 @@ function PartRegister() {
                   className={classes.grid}
                   options={auto1}
                   defaultValue={auto1[0]}
-                  getOptionLabel={(option) => option.part_name}
+                  getOptionLabel={option => option.part_name}
                   filterOptions={filterOptions}
-                  style={{float: "left", width: "300px"}}
+                  style={{ float: "left", width: "300px" }}
                   // onChange={(event, newValue) => {
                   //   setValue(newValue);
                   //   console.log(newValue);
                   // }}
                   getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                    return (
+                      option?.id === value?.id ||
+                      option?.name.toLowerCase() === value?.name.toLowerCase()
+                    );
                   }}
-                  renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
+                  renderInput={params => (
+                    <TextField {...params} label="파트명" variant="outlined" />
+                  )}
                 />
                 <Button
                   type="submit"
-                  color="primary" 
+                  color="primary"
                   round
-                  style={{float: "left", width: "100px"}}
-                  onClick={(e) => onClickSearch(e)}
-                >검색
+                  style={{ float: "left", width: "100px" }}
+                  onClick={e => onClickSearch(e)}
+                >
+                  검색
                 </Button>
-              </Grid>                     
-              <ToastGrid 
-                ref={gridRef}
-                columns={columns}
-                data={data}
-              />
+              </Grid>
+              <ToastGrid ref={gridRef} columns={columns} data={data} />
             </CardBody>
           </Card>
         </Grid>
       </Grid>
 
-      <PartModalContainer           
+      <PartModalContainer
         modalType={modalType}
         open={openPartAddModal}
         close={handlePartModalClose}
         seqId={seqId}
         partObj={partObj}
       />
-
     </>
   );
 }
