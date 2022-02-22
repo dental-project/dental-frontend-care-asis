@@ -1,81 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom"; 
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+// react-router-dom components
+//  import { Link } from "react-router-dom";
 
-// core components
-import Grid from '@material-ui/core/Grid';
-import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import Typography from '@material-ui/core/Typography';
-import CSRFToken from "components/CSRF/CSRFToken";
+// @mui material components
+import Card from "@mui/material/Card";
 
-// Material
-import TextField from "@material-ui/core/TextField";
+// Soft UI Dashboard React components
+import SuiBox from "components/Sui/SuiBox";
+import SuiTypography from "components/Sui/SuiTypography";
+import SuiInput from "components/Sui/SuiInput";
+import SuiButton from "components/Sui/SuiButton";
 
+// Authentication layout components
+import BasicLayout from "layouts/authentication/components/BasicLayout";
+import Socials from "layouts/authentication/components/Socials";
+import Separator from "layouts/authentication/components/Separator";
+
+// Images
+import curved6 from "assets/images/curved-images/curved14.jpg";
 
 // Axios
 import axios from "axios";
 
+function SignIn() {
+  //  const [agreement, setAgremment] = useState(true);
 
-// image
-import toothImg from "images/toothImg.svg";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: "100px",
-  },
-  textField: {
-    width: "96%",
-    margin: theme.spacing(1),
-    "& label.Mui-focused": {
-      color: "#00acc1",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "#00acc1",
-      },
-    },
-  },
-  button: {
-    width: "100%",
-  },
-  titleText: {
-    fontSize: "5vh",
-    fontWeight: "bold",
-    background: "linear-gradient(60deg, #00acc1, #26c6da)",
-    color: "transparent",
-    WebkitBackgroundClip: "text"
-  },
-  customText: {
-    float: "left",
-    marginTop: "10px",
-    color: "#26c6da",
-    cursor: "pointer",
-    "&:hover": {
-      color: "#1993A8",
-    },
-  },
-  customText2: {
-    float: "right",
-    marginTop: "10px",
-    color: "#26c6da",
-    cursor: "pointer",
-    "&:hover": {
-      color: "#1993A8",
-    },
-  },
-}));
-
-
-
-
-
-export default function Signin() {
-  const classes = useStyles();
-  let history = useHistory();
-
+  //  const handleSetAgremment = () => setAgremment(!agreement);
+  const history = useHistory();
   const [inputs, setInputs] = useState({
     userid: "",
     passwd: "",
@@ -88,34 +40,19 @@ export default function Signin() {
       [name]: value,
     });
   };
-
   const loginBtn = () => {
-
-    // const url = "/users/login/";
-    // const param = {
-    //     userid: inputs.userid,
-    //     password: inputs.passwd
-    // }
-
-    // const result = dbAxios(url,param);
-         
-    const xtoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    const config = {
-      withCredentials: true,
-      headers:{
-        'X-CSRFToken':xtoken
-      }
-    }      
-
     axios
-      .post("/api/users/login/", {
+      .post("http://localhost:8000/api/users/login/", {
         userid: inputs.userid,
         password: inputs.passwd,
-      },config)
+      })
       .then((result) => {
-        result.data.status === "SUCCESS"
-          ? history.push("/dental")
-          : alert(result.data.message);
+        //  console.log(result);
+        if (result.data.status === "SUCCESS") {
+          history.push("/dashboard");
+        } else {
+          alert(result.data.message);
+        }
       })
       .catch((error) => {
         throw new Error(error);
@@ -123,57 +60,73 @@ export default function Signin() {
   };
 
   return (
-    <Grid
-      className={classes.root}
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
+    <BasicLayout
+      title="Welcome!"
+      description="Use these awesome forms to login or create new account in your project for free."
+      image={curved6}
     >
-      <Grid item xs={11} sm={8} md={3} >
-        <Card>
-          <CardHeader>
-            <img
-              src={toothImg}
-              style={{ width: "30%", height: "30%", marginTop: "20px" }}
-            />
-            <Typography className={classes.titleText}>Dental Clinic</Typography>
-          </CardHeader>
-          <CardBody>
-            <CSRFToken />
-            <TextField
-              className={classes.textField}
-              name="userid"
-              label="User ID"
-              variant="outlined"
-              onChange={handleChange}
-            />
-            <TextField
-              type="password"
-              className={classes.textField}
-              name="passwd"
-              label="Password"
-              variant="outlined"
-              onChange={handleChange}
-            />
-            <Button
-              className={classes.button}
-              color="info"
-              round
-              onClick={() => loginBtn()}
-            >
-              Login
-            </Button>
-            {/* <Typography
-              className={classes.customText}
-              onClick={() => history.push("/auth/signup")}
-            >
-              Create Account
-            </Typography> */}
-            {/* <Typography className={classes.customText2}>Forgot password?</Typography> */}
-          </CardBody>
-        </Card>
-      </Grid>
-    </Grid>
+      <Card>
+        <SuiBox p={3} mb={1} textAlign="center">
+          <SuiTypography variant="h5" fontWeight="medium">
+            Register with
+          </SuiTypography>
+        </SuiBox>
+        <SuiBox mb={2}>
+          <Socials />
+        </SuiBox>
+        <Separator />
+        <SuiBox pt={2} pb={3} px={3}>
+          <SuiBox component="form" role="form">
+            <SuiBox mb={2}>
+              <SuiInput name="userid" placeholder="Name" onChange={handleChange} />
+            </SuiBox>
+            <SuiBox mb={2}>
+              <SuiInput
+                type="password"
+                name="passwd"
+                placeholder="Password"
+                onChange={handleChange}
+              />
+            </SuiBox>
+            {/* <SuiBox display="flex" alignItems="center">
+              <Checkbox checked={agreement} onChange={handleSetAgremment} />
+              <SuiTypography
+                variant="button"
+                fontWeight="regular"
+                onClick={handleSetAgremment}
+                sx={{ cursor: "poiner", userSelect: "none" }}
+              >
+                &nbsp;&nbsp;I agree the&nbsp;
+              </SuiTypography>
+              <SuiTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
+                Terms and Conditions
+              </SuiTypography>
+            </SuiBox> */}
+            <SuiBox mt={4} mb={1}>
+              <SuiButton variant="gradient" color="dark" fullWidth onClick={() => loginBtn()}>
+                sign in
+              </SuiButton>
+            </SuiBox>
+            {/* <SuiBox mt={3} textAlign="center">
+              <SuiTypography variant="button" color="text" fontWeight="regular">
+                Already have an account?&nbsp;
+                <SuiTypography
+                  component={Link}
+                  to="/authentication/sign-in"
+                  variant="button"
+                  color="dark"
+                  fontWeight="bold"
+                  textGradient
+                >
+                  Sign in
+                </SuiTypography>
+              </SuiTypography>
+            </SuiBox> */}
+          </SuiBox>
+        </SuiBox>
+      </Card>
+    </BasicLayout>
   );
 }
+
+export default SignIn;
