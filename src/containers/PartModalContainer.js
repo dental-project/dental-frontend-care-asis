@@ -52,8 +52,9 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
         const content = {
           part_name: data.partName
         };
-    
+        //console.log(content);
         dispatch(parts.addPartMiddleware(content));
+        //dispatch(parts.getPartMiddleware());
       } else if(modalType === "파트수정") {
 
         const contents = {

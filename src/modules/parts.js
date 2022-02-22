@@ -13,7 +13,7 @@ const REMOVE_PART = 'REMOVE_PART';
 const readPart = createAction(READ_PART, (data) => ({ data }));
 const addPart = createAction(ADD_PART, (data) => ({ data }));
 const updatePart = createAction(UPDATE_PART, (data) => ({ data }));
-const removePart = createAction(REMOVE_PART, (data) => ({ data }));
+const removePart = createAction(REMOVE_PART, (seqId) => ({ seqId }));
 
 // initialState
 const initialState = {
@@ -53,7 +53,6 @@ const addPartMiddleware = (part) => {
 };
 
 const updatePartMiddleware = (seqId, contents) => {
-  console.log(seqId);
   return (dispatch) => {
     apis
       .patchPart(seqId, contents)
@@ -86,61 +85,55 @@ const deletePartMiddleware = (seqId) => {
 };
 
 
-/* 리듀서 */
-export default function part(state = initialState, action) {
-    switch(action.type) {
-        case READ_PART:
-          return {
-            ...state,
-            data: {
-              data: action.payload.data,
-              loading: true,
-              error: null
-            }
-          };
-        case ADD_PART:
-          return {
-            ...state,
-          };
-        case UPDATE_PART:
-          return {
-            ...state,
-          };
-        case REMOVE_PART:
-          return {
-            ...state,
-          };
-        default:
-            return state;
-    }
-}
-
-// 나중에 손봐야 함
 // reducer
-// export default handleActions(
-//   {
-//     [READ_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data = action.payload.data;
-//       }),
-//     [ADD_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data.push(action.payload);
-//       }),
-//     [UPDATE_PART]: (state, action) => {(
-//       state.data.map((seq_id) => {
-//         if(seq_id === action.payload.data.contents.seq_id) {
-//           console.log(state.seq_id);
-//         }
-//       })
-//     )},
-//     [REMOVE_PART]: (state, action) =>
-//       produce(state, (draft) => {
-//         draft.data = []
-//       }),
-//   },
-//   initialState
-// );
+// state -> 초기값, draft -> 상태를 어떻게 업데이트 할지 정의
+export default handleActions(
+  {
+    [READ_PART]: (state, action) =>
+      produce(state, (draft) => {
+        draft.data = action.payload.data;
+      }),
+    [ADD_PART]: (state, action) =>
+      produce(state, (draft) => {
+        draft.data.push(action.payload.data);
+      }),
+    [UPDATE_PART]: (state, action) => {
+    
+      
+
+      //(
+      // state.data.map((contents) => {
+      //   if(seqId === action.payload.data.seq_id) {
+      //     console.log(seqId);
+      //     //console.log(action);
+      //   }
+      // })
+      //)
+    },
+    [REMOVE_PART]: (state, action) =>
+      produce(state, (draft) => {
+        //console.log(state);
+        //console.log(action);
+
+        //console.log(draft.data[0].seq_id);
+        //console.log(action.payload.seqId);
+
+        
+        const index = draft.data.findIndex(element => element.seq_id === action.payload.seqId);
+        console.log(index);
+        draft.data.splice(index, 1);
+
+        //const a = draft.data.filter(element => element.seq_id === action.payload.seqId);
+        //console.log(a);
+
+        //console.log(draft.data);
+        //data.seq_id === action.payload.data.seq_id
+        //const index = draft.data.findIndex((e) => console.log(e));
+        //console.log(index);
+      }),
+  },
+  initialState
+);
 
 const parts = {
   getPartMiddleware,

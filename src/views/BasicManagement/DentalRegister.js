@@ -206,9 +206,8 @@ export default function DentalRegister() {
                     </Button>
                   </Grid>    
                   <BasicGrid 
-                      type={"dental"}
-                      columns={columns}
-                      data={dental.data}
+                    columns={columns}
+                    data={dental.data}
                   />
                 </CardBody>
               </Card>

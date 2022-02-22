@@ -64,10 +64,10 @@ function PartRegister() {
   const classes = useStyles();
   const gridRef = React.createRef();
 
-  const { data, loading, err } = useSelector(({part}) => part.data);
+  const { data, loading, err } = useSelector(({part}) => part);
   const dispatch = useDispatch();
   
-
+  
 
   useEffect(() => {
     
@@ -75,11 +75,10 @@ function PartRegister() {
     
     //setOpenPartModal(part.modal);
     
-  }, [dispatch] );
- 
-  console.log(data);
-  
-
+  }, [data.length] );
+  //console.log(data);
+  //console.log(data);
+  //console.log(loading);
 
   const auto1 = [ {part_name: "전체"} ];
   //part.map( (data) => auto1.push({ part_name: data.part_name}) );
