@@ -51,7 +51,8 @@ function SignIn() {
       .then((result) => {
         //  console.log(result);
         if (result.data.status === "SUCCESS") {
-          history.push("/dashboard");
+          // history.push("/dashboard");
+          history.push("/dental");
         } else {
           alert(result.data.message);
         }
@@ -63,14 +64,14 @@ function SignIn() {
 
   return (
     <LoginLayout
-      title="Welcome!"
-      description="Use these awesome forms to login or create new account in your project for free."
+      title="Dental Clinic"
+      description="덴탈 A 사이트"
       image={curved6}
     >
       <Card>
         <SuiBox p={3} mb={1} textAlign="center">
-          <SuiTypography variant="h5" fontWeight="medium">
-            Register with
+          <SuiTypography variant="h3" fontWeight="bold">
+            Login
           </SuiTypography>
         </SuiBox>
         <SuiBox mb={2}>
