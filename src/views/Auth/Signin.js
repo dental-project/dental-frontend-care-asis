@@ -18,6 +18,7 @@ import LoginLayout from "layouts/LoginLayout";
 
 // Images
 import curved6 from "assets/img/curved-images/curved14.jpg";
+import toothImg from "images/toothImg.svg";
 
 // Axios
 import axios from "axios";
@@ -71,7 +72,11 @@ function SignIn() {
       <Card>
         <SuiBox p={3} mb={1} textAlign="center">
           <SuiTypography variant="h3" fontWeight="bold">
-            Login
+            <img
+              src={toothImg}
+              style={{ width: "30%", height: "30%", marginTop: "20px" }}
+            />
+            {/* Login */}
           </SuiTypography>
         </SuiBox>
         <SuiBox mb={2}>
