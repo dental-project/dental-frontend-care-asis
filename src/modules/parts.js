@@ -94,34 +94,19 @@ export default handleActions(
       produce(state, draft => {
         draft.data.push(action.payload.data);
       }),
-    [UPDATE_PART]: (state, action) => {
-      //(
-      // state.data.map((contents) => {
-      //   if(seqId === action.payload.data.seq_id) {
-      //     console.log(seqId);
-      //     //console.log(action);
-      //   }
-      // })
-      //)
-    },
+    [UPDATE_PART]: (state, action) => 
+      produce(state, draft => {
+        const index = draft.data.findIndex(
+          element => element.seq_id === action.payload.data.seq_id
+        );
+        draft.data.splice(index, 1);
+        draft.data.push(action.payload.data.contents);
+      }),
     [REMOVE_PART]: (state, action) =>
       produce(state, draft => {
-        // const filterData = state.data.filter(
-        //   element => element.seq_id !== action.payload.seqId
-        // );
-
-        // draft.data.push(filterData);
-
-        //console.log(state);
-        //console.log(action);
-
-        //console.log(draft.data[0].seq_id);
-        //console.log(action);
-
         const index = draft.data.findIndex(
           element => element.seq_id === action.payload.seqId
         );
-        console.log(index);
         draft.data.splice(index, 1);
       }),
   },
