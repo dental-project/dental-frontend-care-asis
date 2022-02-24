@@ -67,12 +67,12 @@ export default function ItemRegister() {
     const classes = useStyles();
  
     const dispatch = useDispatch();
-    const item = useSelector(({item}) => item);
+    const { data, count } = useSelector(({ item }) => item);
     
     useEffect(() => {
       dispatch(items.getItemMiddleware());
-      setOpenItemModal(item.modal);
-    }, [item.data.length] );
+      setOpenItemModal(false);
+    }, [count] );
     
     const [seqId, setSeqId] = useState();
     const [itemObj, setItemObj] = useState({});
@@ -189,7 +189,7 @@ export default function ItemRegister() {
                   <BasicGrid 
                     type={"item"}
                     columns={columns}
-                    data={item.data}
+                    data={data}
                   />
                 </CardBody>
               </Card>

@@ -64,19 +64,15 @@ function PartRegister() {
   const classes = useStyles();
   const gridRef = React.createRef();
 
-  const { data, loading, err } = useSelector(({ part }) => part);
   const dispatch = useDispatch();
-
+  const { data, loading, modal, err, count } = useSelector(({ part }) => part);
+  
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-
-    //setOpenPartModal(part.modal);
-    console.log("렌더링");
-  }, [data.length]);
-  //console.log(data);
-  //console.log(data);
-  //console.log(loading);
-
+    setOpenPartModal(false);
+    
+  }, [count] );
+  
   const auto1 = [{ part_name: "전체" }];
   //part.map( (data) => auto1.push({ part_name: data.part_name}) );
 
@@ -85,11 +81,12 @@ function PartRegister() {
     stringify: option => option.part_name,
   });
 
-  const [modalType, setModalType] = useState("");
+  
   const [seqId, setSeqId] = useState("");
   const [partObj, setPartObj] = useState({});
 
   // 모달
+  const [modalType, setModalType] = useState("");
   const [openPartAddModal, setOpenPartModal] = useState(false);
   const handlePartModalOpen = () => {
     setOpenPartModal(true);
@@ -217,6 +214,7 @@ function PartRegister() {
         seqId={seqId}
         partObj={partObj}
       />
+        
     </>
   );
 }

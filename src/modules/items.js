@@ -14,14 +14,15 @@ const readItem = createAction(READ_ITEM, (data) => ({ data }));
 //const readSelectItem = createAction(READ_SELECT_ITEM, (data) => ({ data }));
 const addItem = createAction(ADD_ITEM, (data) => ({ data }));
 const updateItem = createAction(UPDATE_ITEM, (data) => ({ data }));
-const removeItem = createAction(REMOVE_ITEM, (data) => ({ data }));
+const removeItem = createAction(REMOVE_ITEM, (seqId) => ({ seqId }));
 
 // initialState
 const initialState = {
   data: [],
   loading: false,
   modal: false,
-  err: null
+  err: null,
+  count: 0
 };
 
 // middleware
@@ -38,20 +39,6 @@ const getItemMiddleware = () => {
       });
   };
 };
-
-// const getSelectItemMiddleware = (partSeqId) => {
-//   return (dispatch) => {
-//     apis
-//       .getSelectItem(partSeqId)
-//       .then((result) => {   
-//         const itemData = result.data;
-//         dispatch(readSelectItem(itemData));
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//       });
-//   };
-// };
 
 const addItemMiddleware = (contents) => {
   return (dispatch) => {
@@ -72,9 +59,7 @@ const updateItemMiddleware = (seqId, contents) => {
     apis
       .patchItem(seqId, contents)
       .then((result) => {
-
         const data = { seq_id: seqId, contents: contents }
-
         dispatch(updateItem(data));
         alert("장치를 수정 했습니다.");
       })
@@ -105,24 +90,17 @@ export default handleActions(
       produce(state, (draft) => {
         draft.data = action.payload.data;
       }),
-    // [READ_SELECT_ITEM]: (state, action) =>
-    //   produce(state, (draft) => {
-    //     draft.data = action.payload.data;
-    //   }),
     [ADD_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.data.push(action.payload);
+        draft.count = draft.count + 1;
       }),
-    [UPDATE_ITEM]: (state, action) => {(
-      state.data.map((seq_id) => {
-        if(seq_id === action.payload.data.contents.seq_id) {
-          //console.log(state.seq_id);
-        }
-      })
-    )},
+    [UPDATE_ITEM]: (state, action) => 
+      produce(state, draft => {
+        draft.count = draft.count + 1;
+      }),
     [REMOVE_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.data = []
+        draft.count = draft.count + 1;
       }),
   },
   initialState

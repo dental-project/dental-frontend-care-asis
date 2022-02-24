@@ -20,6 +20,7 @@ const initialState = {
   loading: false,
   modal: false,
   err: null,
+  count: 0
 };
 
 // middleware
@@ -68,7 +69,6 @@ const updatePartMiddleware = (seqId, contents) => {
 };
 
 const deletePartMiddleware = seqId => {
-  console.log(seqId);
   return dispatch => {
     apis
       .deletePart(seqId)
@@ -92,22 +92,26 @@ export default handleActions(
       }),
     [ADD_PART]: (state, action) =>
       produce(state, draft => {
-        draft.data.push(action.payload.data);
+        //draft.data.push(action.payload.data);
+        draft.count = draft.count + 1;
       }),
     [UPDATE_PART]: (state, action) => 
       produce(state, draft => {
-        const index = draft.data.findIndex(
-          element => element.seq_id === action.payload.data.seq_id
-        );
-        draft.data.splice(index, 1);
-        draft.data.push(action.payload.data.contents);
+        // const index = draft.data.findIndex(
+        //   element => element.seq_id === action.payload.data.seq_id
+        // );
+        //draft.data.splice(index, 1);
+        //draft.data.push(action.payload.data.contents);
+        //draft.modal = false;
+        draft.count = draft.count + 1;
       }),
     [REMOVE_PART]: (state, action) =>
       produce(state, draft => {
-        const index = draft.data.findIndex(
-          element => element.seq_id === action.payload.seqId
-        );
-        draft.data.splice(index, 1);
+        // const index = draft.data.findIndex(
+        //   element => element.seq_id === action.payload.seqId
+        // );
+        // draft.data.splice(index, 1);
+        draft.count = draft.count + 1;
       }),
   },
   initialState

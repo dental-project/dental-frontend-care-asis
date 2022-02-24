@@ -54,14 +54,6 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
    
     const [autoSeqId, setAutoSeqId] = useState('');
 
-    useEffect(() => {
-      dispatch(items.getItemMiddleware());
-      dispatch(parts.getPartMiddleware());
-
-      console.log("렌더링");
-    
-    }, [itemData.length] );
-
     const auto = [];
     partData.map( (data) => auto.push({ part_name: data.part_name}) );
 
