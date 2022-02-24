@@ -20,7 +20,7 @@ const initialState = {
   loading: false,
   modal: false,
   err: null,
-  count: 0
+  count: 0,
 };
 
 // middleware
@@ -95,7 +95,7 @@ export default handleActions(
         //draft.data.push(action.payload.data);
         draft.count = draft.count + 1;
       }),
-    [UPDATE_PART]: (state, action) => 
+    [UPDATE_PART]: (state, action) =>
       produce(state, draft => {
         // const index = draft.data.findIndex(
         //   element => element.seq_id === action.payload.data.seq_id

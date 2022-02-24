@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -65,14 +63,13 @@ function PartRegister() {
   const gridRef = React.createRef();
 
   const dispatch = useDispatch();
-  const { data, loading, modal, err, count } = useSelector(({ part }) => part);
-  
+  const { data, count } = useSelector(({ part }) => part);
+
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
     setOpenPartModal(false);
-    
-  }, [count] );
-  
+  }, [count]);
+
   const auto1 = [{ part_name: "전체" }];
   //part.map( (data) => auto1.push({ part_name: data.part_name}) );
 
@@ -81,7 +78,6 @@ function PartRegister() {
     stringify: option => option.part_name,
   });
 
-  
   const [seqId, setSeqId] = useState("");
   const [partObj, setPartObj] = useState({});
 
@@ -95,7 +91,7 @@ function PartRegister() {
     setOpenPartModal(false);
   };
 
-  const partModalOpen = e => {
+  const partModalOpen = () => {
     setModalType("추가");
     handlePartModalOpen();
   };
@@ -214,7 +210,6 @@ function PartRegister() {
         seqId={seqId}
         partObj={partObj}
       />
-        
     </>
   );
 }
