@@ -18,7 +18,7 @@ import LoginLayout from "layouts/LoginLayout";
 
 // Images
 import curved6 from "assets/img/curved-images/curved14.jpg";
-import toothImg from "images/toothImg.svg";
+import toothImg from "assets/img/toothImg.svg";
 
 // Axios
 import axios from "axios";
