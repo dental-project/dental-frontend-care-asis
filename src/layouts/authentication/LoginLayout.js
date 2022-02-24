@@ -11,10 +11,10 @@ import SuiTypography from "components/Sui/SuiTypography";
 
 // Soft UI Dashboard PRO React example components
 // import DefaultNavbar from "examples/Navbars/DefaultNavbar";
-import PageLayout from "layouts/PageLayout";
+import PageLayout from "layouts/authentication/PageLayout";
 
 // Authentication layout components
-// import Footer from "layouts/authentication/components/Footer";
+import Footer from "layouts/authentication/Footer";
 
 function LoginLayout({ title, description, image, children }) {
   return (
@@ -70,7 +70,7 @@ function LoginLayout({ title, description, image, children }) {
           </Grid>
         </Grid>
       </SuiBox>
-      {/* <Footer /> */}
+      <Footer />
     </PageLayout>
   );
 }

@@ -14,7 +14,8 @@ import SuiInput from "components/Sui/SuiInput";
 import SuiButton from "components/Sui/SuiButton";
 
 // Authentication layout components
-import LoginLayout from "layouts/LoginLayout";
+import LoginLayout from "layouts/authentication/LoginLayout";
+import Separator from "layouts/authentication/Separator";
 
 // Images
 import curved6 from "assets/img/curved-images/curved14.jpg";
@@ -70,19 +71,20 @@ function SignIn() {
       image={curved6}
     >
       <Card>
-        <SuiBox p={3} mb={1} textAlign="center">
-          <SuiTypography variant="h3" fontWeight="bold">
+        {/* <SuiBox p={3} mb={1} textAlign="center"> */}
+        <SuiBox pt={3} mb={1} textAlign="center">
+          {/* <SuiTypography variant="h5" fontWeight="bold">
+          {/* Login 
+          {/* </SuiTypography> */} 
             <img
               src={toothImg}
-              style={{ width: "30%", height: "30%", marginTop: "20px" }}
+              // style={{ width: "30%", height: "30%", marginTop: "20px" }}
             />
-            {/* Login */}
-          </SuiTypography>
         </SuiBox>
-        <SuiBox mb={2}>
+        {/* <SuiBox mb={2}> */}
           {/* <Socials /> */}
-        </SuiBox>
-        {/* <Separator /> */}
+        {/* </SuiBox> */}
+        <Separator />
         <SuiBox pt={2} pb={3} px={3}>
           <SuiBox component="form" role="form">
             <SuiBox mb={2}>
