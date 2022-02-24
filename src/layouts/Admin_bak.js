@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, useLocation } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -8,25 +8,10 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-
 import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-2.jpg";
 import toothImg from "assets/img/toothImg.svg";
-
-// # NEW
-// Soft UI Dashboard PRO React components
-import SuiBox from "components/Sui/SuiBox";
-import Icon from "@mui/material/Icon";
-import Sidenav from "components/Sidenav";
-import Configurator from "components/Configurator";
-// Soft UI Dashboard PRO React contexts
-
-import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
-
-// Images
-import brand from "assets/img/logo-ct.png";
-// # NEW
 
 let ps;
 
@@ -51,48 +36,6 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
-  
-  // # NEW
-    
-  // Open sidenav when mouse enter on mini sidenav
-  const handleOnMouseEnter = () => {
-    if (miniSidenav && !onMouseEnter) {
-      setMiniSidenav(dispatch, false);
-      setOnMouseEnter(true);
-    }
-  };
-
-  // Close sidenav when mouse leave mini sidenav
-  const handleOnMouseLeave = () => {
-    if (onMouseEnter) {
-      setMiniSidenav(dispatch, true);
-      setOnMouseEnter(false);
-    }
-  };
-
-  const [onMouseEnter, setOnMouseEnter] = React.useState(false);
-  const [controller, dispatch] = useSoftUIController();
-  const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
-  const { pathname } = useLocation();
-  
-  // Setting the dir attribute for the body element
-
-  // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
-  React.useEffect(() => {
-    document.body.setAttribute("dir", direction);
-  }, [direction]);
-
-  // Setting page scroll to 0 when changing the route
-  React.useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-  }, [pathname]);
-  
-
-  // # NEW
-
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -117,11 +60,6 @@ export default function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
-
-
-  
-
-
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -140,34 +78,9 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
-
-  const configsButton = (
-    <SuiBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.5rem"
-      height="3.5rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="default" color="inherit">
-        settings
-      </Icon>
-    </SuiBox>
-  );
-
   return (
     <div className={classes.wrapper}>
-      {/* <Sidebar
+      <Sidebar
         routes={routes}
         logoText={"Dental Clinic"}
         logo={toothImg}
@@ -176,19 +89,7 @@ export default function Admin({ ...rest }) {
         open={mobileOpen}
         color={color}
         {...rest}
-      /> */}
-      <>
-      <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName="Soft UI Dashboard"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
       />
-      <Configurator />
-      {configsButton}
-      </>
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}

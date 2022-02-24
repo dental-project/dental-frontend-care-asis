@@ -6,11 +6,17 @@ import App from "App";
 // Soft UI Dashboard React Context Provider
 import { SoftUIControllerProvider } from "context";
 
+// redux
+import { Provider } from 'react-redux';
+import store from './modules/index';
+
 ReactDOM.render(
   <BrowserRouter>
-    <SoftUIControllerProvider>
-      <App />
-    </SoftUIControllerProvider>
+    <Provider store={store}>
+      <SoftUIControllerProvider>
+        <App />
+      </SoftUIControllerProvider>
+    </Provider>
   </BrowserRouter>,
   document.getElementById("root")
 )
