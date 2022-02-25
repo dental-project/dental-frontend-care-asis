@@ -198,7 +198,7 @@ export default function ReceptionRegister() {
     },
     {
       name: "appliance",
-      header: "장치",
+      header: "Appliance",
       align: "center",
       whiteSpace: "normal",
       resizable: true,

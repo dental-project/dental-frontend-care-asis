@@ -59,7 +59,6 @@ const addReceptionMiddleware = contents => {
       .createReception(contents)
       .then(result => {
         dispatch(addReception(contents));
-        alert("접수 정보를 추가 하였습니다.");
       })
       .catch(err => {
         console.error(err);
@@ -73,7 +72,7 @@ const addReceptionPriceMiddleware = contents => {
       .createReceptionPrice(contents)
       .then(result => {
         dispatch(addReceptionPrice(contents));
-        alert("접수단가 정보를 추가 하였습니다.");
+        alert("접수 정보를 추가 하였습니다.");
       })
       .catch(err => {
         console.error(err);

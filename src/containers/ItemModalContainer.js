@@ -49,32 +49,46 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
   const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
   const partData = useSelector(({ part }) => part.data);
-  
+
+  const [partSeqId, setPartSeqId] = useState(itemObj.seqId);
+
+
+  const [partName, setPartName] = useState(itemObj.partName);
+ 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
+    setPartName()
+ //setPartName(itemObj.partName);
   }, []);
 
-  const [autoSeqId, setAutoSeqId] = useState("");
+  useEffect(() => {
+    setPartName(itemObj.partName);
+    console.log(partName);
+  }, [itemObj.partName]);
+    
+  
 
   const auto = [];
-  partData.map(data => auto.push({ part_name: data.part_name }));
-  
+  //partData.map(data => auto.push({ part_name: data.part_name }));
+  partData.map(data => auto.push(data.part_name ));
+  console.log(auto);
   const onSubmit = data => {
+
     if (modalType === "추가") {
-      if (autoSeqId == "") return alert("파트명을 선택하세요.");
+      if (partSeqId === "") return alert("파트명을 선택하세요.");
 
       const content = {
-        part_seq_id: autoSeqId,
+        part_seq_id: partSeqId,
         item_name: data.itemName,
       };
       console.log(content);
       dispatch(items.addItemMiddleware(content));
     } else if (modalType === "수정") {
-      if (autoSeqId == "") return alert("파트명을 선택하세요.");
+      if (partSeqId === "") return alert("파트명을 선택하세요.");
 
       const contents = {
         seq_id: itemObj.seqId,
-        part_seq_id: autoSeqId,
+        part_seq_id: partSeqId,
         item_name: data.itemName,
       };
 
@@ -86,7 +100,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.part_name,
+    stringify: option => option,
   });
 
   return (
@@ -95,25 +109,38 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
         {modalType === "삭제" ? null : (
           <>
             <Autocomplete
+              value={partName}
               className={classes.textField}
               name="partName"
-              control={control}
+              //control={control}
+              //inputValue={partName}
+              id="controllable-states-demo"
               options={auto}
-              getOptionLabel={option => option.part_name}
-              filterOptions={filterOptions}
+              //getOptionLabel={option => option}
+              //filterOptions={filterOptions}
               getOptionSelected={(option, value) => {
-                return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                return (
+                  option?.id === value?.id ||
+                  option?.name.toLowerCase() === value?.name.toLowerCase()
+                );
               }}
+              // onInputChange={(event, newInputValue) => {
+              //   setPartName(newInputValue.part_name);
+              // }}
               onChange={(event, newValue) => {
-                console.log(newValue);
+                
                 if (newValue === null) {
-                  setAutoSeqId("");
+                  setPartSeqId("");
                 } else {
                   const index = partData.findIndex(
-                    obj => obj.part_name === newValue.part_name
+                    obj => console.log(obj)
                   );
-                  const partSeqId = partData[index].seq_id;
-                  setAutoSeqId(partSeqId);
+                  //const partSeqId = partData[index];
+
+                  console.log(index);
+
+                  setPartName(newValue.part_name);
+                  //setPartSeqId(partSeqId);
                 }
               }}
               renderInput={params => (
