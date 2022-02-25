@@ -57,9 +57,25 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, route, href }) => {
+  // const renderRoutes = routes.map(({ path, name, icon, component, layout}) => {
     let returnValue;
+    /**
+   *     type: "collapse",
+    name: "Virtual Reality",
+    key: "virtual-reality",
+    route: "/virtual-reality",
+    icon: <Cube size="12px" />,
+    component: VirtualReality,
+    noCollapse: true,
 
-    if (type === "collapse") {
+    path: "/receptionRegister",
+    name: "접수 리스트",
+    icon: DvrIcon,
+    component: ReceptionRegister,
+    layout: "/dental"
+
+    { type, name, icon, title, noCollapse, key, route, href }
+   */
       returnValue = href ? (
         <Link
           href={href}
@@ -88,26 +104,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       );
-    } else if (type === "title") {
-      returnValue = (
-        <SuiTypography
-          key={key}
-          display="block"
-          variant="caption"
-          fontWeight="bold"
-          textTransform="uppercase"
-          opacity={0.6}
-          pl={3}
-          mt={2}
-          mb={1}
-          ml={1}
-        >
-          {title}
-        </SuiTypography>
-      );
-    } else if (type === "divider") {
-      returnValue = <Divider key={key} />;
-    }
 
     return returnValue;
   });
