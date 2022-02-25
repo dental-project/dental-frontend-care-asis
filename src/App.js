@@ -32,18 +32,18 @@ export default function App() {
 
 
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+  // const getRoutes = (allRoutes) =>
+  //   allRoutes.map((route) => {
+  //     if (route.collapse) {
+  //       return getRoutes(route.collapse);
+  //     }
 
-      if (route.route) {
-        return <Route exact path={route.route} component={route.component} key={route.key} />;
-      }
+  //     if (route.route) {
+  //       return <Route exact path={route.route} component={route.component} key={route.key} />;
+  //     }
 
-      return null;
-    });
+  //     return null;
+  //   });
 
 
 
@@ -51,7 +51,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Switch>
-        {getRoutes(routes)}
+        {/* {getRoutes(routes)} */}
         <Route path="/auth/signin" component={Signin} /> 
         <Route path="/dental" component={Admin} />
         <Redirect from="/" to="/auth/signin" />

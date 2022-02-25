@@ -48,7 +48,7 @@ const routes = [
     key: "receptionRegister",
     icon: <AssignmentOutlinedIcon />,
     component: ReceptionRegister,
-    route: "/receptionRegister",
+    path: "/receptionRegister",
     layout: "/dental",
   },
   {
@@ -56,7 +56,7 @@ const routes = [
     key: "partRegister",
     icon: <AssignmentOutlinedIcon />,
     component: PartRegister,
-    route: "/partRegister",
+    path: "/partRegister",
     layout: "/dental",
   },
   // {
