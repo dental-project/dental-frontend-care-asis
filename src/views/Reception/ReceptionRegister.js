@@ -31,7 +31,6 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import { receptions } from 'modules/receptions';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 const useStyles = makeStyles((theme) => ({
   grid: {
     padding: theme.spacing(1)
@@ -207,89 +206,122 @@ export default function ReceptionRegister() {
 
   return (
     <>
+     
       <Grid container>
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
               <Button
                 type="submit"
-                className={classes.button} 
-                color="info" 
+                className={classes.button}
+                color="info"
                 round
-                onClick={(e) => receptionModalOpen(e)}
-              >추가
+                onClick={e => receptionModalOpen(e)}
+              >
+                추가
               </Button>
             </CardHeader>
             <CardBody>
-
               <form className={classes.container} noValidate>
-                <Grid item xs={4} className={classes.grid} style={{float: "left"}}>
+                <Grid
+                  item
+                  xs={4}
+                  className={classes.grid}
+                  style={{ float: "left" }}
+                >
                   <TextField
                     id="date"
                     label="접수일자"
                     type="date"
                     defaultValue="2022-01-11"
                     className={classes.textField}
-                    style={{width: "45%"}}
+                    style={{ width: "45%" }}
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
-                
+
                   <TextField
                     id="date"
                     label="완성일자"
                     type="date"
                     defaultValue="2022-01-12"
                     className={classes.textField}
-                    style={{width: "45%"}}
+                    style={{ width: "45%" }}
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
-               
                 </Grid>
 
-                <Grid item xs={6} className={classes.grid} style={{float: "left"}}>
+                <Grid
+                  item
+                  xs={6}
+                  className={classes.grid}
+                  style={{ float: "left" }}
+                >
                   <Autocomplete
                     className={classes.grid}
                     options={auto1}
-                    getOptionLabel={(option) => option.title}
+                    getOptionLabel={option => option.title}
                     filterOptions={filterOptions}
-                    style={{float: "left", width: "200px", marginLeft: "20px"}}           
-                    renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                    style={{
+                      float: "left",
+                      width: "200px",
+                      marginLeft: "20px",
+                    }}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="거래처명"
+                        variant="outlined"
+                      />
+                    )}
                   />
 
                   <Autocomplete
                     className={classes.grid}
                     options={auto2}
-                    getOptionLabel={(option) => option.title}
+                    getOptionLabel={option => option.title}
                     filterOptions={filterOptions}
-                    style={{float: "left", width: "200px"}}
-                    renderInput={(params) => <TextField {...params} label="환자명" variant="outlined" />}
+                    style={{ float: "left", width: "200px" }}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="환자명"
+                        variant="outlined"
+                      />
+                    )}
                   />
 
                   <Button
                     type="submit"
-                    color="primary" 
+                    color="primary"
                     round
-                    style={{float: "left", width: "100px"}}
-                  >검색
+                    style={{ float: "left", width: "100px" }}
+                  >
+                    검색
                   </Button>
-                </Grid>   
-                
-                <Grid item xs={2} className={classes.grid} style={{float: "right"}}>
+                </Grid>
+
+                <Grid
+                  item
+                  xs={2}
+                  className={classes.grid}
+                  style={{ float: "right" }}
+                >
                   <Button
-                    color="danger" 
+                    color="danger"
                     round
-                    style={{width: "100%"}}
-                    onClick={(e) => handleClickOpenPrint(e)}
-                  >출력
+                    style={{ width: "100%" }}
+                    onClick={e => handleClickOpenPrint(e)}
+                  >
+                    출력
                   </Button>
                 </Grid>
               </form>
-           
-              <BasicGrid 
+
+              <BasicGrid
                 type={"reception"}
                 columns={columns}
                 data={reception.data}
@@ -299,7 +331,7 @@ export default function ReceptionRegister() {
         </Grid>
       </Grid>
 
-      <ReceptionModalContainer      
+      <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
@@ -307,10 +339,7 @@ export default function ReceptionRegister() {
         receptionObj={receptionObj}
       />
 
-      <PrintModalContainer
-        open={openPrint}
-        close={handleClosePrint}
-      />
+      <PrintModalContainer open={openPrint} close={handleClosePrint} />
 
       {/* <Modal      
         type={"dash"}         
@@ -320,7 +349,6 @@ export default function ReceptionRegister() {
         open={openDashAddModal}
         close={handleDashModalClose}
       /> */}
-
     </>
   );
 }

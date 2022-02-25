@@ -37,7 +37,7 @@ const switchRoutes = (
       if (prop.layout === "/dental") {
         return (
           <Route
-            route={prop.layout + prop.path}
+            route={prop.layout + prop.route}
             component={prop.component}
             key={key}
           />
@@ -179,16 +179,16 @@ export default function Admin({ ...rest }) {
         {...rest}
       /> */}
       <>
-      <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName="Soft UI Dashboard"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-      />
-      <Configurator />
-      {configsButton}
+        <Sidenav
+          color={sidenavColor}
+          brand={brand}
+          brandName="Soft UI Dashboard"
+          routes={routes}
+          onMouseEnter={handleOnMouseEnter}
+          onMouseLeave={handleOnMouseLeave}
+        />
+        <Configurator />
+        {configsButton}
       </>
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar

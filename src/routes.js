@@ -44,15 +44,28 @@ import StarBorder from '@material-ui/icons/StarBorder';
 
 const routes = [
   {
-    type: "collapse",
     name: "접수 리스트",
     key: "receptionRegister",
-    route: "/receptionRegister",
     icon: <AssignmentOutlinedIcon />,
     component: ReceptionRegister,
-    path: "/receptionRegister",
+    route: "/receptionRegister",
     layout: "/dental",
   },
+  {
+    name: "유저 회원가입",
+    key: "partRegister",
+    icon: <AssignmentOutlinedIcon />,
+    component: PartRegister,
+    route: "/partRegister",
+    layout: "/dental",
+  },
+  // {
+  //   path: "/partRegister",
+  //   name: "파트 등록",
+  //   icon: DvrIcon,
+  //   component: PartRegister,
+  //   layout: "/dental",
+  // },
 
   // {
   //   path: "/receptionRegister",
