@@ -50,8 +50,18 @@ const routes = [
     route: "/receptionRegister",
     icon: <AssignmentOutlinedIcon />,
     component: ReceptionRegister,
-    noCollapse: true,
+    path: "/receptionRegister",
+    layout: "/dental",
   },
+
+  // {
+  //   path: "/receptionRegister",
+  //   name: "접수 리스트",
+  //   icon: DvrIcon,
+  //   component: ReceptionRegister,
+  //   layout: "/dental",
+  // },
+
   // {
   //   type: "collapse",
   //   name: "Tables",

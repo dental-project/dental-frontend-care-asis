@@ -33,10 +33,11 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
+
       if (prop.layout === "/dental") {
         return (
           <Route
-            path={prop.layout + prop.path}
+            route={prop.layout + prop.path}
             component={prop.component}
             key={key}
           />
