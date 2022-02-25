@@ -9,14 +9,6 @@ import Signin from "views/Auth/Signin.js";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-
-
-
-// Soft UI Dashboard PRO React example components
-// import Sidenav from "examples/Sidenav";
-// import Sidenav from "components/Sidenav";
-// import Configurator from "examples/Configurator";
-
 // Soft UI Dashboard PRO React themes
 import theme from "assets/theme";
 
@@ -28,30 +20,10 @@ import routes from "routes";
 
 export default function App() {
   
-
-
-
-
-  // const getRoutes = (allRoutes) =>
-  //   allRoutes.map((route) => {
-  //     if (route.collapse) {
-  //       return getRoutes(route.collapse);
-  //     }
-
-  //     if (route.route) {
-  //       return <Route exact path={route.route} component={route.component} key={route.key} />;
-  //     }
-
-  //     return null;
-  //   });
-
-
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Switch>
-        {/* {getRoutes(routes)} */}
         <Route path="/auth/signin" component={Signin} /> 
         <Route path="/dental" component={Admin} />
         <Redirect from="/" to="/auth/signin" />
