@@ -44,7 +44,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
+const ItemModalContainer = ({
+  modalType,
+  open,
+  close,
+  seqId,
+  itemObj,
+}) => {
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
@@ -52,28 +58,23 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
 
   const [partSeqId, setPartSeqId] = useState(itemObj.seqId);
 
-
   const [partName, setPartName] = useState(itemObj.partName);
- 
+  
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    setPartName()
- //setPartName(itemObj.partName);
+    setPartName();
+    //setPartName(itemObj.partName);
   }, []);
 
   useEffect(() => {
     setPartName(itemObj.partName);
-    console.log(partName);
   }, [itemObj.partName]);
-    
-  
 
   const auto = [];
   //partData.map(data => auto.push({ part_name: data.part_name }));
-  partData.map(data => auto.push(data.part_name ));
+  partData.map(data => auto.push(data.part_name));
   console.log(auto);
   const onSubmit = data => {
-
     if (modalType === "추가") {
       if (partSeqId === "") return alert("파트명을 선택하세요.");
 
@@ -132,15 +133,10 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
                 if (newValue === null) {
                   setPartSeqId("");
                 } else {
-                  const index = partData.findIndex(
-                    obj => console.log(obj)
-                  );
-                  //const partSeqId = partData[index];
-
-                  console.log(index);
-
-                  setPartName(newValue.part_name);
-                  //setPartSeqId(partSeqId);
+                  const partSeqId = partData.findIndex(obj => obj.part_name === newValue);
+                 
+                  setPartName(newValue);
+                  setPartSeqId(partSeqId);
                 }
               }}
               renderInput={params => (
