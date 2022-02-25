@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // react-github-btn
-import GitHubButton from "react-github-btn";
+// import GitHubButton from "react-github-btn";
 
 // @mui material components
 import Divider from "@mui/material/Divider";
@@ -212,7 +212,7 @@ function Configurator() {
             view documentation
           </SuiButton>
         </SuiBox>
-        <SuiBox display="flex" justifyContent="center">
+        {/* <SuiBox display="flex" justifyContent="center">
           <GitHubButton
             href="https://github.com/creativetimofficial/soft-ui-dashboard-react"
             data-icon="octicon-star"
@@ -222,7 +222,7 @@ function Configurator() {
           >
             Star
           </GitHubButton>
-        </SuiBox>
+        </SuiBox> */}
         <SuiBox mt={3} textAlign="center">
           <SuiBox mb={0.5}>
             <SuiTypography variant="h6">Thank you for sharing!</SuiTypography>
