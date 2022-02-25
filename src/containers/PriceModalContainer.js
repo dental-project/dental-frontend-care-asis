@@ -5,12 +5,9 @@ import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
 
-import Checkbox from "@material-ui/core/Checkbox";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -66,9 +63,6 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
     dispatch(items.getItemMiddleware());
   }, []);
 
-  //console.log(priceData);
-  //console.log(itemData);
-
   const auto1 = [];
   dentalData.map(data =>
     auto1.push({ vendor_name: data.vendor_name + "/" + data.ceo })
@@ -89,7 +83,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const onSubmit = data => {
     if (modalType === "추가") {
       if (autoVendorSeqId == "") return alert("거래처명을 선택하세요.");
-      if (autoItemSeqId == "") return alert("단가를 선택하세요.");
+      if (autoItemSeqId == "") return alert("장치명을 선택하세요.");
 
       const content = {
         vendor_seq_id: autoVendorSeqId,

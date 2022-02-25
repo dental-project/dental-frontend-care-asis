@@ -48,19 +48,17 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
-
   const partData = useSelector(({ part }) => part.data);
-  console.log(partData);
-
+  
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
   }, []);
 
   const [autoSeqId, setAutoSeqId] = useState("");
+
   const auto = [];
-
-  // partData.map(data => auto.push({ part_name: data.part_name }));
-
+  partData.map(data => auto.push({ part_name: data.part_name }));
+  
   const onSubmit = data => {
     if (modalType === "추가") {
       if (autoSeqId == "") return alert("파트명을 선택하세요.");
@@ -69,7 +67,7 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
         part_seq_id: autoSeqId,
         item_name: data.itemName,
       };
-
+      console.log(content);
       dispatch(items.addItemMiddleware(content));
     } else if (modalType === "수정") {
       if (autoSeqId == "") return alert("파트명을 선택하세요.");
@@ -103,16 +101,19 @@ const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
               options={auto}
               getOptionLabel={option => option.part_name}
               filterOptions={filterOptions}
+              getOptionSelected={(option, value) => {
+                return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+              }}
               onChange={(event, newValue) => {
                 console.log(newValue);
                 if (newValue === null) {
                   setAutoSeqId("");
                 } else {
-                  // const index = partData.findIndex(
-                  //   obj => obj.part_name === newValue.part_name
-                  // );
-                  // const partSeqId = partData[index].seq_id;
-                  // setAutoSeqId(partSeqId);
+                  const index = partData.findIndex(
+                    obj => obj.part_name === newValue.part_name
+                  );
+                  const partSeqId = partData[index].seq_id;
+                  setAutoSeqId(partSeqId);
                 }
               }}
               renderInput={params => (

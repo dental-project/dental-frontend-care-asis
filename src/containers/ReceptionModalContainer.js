@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from "components/CustomButtons/Button.js";
 import Modal from 'components/Modal/Modal'
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -94,10 +90,9 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
    const receptionData = useSelector(({ reception }) => reception.data);
    const [vendorId, setVendorId] = useState('');
 
-
    useEffect(() => {
      dispatch(dentals.getDentalMiddleware());
-   }, [] );
+   }, [dispatch]);
 
    const handleAppendRow = () => {
      gridRef.current.getInstance().appendRow({});
@@ -116,18 +111,8 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
      stringify: (option) => option.vendor_name,
    });
 
-   const filterPartName = createFilterOptions({
-     matchFrom: 'start',
-     stringify: (option) => option.part_name,
-   });
-
    const vendorNameAuto = [];
    dentalData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
-
-
-
-
-
 
    const newArray = receptionData.filter(
      (arr, index, callback) => index === callback.findIndex(t => t.part_name === arr.part_name)
@@ -146,11 +131,6 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
        data.part_name === newArray[i].value 
      ).map( (data) => { return {text: data.item_name, value: data.item_name} } )
    }
-
-
-
-
-
 
    const columns = [
      {
@@ -262,18 +242,16 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
          vendor_seq_id: 1
        }
    
-       console.log(contents);
-
        const gridArr = gridRef.current.getInstance().getData();
  
        for(let i=0; i<gridArr.length; i++) {
-         if(gridArr[i].partName == null || gridArr[i].partName == "") {
+         if(gridArr[i].partName === null || gridArr[i].partName === "") {
            return alert((i+1) + "번째 행 파트명을 선택하세요.");
-         } else if(gridArr[i].itemName == null || gridArr[i].itemName == "") {
+         } else if(gridArr[i].itemName === null || gridArr[i].itemName === "") {
            return alert((i+1) + "번째 행 장치명을 선택하세요.");
-         } else if(gridArr[i].amount == null || gridArr[i].amount == "") {
+         } else if(gridArr[i].amount === null || gridArr[i].amount === "") {
            return alert((i+1) + "번째 행 수량을 입력하세요.");
-         } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice == "") {
+         } else if(gridArr[i].discountPrice == null || gridArr[i].discountPrice === "") {
            return alert((i+1) + "번째 행 할인금액을 입력하세요.");
          }
        }
@@ -300,6 +278,9 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
        dispatch(receptions.addReceptionPriceMiddleware(priceContents));
 
      } else if(modalType === "접수수정") {
+
+        console.log(data);
+
         if(vendorId === "") return alert("거래처명을 선택하세요"); 
      } else if(modalType === "삭제") {
        dispatch(receptions.deleteReceptionMiddleware(seqId));
@@ -373,9 +354,9 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
  
    }
 
-
    return (
-     <Modal open={open} modalType={modalType} screen={true}>
+     <Modal 
+      open={open} modalType={modalType}  screen={ modalType === "삭제" ? false : true}>
        <form onSubmit={handleSubmit(onSubmit)}>
        { 
          modalType === "삭제"
@@ -384,25 +365,26 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
            <>
              <Grid container>
                <Grid item xs={4}>
-                 <Controller
+                 {/* <Controller
                    name="receiptDate"
                    control={control}
-                   render={({ field: { onChange, value }, fieldState: { error } }) => (
+                   render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
                      <TextField
                        className={classes.textField} 
                        label="접수일자"
                        type="date"
-                       defaultValue={receptionObj.receiptDate?receptionObj.receiptDate:""}
+                       //defaultValue={receptionObj.receiptDate?receptionObj.receiptDate:""}
+                       value="2022-02-25"
                        onChange={onChange}
-                       error={!!error}
-                       helperText={error ? error.message : null}
+                       //error={!!error}
+                       //helperText={error ? error.message : null}
                        InputLabelProps={{ shrink: true, }}
                      />
-                   )}
+                   {/* )}
                    rules={{ 
-                     required: "접수일자를 선택하세요."
-                   }}
-                 />
+                    required: "접수일자를 선택하세요."
+                  }}
+                 /> */}
                </Grid>
                <Grid item xs={4}>
                  <Controller
@@ -447,14 +429,16 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
                    freeSolo
                    className={classes.textField}
                    name="vendorName"
+                   //defaultValue={receptionObj.vendorName}
                    control={control}
                    options={vendorNameAuto}
-                   getOptionLabel={(option) => option.vendor_name}
+                   getOptionLabel={(option) => console.log(option)}
                    filterOptions={filterVendorName}
                    getOptionSelected={(option, value) => {
                      return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                    }}
                    onChange={(event, newValue) => {
+                    gridRef.current.getInstance().resetData([], {})
                     if(newValue === null) {
                       setVendorId("");
                     }
@@ -596,38 +580,31 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
              <Button className={classes.button}  color="info" round >
                이미지 업로드
              </Button>
+             <Grid item xs={12}>
+              <Button className={classes.button}  color="info" round  onClick={handleAppendRow}>그리드 행추가</Button>
+              <ToastGrid
+                ref={gridRef}
+                columns={columns}
+                rowHeight={20}
+                bodyHeight={200}
+                virtualScrolling={true}
+                heightResizable={true}
+                rowHeaders={['rowNum']}
+                onAfterChange={onChange}
+              />
+            </Grid>
           </>
          )
        }
-
-
-       <Grid item xs={12}>
-         
-         <Button className={classes.button}  color="info" round  onClick={handleAppendRow}>그리드 행추가</Button>
-         {/* <Button className={classes.button}  color="info" round  onClick={save}>저장</Button> */}
-         <ToastGrid
-           ref={gridRef}
-           columns={columns}
-           rowHeight={20}
-           bodyHeight={200}
-           virtualScrolling={true}
-           heightResizable={true}
-           rowHeaders={['rowNum']}
-           onAfterChange={onChange}
-         />
-         
-       </Grid>
-
-         <Button
-           type="submit"
-           className={classes.button} 
-           color="info" 
-           round
-         >
-           {modalType}
-         </Button>
+        <Button
+          type="submit"
+          className={classes.button} 
+          color="info" 
+          round
+        >
+          {modalType}
+        </Button>
        </form>
-
        <Button
          className={classes.button} 
          color="danger" 

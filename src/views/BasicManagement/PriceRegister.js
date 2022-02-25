@@ -64,6 +64,8 @@ export default function PriceRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ price }) => price);
+  const [seqId, setSeqId] = useState("");
+  const [priceObj, setPriceObj] = useState({});
 
   useEffect(() => {
     dispatch(prices.getPriceMiddleware());
@@ -74,9 +76,6 @@ export default function PriceRegister() {
     matchFrom: "start",
     stringify: option => option.title,
   });
-
-  const [seqId, setSeqId] = useState("");
-  const [priceObj, setPriceObj] = useState({});
 
   // 모달
   const [openPriceAddModal, setOpenPriceModal] = useState(false);

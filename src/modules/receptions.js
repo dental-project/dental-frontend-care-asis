@@ -127,16 +127,16 @@ export default handleActions(
       produce(state, draft => {
         draft.count = draft.count + 1;
       }),
-    // [ADD_RECEPTION_PRICE]: (state, action) =>
-    //   produce(state, draft => {
-    //     draft.data.push(action.payload);
-    //   }),
     [UPDATE_RECEPTION]: state =>
       produce(state, draft => {
         draft.count = draft.count + 1;
       }),
-    [REMOVE_RECEPTION]: state =>
+    [REMOVE_RECEPTION]: (state, action) =>
       produce(state, draft => {
+        const index = draft.data.findIndex(
+          element => element.seq_id === action.payload.seqId
+        );
+        draft.data.splice(index, 1);
         draft.count = draft.count + 1;
       }),
   },

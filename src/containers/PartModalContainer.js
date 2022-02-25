@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
   const classes = useStyles();
-  const { watch, handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
 
   const onSubmit = data => {

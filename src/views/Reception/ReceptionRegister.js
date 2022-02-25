@@ -281,20 +281,6 @@ export default function ReceptionRegister() {
     { title: "조유나" },
   ];
 
-  // const config = {
-  //   withCredentials: true,
-  // }
-
-  // axios
-  //   .get("/api/sell/master/",config)
-  //   .then((result) => {
-  //       console.log(result);
-  //       setDentalData(result.data);
-  //   })
-  //   .catch((error) => {
-  //     throw new Error(error);
-  // });
-
   return (
     <>
       <Grid container>
@@ -405,12 +391,11 @@ export default function ReceptionRegister() {
                   </Button>
                 </Grid>
               </form>
-              <BasicGrid type={"reception"} columns={columns} data={data} />
+              <BasicGrid columns={columns} data={data} />
             </CardBody>
           </Card>
         </Grid>
       </Grid>
-
       <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
@@ -418,37 +403,7 @@ export default function ReceptionRegister() {
         seqId={seqId}
         receptionObj={receptionObj}
       />
-
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
-
-      {/* <Modal      
-        type={"dash"}         
-        modalType={registerType}
-        rowSeqId={rowSeqId}
-        rowValue={rowItemName}
-        open={openDashAddModal}
-        close={handleDashModalClose}
-      /> */}
     </>
   );
 }
-
-// const mapStateToProps = ({subscribers}) => {
-
-//   return {
-//     count: subscribers.count
-//   }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addSubscriber: () => dispatch(addSubscriber())
-//   }
-// }
-// ==>
-
-// const mapDispatchToProps = {
-//   addSubscriber: (number) => addSubscriber(number)
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

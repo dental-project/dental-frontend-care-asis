@@ -4,11 +4,8 @@ import Grid from "@toast-ui/react-grid";
 import TuiGrid from 'tui-grid';
 
 const BasicGrid = ({
- 
   data,
   columns,
-  type,
-  hoc
 }) => {
 
   TuiGrid.applyTheme('striped', {
@@ -59,7 +56,6 @@ const BasicGrid = ({
  
   return(
     <Grid
-      //ref={ref}
       data={data}
       columns={columns}
       rowHeaders={['rowNum']}
@@ -68,7 +64,6 @@ const BasicGrid = ({
       virtualScrolling={true}
       heightResizable={true}
       hidden
-      //onClick={check}
     />
   );
 };
