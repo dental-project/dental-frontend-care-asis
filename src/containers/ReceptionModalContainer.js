@@ -89,7 +89,7 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
    const dentalData = useSelector(({ dental }) => dental.data);
    const receptionData = useSelector(({ reception }) => reception.data);
    const [vendorId, setVendorId] = useState('');
-
+ 
    useEffect(() => {
      dispatch(dentals.getDentalMiddleware());
    }, [dispatch]);
@@ -278,9 +278,6 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
        dispatch(receptions.addReceptionPriceMiddleware(priceContents));
 
      } else if(modalType === "접수수정") {
-
-        console.log(data);
-
         if(vendorId === "") return alert("거래처명을 선택하세요"); 
      } else if(modalType === "삭제") {
        dispatch(receptions.deleteReceptionMiddleware(seqId));
@@ -365,26 +362,25 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
            <>
              <Grid container>
                <Grid item xs={4}>
-                 {/* <Controller
+                 <Controller
                    name="receiptDate"
                    control={control}
-                   render={({ field: { onChange, value }, fieldState: { error } }) => ( */}
+                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                      <TextField
                        className={classes.textField} 
                        label="접수일자"
                        type="date"
-                       //defaultValue={receptionObj.receiptDate?receptionObj.receiptDate:""}
-                       value="2022-02-25"
+                       defaultValue={receptionObj.receiptDate?receptionObj.receiptDate:""}
                        onChange={onChange}
-                       //error={!!error}
-                       //helperText={error ? error.message : null}
+                       error={!!error}
+                       helperText={error ? error.message : null}
                        InputLabelProps={{ shrink: true, }}
                      />
-                   {/* )}
+                   )}
                    rules={{ 
-                    required: "접수일자를 선택하세요."
-                  }}
-                 /> */}
+                     required: "접수일자를 선택하세요."
+                   }}
+                 />
                </Grid>
                <Grid item xs={4}>
                  <Controller
@@ -429,16 +425,17 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
                    freeSolo
                    className={classes.textField}
                    name="vendorName"
-                   //defaultValue={receptionObj.vendorName}
                    control={control}
                    options={vendorNameAuto}
-                   getOptionLabel={(option) => console.log(option)}
+                   getOptionLabel={(option) => option.vendor_name}
                    filterOptions={filterVendorName}
                    getOptionSelected={(option, value) => {
                      return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
                    }}
                    onChange={(event, newValue) => {
+
                     gridRef.current.getInstance().resetData([], {})
+
                     if(newValue === null) {
                       setVendorId("");
                     }
