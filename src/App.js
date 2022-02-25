@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // react-router components
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Admin from "layouts/Admin.js";
 import Signin from "views/Auth/Signin.js";
 
@@ -11,12 +11,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 // Soft UI Dashboard PRO React themes
 import theme from "assets/theme";
-
-// Soft UI Dashboard PRO React routes
-import routes from "routes";
-
-
-
 
 export default function App() {
   

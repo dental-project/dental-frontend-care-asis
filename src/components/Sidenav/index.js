@@ -56,7 +56,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, layout, path, href }) => {
+  const renderRoutes = routes.map(({ type, name, icon, collapse, noCollapse, key, layout, path, href }) => {
   // const renderRoutes = routes.map(({ path, name, icon, component, layout}) => {
     let returnValue;
     /**
@@ -73,12 +73,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     icon: DvrIcon,
     component: ReceptionRegister,
     layout: "/dental"
-
+    
     { type, name, icon, title, noCollapse, key, route, href }
    */
-    console.log(routes);
-
-
+    console.log(collapse);
       returnValue = href ? (
         <Link
           href={href}
@@ -144,7 +142,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       <SuiBox pt={2} my={2} mx={2} mt="auto">
         <SidenavCard />
         <SuiBox mt={2}>
-          <SuiButton
+          {/* <SuiButton
             component="a"
             href="https://creative-tim.com/product/soft-ui-dashboard-pro-react"
             target="_blank"
@@ -154,7 +152,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             fullWidth
           >
             upgrade to pro
-          </SuiButton>
+          </SuiButton> */}
         </SuiBox>
       </SuiBox>
     </SidenavRoot>

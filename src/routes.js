@@ -52,6 +52,29 @@ const routes = [
     layout: "/dental",
   },
   {
+    name: "기초 등록",
+    key: "standardRegister",
+    icon: <ExpandMore />,
+    collapse: [
+      {
+        name: "접수상세 리스트",
+        key: "receptionDetail",
+        icon: <AssignmentOutlinedIcon />,
+        component: ReceptionDetail,
+        path: "/receptionRegister",
+        layout: "/dental",        
+      },
+      {
+        name: "파트 등록",
+        key: "partRegister",
+        // icon: <StarBorder />,
+        component: PartRegister,
+        path: "/partRegister",
+        layout: "/dental",
+      },
+    ],
+  },
+  {
     name: "접수상세 리스트",
     key: "receptionDetail",
     icon: <AssignmentOutlinedIcon />,
