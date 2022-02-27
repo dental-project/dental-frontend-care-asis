@@ -51,51 +51,52 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const { handleSubmit, control } = useForm();
 
   const dispatch = useDispatch();
-  //const priceData = useSelector(({price}) => price.data);
-  const dentalData = useSelector(({ dental }) => dental.data);
-  const itemData = useSelector(({ item }) => item.data);
 
-  const [autoVendorSeqId, setAutoVendorSeqId] = useState("");
-  const [autoItemSeqId, setAutoItemSeqId] = useState("");
+  const dentalAutoData = useSelector(({ dental }) => dental.data);
+  const itemAutoData = useSelector(({ item }) => item.data);
+
+  const [vendorSeqId, setVendorSeqId] = useState("");
+  const [vendorName, setVendorName] = useState("");
+  const [itemSeqId, setItemSeqId] = useState("");
+  const [itemName, setItemName] = useState("");
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
     dispatch(items.getItemMiddleware());
   }, []);
 
+  useEffect(() => {
+    setVendorName(priceObj.vendorName);
+    setItemName(priceObj.itemName);
+  }, [priceObj.vendorName, priceObj.itemName]);
+
   const auto1 = [];
-  dentalData.map(data =>
-    auto1.push({ vendor_name: data.vendor_name + "/" + data.ceo })
-  );
+  dentalAutoData.map(data => auto1.push(data.vendor_name + "/" + data.ceo));
 
   const auto2 = [];
-  itemData.map(data => auto2.push({ item_name: data.item_name }));
+  itemAutoData.map(data => auto2.push(data.item_name));
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.vendor_name,
-  });
-  const filterOptions2 = createFilterOptions({
-    matchFrom: "start",
-    stringify: option => option.item_name,
+    stringify: option => option,
   });
 
   const onSubmit = data => {
     if (modalType === "추가") {
-      if (autoVendorSeqId == "") return alert("거래처명을 선택하세요.");
-      if (autoItemSeqId == "") return alert("장치명을 선택하세요.");
+      if (vendorSeqId == "") return alert("거래처명을 선택하세요.");
+      if (itemSeqId == "") return alert("장치명을 선택하세요.");
 
       const content = {
-        vendor_seq_id: autoVendorSeqId,
-        item_seq_id: autoItemSeqId,
+        vendor_seq_id: vendorSeqId,
+        item_seq_id: itemSeqId,
         price: data.price,
       };
       dispatch(prices.addPriceMiddleware(content));
     } else if (modalType === "단가수정") {
       const contents = {
         seq_id: priceObj.seqId,
-        vendor_seq_id: autoVendorSeqId,
-        item_seq_id: autoItemSeqId,
+        vendor_seq_id: vendorSeqId,
+        item_seq_id: itemSeqId,
         price: priceObj.price,
       };
 
@@ -111,11 +112,29 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
         {modalType === "삭제" ? null : (
           <>
             <Autocomplete
-              name="vendorName"
+              className={classes.textField}
+              value={modalType === "단가수정" ? vendorName : null}
               options={auto1}
-              getOptionLabel={option => option.vendor_name}
               filterOptions={filterOptions}
-              style={{ width: 500 }}
+              getOptionSelected={(option, value) => {
+                return (
+                  option?.id === value?.id ||
+                  option?.name.toLowerCase() === value?.name.toLowerCase()
+                );
+              }}
+              onChange={(event, newValue) => {
+                const vendorNameArr = newValue.split("/");
+                if (newValue === null) {
+                  setVendorSeqId("");
+                } else {
+                  const index = dentalAutoData.findIndex(
+                    obj => obj.vendor_name === vendorNameArr[0]
+                  );
+                  const vendorSeqId = dentalAutoData[index].seq_id;
+                  setVendorName(vendorNameArr[0]);
+                  setVendorSeqId(vendorSeqId);
+                }
+              }}
               renderInput={params => (
                 <TextField
                   {...params}
@@ -124,32 +143,24 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
                   placeholder="Favorites"
                 />
               )}
-              getOptionSelected={(option, value) => {
-                return (
-                  option?.id === value?.id ||
-                  option?.name.toLowerCase() === value?.name.toLowerCase()
-                );
-              }}
-              onChange={(event, newValue) => {
-                const vendorNameArr = newValue.vendor_name.split("/");
-
-                if (newValue === null) {
-                  setAutoVendorSeqId("");
-                } else {
-                  const index = dentalData.findIndex(
-                    obj => obj.vendor_name === vendorNameArr[0]
-                  );
-                  const vendorSeqId = dentalData[index].seq_id;
-                  setAutoVendorSeqId(vendorSeqId);
-                }
-              }}
             />
             <Autocomplete
-              name="itemName"
+              className={classes.textField}
+              value={modalType === "단가수정" ? itemName : null}
               options={auto2}
-              getOptionLabel={option => option.item_name}
-              filterOptions={filterOptions2}
-              style={{ width: 500 }}
+              filterOptions={filterOptions}
+              onChange={(event, newValue) => {
+                if (newValue === null) {
+                  setItemSeqId("");
+                } else {
+                  const index = itemAutoData.findIndex(
+                    obj => obj.item_name === newValue
+                  );
+                  const itemIndex = itemAutoData[index].seq_id;
+                  setItemName(newValue);
+                  setItemSeqId(itemIndex);
+                }
+              }}
               renderInput={params => (
                 <TextField
                   {...params}
@@ -158,23 +169,6 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
                   placeholder="Favorites"
                 />
               )}
-              getOptionSelected={(option, value) => {
-                return (
-                  option?.id === value?.id ||
-                  option?.name.toLowerCase() === value?.name.toLowerCase()
-                );
-              }}
-              onChange={(event, newValue) => {
-                if (newValue === null) {
-                  setAutoItemSeqId("");
-                } else {
-                  const index = itemData.findIndex(
-                    obj => obj.item_name === newValue.item_name
-                  );
-                  const itemSeqId = itemData[index].seq_id;
-                  setAutoItemSeqId(itemSeqId);
-                }
-              }}
             />
             <Controller
               name="price"

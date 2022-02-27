@@ -48,37 +48,53 @@ const useStyles = makeStyles((theme) => ({
 const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
     const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
+    const { handleSubmit, control } = useForm();
     const dispatch = useDispatch();
 
-    const businessTypeData = useSelector(({businessType}) => businessType.data);
-    const businessSectorData = useSelector(({businessSector}) => businessSector.data);
-    const bankData = useSelector(({bank}) => bank.data);
+    const businessTypeAutoData = useSelector(({businessType}) => businessType.data);
+    const businessSectorAutoData = useSelector(({businessSector}) => businessSector.data);
+    const bankAutoData = useSelector(({bank}) => bank.data);
 
-    const [typeNo, setTypeNo] = useState('');
-    const [sectorNo, setSectorNo] = useState('');
-    const [bankNo, setBankNo] = useState('');
- 
-    
+    const [typeNo, setTypeNo] = useState("");
+    const [sectorNo, setSectorNo] = useState("");
+    const [bankNo, setBankNo] = useState("");
+    const [businessTypeData, setBusinessTypeData] = useState("");
+    const [businessSectorData, setBusinessSectorData] = useState("");
+    const [bankData, setBankData] = useState("");
+  
     useEffect(() => {
       dispatch(businessTypes.getBusinessTypeMiddleware());
       dispatch(businessSectors.getBusinessSectorMiddleware());
       dispatch(banks.getBankMiddleware());
-      // console.log("렌더링");
-      //console.log(dentalObj);   -- 봐야함
-      //console.log(businessSectorData);
-    }, [bankData.length] );
+      
+    }, []);
    
+    useEffect(() => {
+      setBusinessTypeData(dentalObj.businessTypeName);
+      setBusinessSectorData(dentalObj.businessSectorName);
+      setBankData(dentalObj.bankName);
+      console.log("Asdasd");
+    }, [
+      dentalObj.businessTypeName,
+      dentalObj.businessSectorName,
+      dentalObj.bankName,
+    ]);
+
     const autoType = [];
-    businessTypeData.map( (data) => autoType.push({ type_name: data.type_name}) );
+    businessTypeAutoData.map(data =>
+      autoType.push(data.type_name)
+    );
 
     const autoSector = [];
-    businessSectorData.map( (data) => autoSector.push({ sector_name: data.sector_name}) );
+    businessSectorAutoData.map(data =>
+      autoSector.push(data.sector_name)
+    );
 
     const autoBank = [];
-    bankData.map( (data) => autoBank.push({ bank_name: data.bank_name}) );
-
-
+    bankAutoData.map(data =>
+      autoBank.push(data.bank_name)
+    );
+    
     const onSubmit = (data) => {
 
       console.log(data);
@@ -134,310 +150,310 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     
       } else if(modalType === "삭제") {
         dispatch(dentals.deleteDentalMiddleware(seqId));
-      }
-
-    //   } else if(modalType === "수정") {
-
-    //     const contents = {
-    //       part_name: data.partName
-    //     };
-        
-    //     dispatch(dentals.updateDentalMiddleware(seqId, contents))
-
-      
-      
+      }      
     }
-
-
 
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
-        stringify: (option) => option.type_name,
+        stringify: (option) => option,
       });
-
-    const filterOptions2 = createFilterOptions({
-      matchFrom: 'start',
-      stringify: (option) => option.sector_name,
-    });
-
-    const filterOptions3 = createFilterOptions({
-      matchFrom: 'start',
-      stringify: (option) => option.bank_name,
-    });
-
-
-
-
 
     return (
       <Modal open={open} modalType={modalType}>
         <form onSubmit={handleSubmit(onSubmit)}>
-        { 
-          modalType === "삭제"
-          ? null
-          : (
-              <>
-                <Controller
-                  name="vendorName"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="거래처명"
-                      variant="outlined"
-                      defaultValue={dentalObj.vendorName ? dentalObj.vendorName:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "거래처명을 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="ceo"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="대표명"
-                      variant="outlined"
-                      defaultValue={dentalObj.ceo ? dentalObj.ceo:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "대표명을 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="tel"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="전화번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.tel ? dentalObj.tel:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "전화번호를 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="mobile"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="휴대폰번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.mobile ? dentalObj.mobile:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "전화번호를 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="fax"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="팩스번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.fax ? dentalObj.fax:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "팩스번호를 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="businessNumber"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="사업자번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.businessNumber ? dentalObj.businessNumber:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "사업자번호를 입력하세요."
-                  }}
-                />
-                <Autocomplete
-                  className={classes.textField}
-                  id="businessType"
-                  options={autoType}
-                  getOptionLabel={(option) => option.type_name}
-                  filterOptions={filterOptions}
-                  style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="업태" variant="outlined" />}
-                  getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                  }}
-                  onChange={(event, newValue) => {
-                    if(newValue === null) {
-                      setTypeNo("");
-                    } else {
-                      const index = businessTypeData.findIndex(obj => obj.type_name === newValue.type_name);
-                      const typeIndex = businessTypeData[index].type_no;
-                      setTypeNo(typeIndex);
+          {modalType === "삭제" ? null : (
+            <>
+              <Controller
+                name="vendorName"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="거래처명"
+                    variant="outlined"
+                    defaultValue={
+                      dentalObj.vendorName ? dentalObj.vendorName : ""
                     }
-                  }}
-                />
-                <Autocomplete
-                  className={classes.textField}
-                  id="businessSector"
-                  options={autoSector}
-                  getOptionLabel={(option) => option.sector_name}
-                  filterOptions={filterOptions2}
-                  style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="업종" variant="outlined" />}
-                  getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                  }}
-                  onChange={(event, newValue) => {
-                    if(newValue === null) {
-                      setSectorNo("");
-                    } else {
-                      const index = businessSectorData.findIndex(obj => obj.sector_name === newValue.sector_name);
-                      const sectorIndex = businessSectorData[index].sector_no;
-                      setSectorNo(sectorIndex);
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "거래처명을 입력하세요.",
+                }}
+              />
+              <Controller
+                name="ceo"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="대표명"
+                    variant="outlined"
+                    defaultValue={dentalObj.ceo ? dentalObj.ceo : ""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "대표명을 입력하세요.",
+                }}
+              />
+              <Controller
+                name="tel"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="전화번호"
+                    variant="outlined"
+                    defaultValue={dentalObj.tel ? dentalObj.tel : ""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "전화번호를 입력하세요.",
+                }}
+              />
+              <Controller
+                name="mobile"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="휴대폰번호"
+                    variant="outlined"
+                    defaultValue={dentalObj.mobile ? dentalObj.mobile : ""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "전화번호를 입력하세요.",
+                }}
+              />
+              <Controller
+                name="fax"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="팩스번호"
+                    variant="outlined"
+                    defaultValue={dentalObj.fax ? dentalObj.fax : ""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "팩스번호를 입력하세요.",
+                }}
+              />
+              <Controller
+                name="businessNumber"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="사업자번호"
+                    variant="outlined"
+                    defaultValue={
+                      dentalObj.businessNumber ? dentalObj.businessNumber : ""
                     }
-                  }}
-                />
-                <Controller
-                  name="postNumber"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="우편번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.postNumber ? dentalObj.postNumber:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "우편번호를 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="address"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="주소"
-                      variant="outlined"
-                      defaultValue={dentalObj.address ? dentalObj.address:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "주소를 입력하세요."
-                  }}
-                />
-                <Autocomplete
-                  className={classes.textField}
-                  id="bankName"
-                  options={autoBank}
-                  getOptionLabel={(option) => option.bank_name}
-                  filterOptions={filterOptions3}
-                  style={{ width: "95%" }}
-                  renderInput={(params) => <TextField {...params} label="은행" variant="outlined" />}
-                  getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                  }}
-                  onChange={(event, newValue) => {
-                    if(newValue === null) {
-                      setBankNo("");
-                    } else {
-                      const index = bankData.findIndex(obj => obj.bank_name === newValue.bank_name);
-                      const bankIndex = bankData[index].bank_no;
-                      setBankNo(bankIndex);
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "사업자번호를 입력하세요.",
+                }}
+              />
+              <Autocomplete
+                className={classes.textField}
+                value={modalType === "치과수정" ? businessTypeData : null}
+                options={autoType}
+                filterOptions={filterOptions}
+                onChange={(event, newValue) => {
+                  if (newValue === null) {
+                    setTypeNo("");
+                  } else {
+                    const index = businessTypeAutoData.findIndex(
+                      obj => obj.type_name === newValue
+                    );
+                    const typeIndex = businessTypeAutoData[index].type_no;
+                    setBusinessTypeData(newValue);
+                    setTypeNo(typeIndex);
+                  }
+                }}
+                renderInput={params => (
+                  <TextField {...params} label="업태" variant="outlined" />
+                )}
+              />
+              <Autocomplete
+                className={classes.textField}
+                value={modalType === "치과수정" ? businessSectorData : null}
+                options={autoSector}
+                filterOptions={filterOptions}
+                onChange={(event, newValue) => {
+                  if (newValue === null) {
+                    setSectorNo("");
+                  } else {
+                    const index = businessSectorAutoData.findIndex(
+                      obj => obj.sector_name === newValue
+                    );
+                    const sectorIndex = businessSectorAutoData[index].sector_no;
+                    setBusinessSectorData(newValue);
+                    setSectorNo(sectorIndex);
+                  }
+                }}
+                renderInput={params => (
+                  <TextField {...params} label="업종" variant="outlined" />
+                )}
+              />
+              <Controller
+                name="postNumber"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="우편번호"
+                    variant="outlined"
+                    defaultValue={
+                      dentalObj.postNumber ? dentalObj.postNumber : ""
                     }
-                  }}
-                />
-                <Controller
-                  name="bankAccount"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="계좌번호"
-                      variant="outlined"
-                      defaultValue={dentalObj.bankAccount ? dentalObj.bankAccount:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: "계좌번호를 입력하세요."
-                  }}
-                />
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="비고"
-                      variant="outlined"
-                      defaultValue={dentalObj.description ? dentalObj.description:""}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                />
-              </>
-            )
-        }
-        <Button
-          type="submit"
-          className={classes.button} 
-          color="info" 
-          round
-        >
-          {modalType}
-        </Button> 
-      </form>
-      <Button
-        className={classes.button} 
-        color="danger" 
-        round
-        onClick={close}
-      >취소
-      </Button>
-    </Modal>
-    )
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "우편번호를 입력하세요.",
+                }}
+              />
+              <Controller
+                name="address"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="주소"
+                    variant="outlined"
+                    defaultValue={dentalObj.address ? dentalObj.address : ""}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "주소를 입력하세요.",
+                }}
+              />
+              <Autocomplete
+                className={classes.textField}
+                value={modalType === "치과수정" ? bankData : null}
+                options={autoBank}
+                filterOptions={filterOptions}
+                onChange={(event, newValue) => {
+                  if (newValue === null) {
+                    setBankNo("");
+                  } else {
+                    const index = bankAutoData.findIndex(
+                      obj => obj.bank_name === newValue
+                    );
+                    const bankIndex = bankAutoData[index].bank_no;
+                    setBankData(newValue);
+                    setBankNo(bankIndex);
+                  }
+                }}
+                renderInput={params => (
+                  <TextField {...params} label="은행" variant="outlined" />
+                )}
+              />
+              <Controller
+                name="bankAccount"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="계좌번호"
+                    variant="outlined"
+                    defaultValue={
+                      dentalObj.bankAccount ? dentalObj.bankAccount : ""
+                    }
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{
+                  required: "계좌번호를 입력하세요.",
+                }}
+              />
+              <Controller
+                name="description"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    className={classes.textField}
+                    label="비고"
+                    variant="outlined"
+                    defaultValue={
+                      dentalObj.description ? dentalObj.description : ""
+                    }
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+              />
+            </>
+          )}
+          <Button type="submit" className={classes.button} color="info" round>
+            {modalType}
+          </Button>
+        </form>
+        <Button className={classes.button} color="danger" round onClick={close}>
+          취소
+        </Button>
+      </Modal>
+    );
 }
 
 export default DentalModalContainer;

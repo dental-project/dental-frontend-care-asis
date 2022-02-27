@@ -54,16 +54,13 @@ const ItemModalContainer = ({
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
-  const partData = useSelector(({ part }) => part.data);
+  const partAutoData = useSelector(({ part }) => part.data);
 
-  const [partSeqId, setPartSeqId] = useState(itemObj.seqId);
+  const [partSeqId, setPartSeqId] = useState("");
+  const [partName, setPartName] = useState("");
 
-  const [partName, setPartName] = useState(itemObj.partName);
-  
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    setPartName();
-    //setPartName(itemObj.partName);
   }, []);
 
   useEffect(() => {
@@ -71,9 +68,8 @@ const ItemModalContainer = ({
   }, [itemObj.partName]);
 
   const auto = [];
-  //partData.map(data => auto.push({ part_name: data.part_name }));
-  partData.map(data => auto.push(data.part_name));
-  console.log(auto);
+  partAutoData.map(data => auto.push(data.part_name));
+  
   const onSubmit = data => {
     if (modalType === "추가") {
       if (partSeqId === "") return alert("파트명을 선택하세요.");
@@ -92,7 +88,7 @@ const ItemModalContainer = ({
         part_seq_id: partSeqId,
         item_name: data.itemName,
       };
-
+      console.log(contents);
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
     } else if (modalType === "삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
@@ -110,33 +106,20 @@ const ItemModalContainer = ({
         {modalType === "삭제" ? null : (
           <>
             <Autocomplete
-              value={partName}
               className={classes.textField}
-              name="partName"
-              //control={control}
-              //inputValue={partName}
-              id="controllable-states-demo"
+              value={modalType === "수정" ? partName : null}
               options={auto}
-              //getOptionLabel={option => option}
-              //filterOptions={filterOptions}
-              getOptionSelected={(option, value) => {
-                return (
-                  option?.id === value?.id ||
-                  option?.name.toLowerCase() === value?.name.toLowerCase()
-                );
-              }}
-              // onInputChange={(event, newInputValue) => {
-              //   setPartName(newInputValue.part_name);
-              // }}
+              filterOptions={filterOptions}
               onChange={(event, newValue) => {
-                
                 if (newValue === null) {
                   setPartSeqId("");
                 } else {
-                  const partSeqId = partData.findIndex(obj => obj.part_name === newValue);
-                 
+                  const index = partAutoData.findIndex(
+                    obj => obj.part_name === newValue
+                  );
+                  const partIndex = partAutoData[index].seq_id;
                   setPartName(newValue);
-                  setPartSeqId(partSeqId);
+                  setPartSeqId(partIndex);
                 }
               }}
               renderInput={params => (
