@@ -66,14 +66,18 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       dispatch(businessTypes.getBusinessTypeMiddleware());
       dispatch(businessSectors.getBusinessSectorMiddleware());
       dispatch(banks.getBankMiddleware());
-      
     }, []);
    
-    useEffect(() => {
-      setBusinessTypeData(dentalObj.businessTypeName);
+  useEffect(() => {
+    if (modalType === "치과수정") {
+      setBusinessTypeData(dentalObj.businessTypeName)
       setBusinessSectorData(dentalObj.businessSectorName);
       setBankData(dentalObj.bankName);
-      console.log("Asdasd");
+    } else {
+      setBusinessTypeData("");
+      setBusinessSectorData("");
+      setBankData("");
+    }
     }, [
       dentalObj.businessTypeName,
       dentalObj.businessSectorName,
@@ -154,9 +158,9 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     }
 
     const filterOptions = createFilterOptions({
-        matchFrom: 'start',
-        stringify: (option) => option,
-      });
+      matchFrom: 'start',
+      stringify: (option) => option,
+    });
 
     return (
       <Modal open={open} modalType={modalType}>
@@ -295,7 +299,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               />
               <Autocomplete
                 className={classes.textField}
-                value={modalType === "치과수정" ? businessTypeData : null}
+                value={businessTypeData}
                 options={autoType}
                 filterOptions={filterOptions}
                 onChange={(event, newValue) => {
@@ -308,6 +312,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                     const typeIndex = businessTypeAutoData[index].type_no;
                     setBusinessTypeData(newValue);
                     setTypeNo(typeIndex);
+                    console.log(newValue);
                   }
                 }}
                 renderInput={params => (
@@ -316,7 +321,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               />
               <Autocomplete
                 className={classes.textField}
-                value={modalType === "치과수정" ? businessSectorData : null}
+                value={modalType === "치과수정" ? businessSectorData : ""}
                 options={autoSector}
                 filterOptions={filterOptions}
                 onChange={(event, newValue) => {
