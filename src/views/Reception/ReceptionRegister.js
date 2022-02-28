@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom"; 
+import { useHistory } from "react-router-dom";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
 
 // core components
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -26,76 +26,74 @@ import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
 
-import { receptions } from 'modules/receptions';
-import { useDispatch, useSelector } from 'react-redux';
+import { receptions } from "modules/receptions";
+import { useDispatch, useSelector } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   grid: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
 
   textFieldDate: {
-    width: "100%"
+    width: "100%",
   },
   textField: {
     width: "100%",
     margin: theme.spacing(1),
-    '& label.Mui-focused': {
-        color: '#00acc1',
+    "& label.Mui-focused": {
+      color: "#00acc1",
     },
-    '& .MuiOutlinedInput-root': {
-    '&.Mui-focused fieldset': {
-            borderColor: '#00acc1',
-        },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#00acc1",
+      },
     },
   },
   customText: {
     color: "#26c6da",
     fontWeight: "bold",
-    cursor:"pointer",
+    cursor: "pointer",
     "&:hover": {
-      color: "#1993A8"
-    }
+      color: "#1993A8",
+    },
   },
   button: {
-    width: "100%"
-  }
+    width: "100%",
+  },
 }));
 
 export default function ReceptionRegister() {
-
   const classes = useStyles();
   let history = useHistory();
 
-
   const dispatch = useDispatch();
-  const reception = useSelector(({reception}) => reception);
-  
+  const reception = useSelector(({ reception }) => reception);
+
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     //setOpenItemModal(item.modal);
     console.log(reception.data);
-  }, [] );
+  }, []);
 
   const [seqId, setSeqId] = useState();
   const [receptionObj, setReceptionObj] = useState({});
 
   // 추가 모달
-  const [openReceptionAddModal, setOpenReceptionAddModal] = React.useState(false);
+  const [openReceptionAddModal, setOpenReceptionAddModal] = React.useState(
+    false
+  );
   const [modalType, setModalType] = useState("");
-  
+
   const handleReceptionModalOpen = () => {
     setOpenReceptionAddModal(true);
   };
   const handleReceptionModalClose = () => {
     setOpenReceptionAddModal(false);
   };
- 
-
-
-
 
   // 출력 모달
   const [openPrint, setOpenPrint] = React.useState(false);
@@ -106,24 +104,22 @@ export default function ReceptionRegister() {
     setOpenPrint(false);
   };
 
-
-
   const onDetailButtonClicked = () => {
     history.push("/dental/receptionDetail");
   };
 
-  const receptionModalOpen = (e) => {
+  const receptionModalOpen = e => {
     setModalType("추가");
     handleReceptionModalOpen();
-  }
+  };
 
-  const onUpdateButtonClicked = (receptionObj) => {
+  const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
     setReceptionObj(receptionObj);
     handleReceptionModalOpen();
   };
 
-  const onRemoveButtonClicked = (seqId) => {
+  const onRemoveButtonClicked = seqId => {
     setModalType("삭제");
     setSeqId(seqId);
     handleReceptionModalOpen();
@@ -131,17 +127,105 @@ export default function ReceptionRegister() {
 
   const columns = [
     { name: "seq_id", header: "codeNo", align: "center", hidden: true },
-    { name: "receipt_date", header: "접수일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }} },
-    { name: "completion_date", header: "완성일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }}},
-    { name: "delivery_date", header: "배달일자", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: { type: 'date', options: { format: 'yyyy.MM.dd' }} },
-    { name: "vendor_name", header: "거래처", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "chart_number", header: "차트번호", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "upper", header: "Upper", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "lower", header: "Lower", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "bite", header: "Bite", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "appliance", header: "장치", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "patient_name", header: "환자명", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
-    { name: "description", header: "비고", align: "center", whiteSpace: 'normal', resizable: true, sortable: true, filter: 'select' },
+    {
+      name: "receipt_date",
+      header: "접수일자",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: { type: "date", options: { format: "yyyy.MM.dd" } },
+    },
+    {
+      name: "completion_date",
+      header: "완성일자",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: { type: "date", options: { format: "yyyy.MM.dd" } },
+    },
+    {
+      name: "delivery_date",
+      header: "배달일자",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: { type: "date", options: { format: "yyyy.MM.dd" } },
+    },
+    {
+      name: "vendor_name",
+      header: "거래처",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "chart_number",
+      header: "차트번호",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "upper",
+      header: "Upper",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "lower",
+      header: "Lower",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "bite",
+      header: "Bite",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "appliance",
+      header: "장치",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "patient_name",
+      header: "환자명",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
+    {
+      name: "description",
+      header: "비고",
+      align: "center",
+      whiteSpace: "normal",
+      resizable: true,
+      sortable: true,
+      filter: "select",
+    },
     {
       name: "detail",
       header: "상세보기",
@@ -149,9 +233,9 @@ export default function ReceptionRegister() {
       renderer: {
         type: DetailButtonRenderer,
         options: {
-          onDetailButtonClicked
-        }
-      }
+          onDetailButtonClicked,
+        },
+      },
     },
     {
       name: "update",
@@ -160,53 +244,62 @@ export default function ReceptionRegister() {
       renderer: {
         type: UpdateButtonRenderer,
         options: {
-          onUpdateButtonClicked
-        }
-      }
+          onUpdateButtonClicked,
+        },
+      },
     },
     {
-      name: 'remove',
-      header: '삭제',
+      name: "remove",
+      header: "삭제",
       align: "center",
       renderer: {
         type: RemoveButtonRenderer,
         options: {
-          onRemoveButtonClicked
-        }
-      }
-    }
+          onRemoveButtonClicked,
+        },
+      },
+    },
   ];
 
-
   const filterOptions = createFilterOptions({
-    matchFrom: 'start',
-    stringify: (option) => option.title,
+    matchFrom: "start",
+    stringify: option => option.title,
   });
 
+  const auto1 = [
+    { title: "전체" },
+    { title: "리더스탑치과" },
+    { title: "이바른치과" },
+    { title: "연세두리치과" },
+    { title: "서울스위트치과" },
+    { title: "연세바로치과" },
+    { title: "서울시카고" },
+  ];
+  const auto2 = [
+    { title: "전체" },
+    { title: "최진실" },
+    { title: "전윤화" },
+    { title: "정보경" },
+    { title: "이유림" },
+    { title: "조유나" },
+  ];
 
-  const auto1 = [ { title: "전체" }, { title: "리더스탑치과" }, { title: "이바른치과" }, { title: "연세두리치과" }, { title: "서울스위트치과" }, { title: "연세바로치과" }, { title: "서울시카고" }];
-  const auto2 = [ { title: "전체" }, { title: "최진실" }, { title: "전윤화" }, { title: "정보경" }, { title: "이유림" }, { title: "조유나" }]
+  // const config = {
+  //   withCredentials: true,
+  // }
 
-
-    // const config = {
-    //   withCredentials: true,
-    // }   
-    
-    // axios
-    //   .get("/api/sell/master/",config)
-    //   .then((result) => {
-    //       console.log(result);
-    //       setDentalData(result.data);
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error);
-    // });
- 
-   
+  // axios
+  //   .get("/api/sell/master/",config)
+  //   .then((result) => {
+  //       console.log(result);
+  //       setDentalData(result.data);
+  //   })
+  //   .catch((error) => {
+  //     throw new Error(error);
+  // });
 
   return (
     <>
-     
       <Grid container>
         <Grid item xs={12} className={classes.grid}>
           <Card>

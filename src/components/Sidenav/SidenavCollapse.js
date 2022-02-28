@@ -23,31 +23,106 @@ import {
 // Soft UI Dashboard PRO React context
 import { useSoftUIController } from "context";
 
-function SidenavCollapse({ color, icon, name, children, active, noCollapse, open, ...rest }) {
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import { NavLink } from "react-router-dom";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import StarBorder from "@material-ui/icons/StarBorder";
+import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
+
+const useStyles = makeStyles(styles);
+
+function SidenavCollapse({ color, icon, name, children, active, noCollapse, open, subItem, ...rest }) {
   const [controller] = useSoftUIController();
   const { miniSidenav, transparentSidenav } = controller;
   
+  const classes = useStyles();
+  const [openSub, setOpenSub] = React.useState(true);
+
+  const handleClick = () => {
+    setOpenSub(!openSub);
+  };
+
+
+
+
+
+  // const SubItemOn = () => (
+  //   <>
+  //     <ListItem component="li" button onClick={handleClick}>
+  //       <SuiBox
+  //         {...rest}
+  //         sx={theme => collapseItem(theme, { active, transparentSidenav })}
+  //       >
+  //         <ListItemIcon
+  //           sx={theme =>
+  //             collapseIconBox(theme, { active, transparentSidenav, color })
+  //           }
+  //         >
+  //           {typeof icon === "string"
+  //             ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
+  //               { icon }
+  //             : icon}
+  //         </ListItemIcon>
+
+  //         <ListItemText
+  //           primary={name}
+  //           sx={theme =>
+  //             collapseText(theme, { miniSidenav, transparentSidenav, active })
+  //           }
+  //         />
+  //         {openSub ? (
+  //           <ExpandLess style={{ color: "#000" }} />
+  //         ) : (
+  //           <ExpandMore style={{ color: "#000" }} />
+  //         )}
+  //       </SuiBox>
+  //     </ListItem>
+
+  //     <Collapse in={open} timeout="auto" unmountOnExit>
+  //       <List component="div" disablePadding style={{ marginLeft: "20px" }}>
+  //         <ListItem button className={classes.nested}>
+  //           <ListItemIcon style={{ color: "#000" }}>
+  //             <StarBorder style={{ color: "#000" }} />
+  //           </ListItemIcon>
+  //           <ListItemText primary="파트등록" style={{ color: "#000" }} />
+  //         </ListItem>
+  //       </List>
+  //     </Collapse>
+      
+  //   </>
+  // );
+
+  const SubItemOff = () => (
+    <ListItem component="li">
+      <SuiBox
+        {...rest}
+        sx={theme => collapseItem(theme, { active, transparentSidenav })}
+      >
+        <ListItemIcon
+          sx={theme =>
+            collapseIconBox(theme, { active, transparentSidenav, color })
+          }
+        >
+          {typeof icon === "string"
+            ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
+              { icon }
+            : icon}
+        </ListItemIcon>
+        <ListItemText
+          primary={name}
+          sx={theme =>
+            collapseText(theme, { miniSidenav, transparentSidenav, active })
+          }
+        />
+      </SuiBox>
+    </ListItem>
+  );
+
   return (
     <>
-      <ListItem component="li">
-        <SuiBox {...rest} sx={(theme) => collapseItem(theme, { active, transparentSidenav })}>
-          <ListItemIcon
-            sx={(theme) => collapseIconBox(theme, { active, transparentSidenav, color })}
-          >
-            {typeof icon === "string" ? (
-              // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
-              {icon}
-            ) : (
-              icon
-            )}
-          </ListItemIcon>
-
-          <ListItemText
-            primary={name}
-            sx={(theme) => collapseText(theme, { miniSidenav, transparentSidenav, active })}
-          />
-        </SuiBox>
-      </ListItem>
+      <SubItemOff />
     </>
   );
 }

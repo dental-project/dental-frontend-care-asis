@@ -5,6 +5,9 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+// core components
+import Navbar from "components/Navbars/Navbar.js";
+import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
@@ -19,8 +22,14 @@ import Sidenav from "components/Sidenav";
 import Configurator from "components/Configurator";
 // Soft UI Dashboard PRO React contexts
 
-import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import {
+  useSoftUIController,
+  setMiniSidenav,
+  setOpenConfigurator,
+} from "context";
 
+// Images
+import brand from "assets/img/logo-ct.png";
 // # NEW
 
 let ps;
@@ -28,12 +37,15 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
+      console.log(prop);
       if (prop.layout === "/dental") {
         return (
           <Route
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
+            color={"#000"}
+            subItem={prop.subItem}
           />
         );
       }
@@ -46,9 +58,8 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
-  
   // # NEW
-    
+
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {
@@ -67,13 +78,20 @@ export default function Admin({ ...rest }) {
 
   const [onMouseEnter, setOnMouseEnter] = React.useState(false);
   const [controller, dispatch] = useSoftUIController();
-  const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
+  const {
+    miniSidenav,
+    direction,
+    layout,
+    openConfigurator,
+    sidenavColor,
+  } = controller;
   const { pathname } = useLocation();
-  
+
   // Setting the dir attribute for the body element
 
   // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+  const handleConfiguratorOpen = () =>
+    setOpenConfigurator(dispatch, !openConfigurator);
 
   React.useEffect(() => {
     document.body.setAttribute("dir", direction);
@@ -84,7 +102,6 @@ export default function Admin({ ...rest }) {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
-  
 
   // # NEW
 
@@ -97,10 +114,10 @@ export default function Admin({ ...rest }) {
   const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const handleImageClick = (image) => {
+  const handleImageClick = image => {
     setImage(image);
   };
-  
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -112,10 +129,6 @@ export default function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
-
-
-  
-
 
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
@@ -175,16 +188,21 @@ export default function Admin({ ...rest }) {
       <>
         <Sidenav
           color={sidenavColor}
-          brand={toothImg}
+          brand={brand}
           brandName="Soft UI Dashboard"
           routes={routes}
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}
         />
-        {/* <Configurator />
-        {configsButton} */}
+        <Configurator />
+        {configsButton}
       </>
       <div className={classes.mainPanel} ref={mainPanel}>
+        <Navbar
+          routes={routes}
+          handleDrawerToggle={handleDrawerToggle}
+          {...rest}
+        />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>

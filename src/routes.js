@@ -1,27 +1,6 @@
-/** 
-  All of the routes for the Soft UI Dashboard React are added here,
-  You can add a new route, customize the routes and delete the routes here.
-
-  Once you add a new route on this file it will be visible automatically on
-  the Sidenav.
-
-  For adding a new route you can follow the existing routes in the routes array.
-  1. The `type` key with the `collapse` value is used for a route.
-  2. The `type` key with the `title` value is used for a title inside the Sidenav. 
-  3. The `type` key with the `divider` value is used for a divider between Sidenav items.
-  4. The `name` key is used for the name of the route on the Sidenav.
-  5. The `key` key is used for the key of the route (It will help you with the key prop inside a loop).
-  6. The `icon` key is used for the icon of the route on the Sidenav, you have to add a node.
-  7. The `collapse` key is used for making a collapsible item on the Sidenav that has other routes
-  inside (nested routes), you need to pass the nested routes inside an array as a value for the `collapse` key.
-  8. The `route` key is used to store the route location which is used for the react router.
-  9. The `href` key is used to store the external links location.
-  10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
-  10. The `component` key is used to store the component of its route.
-*/
 import React from "react";
 // Soft UI Dashboard React layouts
-import DvrIcon from '@material-ui/icons/Dvr';
+import DvrIcon from "@material-ui/icons/Dvr";
 import ReceptionRegister from "views/Reception/ReceptionRegister.js";
 import ReceptionDetail from "views/Reception/ReceptionDetail.js";
 import PartRegister from "views/BasicManagement/PartRegister.js";
@@ -30,16 +9,14 @@ import DentalRegister from "views/BasicManagement/DentalRegister.js";
 import PriceRegister from "views/BasicManagement/PriceRegister.js";
 import UserRegister from "views/Users/UserRegister.js";
 
-
-
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Collapse from '@material-ui/core/Collapse';
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
-import StarsIcon from '@material-ui/icons/Stars';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Collapse from "@material-ui/core/Collapse";
+import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
+import StarsIcon from "@material-ui/icons/Stars";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import StarBorder from "@material-ui/icons/StarBorder";
 //  import SignUp from "layouts/authentication/sign-up";
 
 const routes = [
@@ -50,77 +27,18 @@ const routes = [
     component: ReceptionRegister,
     path: "/receptionRegister",
     layout: "/dental",
-  },
-  // {
-  //   name: "기초 등록",
-  //   key: "standardRegister",
-  //   icon: <ExpandMore />,
-  //   collapse: [
-  //     {
-  //       name: "접수상세 리스트",
-  //       // key: "receptionDetail2",
-  //       icon: <AssignmentOutlinedIcon />,
-  //       component: ReceptionDetail,
-  //       path: "/receptionRegister",
-  //       layout: "/dental",        
-  //     },
-  //     {
-  //       name: "파트 등록",
-  //       // key: "partRegister2",
-  //       // icon: <StarBorder />,
-  //       component: PartRegister,
-  //       path: "/partRegister",
-  //       layout: "/dental",
-  //     },
-  //   ],
-  // },
-  {
-    name: "접수상세 리스트",
-    key: "receptionDetail",
-    icon: <AssignmentOutlinedIcon />,
-    component: ReceptionDetail,
-    path: "/receptionRegister",
-    layout: "/dental",
-  },
-  {
-    name: "파트 등록",
-    key: "partRegister",
-    icon: <StarBorder />,
-    component: PartRegister,
-    path: "/partRegister",
-    layout: "/dental",
-  },
-  {
-    name: "장치 등록",
-    key: "itemRegister",
-    icon: <StarBorder />,
-    component: ItemRegister,
-    path: "/itemRegister",
-    layout: "/dental",
-  },
-  {
-    name: "치과 등록",
-    key: "dentalRegister",
-    icon: <StarBorder />,
-    component: DentalRegister,
-    path: "/dentalRegister",
-    layout: "/dental",
-  },
-  {
-    name: "단가 등록",
-    key: "priceRegister",
-    icon: <StarBorder />,
-    component: PriceRegister,
-    path: "/priceRegister",
-    layout: "/dental",
+    noCollapse: true,
+    subItem: false,
   },
   {
     name: "유저 회원가입",
-    key: "userRegister",
-    icon: <PersonAddIcon />,
-    component: UserRegister,
-    path: "/userRegister",
+    key: "partRegister",
+    icon: <AssignmentOutlinedIcon />,
+    component: PartRegister,
+    path: "/partRegister",
     layout: "/dental",
+    noCollapse: false,
+    subItem: true,
   },
   // {
   //   path: "/partRegister",

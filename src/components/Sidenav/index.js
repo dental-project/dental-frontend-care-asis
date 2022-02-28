@@ -28,12 +28,39 @@ import sidenavLogoLabel from "components/Sidenav/styles/sidenav";
 // Soft UI Dashboard PRO React context
 import { useSoftUIController, setMiniSidenav } from "context";
 
+import { makeStyles } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import StarsIcon from "@material-ui/icons/Stars";
+import StarBorder from "@material-ui/icons/StarBorder";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
+
+const useStyles = makeStyles(styles);
+
+
+
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
   const { pathname } = location;
   const collapseName = pathname.split("/").slice(1)[0];
+
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+
+
+
+
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -56,8 +83,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ type, name, icon, collapse, noCollapse, key, layout, path, href }) => {
-  // const renderRoutes = routes.map(({ path, name, icon, component, layout}) => {
+  const renderRoutes = routes.map(({ type, name, icon, collapse, noCollapse, key, layout, path, href, subItem }) => {
+    // const renderRoutes = routes.map(({ path, name, icon, component, layout}) => {
     let returnValue;
     /**
    *     type: "collapse",
@@ -76,22 +103,65 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     
     { type, name, icon, title, noCollapse, key, route, href }
    */
-    returnValue = href ? (
-        <Link
-          href={href}
-          key={key}
-          target="_blank"
-          rel="noreferrer"
-          sx={{ textDecoration: "none" }}
-        >
-          <SidenavCollapse
-            color={color}
-            name={name}
-            icon={icon}
-            active={key === collapseName}
-            noCollapse={noCollapse}
-          />
-        </Link>
+    console.log(collapse);
+    // returnValue = href ? (
+    //   <Link
+    //     href={href}
+    //     key={key}
+    //     target="_blank"
+    //     rel="noreferrer"
+    //     sx={{ textDecoration: "none" }}
+    //   >
+    //     <SidenavCollapse
+    //       color={color}
+    //       name={name}
+    //       icon={icon}
+    //       active={key === collapseName}
+    //       noCollapse={noCollapse}
+    //     />
+    //   </Link>
+    // ) : (
+          
+    //   <NavLink to={layout + path} key={key}>
+    //     <SidenavCollapse
+    //       color={color}
+    //       key={key}
+    //       name={name}
+    //       icon={icon}
+    //       active={key === collapseName}
+    //       noCollapse={noCollapse}
+    //       subItem={subItem}
+    //     />
+    //   </NavLink>
+    // );
+    returnValue = (
+      subItem === true ? (
+        <>
+          <ListItem button onClick={handleClick}>
+            <ListItemIcon>
+              <StarsIcon style={{ color: "#000" }} />
+            </ListItemIcon>
+            <ListItemText primary="기초관리" style={{ color: "#000" }} />
+            {open ? (
+              <ExpandLess style={{ color: "#000" }} />
+            ) : (
+              <ExpandMore style={{ color: "#000" }} />
+            )}
+          </ListItem>
+
+          <NavLink to={"/dental/partRegister"} key={key}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding style={{ marginLeft: "20px" }}>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon style={{ color: "#000" }}>
+                    <StarBorder style={{ color: "#000" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="파트등록" style={{ color: "#000" }} />
+                </ListItem>
+              </List>
+            </Collapse>
+          </NavLink>
+        </>
       ) : (
         <NavLink to={layout + path} key={key}>
           <SidenavCollapse
@@ -101,9 +171,14 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             icon={icon}
             active={key === collapseName}
             noCollapse={noCollapse}
+            subItem={subItem}
           />
         </NavLink>
-      );
+      )
+     );
+    
+    
+    
     return returnValue;
   });
 
