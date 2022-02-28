@@ -19,6 +19,7 @@ import SuiButton from "components/Sui/SuiButton";
 
 // Soft UI Dashboard PRO React example components
 import SidenavCollapse from "components/Sidenav/SidenavCollapse";
+import SidenavDropdown from "components/Sidenav/SidenavDropdown";
 import SidenavCard from "components/Sidenav/SidenavCard";
 
 // Custom styles for the Sidenav
@@ -103,65 +104,44 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     
     { type, name, icon, title, noCollapse, key, route, href }
    */
-    console.log(collapse);
-    // returnValue = href ? (
-    //   <Link
-    //     href={href}
-    //     key={key}
-    //     target="_blank"
-    //     rel="noreferrer"
-    //     sx={{ textDecoration: "none" }}
-    //   >
-    //     <SidenavCollapse
-    //       color={color}
-    //       name={name}
-    //       icon={icon}
-    //       active={key === collapseName}
-    //       noCollapse={noCollapse}
-    //     />
-    //   </Link>
-    // ) : (
-          
-    //   <NavLink to={layout + path} key={key}>
-    //     <SidenavCollapse
-    //       color={color}
-    //       key={key}
-    //       name={name}
-    //       icon={icon}
-    //       active={key === collapseName}
-    //       noCollapse={noCollapse}
-    //       subItem={subItem}
-    //     />
-    //   </NavLink>
-    // );
     returnValue = (
-      subItem === true ? (
-        <>
-          <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-              <StarsIcon style={{ color: "#000" }} />
-            </ListItemIcon>
-            <ListItemText primary="기초관리" style={{ color: "#000" }} />
-            {open ? (
-              <ExpandLess style={{ color: "#000" }} />
-            ) : (
-              <ExpandMore style={{ color: "#000" }} />
-            )}
-          </ListItem>
+      subItem ? (
+        // <>
+        //   <ListItem button onClick={handleClick} >
+        //     <ListItemIcon>
+        //       <StarsIcon style={{ color: "#000" }} />
+        //     </ListItemIcon>
+        //     <ListItemText primary="기초관리" style={{ color: "#000" }} />
+        //     {open ? (
+        //       <ExpandLess style={{ color: "#000" }} />
+        //     ) : (
+        //       <ExpandMore style={{ color: "#000" }} />
+        //     )}
+        //   </ListItem>
 
-          <NavLink to={"/dental/partRegister"} key={key}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding style={{ marginLeft: "20px" }}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon style={{ color: "#000" }}>
-                    <StarBorder style={{ color: "#000" }} />
-                  </ListItemIcon>
-                  <ListItemText primary="파트등록" style={{ color: "#000" }} />
-                </ListItem>
-              </List>
-            </Collapse>
-          </NavLink>
-        </>
+        //   <NavLink to={"/dental/partRegister"} key={key}>
+        //     <Collapse in={open} timeout="auto" unmountOnExit>
+        //       <List component="div" disablePadding style={{ marginLeft: "20px" }}>
+        //         <ListItem button className={classes.nested}>
+        //           <ListItemIcon style={{ color: "#000" }}>
+        //             <StarBorder style={{ color: "#000" }} />
+        //           </ListItemIcon>
+        //           <ListItemText primary="파트등록" style={{ color: "#000" }} />
+        //         </ListItem>
+        //       </List>
+        //     </Collapse>
+        //   </NavLink>
+        // </>
+        <SidenavDropdown
+          color={color}
+          key={key}
+          name={name}
+          icon={icon}
+          active={key === collapseName}        
+          subItem={subItem}        
+        />
+
+        
       ) : (
         <NavLink to={layout + path} key={key}>
           <SidenavCollapse

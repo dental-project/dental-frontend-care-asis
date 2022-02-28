@@ -28,8 +28,7 @@ import {
   setOpenConfigurator,
 } from "context";
 
-// Images
-import brand from "assets/img/logo-ct.png";
+
 // # NEW
 
 let ps;
@@ -110,7 +109,7 @@ export default function Admin({ ...rest }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  const [image, setImage] = React.useState(bgImage);
+  const [image, setImage] = React.useState(toothImg);
   const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -188,7 +187,7 @@ export default function Admin({ ...rest }) {
       <>
         <Sidenav
           color={sidenavColor}
-          brand={brand}
+          brand={toothImg}
           brandName="Soft UI Dashboard"
           routes={routes}
           onMouseEnter={handleOnMouseEnter}
