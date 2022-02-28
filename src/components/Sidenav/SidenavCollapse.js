@@ -26,7 +26,7 @@ import { useSoftUIController } from "context";
 function SidenavCollapse({ color, icon, name, children, active, noCollapse, open, ...rest }) {
   const [controller] = useSoftUIController();
   const { miniSidenav, transparentSidenav } = controller;
-  console.log(children);
+  
   return (
     <>
       <ListItem component="li">
@@ -48,11 +48,6 @@ function SidenavCollapse({ color, icon, name, children, active, noCollapse, open
           />
         </SuiBox>
       </ListItem>
-      {children && (
-        <Collapse in={open} unmountOnExit>
-          {children}
-        </Collapse>
-      )}
     </>
   );
 }

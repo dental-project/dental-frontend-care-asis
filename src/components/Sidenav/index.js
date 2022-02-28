@@ -76,8 +76,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     
     { type, name, icon, title, noCollapse, key, route, href }
    */
-    console.log(collapse);
-      returnValue = href ? (
+    returnValue = href ? (
         <Link
           href={href}
           key={key}
@@ -105,7 +104,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       );
-
     return returnValue;
   });
 
