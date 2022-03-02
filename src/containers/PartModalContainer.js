@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
@@ -8,6 +8,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 import { parts } from "modules/parts";
+import { AutoScaleAxis } from "chartist";
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -42,10 +43,42 @@ const useStyles = makeStyles(theme => ({
 
 const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
   const classes = useStyles();
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, reset } = useForm();
   const dispatch = useDispatch();
 
+  const [partNameData, setPartNameData] = useState("");
+
+  useEffect(() => {
+    if (modalType === "파트수정") {
+      setPartNameData(partObj.partName);
+    } else {
+      console.log("추가");
+      setPartNameData("");
+      reset({
+        partName: "",
+      });
+    }
+  }, [open]);
+
+
+
+
+
+
+
+
+
+
   const onSubmit = data => {
+   
+    console.log(data);
+
+    if (data.partName === undefined || data.partName === "")
+      return alert("파트명을 입력하세요.");
+  
+    //checkSpace(data.partName);
+
+
     if (modalType === "추가") {
       const content = {
         part_name: data.partName,
@@ -62,33 +95,35 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
     } else if (modalType === "삭제") {
       dispatch(parts.deletePartMiddleware(seqId));
     }
+
+    
+
   };
 
+  // const checkSpace = (str) => {
+  //   if (str.search(/\s/) != -1) {
+  //     return alert("공백을 제거하세요.")
+  //   }
+  // }
+
+  
   return (
     <Modal open={open} modalType={modalType}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {modalType === "삭제" ? null : (
           <>
             <Controller
-              name="partName"
               control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              name="partName"
+              render={({ field: { onChange, value } }) => (
                 <TextField
                   className={classes.textField}
                   label="파트명"
                   variant="outlined"
-                  defaultValue={partObj.partName ? partObj.partName : ""}
+                  defaultValue={partNameData}
                   onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
                 />
               )}
-              rules={{
-                required: "파트명을 입력하세요.",
-              }}
             />
           </>
         )}

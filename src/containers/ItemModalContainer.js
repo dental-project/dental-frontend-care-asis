@@ -57,20 +57,35 @@ const ItemModalContainer = ({
   const partAutoData = useSelector(({ part }) => part.data);
 
   const [partSeqId, setPartSeqId] = useState("");
-  const [partName, setPartName] = useState("");
+  console.log(itemObj);
+
+  const [partNameData, setPartNameData] = useState("");
+  const [itemNameData, setItemNameData] = useState("");
 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
   }, []);
 
   useEffect(() => {
-    setPartName(itemObj.partName);
-  }, [itemObj.partName]);
+    if (modalType === "수정") {
+      setPartNameData(itemObj.partName);
+      setItemNameData(itemObj.itemName);
+    } else {
+      setPartNameData("");
+      setItemNameData("");
+    }
+  }, [open]);
 
   const auto = [];
   partAutoData.map(data => auto.push(data.part_name));
   
   const onSubmit = data => {
+
+
+
+
+
+
     if (modalType === "추가") {
       if (partSeqId === "") return alert("파트명을 선택하세요.");
 
@@ -107,7 +122,7 @@ const ItemModalContainer = ({
           <>
             <Autocomplete
               className={classes.textField}
-              value={modalType === "수정" ? partName : null}
+              value={partNameData}
               options={auto}
               filterOptions={filterOptions}
               onChange={(event, newValue) => {
@@ -118,7 +133,7 @@ const ItemModalContainer = ({
                     obj => obj.part_name === newValue
                   );
                   const partIndex = partAutoData[index].seq_id;
-                  setPartName(newValue);
+                  setPartNameData(newValue);
                   setPartSeqId(partIndex);
                 }
               }}
@@ -130,22 +145,18 @@ const ItemModalContainer = ({
               name="itemName"
               control={control}
               render={({
-                field: { onChange, value },
-                fieldState: { error },
+                field: { onChange },
               }) => (
                 <TextField
                   className={classes.textField}
                   label="장치명"
                   variant="outlined"
-                  defaultValue={itemObj.itemName ? itemObj.itemName : ""}
+                  defaultValue={itemNameData}
                   onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
+                 
                 />
               )}
-              rules={{
-                required: "장치명을 입력하세요.",
-              }}
+             
             />
           </>
         )}

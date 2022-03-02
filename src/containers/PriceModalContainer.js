@@ -56,9 +56,11 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const itemAutoData = useSelector(({ item }) => item.data);
 
   const [vendorSeqId, setVendorSeqId] = useState("");
-  const [vendorName, setVendorName] = useState("");
   const [itemSeqId, setItemSeqId] = useState("");
-  const [itemName, setItemName] = useState("");
+
+  const [vendorNameData, setVendorNameData] = useState("");
+  const [itemNameData, setItemNameData] = useState("");
+  const [priceData, setPriceData] = useState("");
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
@@ -66,9 +68,16 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   }, []);
 
   useEffect(() => {
-    setVendorName(priceObj.vendorName);
-    setItemName(priceObj.itemName);
-  }, [priceObj.vendorName, priceObj.itemName]);
+    if (modalType === "단가수정") {
+      setVendorNameData(priceObj.vendorName);
+      setItemNameData(priceObj.itemName);
+      setPriceData(priceObj.price);
+    } else {
+      setVendorNameData("");
+      setItemNameData("");
+      setPriceData("");
+    }
+  }, [open]);
 
   const auto1 = [];
   dentalAutoData.map(data => auto1.push(data.vendor_name + "/" + data.ceo));
@@ -113,15 +122,9 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
           <>
             <Autocomplete
               className={classes.textField}
-              value={modalType === "단가수정" ? vendorName : null}
+              value={vendorNameData}
               options={auto1}
               filterOptions={filterOptions}
-              getOptionSelected={(option, value) => {
-                return (
-                  option?.id === value?.id ||
-                  option?.name.toLowerCase() === value?.name.toLowerCase()
-                );
-              }}
               onChange={(event, newValue) => {
                 const vendorNameArr = newValue.split("/");
                 if (newValue === null) {
@@ -131,7 +134,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
                     obj => obj.vendor_name === vendorNameArr[0]
                   );
                   const vendorSeqId = dentalAutoData[index].seq_id;
-                  setVendorName(vendorNameArr[0]);
+                  setVendorNameData(vendorNameArr[0]);
                   setVendorSeqId(vendorSeqId);
                 }
               }}
@@ -146,7 +149,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
             />
             <Autocomplete
               className={classes.textField}
-              value={modalType === "단가수정" ? itemName : null}
+              value={itemNameData}
               options={auto2}
               filterOptions={filterOptions}
               onChange={(event, newValue) => {
@@ -157,7 +160,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
                     obj => obj.item_name === newValue
                   );
                   const itemIndex = itemAutoData[index].seq_id;
-                  setItemName(newValue);
+                  setItemNameData(newValue);
                   setItemSeqId(itemIndex);
                 }
               }}
@@ -173,16 +176,12 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
             <Controller
               name="price"
               control={control}
-              defaultValue=""
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange }, fieldState: { error } }) => (
                 <TextField
                   className={classes.textField}
                   label="단가"
                   variant="outlined"
-                  defaultValue={priceObj.price ? priceObj.price : ""}
+                  defaultValue={priceData}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}

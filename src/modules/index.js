@@ -23,6 +23,10 @@ const rootReducer = combineReducers({
   businessSector,
   bank,
 });
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logger)));
+//const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logger)));
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 export default store;

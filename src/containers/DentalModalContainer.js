@@ -47,42 +47,70 @@ const useStyles = makeStyles((theme) => ({
 
 const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
-    const classes = useStyles();
-    const { handleSubmit, control } = useForm();
-    const dispatch = useDispatch();
+  const classes = useStyles();
+  const { handleSubmit, control } = useForm();
+  const dispatch = useDispatch();
 
-    const businessTypeAutoData = useSelector(({businessType}) => businessType.data);
-    const businessSectorAutoData = useSelector(({businessSector}) => businessSector.data);
-    const bankAutoData = useSelector(({bank}) => bank.data);
+  const businessTypeAutoData = useSelector(({businessType}) => businessType.data);
+  const businessSectorAutoData = useSelector(({businessSector}) => businessSector.data);
+  const bankAutoData = useSelector(({bank}) => bank.data);
 
-    const [typeNo, setTypeNo] = useState("");
-    const [sectorNo, setSectorNo] = useState("");
-    const [bankNo, setBankNo] = useState("");
-    const [businessTypeData, setBusinessTypeData] = useState("");
-    const [businessSectorData, setBusinessSectorData] = useState("");
-    const [bankData, setBankData] = useState("");
+  const [typeNo, setTypeNo] = useState("");
+  const [sectorNo, setSectorNo] = useState("");
+  const [bankNo, setBankNo] = useState("");
+  const [businessTypeData, setBusinessTypeData] = useState("");
+  const [businessSectorData, setBusinessSectorData] = useState("");
+  const [bankData, setBankData] = useState("");
+
+
+  const [vendorNameData, setVendorNameData] = useState("");
+  const [ceoData, setCeoData] = useState("");
+  const [telData, setTelData] = useState("");
+  const [mobileData, setMobileData] = useState("");
+  const [faxData, setFaxData] = useState("");
+  const [businessNumberData, setBusinessNumberData] = useState("");
+  const [postNumberData, setPostNumberData] = useState("");
+  const [addressData, setAddressData] = useState("");
+  const [bankAccountData, setBankAccountData] = useState("");
+  const [descriptionData, setDescriptionData] = useState("");
+
+  useEffect(() => {
+    dispatch(businessTypes.getBusinessTypeMiddleware());
+    dispatch(businessSectors.getBusinessSectorMiddleware());
+    dispatch(banks.getBankMiddleware());
+  }, []);
   
-    useEffect(() => {
-      dispatch(businessTypes.getBusinessTypeMiddleware());
-      dispatch(businessSectors.getBusinessSectorMiddleware());
-      dispatch(banks.getBankMiddleware());
-    }, []);
-   
   useEffect(() => {
     if (modalType === "치과수정") {
-      setBusinessTypeData(dentalObj.businessTypeName)
+      setVendorNameData(dentalObj.vendorName);
+      setCeoData(dentalObj.ceo);
+      setTelData(dentalObj.tel);
+      setMobileData(dentalObj.mobile);
+      setFaxData(dentalObj.fax);
+      setBusinessNumberData(dentalObj.businessNumber);
+      setPostNumberData(dentalObj.postNumber);
+      setAddressData(dentalObj.address);
+      setBankAccountData(dentalObj.bankAccount);
+      setDescriptionData(dentalObj.description);
+      setBusinessTypeData(dentalObj.businessTypeName);
       setBusinessSectorData(dentalObj.businessSectorName);
       setBankData(dentalObj.bankName);
     } else {
+      setVendorNameData("");
+      setCeoData("");
+      setTelData("");
+      setMobileData("");
+      setFaxData("");
+      setBusinessNumberData("");
+      setPostNumberData("");
+      setAddressData("");
+      setBankAccountData("");
+      setDescriptionData("");
       setBusinessTypeData("");
       setBusinessSectorData("");
       setBankData("");
     }
-    }, [
-      dentalObj.businessTypeName,
-      dentalObj.businessSectorName,
-      dentalObj.bankName,
-    ]);
+  }, [open]);
 
     const autoType = [];
     businessTypeAutoData.map(data =>
@@ -170,17 +198,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="vendorName"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="거래처명"
                     variant="outlined"
-                    defaultValue={
-                      dentalObj.vendorName ? dentalObj.vendorName : ""
-                    }
+                    defaultValue={vendorNameData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -193,15 +216,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="ceo"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="대표명"
                     variant="outlined"
-                    defaultValue={dentalObj.ceo ? dentalObj.ceo : ""}
+                    defaultValue={ceoData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -214,15 +234,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="tel"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="전화번호"
                     variant="outlined"
-                    defaultValue={dentalObj.tel ? dentalObj.tel : ""}
+                    defaultValue={telData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -235,15 +252,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="mobile"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="휴대폰번호"
                     variant="outlined"
-                    defaultValue={dentalObj.mobile ? dentalObj.mobile : ""}
+                    defaultValue={mobileData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -256,15 +270,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="fax"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="팩스번호"
                     variant="outlined"
-                    defaultValue={dentalObj.fax ? dentalObj.fax : ""}
+                    defaultValue={faxData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -277,17 +288,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="businessNumber"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="사업자번호"
                     variant="outlined"
-                    defaultValue={
-                      dentalObj.businessNumber ? dentalObj.businessNumber : ""
-                    }
+                    defaultValue={businessNumberData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -302,6 +308,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                 value={businessTypeData}
                 options={autoType}
                 filterOptions={filterOptions}
+                //getOptionSelected={(option, value) => option.id === value}
                 onChange={(event, newValue) => {
                   if (newValue === null) {
                     setTypeNo("");
@@ -312,7 +319,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
                     const typeIndex = businessTypeAutoData[index].type_no;
                     setBusinessTypeData(newValue);
                     setTypeNo(typeIndex);
-                    console.log(newValue);
                   }
                 }}
                 renderInput={params => (
@@ -321,7 +327,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               />
               <Autocomplete
                 className={classes.textField}
-                value={modalType === "치과수정" ? businessSectorData : ""}
+                value={businessSectorData}
                 options={autoSector}
                 filterOptions={filterOptions}
                 onChange={(event, newValue) => {
@@ -343,17 +349,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="postNumber"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="우편번호"
                     variant="outlined"
-                    defaultValue={
-                      dentalObj.postNumber ? dentalObj.postNumber : ""
-                    }
+                    defaultValue={postNumberData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -366,15 +367,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="address"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="주소"
                     variant="outlined"
-                    defaultValue={dentalObj.address ? dentalObj.address : ""}
+                    defaultValue={addressData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -386,7 +384,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               />
               <Autocomplete
                 className={classes.textField}
-                value={modalType === "치과수정" ? bankData : null}
+                value={bankData}
                 options={autoBank}
                 filterOptions={filterOptions}
                 onChange={(event, newValue) => {
@@ -408,17 +406,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="bankAccount"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="계좌번호"
                     variant="outlined"
-                    defaultValue={
-                      dentalObj.bankAccount ? dentalObj.bankAccount : ""
-                    }
+                    defaultValue={bankAccountData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
@@ -431,17 +424,12 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
               <Controller
                 name="description"
                 control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { onChange }, fieldState: { error } }) => (
                   <TextField
                     className={classes.textField}
                     label="비고"
                     variant="outlined"
-                    defaultValue={
-                      dentalObj.description ? dentalObj.description : ""
-                    }
+                    defaultValue={descriptionData}
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}
