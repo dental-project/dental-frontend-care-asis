@@ -50,6 +50,44 @@ function collapseItem(theme, ownerState) {
   };
 }
 
+function dropdownItem(theme, ownerState) {
+  const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
+  const { active, transparentSidenav } = ownerState;
+
+  const { dark, white, text, transparent } = palette;
+  const { xxl } = boxShadows;
+  const { borderRadius } = borders;
+  const { pxToRem } = functions;
+
+  return {
+    background: active && transparentSidenav ? white.main : transparent.main,
+    color: active ? dark.main : text.main,
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    padding: `${pxToRem(1)} ${pxToRem(12.8)} ${pxToRem(1)} ${pxToRem(16)}`,
+    margin: `0 ${pxToRem(40)}`,
+    borderRadius: borderRadius.md,
+    cursor: "pointer",
+    userSelect: "none",
+    whiteSpace: "nowrap",
+    boxShadow: active && transparentSidenav ? xxl : "none",
+    [breakpoints.up("xl")]: {
+      boxShadow: () => {
+        if (active) {
+          return transparentSidenav ? xxl : "none";
+        }
+
+        return "none";
+      },
+      transition: transitions.create("box-shadow", {
+        easing: transitions.easing.easeInOut,
+        duration: transitions.duration.shorter,
+      }),
+    },
+  };
+}
+
 function collapseIconBox(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
   const { active, transparentSidenav, color } = ownerState;
@@ -106,6 +144,18 @@ const collapseIcon = ({ palette: { white, gradients } }, { active }) => ({
   color: active ? white.main : gradients.dark.state,
 });
 
+function dropdownIcon(theme, ownerState) {
+  const { typography, transitions, breakpoints, functions } = theme;
+  const { miniSidenav, transparentSidenav, active } = ownerState;
+
+  const { size, fontWeightMedium, fontWeightRegular } = typography;
+  const { pxToRem } = functions;
+  
+  return {
+    
+  }
+}
+
 function collapseText(theme, ownerState) {
   const { typography, transitions, breakpoints, functions } = theme;
   const { miniSidenav, transparentSidenav, active } = ownerState;
@@ -134,4 +184,4 @@ function collapseText(theme, ownerState) {
   };
 }
 
-export { collapseItem, collapseIconBox, collapseIcon, collapseText };
+export { collapseItem, collapseIconBox, collapseIcon, collapseText, dropdownItem };

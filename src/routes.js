@@ -17,6 +17,7 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
+import CircleIcon from '@mui/icons-material/Circle';
 //  import SignUp from "layouts/authentication/sign-up";
 
 const routes = [
@@ -37,7 +38,7 @@ const routes = [
       {
         name: "접수상세 리스트",
         key: "receptionDetail",
-        icon: <AssignmentOutlinedIcon />,
+        icon: <CircleIcon />,
         component: ReceptionDetail,
         path: "/receptionRegister",
         layout: "/dental",        
@@ -45,7 +46,7 @@ const routes = [
       {
         name: "파트 등록",
         key: "partRegister",
-        icon: <StarBorder />,
+        icon: <CircleIcon />,
         component: PartRegister,
         path: "/partRegister",
         layout: "/dental",

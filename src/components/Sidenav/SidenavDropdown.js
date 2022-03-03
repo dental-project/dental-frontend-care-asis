@@ -15,6 +15,7 @@ import SuiBox from "components/Sui/SuiBox";
 // Custom styles for the SidenavDropdown
 import {
   collapseItem,
+  dropdownItem,
   collapseIconBox,
   collapseIcon,
   collapseText,
@@ -74,7 +75,6 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
         </SuiBox>
       </ListItem>
       {subItem.map(({layout, path, color, key, name, icon, collapseName}) => {
-        console.log(subItem);
           return (
             // <SidenavCollapse
             //   color={color}
@@ -84,20 +84,24 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
             //   active={key === collapseName}
             // />
             <NavLink to={layout + path} key={key}>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding style={{ marginLeft: "20px" }}>
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon
-                      sx={theme => collapseIconBox(theme, { active, transparentSidenav, color })}
-                    >
-                      {typeof icon === "string"
-                        ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
-                        { icon }
-                        : icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={name}
-                      sx={theme => collapseText(theme, { miniSidenav, transparentSidenav, active })} />
+              {/* <Collapse in={open} timeout="auto" unmountOnExit style={{ paddingLeft: "45px" }}>  */}
+              <Collapse in={open} timeout="auto" unmountOnExit> 
+                <List>
+                  <ListItem button className={classes.nested} >
+                  <SuiBox
+                    {...rest}
+                    sx={theme => dropdownItem(theme, { active, transparentSidenav })}
+                  >
+                      <ListItemIcon >
+                        {typeof icon === "string"
+                          ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
+                            icon
+                          : icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={name}
+                        sx={theme => collapseText(theme, { miniSidenav, transparentSidenav, active })} />
+                  </SuiBox>
                   </ListItem>
                 </List>
               </Collapse>
