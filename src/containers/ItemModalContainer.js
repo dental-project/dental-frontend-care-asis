@@ -52,13 +52,11 @@ const ItemModalContainer = ({
   itemObj,
 }) => {
   const classes = useStyles();
-  const { handleSubmit, control } = useForm();
+  
   const dispatch = useDispatch();
   const partAutoData = useSelector(({ part }) => part.data);
 
   const [partSeqId, setPartSeqId] = useState("");
-  console.log(itemObj);
-
   const [partNameData, setPartNameData] = useState("");
   const [itemNameData, setItemNameData] = useState("");
 
@@ -66,49 +64,76 @@ const ItemModalContainer = ({
     dispatch(parts.getPartMiddleware());
   }, []);
 
-  useEffect(() => {
-    if (modalType === "수정") {
-      setPartNameData(itemObj.partName);
-      setItemNameData(itemObj.itemName);
-    } else {
-      setPartNameData("");
-      setItemNameData("");
-    }
-  }, [open]);
-
   const auto = [];
   partAutoData.map(data => auto.push(data.part_name));
+  console.log(itemObj);
+
   
-  const onSubmit = data => {
 
 
 
+  const onSubmit = (e) => {
+    e && e.preventDefault();
 
+    let formData = new FormData(document.getElementById("formData"));
+    const partName = formData.get("partName");
+    const itemName = formData.get("itemName");
 
+    if (partName === "" || itemName === "") return alert("빈칸없이 입력하세요");
 
-    if (modalType === "추가") {
-      if (partSeqId === "") return alert("파트명을 선택하세요.");
+    const index = partAutoData.findIndex(
+      obj => obj.part_name === partName
+    );
+
+    if(modalType === "추가") {
 
       const content = {
-        part_seq_id: partSeqId,
-        item_name: data.itemName,
+        part_seq_id: partAutoData[index].seq_id,
+        item_name: itemName,
       };
-      console.log(content);
       dispatch(items.addItemMiddleware(content));
-    } else if (modalType === "수정") {
-      if (partSeqId === "") return alert("파트명을 선택하세요.");
-
+    } else if(modalType === "수정") {
       const contents = {
-        seq_id: itemObj.seqId,
-        part_seq_id: partSeqId,
-        item_name: data.itemName,
+        seq_id: seqId,
+        part_seq_id: partAutoData[index].seq_id,
+        item_name: itemName,
       };
-      console.log(contents);
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
-    } else if (modalType === "삭제") {
+    } else if(modalType === "삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
     }
+
   };
+
+
+    // const itemName = (data.itemName === undefined || data.itemName === "") && modalType === "수정" ? itemNameData: data.itemName;
+
+    // if ((itemName === undefined || itemName === "") && modalType !== "삭제")
+    //   return alert("장치명을 입력하세요.");
+
+    // if (modalType === "추가") {
+
+    //   const content = {
+    //     part_seq_id: partSeqId,
+    //     item_name: data.itemName,
+    //   };
+      
+    //   dispatch(items.addItemMiddleware(content));
+    // } else if (modalType === "수정") {
+    
+
+
+    //   const contents = {
+    //     seq_id: itemObj.seqId,
+    //     part_seq_id: partSeqId,
+    //     item_name: data.itemName,
+    //   };
+    //   console.log(contents);
+    //   dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
+    // } else if (modalType === "삭제") {
+    //   dispatch(items.deleteItemMiddleware(seqId));
+    // }
+  
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -117,50 +142,42 @@ const ItemModalContainer = ({
 
   return (
     <Modal open={open} modalType={modalType}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="formData" onSubmit={onSubmit}>
         {modalType === "삭제" ? null : (
           <>
             <Autocomplete
               className={classes.textField}
-              value={partNameData}
+              
+              //value={partNameData}
               options={auto}
               filterOptions={filterOptions}
-              onChange={(event, newValue) => {
-                if (newValue === null) {
-                  setPartSeqId("");
-                } else {
-                  const index = partAutoData.findIndex(
-                    obj => obj.part_name === newValue
-                  );
-                  const partIndex = partAutoData[index].seq_id;
-                  setPartNameData(newValue);
-                  setPartSeqId(partIndex);
-                }
-              }}
+              // onChange={(event, newValue) => {
+              //   if (newValue === null) {
+              //     setPartSeqId("");
+              //   } else {
+              //     const index = partAutoData.findIndex(
+              //       obj => obj.part_name === newValue
+              //     );
+              //     const partIndex = partAutoData[index].seq_id;
+              //     setPartNameData(newValue);
+              //     setPartSeqId(partIndex);
+              //   }
+              // }}
+              defaultValue={modalType === "수정" ? itemObj.partName : ""}
               renderInput={params => (
-                <TextField {...params} label="파트명" variant="outlined" />
+                <TextField {...params} name="partName" label="파트명" variant="outlined"  />
               )}
             />
-            <Controller
+            <TextField
+              className={classes.textField}
               name="itemName"
-              control={control}
-              render={({
-                field: { onChange },
-              }) => (
-                <TextField
-                  className={classes.textField}
-                  label="장치명"
-                  variant="outlined"
-                  defaultValue={itemNameData}
-                  onChange={onChange}
-                 
-                />
-              )}
-             
+              label="장치명"
+              variant="outlined"
+              defaultValue={modalType === "수정" ? itemObj.itemName : ""}
             />
           </>
         )}
-        <Button type="submit" className={classes.button} color="info" round>
+        <Button type="submit" form="formData" className={classes.button} color="info" round>
           {modalType}
         </Button>
       </form>
