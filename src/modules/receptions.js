@@ -58,6 +58,7 @@ const addReceptionMiddleware = contents => {
     apis
       .createReception(contents)
       .then(result => {
+        console.log(result);
         dispatch(addReception(contents));
       })
       .catch(err => {

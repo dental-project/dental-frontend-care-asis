@@ -5,19 +5,13 @@ import Modal from "components/Modal/Modal";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-
 import TextField from "@material-ui/core/TextField";
-import { useForm, Controller } from "react-hook-form";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
-
 import { receptions } from "modules/receptions";
 import { dentals } from "modules/dentals";
-
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
@@ -47,7 +41,6 @@ const useStyles = makeStyles(theme => ({
   },
   textField2: {
     float: "left",
-    //width: "47%",
     marginTop: "20px",
     margin: theme.spacing(1),
     "& label.Mui-focused": {
@@ -87,7 +80,7 @@ const ReceptionModalContainer = ({
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
-  const { handleSubmit, control } = useForm();
+
   const dispatch = useDispatch();
   const dentalData = useSelector(({ dental }) => dental.data);
   const receptionData = useSelector(({ reception }) => reception.data);
@@ -97,7 +90,7 @@ const ReceptionModalContainer = ({
     dispatch(dentals.getDentalMiddleware());
   }, [dispatch]);
 
-  console.log(receptionData);
+
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -111,14 +104,14 @@ const ReceptionModalContainer = ({
 
   const filterVendorName = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.vendor_name,
+    stringify: option => option,
   });
 
   const vendorNameAuto = [];
   dentalData.map(data =>
-    vendorNameAuto.push({ vendor_name: data.vendor_name })
+    vendorNameAuto.push(data.vendor_name)
   );
-
+  
   const newArray = receptionData
     .filter(
       (arr, index, callback) =>
@@ -224,35 +217,64 @@ const ReceptionModalContainer = ({
     },
   ];
 
-  const onSubmit = data => {
+  console.log();
+
+  const onSubmit = (e) => {
+    e && e.preventDefault();
+
+    //     chart_number: parseInt(data.chartNumber),
+    //     upper: upper,
+    //     lower: lower,
+    //     bite: bite,
+    //     appliance: appliance,
+    //     patient_name: data.patientName,
+    //     request_form: "/test/test.png",
+    //     description: "비고",
+    //     vendor_seq_id: vendorId,
+
+    let formData = new FormData(document.getElementById("formData"));
+
+    const receiptDate = formData.get("receiptDate");
+    const completionDate = formData.get("completionDate");
+    const deliveryDate = formData.get("deliveryDate");
+    const vendorName = formData.get("vendorName");
+    const chartNumber = formData.get("chartNumber");
+    const patientName = formData.get("patientName");
+    const description = formData.get("description");
+    const upper = formData.get("upper");
+    const lower = formData.get("lower");
+    const bite = formData.get("bite");
+    const appliance = formData.get("appliance");
+    
+    //const vendorId = formData.get("vendorId");
+
+    if (receiptDate === "" || completionDate === "" || vendorName === "" || patientName === "")
+      return alert("빈칸없이 입력하세요");
+   
+    const index = vendorNameAuto.findIndex(data => data === vendorName);
+   
+
     if (modalType === "추가") {
-      if (vendorId === "") return alert("거래처명을 선택하세요");
-
-      let upper = false;
-      let lower = false;
-      let bite = false;
-      let appliance = false;
-
-      if (data.upper === true) upper = true;
-      if (data.lower === true) lower = true;
-      if (data.bite === true) bite = true;
-      if (data.appliance === true) appliance = true;
-
       const contents = {
-        receipt_date: data.receiptDate,
-        completion_date: data.completionDate,
-        delivery_date: data.deliveryDate,
-        chart_number: parseInt(data.chartNumber),
-        upper: upper,
-        lower: lower,
-        bite: bite,
-        appliance: appliance,
-        patient_name: data.patientName,
+        receipt_date: receiptDate,
+        completion_date: completionDate,
+        delivery_date: deliveryDate,
+        vendor_seq_id: index,
+        chart_number: parseInt(chartNumber),
+        upper: upper === "" ? 1 : 0,
+        lower: lower === "" ? 1 : 0,
+        bite: bite === "" ? 1 : 0,
+        appliance: appliance === "" ? 1 : 0,
+        patient_name: patientName,
         request_form: "/test/test.png",
-        description: "비고",
-        vendor_seq_id: vendorId,
+        description: description,
       };
 
+      console.log(contents);
+
+      dispatch(receptions.addReceptionMiddleware(contents));
+      return;
+      
       const gridArr = gridRef.current.getInstance().getData();
 
       for (let i = 0; i < gridArr.length; i++) {
@@ -272,13 +294,13 @@ const ReceptionModalContainer = ({
 
       const priceContents = [];
       for (let i = 0; i < gridArr.length; i++) {
-        let a = receptionData.filter(
+        let element = receptionData.filter(
           data => data.item_name === gridArr[i].itemName
         );
 
         priceContents.push({
           sell_master_id: 1,
-          item_seq_id: a[0].item_seq_id,
+          item_seq_id: element[0].item_seq_id,
           sell_count: parseInt(gridArr[i].amount),
           normar_price: gridArr[i].normalPrice,
           real_sell_price: parseInt(gridArr[i].discountPrice),
@@ -286,13 +308,81 @@ const ReceptionModalContainer = ({
         });
       }
 
-      dispatch(receptions.addReceptionMiddleware(contents));
+      
       dispatch(receptions.addReceptionPriceMiddleware(priceContents));
-    } else if (modalType === "접수수정") {
-      if (vendorId === "") return alert("거래처명을 선택하세요");
-    } else if (modalType === "삭제") {
-      dispatch(receptions.deleteReceptionMiddleware(seqId));
     }
+
+
+
+
+    // if (modalType === "추가") {
+    //   if (vendorId === "") return alert("거래처명을 선택하세요");
+
+    //   let upper = false;
+    //   let lower = false;
+    //   let bite = false;
+    //   let appliance = false;
+
+    //   if (data.upper === true) upper = true;
+    //   if (data.lower === true) lower = true;
+    //   if (data.bite === true) bite = true;
+    //   if (data.appliance === true) appliance = true;
+
+    //   const contents = {
+    //     receipt_date: data.receiptDate,
+    //     completion_date: data.completionDate,
+    //     delivery_date: data.deliveryDate,
+    //     chart_number: parseInt(data.chartNumber),
+    //     upper: upper,
+    //     lower: lower,
+    //     bite: bite,
+    //     appliance: appliance,
+    //     patient_name: data.patientName,
+    //     request_form: "/test/test.png",
+    //     description: "비고",
+    //     vendor_seq_id: vendorId,
+    //   };
+
+    //   const gridArr = gridRef.current.getInstance().getData();
+
+    //   for (let i = 0; i < gridArr.length; i++) {
+    //     if (gridArr[i].partName === null || gridArr[i].partName === "") {
+    //       return alert(i + 1 + "번째 행 파트명을 선택하세요.");
+    //     } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
+    //       return alert(i + 1 + "번째 행 장치명을 선택하세요.");
+    //     } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
+    //       return alert(i + 1 + "번째 행 수량을 입력하세요.");
+    //     } else if (
+    //       gridArr[i].discountPrice == null ||
+    //       gridArr[i].discountPrice === ""
+    //     ) {
+    //       return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
+    //     }
+    //   }
+
+    //   const priceContents = [];
+    //   for (let i = 0; i < gridArr.length; i++) {
+    //     let a = receptionData.filter(
+    //       data => data.item_name === gridArr[i].itemName
+    //     );
+
+    //     priceContents.push({
+    //       sell_master_id: 1,
+    //       item_seq_id: a[0].item_seq_id,
+    //       sell_count: parseInt(gridArr[i].amount),
+    //       normar_price: gridArr[i].normalPrice,
+    //       real_sell_price: parseInt(gridArr[i].discountPrice),
+    //       discount: parseFloat(gridArr[i].discount),
+    //     });
+    //   }
+
+    //   dispatch(receptions.addReceptionMiddleware(contents));
+    //   dispatch(receptions.addReceptionPriceMiddleware(priceContents));
+    // } else if (modalType === "접수수정") {
+    //   if (vendorId === "") return alert("거래처명을 선택하세요");
+    // } else if (modalType === "삭제") {
+    //   dispatch(receptions.deleteReceptionMiddleware(seqId));
+    // }
   };
 
   const onChange = e => {
@@ -373,119 +463,58 @@ const ReceptionModalContainer = ({
       modalType={modalType}
       screen={modalType === "삭제" ? false : true}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="formData" onSubmit={onSubmit}>
         {modalType === "삭제" ? null : (
           <>
             <Grid container>
               <Grid item xs={4}>
-                <Controller
+                <TextField
+                  className={classes.textField}
+                  type="date"
                   name="receiptDate"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      className={classes.textField}
-                      label="접수일자"
-                      type="date"
-                      defaultValue={
-                        receptionObj.receiptDate ? receptionObj.receiptDate : ""
-                      }
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  )}
-                  rules={{
-                    required: "접수일자를 선택하세요.",
-                  }}
+                  label="접수일자"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.receiptDate : ""
+                  }
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={4}>
-                <Controller
+                <TextField
+                  className={classes.textField}
+                  type="date"
                   name="completionDate"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      className={classes.textField}
-                      label="완성일자"
-                      type="date"
-                      defaultValue={
-                        receptionObj.completionDate
-                          ? receptionObj.completionDate
-                          : ""
-                      }
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  )}
-                  rules={{
-                    required: "완성일자를 선택하세요.",
-                  }}
+                  label="완성일자"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.completionDate : ""
+                  }
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={4}>
-                <Controller
+                <TextField
+                  className={classes.textField}
+                  type="date"
                   name="deliveryDate"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      className={classes.textField}
-                      label="배달일자"
-                      type="date"
-                      defaultValue="2022-01-11"
-                      defaultValue={
-                        receptionObj.deliveryDate
-                          ? receptionObj.deliveryDate
-                          : ""
-                      }
-                      onChange={onChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  )}
+                  label="배달일자"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.deliveryDate : ""
+                  }
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Autocomplete
-                  freeSolo
                   className={classes.textField}
-                  name="vendorName"
-                  control={control}
                   options={vendorNameAuto}
-                  getOptionLabel={option => option.vendor_name}
                   filterOptions={filterVendorName}
-                  getOptionSelected={(option, value) => {
-                    return (
-                      option?.id === value?.id ||
-                      option?.name.toLowerCase() === value?.name.toLowerCase()
-                    );
-                  }}
-                  onChange={(event, newValue) => {
-                    gridRef.current.getInstance().resetData([], {});
-
-                    if (newValue === null) {
-                      setVendorId("");
-                    }
-                    if (newValue !== null) {
-                      const index = dentalData.findIndex(
-                        obj => obj.vendor_name === newValue.vendor_name
-                      );
-                      const vendorSeqId = dentalData[index].seq_id;
-                      resetColumn("vendorSelect");
-                      dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-                      setVendorId(vendorSeqId);
-                    }
-                  }}
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.vendorName : ""
+                  }
                   renderInput={params => (
                     <TextField
                       {...params}
+                      name="vendorName"
                       label="거래처명"
                       variant="outlined"
                     />
@@ -493,141 +522,103 @@ const ReceptionModalContainer = ({
                 />
               </Grid>
               <Grid item xs={4}>
-                <Controller
+                <TextField
+                  className={classes.textField}
                   name="chartNumber"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      className={classes.textField}
-                      label="차트번호"
-                      defaultValue={
-                        receptionObj.chartNumber ? receptionObj.chartNumber : ""
-                      }
-                      variant="outlined"
-                      onChange={onChange}
-                    />
-                  )}
+                  label="차트번호"
+                  variant="outlined"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.chartNumber : ""
+                  }
                 />
               </Grid>
               <Grid item xs={4}>
-                <Controller
+                <TextField
+                  className={classes.textField}
                   name="patientName"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      className={classes.textField}
-                      label="환자명"
-                      variant="outlined"
-                      defaultValue={
-                        receptionObj.patientName ? receptionObj.patientName : ""
-                      }
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{
-                    required: "환자명을 입력하세요.",
-                  }}
+                  label="환자명"
+                  variant="outlined"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.patientName : ""
+                  }
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="description"
+                  label="비고"
+                  variant="outlined"
+                  defaultValue={
+                    modalType === "접수수정" ? receptionObj.patientName : ""
+                  }
+                />
+              </Grid>
               <Grid item xs={2}></Grid>
-
               <Grid item xs={2}>
-                <Controller
-                  name="upper"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          className={classes.textField}
-                          onChange={onChange}
-                          color="primary"
-                          //onChange={upperChange}
-                          defaultChecked={
-                            receptionObj.upper ? receptionObj.upper : false
-                          }
-                        />
+                <FormControlLabel
+                  label="Upper"
+                  control={
+                    <Checkbox
+                      className={classes.textField}
+                      name="upper"
+                      color="primary"
+                      defaultChecked={
+                        modalType === "접수수정" ? receptionObj.upper : false
                       }
-                      label="Upper"
                     />
-                  )}
+                  }
                 />
               </Grid>
               <Grid item xs={2}>
-                <Controller
-                  name="lower"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          className={classes.textField}
-                          onChange={onChange}
-                          color="primary"
-                          defaultChecked={
-                            receptionObj.lower ? receptionObj.lower : false
-                          }
-                        />
+                <FormControlLabel
+                  label="Lower"
+                  control={
+                    <Checkbox
+                      className={classes.textField}
+                      name="lower"
+                      color="primary"
+                      defaultChecked={
+                        modalType === "접수수정" ? receptionObj.lower : false
                       }
-                      label="Lower"
                     />
-                  )}
+                  }
                 />
               </Grid>
               <Grid item xs={2}>
-                <Controller
-                  name="bite"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          className={classes.textField}
-                          onChange={onChange}
-                          color="primary"
-                          defaultChecked={
-                            receptionObj.bite ? receptionObj.bite : false
-                          }
-                        />
+                <FormControlLabel
+                  label="Bite"
+                  control={
+                    <Checkbox
+                      className={classes.textField}
+                      name="bite"
+                      color="primary"
+                      defaultChecked={
+                        modalType === "접수수정" ? receptionObj.bite : false
                       }
-                      label="Bite"
                     />
-                  )}
+                  }
                 />
               </Grid>
               <Grid item xs={2}>
-                <Controller
-                  name="appliance"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          className={classes.textField}
-                          onChange={onChange}
-                          color="primary"
-                          defaultChecked={
-                            receptionObj.appliance
-                              ? receptionObj.appliance
-                              : false
-                          }
-                        />
+                <FormControlLabel
+                  label="Appliance"
+                  control={
+                    <Checkbox
+                      className={classes.textField}
+                      name="appliance"
+                      color="primary"
+                      defaultChecked={
+                        modalType === "접수수정"
+                          ? receptionObj.appliance
+                          : false
                       }
-                      label="Appliance"
                     />
-                  )}
+                  }
                 />
               </Grid>
-
               <Grid item xs={2}></Grid>
             </Grid>
-
             <Grid
               container
               justifyContent="center"
@@ -661,7 +652,13 @@ const ReceptionModalContainer = ({
             </Grid>
           </>
         )}
-        <Button type="submit" className={classes.button} color="info" round>
+        <Button
+          type="submit"
+          form="formData"
+          className={classes.button}
+          color="info"
+          round
+        >
           {modalType}
         </Button>
       </form>

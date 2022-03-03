@@ -3,10 +3,7 @@ import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
-import { useForm, Controller } from "react-hook-form";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { items } from "modules/items";
 import { parts } from "modules/parts";
 import Autocomplete, {
@@ -56,21 +53,18 @@ const ItemModalContainer = ({
   const dispatch = useDispatch();
   const partAutoData = useSelector(({ part }) => part.data);
 
-  const [partSeqId, setPartSeqId] = useState("");
-  const [partNameData, setPartNameData] = useState("");
-  const [itemNameData, setItemNameData] = useState("");
-
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
   }, []);
 
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option,
+  });
+
   const auto = [];
   partAutoData.map(data => auto.push(data.part_name));
-  console.log(itemObj);
-
-  
-
-
 
   const onSubmit = (e) => {
     e && e.preventDefault();
@@ -85,60 +79,25 @@ const ItemModalContainer = ({
       obj => obj.part_name === partName
     );
 
-    if(modalType === "추가") {
-
+    if (modalType === "추가") {
       const content = {
         part_seq_id: partAutoData[index].seq_id,
         item_name: itemName,
       };
       dispatch(items.addItemMiddleware(content));
-    } else if(modalType === "수정") {
+
+    } else if (modalType === "수정") {
       const contents = {
-        seq_id: seqId,
+        seq_id: itemObj.seqId,
         part_seq_id: partAutoData[index].seq_id,
         item_name: itemName,
       };
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
-    } else if(modalType === "삭제") {
+      
+    } else if (modalType === "삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
     }
-
   };
-
-
-    // const itemName = (data.itemName === undefined || data.itemName === "") && modalType === "수정" ? itemNameData: data.itemName;
-
-    // if ((itemName === undefined || itemName === "") && modalType !== "삭제")
-    //   return alert("장치명을 입력하세요.");
-
-    // if (modalType === "추가") {
-
-    //   const content = {
-    //     part_seq_id: partSeqId,
-    //     item_name: data.itemName,
-    //   };
-      
-    //   dispatch(items.addItemMiddleware(content));
-    // } else if (modalType === "수정") {
-    
-
-
-    //   const contents = {
-    //     seq_id: itemObj.seqId,
-    //     part_seq_id: partSeqId,
-    //     item_name: data.itemName,
-    //   };
-    //   console.log(contents);
-    //   dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
-    // } else if (modalType === "삭제") {
-    //   dispatch(items.deleteItemMiddleware(seqId));
-    // }
-  
-
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    stringify: option => option,
-  });
 
   return (
     <Modal open={open} modalType={modalType}>
@@ -147,22 +106,8 @@ const ItemModalContainer = ({
           <>
             <Autocomplete
               className={classes.textField}
-              
-              //value={partNameData}
               options={auto}
               filterOptions={filterOptions}
-              // onChange={(event, newValue) => {
-              //   if (newValue === null) {
-              //     setPartSeqId("");
-              //   } else {
-              //     const index = partAutoData.findIndex(
-              //       obj => obj.part_name === newValue
-              //     );
-              //     const partIndex = partAutoData[index].seq_id;
-              //     setPartNameData(newValue);
-              //     setPartSeqId(partIndex);
-              //   }
-              // }}
               defaultValue={modalType === "수정" ? itemObj.partName : ""}
               renderInput={params => (
                 <TextField {...params} name="partName" label="파트명" variant="outlined"  />

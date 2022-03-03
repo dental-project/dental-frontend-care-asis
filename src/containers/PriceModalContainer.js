@@ -4,13 +4,10 @@ import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
-
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { prices } from "modules/prices";
 import { dentals } from "modules/dentals";
 import { items } from "modules/items";
@@ -48,36 +45,20 @@ const useStyles = makeStyles(theme => ({
 
 const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const classes = useStyles();
-  const { handleSubmit, control } = useForm();
-
   const dispatch = useDispatch();
 
   const dentalAutoData = useSelector(({ dental }) => dental.data);
   const itemAutoData = useSelector(({ item }) => item.data);
-
-  const [vendorSeqId, setVendorSeqId] = useState("");
-  const [itemSeqId, setItemSeqId] = useState("");
-
-  const [vendorNameData, setVendorNameData] = useState("");
-  const [itemNameData, setItemNameData] = useState("");
-  const [priceData, setPriceData] = useState("");
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
     dispatch(items.getItemMiddleware());
   }, []);
 
-  useEffect(() => {
-    if (modalType === "단가수정") {
-      setVendorNameData(priceObj.vendorName);
-      setItemNameData(priceObj.itemName);
-      setPriceData(priceObj.price);
-    } else {
-      setVendorNameData("");
-      setItemNameData("");
-      setPriceData("");
-    }
-  }, [open]);
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option,
+  });
 
   const auto1 = [];
   dentalAutoData.map(data => auto1.push(data.vendor_name + "/" + data.ceo));
@@ -85,115 +66,95 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const auto2 = [];
   itemAutoData.map(data => auto2.push(data.item_name));
 
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    stringify: option => option,
-  });
+  const onSubmit = (e) => {
+    e && e.preventDefault();
 
-  const onSubmit = data => {
+    if (modalType === "삭제") {
+      dispatch(prices.deletePriceMiddleware(seqId));
+      return;
+    }
+
+    let formData = new FormData(document.getElementById("formData"));
+    const vendorName = formData.get("vendorName");
+    const itemName = formData.get("itemName");
+    const price = formData.get("price");
+    const vendorNameArr = vendorName.split("/");
+
+    if (vendorNameArr[0] === "" || itemName === "" || price === "")
+      return alert("빈칸없이 입력하세요");
+
+    const vendorNameIndex = dentalAutoData.findIndex(
+      obj => obj.vendor_name === vendorNameArr[0]
+    );
+    const itemNameIndex = itemAutoData.findIndex(
+      obj => obj.item_name === itemName
+    );
+
     if (modalType === "추가") {
-      if (vendorSeqId == "") return alert("거래처명을 선택하세요.");
-      if (itemSeqId == "") return alert("장치명을 선택하세요.");
-
       const content = {
-        vendor_seq_id: vendorSeqId,
-        item_seq_id: itemSeqId,
-        price: data.price,
+        vendor_seq_id: dentalAutoData[vendorNameIndex].seq_id,
+        item_seq_id: itemAutoData[itemNameIndex].seq_id,
+        price: price,
       };
+      
       dispatch(prices.addPriceMiddleware(content));
+
     } else if (modalType === "단가수정") {
       const contents = {
         seq_id: priceObj.seqId,
-        vendor_seq_id: vendorSeqId,
-        item_seq_id: itemSeqId,
-        price: priceObj.price,
+        vendor_seq_id: dentalAutoData[vendorNameIndex].seq_id,
+        item_seq_id: itemAutoData[itemNameIndex].seq_id,
+        price: price,
       };
 
       dispatch(prices.updatePriceMiddleware(priceObj.seqId, contents));
-    } else if (modalType === "삭제") {
-      dispatch(prices.deletePriceMiddleware(seqId));
-    }
+
+    } 
   };
 
   return (
     <Modal open={open} modalType={modalType}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="formData" onSubmit={onSubmit}>
         {modalType === "삭제" ? null : (
           <>
             <Autocomplete
               className={classes.textField}
-              value={vendorNameData}
               options={auto1}
               filterOptions={filterOptions}
-              onChange={(event, newValue) => {
-                const vendorNameArr = newValue.split("/");
-                if (newValue === null) {
-                  setVendorSeqId("");
-                } else {
-                  const index = dentalAutoData.findIndex(
-                    obj => obj.vendor_name === vendorNameArr[0]
-                  );
-                  const vendorSeqId = dentalAutoData[index].seq_id;
-                  setVendorNameData(vendorNameArr[0]);
-                  setVendorSeqId(vendorSeqId);
-                }
-              }}
+              defaultValue={modalType === "단가수정" ? priceObj.vendorName : ""}
               renderInput={params => (
                 <TextField
                   {...params}
-                  variant="outlined"
+                  name="vendorName"
                   label="거래처명"
-                  placeholder="Favorites"
+                  variant="outlined"
                 />
               )}
             />
             <Autocomplete
               className={classes.textField}
-              value={itemNameData}
               options={auto2}
               filterOptions={filterOptions}
-              onChange={(event, newValue) => {
-                if (newValue === null) {
-                  setItemSeqId("");
-                } else {
-                  const index = itemAutoData.findIndex(
-                    obj => obj.item_name === newValue
-                  );
-                  const itemIndex = itemAutoData[index].seq_id;
-                  setItemNameData(newValue);
-                  setItemSeqId(itemIndex);
-                }
-              }}
+              defaultValue={modalType === "단가수정" ? priceObj.itemName : ""}
               renderInput={params => (
                 <TextField
                   {...params}
-                  variant="outlined"
+                  name="itemName"
                   label="장치명"
-                  placeholder="Favorites"
+                  variant="outlined"
                 />
               )}
             />
-            <Controller
+            <TextField
+              className={classes.textField}
               name="price"
-              control={control}
-              render={({ field: { onChange }, fieldState: { error } }) => (
-                <TextField
-                  className={classes.textField}
-                  label="단가"
-                  variant="outlined"
-                  defaultValue={priceData}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                />
-              )}
-              rules={{
-                required: "단가를 입력하세요.",
-              }}
+              label="단가"
+              variant="outlined"
+              defaultValue={modalType === "단가수정" ? priceObj.price : ""}
             />
           </>
         )}
-        <Button type="submit" className={classes.button} color="info" round>
+        <Button type="submit" form="formData" className={classes.button} color="info" round>
           {modalType}
         </Button>
       </form>

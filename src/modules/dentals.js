@@ -41,7 +41,7 @@ const addDentalMiddleware = contents => {
       .createDental(contents)
       .then(result => {
         dispatch(addDental(contents));
-        alert("장치를 추가 하였습니다.");
+        alert("추가를 완료 하였습니다.");
       })
       .catch(err => {
         console.error(err);
@@ -57,7 +57,7 @@ const updateDentalMiddleware = (seqId, contents) => {
         const data = { seq_id: seqId, contents: contents };
 
         dispatch(updateDental(data));
-        alert("수정 했습니다.");
+        alert("수정을 완료 했습니다.");
       })
       .catch(err => {
         console.log(err);
@@ -71,7 +71,7 @@ const deleteDentalMiddleware = seqId => {
       .deleteDental(seqId)
       .then(result => {
         dispatch(removeDental(seqId));
-        alert("삭제 했습니다.");
+        alert("삭제를 완료 했습니다.");
       })
       .catch(err => {
         console.log(err);
