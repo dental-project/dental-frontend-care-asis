@@ -15,6 +15,7 @@ import { dentals } from "modules/dentals";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
+import { FormProvider } from "react-hook-form";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,7 +83,7 @@ const ReceptionModalContainer = ({
   const gridRef = React.createRef();
 
   const dispatch = useDispatch();
-  const dentalData = useSelector(({ dental }) => dental.data);
+  const dentalAutoData = useSelector(({ dental }) => dental.data);
   const receptionData = useSelector(({ reception }) => reception.data);
   const [vendorId, setVendorId] = useState("");
 
@@ -108,10 +109,10 @@ const ReceptionModalContainer = ({
   });
 
   const vendorNameAuto = [];
-  dentalData.map(data =>
+  dentalAutoData.map(data =>
     vendorNameAuto.push(data.vendor_name)
   );
-  
+
   const newArray = receptionData
     .filter(
       (arr, index, callback) =>
@@ -251,32 +252,35 @@ const ReceptionModalContainer = ({
     if (receiptDate === "" || completionDate === "" || vendorName === "" || patientName === "")
       return alert("빈칸없이 입력하세요");
    
-    const index = vendorNameAuto.findIndex(data => data === vendorName);
+    const index = dentalAutoData.findIndex(
+      obj => obj.vendor_name === vendorName
+    );
    
+
+    console.log(dentalAutoData[index].seq_id);
 
     if (modalType === "추가") {
       const contents = {
         receipt_date: receiptDate,
         completion_date: completionDate,
-        delivery_date: deliveryDate,
-        vendor_seq_id: index,
+        delivery_date: deliveryDate,   
         chart_number: parseInt(chartNumber),
-        upper: upper === "" ? 1 : 0,
-        lower: lower === "" ? 1 : 0,
-        bite: bite === "" ? 1 : 0,
-        appliance: appliance === "" ? 1 : 0,
+        upper: upper === "" ? true : false,
+        lower: lower === "" ? true : false,
+        bite: bite === "" ? true : false,
+        appliance: appliance === "" ? true : false,
         patient_name: patientName,
         request_form: "/test/test.png",
         description: description,
+        vendor_seq_id: dentalAutoData[index].seq_id,
       };
 
-      console.log(contents);
-
-      dispatch(receptions.addReceptionMiddleware(contents));
-      return;
-      
       const gridArr = gridRef.current.getInstance().getData();
 
+      if(gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
+      
+
+      
       for (let i = 0; i < gridArr.length; i++) {
         if (gridArr[i].partName === null || gridArr[i].partName === "") {
           return alert(i + 1 + "번째 행 파트명을 선택하세요.");
@@ -307,9 +311,9 @@ const ReceptionModalContainer = ({
           discount: parseFloat(gridArr[i].discount),
         });
       }
-
-      
-      dispatch(receptions.addReceptionPriceMiddleware(priceContents));
+     
+      dispatch(receptions.addReceptionMiddleware(contents, priceContents));
+      //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
     }
 
 
@@ -391,8 +395,10 @@ const ReceptionModalContainer = ({
     let rowId = e.changes[0].rowKey;
     var regNumber = /^[0-9]*$/;
 
+    console.log(e.changes[0].columnName);
+
     if (e.changes[0].columnName === "partName") {
-      resetColumn(rowId, "gridSelect");
+      resetColumn(rowId, "itemReset");
     } else if (e.changes[0].columnName === "itemName") {
       let price = receptionData.filter(
         data =>
@@ -400,7 +406,7 @@ const ReceptionModalContainer = ({
           data.item_name === gridArr[rowId].itemName
       );
 
-      resetColumn(rowId, "gridSelect");
+      resetColumn(rowId, "itemReset");
       setColumnValue(rowId, "unitPrice", price[0].unit_price);
     } else if (e.changes[0].columnName === "amount") {
       if (regNumber.test(gridArr[rowId].amount) === false)
@@ -440,21 +446,17 @@ const ReceptionModalContainer = ({
   const setColumnValue = (rowId, columnName, value) => {
     gridRef.current.getInstance().setValue(rowId, columnName, value, false);
   };
-
+  
   const resetColumn = (rowId, type) => {
-    if (type === "vendorSelect") {
-      gridRef.current.getInstance().setValue(rowId, "partName", "", false);
-      gridRef.current.getInstance().setValue(rowId, "itemName", "", false);
-    }
-    if (type === "gridSelect") {
-      gridRef.current.getInstance().setValue(rowId, "unitPrice", "", false);
-      gridRef.current.getInstance().setValue(rowId, "amount", "", false);
-      gridRef.current.getInstance().setValue(rowId, "normalPrice", "", false);
-    }
+    if(type === "itemReset") {
+      gridRef.current.getInstance().setValue(rowId,'unitPrice',"",false);
+      gridRef.current.getInstance().setValue(rowId,'amount',"",false);
+      gridRef.current.getInstance().setValue(rowId,'normalPrice',"",false);      
+    } 
 
-    gridRef.current.getInstance().setValue(rowId, "discountPrice", "", false);
-    gridRef.current.getInstance().setValue(rowId, "finalPrice", "", false);
-    gridRef.current.getInstance().setValue(rowId, "discount", "", false);
+    gridRef.current.getInstance().setValue(rowId,'discountPrice',"",false);
+    gridRef.current.getInstance().setValue(rowId,'finalPrice',"",false);
+    gridRef.current.getInstance().setValue(rowId,'discount',"",false);
   };
 
   return (
@@ -511,6 +513,28 @@ const ReceptionModalContainer = ({
                   defaultValue={
                     modalType === "접수수정" ? receptionObj.vendorName : ""
                   }
+                  onChange={(event, newValue) => {
+                    if(newValue === null) {
+                      //setVendorId("");
+                    }
+                    if(newValue !== null) {
+                         const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue) 
+                         const vendorSeqId = dentalAutoData[index].seq_id
+
+
+                         const length = gridRef.current.getInstance().getData().length;
+                      
+                          // for(let i=0; i<length; i++) {
+                          //   resetColumn(i,"allReset");
+                          // }
+
+                          gridRef.current.getInstance().restore()
+
+                         //resetColumn("vendorSelect");
+                         dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                         //setVendorId(vendorSeqId);
+                     }
+                   }}
                   renderInput={params => (
                     <TextField
                       {...params}

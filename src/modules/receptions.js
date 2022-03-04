@@ -53,13 +53,22 @@ const getVendorPartMiddleware = seqId => {
   };
 };
 
-const addReceptionMiddleware = contents => {
+const addReceptionMiddleware = (contents, priceContents) => {
   return dispatch => {
     apis
       .createReception(contents)
       .then(result => {
-        console.log(result);
+        
         dispatch(addReception(contents));
+        
+        console.log(result);
+        console.log(contents);
+        console.log(priceContents);
+
+
+
+        //addReceptionPriceMiddleware();
+        
       })
       .catch(err => {
         console.error(err);
