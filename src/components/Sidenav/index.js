@@ -49,7 +49,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
   const { pathname } = location;
-  const collapseName = pathname.split("/").slice(1)[0];
+  const collapseName = pathname.split("/").slice(1)[1];
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -104,34 +104,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     
     { type, name, icon, title, noCollapse, key, route, href }
    */
+  console.log(key === collapseName)
+  console.log(key)
+  console.log(collapseName)
+  console.log(key === collapseName)
     returnValue = (
       subItem ? (
-        // <>
-        //   <ListItem button onClick={handleClick} >
-        //     <ListItemIcon>
-        //       <StarsIcon style={{ color: "#000" }} />
-        //     </ListItemIcon>
-        //     <ListItemText primary="기초관리" style={{ color: "#000" }} />
-        //     {open ? (
-        //       <ExpandLess style={{ color: "#000" }} />
-        //     ) : (
-        //       <ExpandMore style={{ color: "#000" }} />
-        //     )}
-        //   </ListItem>
-
-        //   <NavLink to={"/dental/partRegister"} key={key}>
-        //     <Collapse in={open} timeout="auto" unmountOnExit>
-        //       <List component="div" disablePadding style={{ marginLeft: "20px" }}>
-        //         <ListItem button className={classes.nested}>
-        //           <ListItemIcon style={{ color: "#000" }}>
-        //             <StarBorder style={{ color: "#000" }} />
-        //           </ListItemIcon>
-        //           <ListItemText primary="파트등록" style={{ color: "#000" }} />
-        //         </ListItem>
-        //       </List>
-        //     </Collapse>
-        //   </NavLink>
-        // </>
         <SidenavDropdown
           color={color}
           key={key}
@@ -140,8 +118,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           active={key === collapseName}        
           subItem={subItem}        
         />
-
-        
       ) : (
         <NavLink to={layout + path} key={key}>
           <SidenavCollapse

@@ -15,10 +15,12 @@ import SuiBox from "components/Sui/SuiBox";
 // Custom styles for the SidenavDropdown
 import {
   collapseItem,
-  dropdownItem,
   collapseIconBox,
   collapseIcon,
   collapseText,
+  dropdownItem,
+  dropdownIcon,
+  dropdownText,
 } from "components/Sidenav/styles/sidenavDropdown";
 
 // Soft UI Dashboard PRO React context
@@ -85,14 +87,14 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
             // />
             <NavLink to={layout + path} key={key}>
               {/* <Collapse in={open} timeout="auto" unmountOnExit style={{ paddingLeft: "45px" }}>  */}
-              <Collapse in={open} timeout="auto" unmountOnExit> 
+              <Collapse in={open} timeout="auto" unmountOnExit > 
                 <List>
                   <ListItem button className={classes.nested} >
                   <SuiBox
                     {...rest}
                     sx={theme => dropdownItem(theme, { active, transparentSidenav })}
                   >
-                      <ListItemIcon >
+                      <ListItemIcon sx={(theme) => dropdownIcon(theme, { active })}>
                         {typeof icon === "string"
                           ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
                             icon
@@ -100,7 +102,7 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
                       </ListItemIcon>
                       <ListItemText
                         primary={name}
-                        sx={theme => collapseText(theme, { miniSidenav, transparentSidenav, active })} />
+                        sx={theme => dropdownText(theme, { miniSidenav, transparentSidenav, active })} />
                   </SuiBox>
                   </ListItem>
                 </List>

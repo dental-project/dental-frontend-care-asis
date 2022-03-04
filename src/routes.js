@@ -36,14 +36,6 @@ const routes = [
     layout: "/dental",
     subItem: [
       {
-        name: "접수상세 리스트",
-        key: "receptionDetail",
-        icon: <CircleIcon />,
-        component: ReceptionDetail,
-        path: "/receptionRegister",
-        layout: "/dental",        
-      },
-      {
         name: "파트 등록",
         key: "partRegister",
         icon: <CircleIcon />,
@@ -51,6 +43,38 @@ const routes = [
         path: "/partRegister",
         layout: "/dental",
       },
+      {
+        name: "장치 등록",
+        key: "itemRegister",
+        icon: <CircleIcon />,
+        component: ItemRegister,
+        route: "/itemRegister",
+        layout: "/dental",
+      },
+      {
+        name: "치과 등록",
+        key: "dentalRegister",
+        icon: <CircleIcon />,
+        component: DentalRegister,
+        route: "/dentalRegister",
+        layout: "/dental",
+      },
+      {
+        name: "단가 등록",
+        key: "priceRegister",
+        icon: <CircleIcon />,
+        component: PriceRegister,
+        route: "/priceRegister",
+        layout: "/dental",
+      },
+      {
+        name: "유저 회원가입",
+        key: "userRegister",
+        icon: <PersonAddIcon />,
+        component: UserRegister,
+        route: "/userRegister",
+        layout: "/dental",
+      }
     ],
   },
   {
