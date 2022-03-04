@@ -72,9 +72,11 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
+  console.log(data);
 
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
+    
     setOpenReceptionModal(false);
   }, [count]);
 
@@ -113,6 +115,13 @@ export default function ReceptionRegister() {
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
     setReceptionObj(receptionObj);
+
+    
+    // receptionDetailData.map((data) => 
+    //   console.log(data)
+    // )
+
+
     handleReceptionModalOpen();
   };
 
@@ -121,6 +130,18 @@ export default function ReceptionRegister() {
     setSeqId(seqId);
     handleReceptionModalOpen();
   };
+
+
+
+
+  
+
+
+
+
+
+
+
 
   const columns = [
     { name: "seq_id", header: "codeNo", align: "center", hidden: true },

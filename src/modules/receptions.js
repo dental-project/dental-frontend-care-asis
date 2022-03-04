@@ -4,6 +4,7 @@ import { apis } from "apis/axios";
 
 // action 생성
 const READ_RECEPTION = "READ_RECEPTION";
+const READ_RECEPTION_DETAIL = "READ_RECEPTION_DETAIL";
 const READ_VENDOR_PART = "READ_VENDOR_PART";
 const ADD_RECEPTION = "ADD_RECEPTION";
 const ADD_RECEPTION_PRICE = "ADD_RECEPTION_PRICE";
@@ -12,6 +13,7 @@ const REMOVE_RECEPTION = "REMOVE_RECEPTION";
 
 // action creators
 const readReception = createAction(READ_RECEPTION, data => ({ data }));
+const readReceptionDetail = createAction(READ_RECEPTION_DETAIL, data => ({ data }));
 const readVendorPart = createAction(READ_VENDOR_PART, data => ({ data }));
 const addReception = createAction(ADD_RECEPTION, data => ({ data }));
 const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
@@ -39,6 +41,20 @@ const getReceptionMiddleware = () => {
   };
 };
 
+const getReceptionDetailMiddleware = () => {
+  return dispatch => {
+    apis
+      .getReceptionDetail()
+      .then(result => {
+        const receptionDetailData = result.data;
+        dispatch(readReceptionDetail(receptionDetailData));
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  }
+}
+
 const getVendorPartMiddleware = seqId => {
   return dispatch => {
     apis
@@ -58,17 +74,14 @@ const addReceptionMiddleware = (contents, priceContents) => {
     apis
       .createReception(contents)
       .then(result => {
-        
         dispatch(addReception(contents));
-        
-        console.log(result);
-        console.log(contents);
-        console.log(priceContents);
 
+        for(let i=0; i<priceContents.length; i++) {
+          priceContents[i].sell_master_id = result.data.seq_id
+        };
 
+        dispatch(addReceptionPriceMiddleware(priceContents));
 
-        //addReceptionPriceMiddleware();
-        
       })
       .catch(err => {
         console.error(err);
@@ -128,6 +141,10 @@ export default handleActions(
       produce(state, draft => {
         draft.data = action.payload.data;
       }),
+    [READ_RECEPTION_DETAIL]: (state, action) =>
+      produce(state, draft => {
+        draft.data = action.payload.data;
+      }),
     [READ_VENDOR_PART]: (state, action) =>
       produce(state, draft => {
         draft.data = action.payload.data;
@@ -154,6 +171,7 @@ export default handleActions(
 
 const receptions = {
   getReceptionMiddleware,
+  getReceptionDetailMiddleware,
   getVendorPartMiddleware,
   addReceptionMiddleware,
   addReceptionPriceMiddleware,

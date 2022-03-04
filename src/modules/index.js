@@ -11,8 +11,8 @@ import businessType from './businessTypes';
 import businessSector from './businessSectors';
 import bank from './banks';
 
-//const middleware = [thunk];
-//const enhancer = applyMiddleware(...middleware);
+// const middleware = [thunk];
+// const enhancer = applyMiddleware(...middleware);
 const rootReducer = combineReducers({
   reception,
   part,

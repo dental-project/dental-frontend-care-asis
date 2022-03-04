@@ -15,7 +15,6 @@ import { dentals } from "modules/dentals";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
-import { FormProvider } from "react-hook-form";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,13 +84,14 @@ const ReceptionModalContainer = ({
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
   const receptionData = useSelector(({ reception }) => reception.data);
-  const [vendorId, setVendorId] = useState("");
-
+ 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
-  }, [dispatch]);
+    //dispatch(receptions.getReceptionDetailMiddleware());
+  }, []);
 
 
+  console.log(receptionData);
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -218,20 +218,8 @@ const ReceptionModalContainer = ({
     },
   ];
 
-  console.log();
-
   const onSubmit = (e) => {
     e && e.preventDefault();
-
-    //     chart_number: parseInt(data.chartNumber),
-    //     upper: upper,
-    //     lower: lower,
-    //     bite: bite,
-    //     appliance: appliance,
-    //     patient_name: data.patientName,
-    //     request_form: "/test/test.png",
-    //     description: "비고",
-    //     vendor_seq_id: vendorId,
 
     let formData = new FormData(document.getElementById("formData"));
 
@@ -247,8 +235,6 @@ const ReceptionModalContainer = ({
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
     
-    //const vendorId = formData.get("vendorId");
-
     if (receiptDate === "" || completionDate === "" || vendorName === "" || patientName === "")
       return alert("빈칸없이 입력하세요");
    
@@ -256,9 +242,6 @@ const ReceptionModalContainer = ({
       obj => obj.vendor_name === vendorName
     );
    
-
-    console.log(dentalAutoData[index].seq_id);
-
     if (modalType === "추가") {
       const contents = {
         receipt_date: receiptDate,
@@ -278,8 +261,6 @@ const ReceptionModalContainer = ({
       const gridArr = gridRef.current.getInstance().getData();
 
       if(gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
-      
-
       
       for (let i = 0; i < gridArr.length; i++) {
         if (gridArr[i].partName === null || gridArr[i].partName === "") {
@@ -303,90 +284,34 @@ const ReceptionModalContainer = ({
         );
 
         priceContents.push({
-          sell_master_id: 1,
+          sell_master_id: "",
           item_seq_id: element[0].item_seq_id,
           sell_count: parseInt(gridArr[i].amount),
-          normar_price: gridArr[i].normalPrice,
+          normal_price: parseInt(gridArr[i].normalPrice),
           real_sell_price: parseInt(gridArr[i].discountPrice),
           discount: parseFloat(gridArr[i].discount),
         });
       }
-     
+
       dispatch(receptions.addReceptionMiddleware(contents, priceContents));
-      //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
+      
+    } else if(modalType === "접수수정") {
+
+
+
+
+
+
+    } else if(modalType === "삭제") {
+
+
+
+      //dispatch(receptions.deleteReceptionMiddleware(seqId));
     }
 
 
 
-
-    // if (modalType === "추가") {
-    //   if (vendorId === "") return alert("거래처명을 선택하세요");
-
-    //   let upper = false;
-    //   let lower = false;
-    //   let bite = false;
-    //   let appliance = false;
-
-    //   if (data.upper === true) upper = true;
-    //   if (data.lower === true) lower = true;
-    //   if (data.bite === true) bite = true;
-    //   if (data.appliance === true) appliance = true;
-
-    //   const contents = {
-    //     receipt_date: data.receiptDate,
-    //     completion_date: data.completionDate,
-    //     delivery_date: data.deliveryDate,
-    //     chart_number: parseInt(data.chartNumber),
-    //     upper: upper,
-    //     lower: lower,
-    //     bite: bite,
-    //     appliance: appliance,
-    //     patient_name: data.patientName,
-    //     request_form: "/test/test.png",
-    //     description: "비고",
-    //     vendor_seq_id: vendorId,
-    //   };
-
-    //   const gridArr = gridRef.current.getInstance().getData();
-
-    //   for (let i = 0; i < gridArr.length; i++) {
-    //     if (gridArr[i].partName === null || gridArr[i].partName === "") {
-    //       return alert(i + 1 + "번째 행 파트명을 선택하세요.");
-    //     } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
-    //       return alert(i + 1 + "번째 행 장치명을 선택하세요.");
-    //     } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
-    //       return alert(i + 1 + "번째 행 수량을 입력하세요.");
-    //     } else if (
-    //       gridArr[i].discountPrice == null ||
-    //       gridArr[i].discountPrice === ""
-    //     ) {
-    //       return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
-    //     }
-    //   }
-
-    //   const priceContents = [];
-    //   for (let i = 0; i < gridArr.length; i++) {
-    //     let a = receptionData.filter(
-    //       data => data.item_name === gridArr[i].itemName
-    //     );
-
-    //     priceContents.push({
-    //       sell_master_id: 1,
-    //       item_seq_id: a[0].item_seq_id,
-    //       sell_count: parseInt(gridArr[i].amount),
-    //       normar_price: gridArr[i].normalPrice,
-    //       real_sell_price: parseInt(gridArr[i].discountPrice),
-    //       discount: parseFloat(gridArr[i].discount),
-    //     });
-    //   }
-
-    //   dispatch(receptions.addReceptionMiddleware(contents));
-    //   dispatch(receptions.addReceptionPriceMiddleware(priceContents));
-    // } else if (modalType === "접수수정") {
-    //   if (vendorId === "") return alert("거래처명을 선택하세요");
-    // } else if (modalType === "삭제") {
-    //   dispatch(receptions.deleteReceptionMiddleware(seqId));
-    // }
+    
   };
 
   const onChange = e => {
@@ -394,8 +319,6 @@ const ReceptionModalContainer = ({
 
     let rowId = e.changes[0].rowKey;
     var regNumber = /^[0-9]*$/;
-
-    console.log(e.changes[0].columnName);
 
     if (e.changes[0].columnName === "partName") {
       resetColumn(rowId, "itemReset");
@@ -514,25 +437,12 @@ const ReceptionModalContainer = ({
                     modalType === "접수수정" ? receptionObj.vendorName : ""
                   }
                   onChange={(event, newValue) => {
-                    if(newValue === null) {
-                      //setVendorId("");
-                    }
                     if(newValue !== null) {
-                         const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue) 
-                         const vendorSeqId = dentalAutoData[index].seq_id
+                        const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue) 
+                        const vendorSeqId = dentalAutoData[index].seq_id
+                        gridRef.current.getInstance().restore()
 
-
-                         const length = gridRef.current.getInstance().getData().length;
-                      
-                          // for(let i=0; i<length; i++) {
-                          //   resetColumn(i,"allReset");
-                          // }
-
-                          gridRef.current.getInstance().restore()
-
-                         //resetColumn("vendorSelect");
-                         dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-                         //setVendorId(vendorSeqId);
+                        dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                      }
                    }}
                   renderInput={params => (
@@ -574,7 +484,7 @@ const ReceptionModalContainer = ({
                   label="비고"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.patientName : ""
+                    modalType === "접수수정" ? receptionObj.description : ""
                   }
                 />
               </Grid>

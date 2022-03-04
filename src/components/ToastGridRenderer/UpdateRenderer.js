@@ -28,7 +28,7 @@ class UpdateRenderer {
           appliance: props.grid.store.data.rawData[rowKey].appliance,
           patientName: props.grid.store.data.rawData[rowKey].patient_name,
           requestForm: props.grid.store.data.rawData[rowKey].request_form,
-          desciption: props.grid.store.data.rawData[rowKey].desciption,
+          description: props.grid.store.data.rawData[rowKey].description,
         };
       } else if (updateType === "파트수정") {
         obj = {

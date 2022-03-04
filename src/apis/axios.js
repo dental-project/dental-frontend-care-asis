@@ -12,7 +12,7 @@ const instance = axios.create({
 
 export const apis = {
 
-  // 접수 리스트
+  // 접수 불러오기
   getReception: () => instance.get('api/sell/master/'),
   // 접수 추가
   createReception: (contents) => instance.post('api/sell/master/', contents),
@@ -20,8 +20,9 @@ export const apis = {
   patchReception: (seq_id, contents) => instance.patch(`api/sell/master/${seq_id}/`, contents),
   // 접수 삭제
   deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
-
-  // 접수 리스트 단가 추가
+  // 접수 디테일 불러오기
+  getReceptionDetail: () => instance.get('api/sell/detail/'),
+  // 접수 디테일 단가 추가
   createReceptionPrice: (contents) => instance.post('api/sell/detail/', contents),
 
 
