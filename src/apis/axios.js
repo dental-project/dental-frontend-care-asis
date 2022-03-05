@@ -24,6 +24,10 @@ export const apis = {
   getReceptionDetail: () => instance.get('api/sell/detail/'),
   // 접수 디테일 단가 추가
   createReceptionPrice: (contents) => instance.post('api/sell/detail/', contents),
+  // 접수 디테일 단가 수정
+  //patchReceptionDetail: (seq_id, contents) => instance.patch(`api/sell/detail/${seq_id}/`, contents),
+  // 접수 디테일 단가 삭제
+  deleteReceptionDetail: (seq_id) => instance.delete(`api/sell/detail/${seq_id}/`),
 
 
   // 파트 불러오기

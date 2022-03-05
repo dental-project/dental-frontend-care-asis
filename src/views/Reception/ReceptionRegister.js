@@ -31,6 +31,7 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 
 import { receptions } from "modules/receptions";
+import { receptionDetails } from "modules/receptionDetails";
 import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -72,11 +73,11 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
-  console.log(data);
+  const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
-    
+    dispatch(receptionDetails.getReceptionDetailMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
 
@@ -423,6 +424,8 @@ export default function ReceptionRegister() {
         close={handleReceptionModalClose}
         seqId={seqId}
         receptionObj={receptionObj}
+        receptionData={data}
+        receptionDetailData={receptionDetailData}
       />
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
     </>

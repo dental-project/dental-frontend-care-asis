@@ -4,21 +4,22 @@ import { apis } from "apis/axios";
 
 // action 생성
 const READ_RECEPTION = "READ_RECEPTION";
-const READ_RECEPTION_DETAIL = "READ_RECEPTION_DETAIL";
 const READ_VENDOR_PART = "READ_VENDOR_PART";
 const ADD_RECEPTION = "ADD_RECEPTION";
 const ADD_RECEPTION_PRICE = "ADD_RECEPTION_PRICE";
 const UPDATE_RECEPTION = "UPDATE_RECEPTION";
 const REMOVE_RECEPTION = "REMOVE_RECEPTION";
+const REMOVE_RECEPTION_DETAIL = "REMOVE_RECEPTION_DETAIL";
 
 // action creators
 const readReception = createAction(READ_RECEPTION, data => ({ data }));
-const readReceptionDetail = createAction(READ_RECEPTION_DETAIL, data => ({ data }));
 const readVendorPart = createAction(READ_VENDOR_PART, data => ({ data }));
 const addReception = createAction(ADD_RECEPTION, data => ({ data }));
 const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, data => ({ data }));
+//const updateReceptionDetail = createAction(UPDATE_RECEPTION_DETAIL, data => ({ data }));
 const removeReception = createAction(REMOVE_RECEPTION, data => ({ data }));
+const removeReceptionDetail = createAction(REMOVE_RECEPTION_DETAIL, data => ({ data }));
 
 // initialState
 const initialState = {
@@ -41,25 +42,12 @@ const getReceptionMiddleware = () => {
   };
 };
 
-const getReceptionDetailMiddleware = () => {
-  return dispatch => {
-    apis
-      .getReceptionDetail()
-      .then(result => {
-        const receptionDetailData = result.data;
-        dispatch(readReceptionDetail(receptionDetailData));
-      })
-      .catch(err => {
-        console.error(err);
-      })
-  }
-}
-
 const getVendorPartMiddleware = seqId => {
   return dispatch => {
     apis
       .getSelectVendorPart(seqId)
       .then(result => {
+        console.log(result);
         const vendorPartData = result.data;
         dispatch(readVendorPart(vendorPartData));
       })
@@ -133,15 +121,26 @@ const deleteReceptionMiddleware = seqId => {
   };
 };
 
+const deleteReceptionDetailMiddleware = seqId => {
+  return dispatch => {
+    apis
+      .deleteReceptionDetail(seqId)
+      .then(result => {
+        dispatch(removeReceptionDetail(seqId));
+        alert("접수 단가를 삭제 했습니다.");
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+}
+
+
 // 나중에 손봐야 함
 // reducer
 export default handleActions(
   {
     [READ_RECEPTION]: (state, action) =>
-      produce(state, draft => {
-        draft.data = action.payload.data;
-      }),
-    [READ_RECEPTION_DETAIL]: (state, action) =>
       produce(state, draft => {
         draft.data = action.payload.data;
       }),
@@ -165,18 +164,26 @@ export default handleActions(
         draft.data.splice(index, 1);
         draft.count = draft.count + 1;
       }),
+    [REMOVE_RECEPTION_DETAIL]: (state, action) =>
+      produce(state, draft => {
+        const index = draft.data.findIndex(
+          element => element.seq_id === action.payload.seqId
+        );
+        draft.data.splice(index, 1);
+        draft.count = draft.count + 1;
+      }),
   },
   initialState
 );
 
 const receptions = {
   getReceptionMiddleware,
-  getReceptionDetailMiddleware,
   getVendorPartMiddleware,
   addReceptionMiddleware,
   addReceptionPriceMiddleware,
   updateReceptionMiddleware,
   deleteReceptionMiddleware,
+  deleteReceptionDetailMiddleware,
 };
 
 export { receptions };
