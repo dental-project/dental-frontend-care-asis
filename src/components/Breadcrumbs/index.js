@@ -18,7 +18,15 @@ import SuiTypography from "components/Sui/SuiTypography";
 function Breadcrumbs({ icon, title, urls, light }) {
   const url = urls.slice(0, -1);
   let title_ko = title
-  routes.filter((data) => { if(data.key===title) title_ko = data.name });
+  routes.filter((data) => { 
+    if(data.subItem){
+      data.subItem.filter((subdata) => {
+        if(subdata.key===title) title_ko = subdata.name 
+      })
+    }else{
+      if(data.key===title) title_ko = data.name 
+    }
+  });
 
   return (
     <SuiBox mr={{ xs: 0, xl: 8 }}>
