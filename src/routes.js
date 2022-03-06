@@ -48,7 +48,7 @@ const routes = [
         key: "itemRegister",
         icon: <CircleIcon />,
         component: ItemRegister,
-        route: "/itemRegister",
+        path: "/itemRegister",
         layout: "/dental",
       },
       {
@@ -56,7 +56,7 @@ const routes = [
         key: "dentalRegister",
         icon: <CircleIcon />,
         component: DentalRegister,
-        route: "/dentalRegister",
+        path: "/dentalRegister",
         layout: "/dental",
       },
       {
@@ -64,7 +64,7 @@ const routes = [
         key: "priceRegister",
         icon: <CircleIcon />,
         component: PriceRegister,
-        route: "/priceRegister",
+        path: "/priceRegister",
         layout: "/dental",
       },
       {
@@ -72,19 +72,19 @@ const routes = [
         key: "userRegister",
         icon: <PersonAddIcon />,
         component: UserRegister,
-        route: "/userRegister",
+        path: "/userRegister",
         layout: "/dental",
       }
     ],
   },
-  {
-    name: "유저 회원가입",
-    key: "partRegister",
-    icon: <AssignmentOutlinedIcon />,
-    component: PartRegister,
-    path: "/partRegister",
-    layout: "/dental",
-  },
+  // {
+  //   name: "유저 회원가입",
+  //   key: "partRegister",
+  //   icon: <AssignmentOutlinedIcon />,
+  //   component: PartRegister,
+  //   path: "/partRegister",
+  //   layout: "/dental",
+  // },
 ];
 
 export default routes;

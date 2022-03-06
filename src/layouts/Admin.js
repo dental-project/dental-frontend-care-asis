@@ -36,18 +36,34 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      console.log(prop);
       if (prop.layout === "/dental") {
-        return (
-          <Route
+        if(prop.subItem){
+          let subRoutes = new Object();
+          subRoutes = prop.subItem.map((subProp,subKey)=>{
+            return <Route
+              path={subProp.layout + subProp.path}
+              component={subProp.component}
+              key={subKey}
+              color={"#000"}
+            />
+          });
+          subRoutes.push(<Route
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
             color={"#000"}
             subItem={prop.subItem}
+          />);
+          return subRoutes
+        }else{
+          return <Route
+            path={prop.layout + prop.path}
+            component={prop.component}
+            key={key}
+            color={"#000"}
           />
-        );
-      }
+        }
+      } 
       return null;
     })}
     <Redirect from="/dental" to="/dental/receptionRegister" />

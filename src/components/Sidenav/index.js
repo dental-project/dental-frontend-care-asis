@@ -104,10 +104,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     
     { type, name, icon, title, noCollapse, key, route, href }
    */
-  console.log(key === collapseName)
-  console.log(key)
-  console.log(collapseName)
-  console.log(key === collapseName)
+  // console.log(key === collapseName)
+  // console.log(key)
+  // console.log(collapseName)
+  // console.log(key === collapseName)
     returnValue = (
       subItem ? (
         <SidenavDropdown
