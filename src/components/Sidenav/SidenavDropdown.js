@@ -28,7 +28,7 @@ import { useSoftUIController } from "context";
 
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import { NavLink } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
@@ -38,6 +38,7 @@ import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.
 
 const useStyles = makeStyles(styles);
 
+
 // function SidenavDropdown({ color, icon, name, children, active, noCollapse, open, subItem, ...rest }) {
 function SidenavDropdown({ color, icon, name, children, active, noCollapse,  subItem, ...rest }) {  
   const [controller] = useSoftUIController();
@@ -45,12 +46,15 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  
+  const location = useLocation();
+  const { pathname } = location;
+  const collapseName = pathname.split("/").slice(1)[1];
 
   const handleClick = () => {
     setOpen(!open);
   };
-
-
+  console.log(active)
   const SubItemOff = () => (
     <>
       <ListItem button onClick={handleClick}>
@@ -76,7 +80,9 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
           )}
         </SuiBox>
       </ListItem>
-      {subItem.map(({layout, path, color, key, name, icon, collapseName}) => {
+      {subItem.map(({layout, path, color, key, name, icon}) => {
+        const subactive = key === collapseName ? true : false;
+        active = key === collapseName ? true : false;
           return (
             // <SidenavCollapse
             //   color={color}
@@ -86,15 +92,14 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
             //   active={key === collapseName}
             // />
             <NavLink to={layout + path} key={key}>
-              {/* <Collapse in={open} timeout="auto" unmountOnExit style={{ paddingLeft: "45px" }}>  */}
               <Collapse in={open} timeout="auto" unmountOnExit > 
                 <List>
                   <ListItem button className={classes.nested} >
                   <SuiBox
                     {...rest}
-                    sx={theme => dropdownItem(theme, { active, transparentSidenav })}
+                    sx={theme => dropdownItem(theme, { subactive, transparentSidenav })}
                   >
-                      <ListItemIcon sx={(theme) => dropdownIcon(theme, { active })}>
+                      <ListItemIcon sx={(theme) => dropdownIcon(theme, { subactive })}>
                         {typeof icon === "string"
                           ? // <Icon sx={(theme) => collapseIcon(theme, { active })}>{icon}</Icon>
                             icon
@@ -102,7 +107,7 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
                       </ListItemIcon>
                       <ListItemText
                         primary={name}
-                        sx={theme => dropdownText(theme, { miniSidenav, transparentSidenav, active })} />
+                        sx={theme => dropdownText(theme, { miniSidenav, transparentSidenav, subactive })} />
                   </SuiBox>
                   </ListItem>
                 </List>

@@ -1,3 +1,5 @@
+import { fontWeight } from "@mui/system";
+
 /**
 =========================================================
 * Soft UI Dashboard React - v3.0.0
@@ -173,21 +175,40 @@ function dropdownItem(theme, ownerState) {
 }
 
 function dropdownIcon(theme, ownerState) {
-  const { typography, transitions, breakpoints, functions } = theme;
-  const { miniSidenav, transparentSidenav, active } = ownerState;
-
-  const { size, fontWeightMedium, fontWeightRegular } = typography;
+  const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
+  const { subactive, transparentSidenav, color } = ownerState;
+  const { white, info, light, gradients } = palette;
+  const { md } = boxShadows;
+  const { borderRadius } = borders;
   const { pxToRem } = functions;
+
+  // console.log(subactive);
+  console.log(color)
   
   return {
+    background: () => {
+      // if (subactive) {
+      //   return color === "default" ? info.main : palette[color].main;
+      // }
+
+      return light.main;
+    },
     minWidth:0,
-    fontSize:pxToRem(10)
+    fontSize: () => {
+      if (subactive) return pxToRem(10)
+      else return pxToRem(7)
+    },
+    color: () => {
+      if (subactive) return "rgb(52, 71, 103)"
+      else return "rgba(77, 86, 148, 0.7)"
+      
+    }
   }
 }
 
 function dropdownText(theme, ownerState) {
   const { typography, transitions, breakpoints, functions } = theme;
-  const { miniSidenav, transparentSidenav, active } = ownerState;
+  const { miniSidenav, transparentSidenav, subactive } = ownerState;
 
   const { size, fontWeightMedium, fontWeightRegular } = typography;
   const { pxToRem } = functions;
@@ -206,9 +227,10 @@ function dropdownText(theme, ownerState) {
     },
 
     "& span": {
-      fontWeight: active ? fontWeightMedium : fontWeightRegular,
-      fontSize: size.sm,
+      fontWeight: subactive ? fontWeightMedium : fontWeightRegular,
+      fontSize: subactive ? pxToRem(16) : size.sm,
       lineHeight: 0,
+      color: subactive ? "rgb(52, 71, 103)" : "rgba(77, 86, 148, 0.7)"
     },
   };
 }
