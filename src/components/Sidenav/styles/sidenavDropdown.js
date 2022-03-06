@@ -182,9 +182,6 @@ function dropdownIcon(theme, ownerState) {
   const { borderRadius } = borders;
   const { pxToRem } = functions;
 
-  // console.log(subactive);
-  console.log(color)
-  
   return {
     background: () => {
       // if (subactive) {

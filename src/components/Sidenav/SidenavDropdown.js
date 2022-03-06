@@ -40,7 +40,7 @@ const useStyles = makeStyles(styles);
 
 
 // function SidenavDropdown({ color, icon, name, children, active, noCollapse, open, subItem, ...rest }) {
-function SidenavDropdown({ color, icon, name, children, active, noCollapse,  subItem, ...rest }) {  
+function SidenavDropdown({ color, icon, name, children, noCollapse,  subItem, ...rest }) {  
   const [controller] = useSoftUIController();
   const { miniSidenav, transparentSidenav } = controller;
   
@@ -54,7 +54,13 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
   const handleClick = () => {
     setOpen(!open);
   };
-  console.log(active)
+  let active = false;
+  subItem.filter((data) => {
+    if (data.key===collapseName){
+      active = true;
+    }
+  });
+  
   const SubItemOff = () => (
     <>
       <ListItem button onClick={handleClick}>
@@ -82,7 +88,6 @@ function SidenavDropdown({ color, icon, name, children, active, noCollapse,  sub
       </ListItem>
       {subItem.map(({layout, path, color, key, name, icon}) => {
         const subactive = key === collapseName ? true : false;
-        active = key === collapseName ? true : false;
           return (
             // <SidenavCollapse
             //   color={color}

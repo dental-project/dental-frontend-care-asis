@@ -115,7 +115,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           key={key}
           name={name}
           icon={icon}
-          active={key === collapseName}        
           subItem={subItem}        
         />
       ) : (
