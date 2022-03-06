@@ -78,17 +78,27 @@ const ReceptionModalContainer = ({
   seqId,
   receptionObj,
   receptionData,
-  receptionDetailData,
+  receptionDetailArr,
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
 
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
- console.log(dentalAutoData);
+
+  const [updateData, setUpdateData] = useState([]);
+  
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, []);
+
+
+
+
+
+
+
+
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -213,6 +223,37 @@ const ReceptionModalContainer = ({
     },
   ];
 
+
+
+
+
+
+//   if (modalType === "접수수정") {
+//     console.log(receptionDetailArr);
+
+   
+// const sss = [];
+//     for (let i = 0; receptionDetailArr.length; i++) {
+//       //setUpdateData(i, columns[i].name, receptionDetailArr.partName);
+      
+
+      
+// sss.push({
+//   aaa: "aaa",
+// });
+
+
+
+//     }
+
+
+//     //setUpdateData();
+
+//   }
+
+
+
+
   const onSubmit = e => {
     e && e.preventDefault();
 
@@ -296,18 +337,12 @@ const ReceptionModalContainer = ({
       dispatch(receptions.addReceptionMiddleware(contents, priceContents));
     } else if (modalType === "접수수정") {
     } else if (modalType === "삭제") {
-      
-      const arr = receptionDetailData.filter(
-        data => data.sell_master_id === seqId
-      );
+      // const arr = receptionDetailData.filter(
+      //   data => data.sell_master_id === seqId
+      // );
 
-      // for (let i = 0; i < arr.length; i++) {
-      dispatch(receptions.deleteReceptionDetailMiddleware(arr.seq_id));
-      //}
-      
       dispatch(receptions.deleteReceptionMiddleware(seqId));
     }
-
   };
 
   const onChange = e => {
@@ -332,11 +367,7 @@ const ReceptionModalContainer = ({
         return alert("정수만 입력 가능합니다.");
 
       resetColumn(rowId);
-      setColumnValue(
-        rowId,
-        "normalPrice",
-        gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)
-      );
+      setColumnValue(rowId, "normalPrice", gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount));
     } else if (e.changes[0].columnName === "discountPrice") {
       if (regNumber.test(gridArr[rowId].discountPrice) === false) {
         resetColumn(rowId);
@@ -346,19 +377,8 @@ const ReceptionModalContainer = ({
         resetColumn(rowId);
         return alert("할인금액이 정상가보다 금액이 큽니다.");
       }
-      setColumnValue(
-        rowId,
-        "finalPrice",
-        gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice)
-      );
-      setColumnValue(
-        rowId,
-        "discount",
-        (
-          (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) *
-          100
-        ).toFixed(2) + "%"
-      );
+      setColumnValue(rowId, "finalPrice", gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice));
+      setColumnValue(rowId, "discount", ((gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) * 100).toFixed(2) + "%");
     }
   };
 
@@ -433,31 +453,20 @@ const ReceptionModalContainer = ({
                     modalType === "접수수정" ? receptionObj.vendorName : ""
                   }
                   onChange={(event, newValue) => {
+                    //  gridRef.current.getInstance().resetData([], {});
 
-
-
-//  gridRef.current.getInstance().resetData([], {});
-
-//  if (newValue === null) {
-//    setVendorId("");
-//  }
-//  if (newValue !== null) {
-//    const index = dentalData.findIndex(
-//      obj => obj.vendor_name === newValue.vendor_name
-//    );
-//    const vendorSeqId = dentalData[index].seq_id;
-//    resetColumn("vendorSelect");
-//    dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-//    setVendorId(vendorSeqId);
-//  }
-
-
-
-
-
-
-
-          
+                    //  if (newValue === null) {
+                    //    setVendorId("");
+                    //  }
+                    //  if (newValue !== null) {
+                    //    const index = dentalData.findIndex(
+                    //      obj => obj.vendor_name === newValue.vendor_name
+                    //    );
+                    //    const vendorSeqId = dentalData[index].seq_id;
+                    //    resetColumn("vendorSelect");
+                    //    dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                    //    setVendorId(vendorSeqId);
+                    //  }
 
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
@@ -467,10 +476,9 @@ const ReceptionModalContainer = ({
                       const vendorSeqId = dentalAutoData[index].seq_id;
                       // gridRef.current.getInstance().restore();
                       gridRef.current.getInstance().resetData([], {});
-                    
-                      //dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+
+                      dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                     } else if (newValue === null) {
-                      
                     }
                   }}
                   renderInput={params => (
@@ -601,16 +609,31 @@ const ReceptionModalContainer = ({
               >
                 그리드 행추가
               </Button>
-              <ToastGrid
-                ref={gridRef}
-                columns={columns}
-                rowHeight={20}
-                bodyHeight={200}
-                virtualScrolling={true}
-                heightResizable={true}
-                rowHeaders={["rowNum"]}
-                onAfterChange={onChange}
-              />
+
+              {modalType === "접수수정" ? (
+                <ToastGrid
+                  ref={gridRef}
+                  columns={columns}
+                  rowHeight={20}
+                  bodyHeight={200}
+                  virtualScrolling={true}
+                  heightResizable={true}
+                  rowHeaders={["rowNum"]}
+                  onAfterChange={onChange}
+                  data={receptionDetailArr}
+                />
+              ) : (
+                <ToastGrid
+                  ref={gridRef}
+                  columns={columns}
+                  rowHeight={20}
+                  bodyHeight={200}
+                  virtualScrolling={true}
+                  heightResizable={true}
+                  rowHeaders={["rowNum"]}
+                  onAfterChange={onChange}
+                />
+              )}
             </Grid>
           </>
         )}

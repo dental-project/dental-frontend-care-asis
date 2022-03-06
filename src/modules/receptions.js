@@ -9,7 +9,7 @@ const ADD_RECEPTION = "ADD_RECEPTION";
 const ADD_RECEPTION_PRICE = "ADD_RECEPTION_PRICE";
 const UPDATE_RECEPTION = "UPDATE_RECEPTION";
 const REMOVE_RECEPTION = "REMOVE_RECEPTION";
-const REMOVE_RECEPTION_DETAIL = "REMOVE_RECEPTION_DETAIL";
+//const REMOVE_RECEPTION_DETAIL = "REMOVE_RECEPTION_DETAIL";
 
 // action creators
 const readReception = createAction(READ_RECEPTION, data => ({ data }));
@@ -19,7 +19,7 @@ const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, data => ({ data }));
 //const updateReceptionDetail = createAction(UPDATE_RECEPTION_DETAIL, data => ({ data }));
 const removeReception = createAction(REMOVE_RECEPTION, data => ({ data }));
-const removeReceptionDetail = createAction(REMOVE_RECEPTION_DETAIL, data => ({ data }));
+//const removeReceptionDetail = createAction(REMOVE_RECEPTION_DETAIL, data => ({ data }));
 
 // initialState
 const initialState = {
@@ -112,6 +112,7 @@ const deleteReceptionMiddleware = seqId => {
     apis
       .deleteReception(seqId)
       .then(result => {
+        console.log(result);
         dispatch(removeReception(seqId));
         alert("접수 정보를 삭제 했습니다.");
       })
@@ -121,19 +122,19 @@ const deleteReceptionMiddleware = seqId => {
   };
 };
 
-const deleteReceptionDetailMiddleware = seqId => {
-  return dispatch => {
-    apis
-      .deleteReceptionDetail(seqId)
-      .then(result => {
-        dispatch(removeReceptionDetail(seqId));
-        alert("접수 단가를 삭제 했습니다.");
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }
-}
+// const deleteReceptionDetailMiddleware = seqId => {
+//   return dispatch => {
+//     apis
+//       .deleteReceptionDetail(seqId)
+//       .then(result => {
+//         dispatch(removeReceptionDetail(seqId));
+//         alert("접수 단가를 삭제 했습니다.");
+//       })
+//       .catch(err => {
+//         console.log(err);
+//       })
+//   }
+// }
 
 
 // 나중에 손봐야 함
@@ -164,14 +165,14 @@ export default handleActions(
         draft.data.splice(index, 1);
         draft.count = draft.count + 1;
       }),
-    [REMOVE_RECEPTION_DETAIL]: (state, action) =>
-      produce(state, draft => {
-        const index = draft.data.findIndex(
-          element => element.seq_id === action.payload.seqId
-        );
-        draft.data.splice(index, 1);
-        draft.count = draft.count + 1;
-      }),
+    // [REMOVE_RECEPTION_DETAIL]: (state, action) =>
+    //   produce(state, draft => {
+    //     const index = draft.data.findIndex(
+    //       element => element.seq_id === action.payload.seqId
+    //     );
+    //     draft.data.splice(index, 1);
+    //     draft.count = draft.count + 1;
+    //   }),
   },
   initialState
 );
@@ -183,7 +184,7 @@ const receptions = {
   addReceptionPriceMiddleware,
   updateReceptionMiddleware,
   deleteReceptionMiddleware,
-  deleteReceptionDetailMiddleware,
+  //deleteReceptionDetailMiddleware,
 };
 
 export { receptions };

@@ -75,14 +75,15 @@ export default function ReceptionRegister() {
   const { data, count } = useSelector(({ reception }) => reception);
   const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
+  const [seqId, setSeqId] = useState();
+  const [receptionObj, setReceptionObj] = useState({});
+  const [receptionDetailArr, setReceptionDetailArr] = useState([]);
+
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     dispatch(receptionDetails.getReceptionDetailMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
-
-  const [seqId, setSeqId] = useState();
-  const [receptionObj, setReceptionObj] = useState({});
 
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
@@ -115,13 +116,42 @@ export default function ReceptionRegister() {
 
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
-    setReceptionObj(receptionObj);
-
     
-    // receptionDetailData.map((data) => 
-    //   console.log(data)
-    // )
+    let detailArr = receptionDetailData.filter(
+      data => data.sell_master_id === receptionObj.seqId
+    );
 
+
+    console.log(data);
+    console.log(detailArr);
+    console.log(receptionObj);
+    console.log(receptionDetailArr);
+
+    const sss = [];
+    for (let i = 0; i<detailArr.length; i++) {
+      //setUpdateData(i, columns[i].name, receptionDetailArr.partName);
+          
+
+      let element = data.filter(
+        data => data.item_name === detailArr[i].itemName
+      );
+
+      sss.push({
+        partName: 1,
+        itemName: element[0].item_seq_id,
+        unitPrice: 1,
+        amount: detailArr[i].sell_count,
+        normalPrice: detailArr[i].normal_price,
+        discountPrice: detailArr[i].real_sell_price,
+        finalPrice: detailArr[i].normal_price - detailArr[i].real_sell_price,
+        discount: detailArr[i].discount,
+      });
+      
+    }
+    
+     
+    setReceptionObj(receptionObj);
+    setReceptionDetailArr(sss);
 
     handleReceptionModalOpen();
   };
@@ -131,18 +161,6 @@ export default function ReceptionRegister() {
     setSeqId(seqId);
     handleReceptionModalOpen();
   };
-
-
-
-
-  
-
-
-
-
-
-
-
 
   const columns = [
     { name: "seq_id", header: "codeNo", align: "center", hidden: true },
@@ -425,7 +443,7 @@ export default function ReceptionRegister() {
         seqId={seqId}
         receptionObj={receptionObj}
         receptionData={data}
-        receptionDetailData={receptionDetailData}
+        receptionDetailArr={receptionDetailArr}
       />
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
     </>
