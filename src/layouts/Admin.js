@@ -210,7 +210,7 @@ export default function Admin({ ...rest }) {
           onMouseLeave={handleOnMouseLeave}
         />
         <Configurator />
-        {configsButton}
+        {/* {configsButton} */}
       </>
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
