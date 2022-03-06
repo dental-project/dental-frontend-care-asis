@@ -17,6 +17,7 @@ import SuiBox from "components/Sui/SuiBox";
 import Icon from "@mui/material/Icon";
 import Sidenav from "components/Sidenav";
 import Configurator from "components/Configurator";
+import Navbar from "components/Navbars";
 // Soft UI Dashboard PRO React contexts
 
 import {
@@ -188,6 +189,7 @@ export default function Admin({ ...rest }) {
   return (
     <div className={classes.wrapper}>
       <>
+        
         <Sidenav
           color={sidenavColor}
           brand={toothImg}
@@ -200,6 +202,7 @@ export default function Admin({ ...rest }) {
         {/* {configsButton} */}
       </>
       <div className={classes.mainPanel} ref={mainPanel}>
+      <Navbar />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>
