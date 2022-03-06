@@ -32,6 +32,7 @@ import Autocomplete, {
 
 import { receptions } from "modules/receptions";
 import { receptionDetails } from "modules/receptionDetails";
+import { items } from "modules/items";
 import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -73,6 +74,7 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
+  const itemData  = useSelector(({ item }) => item.data);
   const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
   const [seqId, setSeqId] = useState();
@@ -82,6 +84,7 @@ export default function ReceptionRegister() {
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     dispatch(receptionDetails.getReceptionDetailMiddleware());
+    dispatch(items.getItemMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
 
@@ -121,35 +124,27 @@ export default function ReceptionRegister() {
       data => data.sell_master_id === receptionObj.seqId
     );
 
-
-    console.log(data);
-    console.log(detailArr);
-    console.log(receptionObj);
-    console.log(receptionDetailArr);
-
     const sss = [];
+    
     for (let i = 0; i<detailArr.length; i++) {
-      //setUpdateData(i, columns[i].name, receptionDetailArr.partName);
-          
-
-      let element = data.filter(
-        data => data.item_name === detailArr[i].itemName
+     
+      const partArr = itemData.filter(
+        data => data.seq_id === detailArr[i].item_seq_id
       );
 
       sss.push({
-        partName: 1,
-        itemName: element[0].item_seq_id,
-        unitPrice: 1,
+        partName: partArr[0].part_name,
+        itemName: detailArr[i].item_name,
+        unitPrice: detailArr[i].normal_price,
         amount: detailArr[i].sell_count,
-        normalPrice: detailArr[i].normal_price,
+        normalPrice: detailArr[i].normal_price * detailArr[i].sell_count,
         discountPrice: detailArr[i].real_sell_price,
         finalPrice: detailArr[i].normal_price - detailArr[i].real_sell_price,
         discount: detailArr[i].discount,
       });
-      
     }
     
-     
+    console.log(sss);
     setReceptionObj(receptionObj);
     setReceptionDetailArr(sss);
 
