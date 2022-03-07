@@ -361,87 +361,87 @@ const ReceptionModalContainer = ({
     }
   };
 
-  const onChange = e => {
-    const gridArr = gridRef.current.getInstance().getData();
+  // const onChange = e => {
+  //   const gridArr = gridRef.current.getInstance().getData();
 
-    let rowId = e.changes[0].rowKey;
-    var regNumber = /^[0-9]*$/;
+  //   let rowId = e.changes[0].rowKey;
+  //   var regNumber = /^[0-9]*$/;
 
-    if (e.changes[0].columnName === "partName") {
-      resetColumn(rowId, "itemReset");
-    } else if (e.changes[0].columnName === "itemName") {
-      let price = receptionData.filter(
-        data =>
-          data.part_name === gridArr[rowId].partName &&
-          data.item_name === gridArr[rowId].itemName
-      );
+  //   if (e.changes[0].columnName === "partName") {
+  //     resetColumn(rowId, "itemReset");
+  //   } else if (e.changes[0].columnName === "itemName") {
+  //     let price = receptionData.filter(
+  //       data =>
+  //         data.part_name === gridArr[rowId].partName &&
+  //         data.item_name === gridArr[rowId].itemName
+  //     );
 
-      resetColumn(rowId, "itemReset");
-      setColumnValue(rowId, "unitPrice", price[0].unit_price);
-    } else if (e.changes[0].columnName === "amount") {
-      if (regNumber.test(gridArr[rowId].amount) === false)
-        return alert("정수만 입력 가능합니다.");
+  //     resetColumn(rowId, "itemReset");
+  //     setColumnValue(rowId, "unitPrice", price[0].unit_price);
+  //   } else if (e.changes[0].columnName === "amount") {
+  //     if (regNumber.test(gridArr[rowId].amount) === false)
+  //       return alert("정수만 입력 가능합니다.");
 
-      resetColumn(rowId);
-      setColumnValue(
-        rowId,
-        "normalPrice",
-        gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)
-      );
-    } else if (e.changes[0].columnName === "discountPrice") {
-      if (regNumber.test(gridArr[rowId].discountPrice) === false) {
-        resetColumn(rowId);
-        return alert("정수만 입력 가능합니다.");
-      }
-      if (
-        parseInt(gridArr[rowId].discountPrice) >
-        gridArr[rowId].normalPrice
-      ) {
-        resetColumn(rowId);
-        return alert("할인금액이 정상가보다 금액이 큽니다.");
-      }
-      setColumnValue(
-        rowId,
-        "finalPrice",
-        gridArr[rowId].normalPrice -
-          parseInt(gridArr[rowId].discountPrice)
-      );
-      setColumnValue(
-        rowId,
-        "discount",
-        (
-          (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) *
-          100
-        ).toFixed(2) + "%"
-      );
-    }
-  };
+  //     resetColumn(rowId);
+  //     setColumnValue(
+  //       rowId,
+  //       "normalPrice",
+  //       gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)
+  //     );
+  //   } else if (e.changes[0].columnName === "discountPrice") {
+  //     if (regNumber.test(gridArr[rowId].discountPrice) === false) {
+  //       resetColumn(rowId);
+  //       return alert("정수만 입력 가능합니다.");
+  //     }
+  //     if (
+  //       parseInt(gridArr[rowId].discountPrice) >
+  //       gridArr[rowId].normalPrice
+  //     ) {
+  //       resetColumn(rowId);
+  //       return alert("할인금액이 정상가보다 금액이 큽니다.");
+  //     }
+  //     setColumnValue(
+  //       rowId,
+  //       "finalPrice",
+  //       gridArr[rowId].normalPrice -
+  //         parseInt(gridArr[rowId].discountPrice)
+  //     );
+  //     setColumnValue(
+  //       rowId,
+  //       "discount",
+  //       (
+  //         (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) *
+  //         100
+  //       ).toFixed(2) + "%"
+  //     );
+  //   }
+  // };
 
-  const setColumnValue = (rowId, columnName, value) => {
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, columnName, value, false);
-  };
+  // const setColumnValue = (rowId, columnName, value) => {
+  //   gridRef.current
+  //     .getInstance()
+  //     .setValue(rowId, columnName, value, false);
+  // };
 
-  const resetColumn = (rowId, type) => {
-    if (type === "itemReset") {
-      gridRef.current
-        .getInstance()
-        .setValue(rowId, "unitPrice", "", false);
-      gridRef.current.getInstance().setValue(rowId, "amount", "", false);
-      gridRef.current
-        .getInstance()
-        .setValue(rowId, "normalPrice", "", false);
-    }
+  // const resetColumn = (rowId, type) => {
+  //   if (type === "itemReset") {
+  //     gridRef.current
+  //       .getInstance()
+  //       .setValue(rowId, "unitPrice", "", false);
+  //     gridRef.current.getInstance().setValue(rowId, "amount", "", false);
+  //     gridRef.current
+  //       .getInstance()
+  //       .setValue(rowId, "normalPrice", "", false);
+  //   }
 
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, "discountPrice", "", false);
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, "finalPrice", "", false);
-    gridRef.current.getInstance().setValue(rowId, "discount", "", false);
-  };
+  //   gridRef.current
+  //     .getInstance()
+  //     .setValue(rowId, "discountPrice", "", false);
+  //   gridRef.current
+  //     .getInstance()
+  //     .setValue(rowId, "finalPrice", "", false);
+  //   gridRef.current.getInstance().setValue(rowId, "discount", "", false);
+  // };
 
   return (
     <Modal
@@ -506,33 +506,15 @@ const ReceptionModalContainer = ({
                       : ""
                   }
                   onChange={(event, newValue) => {
-                    //  gridRef.current.getInstance().resetData([], {});
-
-                    //  if (newValue === null) {
-                    //    setVendorId("");
-                    //  }
-                    //  if (newValue !== null) {
-                    //    const index = dentalData.findIndex(
-                    //      obj => obj.vendor_name === newValue.vendor_name
-                    //    );
-                    //    const vendorSeqId = dentalData[index].seq_id;
-                    //    resetColumn("vendorSelect");
-                    //    dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-                    //    setVendorId(vendorSeqId);
-                    //  }
-
+                   
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
                         obj => obj.vendor_name === newValue
                       );
-                      console.log(newValue);
+                      
                       const vendorSeqId = dentalAutoData[index].seq_id;
-                      // gridRef.current.getInstance().restore();
-                      gridRef.current.getInstance().resetData([], {});
+                      dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
 
-                      dispatch(
-                        receptions.getVendorPartMiddleware(vendorSeqId)
-                      );
                     } else if (newValue === null) {
                     }
                   }}
@@ -675,11 +657,11 @@ const ReceptionModalContainer = ({
                             className={classes.textField}
                             options={auto1}
                             filterOptions={filterOptions}
-                            // defaultValue={
-                            //   modalType === "접수수정" 
-                            //     ? data.partName 
-                            //     : ""
-                            // }
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.partName 
+                                : ""
+                            }
                             renderInput={(params) => <TextField {...params} name={"partName_" + index} label="파트명" variant="outlined" />}
                           /> 
                         </Grid>    
@@ -733,6 +715,7 @@ const ReceptionModalContainer = ({
                                 ? data.normalPrice 
                                 : ""
                             }
+                            InputProps={{readOnly: true}}
                           />
                         </Grid>
                         <Grid item xs={1}>
@@ -759,6 +742,7 @@ const ReceptionModalContainer = ({
                                 ? data.normalPrice 
                                 : ""
                             }
+                            InputProps={{readOnly: true}}
                           />
                         </Grid>
                         <Grid item xs={1}>
