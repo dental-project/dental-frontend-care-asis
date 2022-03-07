@@ -520,15 +520,6 @@ const ReceptionModalContainer = ({
             color="primary"
             onClick={removeReceptionDetail()}
           >
-            추가
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={removeReceptionDetail()}
-          >
             삭제
           </Button>
         </Grid>
