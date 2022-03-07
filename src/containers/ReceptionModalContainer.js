@@ -103,17 +103,9 @@ const ReceptionModalContainer = ({
   });
 
   const auto1 = ["App", "Part"];
-  const auto2 = ["기공", "item"]
-
-
-
-
+  const auto2 = ["기공", "item"];
 
   console.log(selectDetailData);
-
-
-
-
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -158,10 +150,6 @@ const ReceptionModalContainer = ({
         return { text: data.item_name, value: data.item_name };
       });
   }
-
-  
-
-
 
   const columns = [
     {
@@ -259,10 +247,8 @@ const ReceptionModalContainer = ({
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
 
-
     const detailArr = [];
     for (let i = 0; i < selectDetailData.length; i++) {
-
       detailArr.push({
         part_name: formData.get("normalPrice_" + i),
         item_name: formData.get("itemPrice_" + i),
@@ -277,17 +263,7 @@ const ReceptionModalContainer = ({
 
     console.log(detailArr);
 
-
-
     return;
-
-
-
-
-
-
-
-
 
     if (
       receiptDate === "" ||
@@ -319,21 +295,14 @@ const ReceptionModalContainer = ({
 
       const gridArr = gridRef.current.getInstance().getData();
 
-      if (gridArr.length === 0)
-        return alert("그리드 행을 추가 해주세요.");
+      if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
 
       for (let i = 0; i < gridArr.length; i++) {
         if (gridArr[i].partName === null || gridArr[i].partName === "") {
           return alert(i + 1 + "번째 행 파트명을 선택하세요.");
-        } else if (
-          gridArr[i].itemName === null ||
-          gridArr[i].itemName === ""
-        ) {
+        } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
           return alert(i + 1 + "번째 행 장치명을 선택하세요.");
-        } else if (
-          gridArr[i].amount === null ||
-          gridArr[i].amount === ""
-        ) {
+        } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
           return alert(i + 1 + "번째 행 수량을 입력하세요.");
         } else if (
           gridArr[i].discountPrice == null ||
@@ -359,9 +328,7 @@ const ReceptionModalContainer = ({
         });
       }
 
-      dispatch(
-        receptions.addReceptionMiddleware(contents, priceContents)
-      );
+      dispatch(receptions.addReceptionMiddleware(contents, priceContents));
     } else if (modalType === "접수수정") {
       const gridArr = gridRef.current.getInstance().getData();
       console.log(gridArr);
@@ -455,18 +422,6 @@ const ReceptionModalContainer = ({
   //     .setValue(rowId, "finalPrice", "", false);
   //   gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   // };
-
-
-
-
-
-
-
-
-
-
-
-
 
   const PriceComponent = (index, data) => {
     return (
@@ -578,16 +533,8 @@ const ReceptionModalContainer = ({
           </Button>
         </Grid>
       </Grid>
-    )
+    );
   };
-
-
-
-
-
-
-
-
 
   return (
     <Modal
@@ -762,24 +709,11 @@ const ReceptionModalContainer = ({
               </Grid>
               <Grid item xs={2}></Grid>
 
-              
-
-
-
-
-
-
-
-
-                {
-                  modalType === "접수수정"
-                  ? selectDetailData.map((data, index) => {
-                      return <PriceComponent key={index} data={data} />
-                    })
-                    : null
-                }   
-
-             
+              {modalType === "접수수정"
+                ? selectDetailData.map((data, index) => {
+                    return <PriceComponent key={index} data={data} />;
+                  })
+                : null}
             </Grid>
             <Grid
               container
