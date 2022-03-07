@@ -183,13 +183,15 @@ function dropdownIcon(theme, ownerState) {
   const { pxToRem } = functions;
 
   return {
-    background: () => {
-      // if (subactive) {
-      //   return color === "default" ? info.main : palette[color].main;
-      // }
+    // background: () => {
+    //   console.log(info)
+    //   console.log(white)
+    //   // if (subactive) {
+    //   //   return color === "default" ? info.main : palette[color].main;
+    //   // }
 
-      return light.main;
-    },
+    //   return white.main;
+    // },
     minWidth:0,
     fontSize: () => {
       if (subactive) return pxToRem(10)
