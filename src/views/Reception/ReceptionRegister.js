@@ -31,6 +31,8 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 
 import { receptions } from "modules/receptions";
+import { receptionDetails } from "modules/receptionDetails";
+import { items } from "modules/items";
 import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -71,32 +73,34 @@ export default function ReceptionRegister() {
   let history = useHistory();
 
   const dispatch = useDispatch();
-  const reception = useSelector(({ reception }) => reception);
-
-  useEffect(() => {
-    dispatch(receptions.getReceptionMiddleware());
-    //setOpenItemModal(item.modal);
-    console.log(reception.data);
-  }, []);
+  const { data, count } = useSelector(({ reception }) => reception);
+  const itemData  = useSelector(({ item }) => item.data);
+  const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
   const [seqId, setSeqId] = useState();
   const [receptionObj, setReceptionObj] = useState({});
+  const [receptionDetailArr, setReceptionDetailArr] = useState([]);
+
+  useEffect(() => {
+    dispatch(receptions.getReceptionMiddleware());
+    dispatch(receptionDetails.getReceptionDetailMiddleware());
+    dispatch(items.getItemMiddleware());
+    setOpenReceptionModal(false);
+  }, [count]);
 
   // 추가 모달
-  const [openReceptionAddModal, setOpenReceptionAddModal] = React.useState(
-    false
-  );
+  const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
   const [modalType, setModalType] = useState("");
 
   const handleReceptionModalOpen = () => {
-    setOpenReceptionAddModal(true);
+    setOpenReceptionModal(true);
   };
   const handleReceptionModalClose = () => {
-    setOpenReceptionAddModal(false);
+    setOpenReceptionModal(false);
   };
 
   // 출력 모달
-  const [openPrint, setOpenPrint] = React.useState(false);
+  const [openPrint, setOpenPrint] = useState(false);
   const handleClickOpenPrint = () => {
     setOpenPrint(true);
   };
@@ -108,14 +112,42 @@ export default function ReceptionRegister() {
     history.push("/dental/receptionDetail");
   };
 
-  const receptionModalOpen = e => {
+  const receptionModalOpen = () => {
     setModalType("추가");
     handleReceptionModalOpen();
   };
 
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
+    
+    let detailArr = receptionDetailData.filter(
+      data => data.sell_master_id === receptionObj.seqId
+    );
+
+    const sss = [];
+    
+    for (let i = 0; i<detailArr.length; i++) {
+     
+      const partArr = itemData.filter(
+        data => data.seq_id === detailArr[i].item_seq_id
+      );
+
+      sss.push({
+        partName: partArr[0].part_name,
+        itemName: detailArr[i].item_name,
+        unitPrice: detailArr[i].normal_price,
+        amount: detailArr[i].sell_count,
+        normalPrice: detailArr[i].normal_price * detailArr[i].sell_count,
+        discountPrice: detailArr[i].real_sell_price,
+        finalPrice: detailArr[i].normal_price - detailArr[i].real_sell_price,
+        discount: detailArr[i].discount,
+      });
+    }
+    
+    console.log(sss);
     setReceptionObj(receptionObj);
+    setReceptionDetailArr(sss);
+
     handleReceptionModalOpen();
   };
 
@@ -201,7 +233,7 @@ export default function ReceptionRegister() {
     },
     {
       name: "appliance",
-      header: "장치",
+      header: "Appliance",
       align: "center",
       whiteSpace: "normal",
       resizable: true,
@@ -284,20 +316,6 @@ export default function ReceptionRegister() {
     { title: "조유나" },
   ];
 
-  // const config = {
-  //   withCredentials: true,
-  // }
-
-  // axios
-  //   .get("/api/sell/master/",config)
-  //   .then((result) => {
-  //       console.log(result);
-  //       setDentalData(result.data);
-  //   })
-  //   .catch((error) => {
-  //     throw new Error(error);
-  // });
-
   return (
     <>
       <Grid container>
@@ -333,7 +351,6 @@ export default function ReceptionRegister() {
                       shrink: true,
                     }}
                   />
-
                   <TextField
                     id="date"
                     label="완성일자"
@@ -346,7 +363,6 @@ export default function ReceptionRegister() {
                     }}
                   />
                 </Grid>
-
                 <Grid
                   item
                   xs={6}
@@ -371,7 +387,6 @@ export default function ReceptionRegister() {
                       />
                     )}
                   />
-
                   <Autocomplete
                     className={classes.grid}
                     options={auto2}
@@ -386,7 +401,6 @@ export default function ReceptionRegister() {
                       />
                     )}
                   />
-
                   <Button
                     type="submit"
                     color="primary"
@@ -396,7 +410,6 @@ export default function ReceptionRegister() {
                     검색
                   </Button>
                 </Grid>
-
                 <Grid
                   item
                   xs={2}
@@ -413,55 +426,21 @@ export default function ReceptionRegister() {
                   </Button>
                 </Grid>
               </form>
-
-              <BasicGrid
-                type={"reception"}
-                columns={columns}
-                data={reception.data}
-              />
+              <BasicGrid columns={columns} data={data} />
             </CardBody>
           </Card>
         </Grid>
       </Grid>
-
       <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
         seqId={seqId}
         receptionObj={receptionObj}
+        receptionData={data}
+        receptionDetailArr={receptionDetailArr}
       />
-
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
-
-      {/* <Modal      
-        type={"dash"}         
-        modalType={registerType}
-        rowSeqId={rowSeqId}
-        rowValue={rowItemName}
-        open={openDashAddModal}
-        close={handleDashModalClose}
-      /> */}
     </>
   );
 }
-
-// const mapStateToProps = ({subscribers}) => {
-
-//   return {
-//     count: subscribers.count
-//   }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addSubscriber: () => dispatch(addSubscriber())
-//   }
-// }
-// ==>
-
-// const mapDispatchToProps = {
-//   addSubscriber: (number) => addSubscriber(number)
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

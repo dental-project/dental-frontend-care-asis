@@ -1,82 +1,79 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import { apis } from 'apis/axios'
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import { apis } from "apis/axios";
 
 // action 생성
-const READ_DENTAL = 'READ_DENTAL';
-const ADD_DENTAL = 'ADD_DENTAL';
-const UPDATE_DENTAL = 'UPDATE_DENTAL';
-const REMOVE_DENTAL = 'REMOVE_DENTAL';
+const READ_DENTAL = "READ_DENTAL";
+const ADD_DENTAL = "ADD_DENTAL";
+const UPDATE_DENTAL = "UPDATE_DENTAL";
+const REMOVE_DENTAL = "REMOVE_DENTAL";
 
 // action creators
-const readDental = createAction(READ_DENTAL, (data) => ({ data }));
-const addDental = createAction(ADD_DENTAL, (data) => ({ data }));
-const updateDental = createAction(UPDATE_DENTAL, (data) => ({ data }));
-const removeDental = createAction(REMOVE_DENTAL, (data) => ({ data }));
+const readDental = createAction(READ_DENTAL, data => ({ data }));
+const addDental = createAction(ADD_DENTAL, data => ({ data }));
+const updateDental = createAction(UPDATE_DENTAL, data => ({ data }));
+const removeDental = createAction(REMOVE_DENTAL, data => ({ data }));
 
 // initialState
 const initialState = {
   data: [],
-  loading: false,
-  modal: false,
-  err: null
+  count: 0,
 };
 
 // middleware
 const getDentalMiddleware = () => {
-  return (dispatch) => {
+  return dispatch => {
     apis
       .getDental()
-      .then((result) => {        
+      .then(result => {
         const dentalData = result.data;
         dispatch(readDental(dentalData));
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   };
 };
 
-const addDentalMiddleware = (contents) => {
-  return (dispatch) => {
+const addDentalMiddleware = contents => {
+  return dispatch => {
     apis
       .createDental(contents)
-      .then((result) => {
+      .then(result => {
         dispatch(addDental(contents));
-        alert("장치를 추가 하였습니다.");
+        alert("추가를 완료 하였습니다.");
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   };
 };
 
 const updateDentalMiddleware = (seqId, contents) => {
-  return (dispatch) => {
+  return dispatch => {
     apis
       .patchDental(seqId, contents)
-      .then((result) => {
-
-        const data = { seq_id: seqId, contents: contents }
+      .then(result => {
+        const data = { seq_id: seqId, contents: contents };
 
         dispatch(updateDental(data));
-        alert("수정 했습니다.");
+        alert("수정을 완료 했습니다.");
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
-  }
-}
+  };
+};
 
-const deleteDentalMiddleware = (seqId) => {
-  return (dispatch) => {
+const deleteDentalMiddleware = seqId => {
+  return dispatch => {
     apis
       .deleteDental(seqId)
-      .then((result) => {
+      .then(result => {
         dispatch(removeDental(seqId));
-        alert("삭제 했습니다.");
+        alert("삭제를 완료 했습니다.");
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -86,28 +83,21 @@ const deleteDentalMiddleware = (seqId) => {
 export default handleActions(
   {
     [READ_DENTAL]: (state, action) =>
-      produce(state, (draft) => {
+      produce(state, draft => {
         draft.data = action.payload.data;
       }),
-    [ADD_DENTAL]: (state, action) =>
-      produce(state, (draft) => {
-        draft.data.push(action.payload);
+    [ADD_DENTAL]: state =>
+      produce(state, draft => {
+        draft.count = draft.count + 1;
       }),
-    [UPDATE_DENTAL]: (state, action) => {(
-      state.data.map((seq_id) => {
-        if(seq_id === action.payload.data.contents.seq_id) {
-          //console.log(state.seq_id);
-        }
-      })
-    )},
-    [REMOVE_DENTAL]: (state, action) =>
-      produce(state, (draft) => {
-        draft.data = []
-    }),
-    // produce(state, (draft) => {
-     
-    //   }),
-
+    [UPDATE_DENTAL]: state =>
+      produce(state, draft => {
+        draft.count = draft.count + 1;
+      }),
+    [REMOVE_DENTAL]: state =>
+      produce(state, draft => {
+        draft.count = draft.count + 1;
+      }),
   },
   initialState
 );

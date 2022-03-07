@@ -4,8 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from "react-hook-form";
-
-import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
 
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const PrintModalContainer = ({ open, close}) => {
 
     const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
+    const { handleSubmit, control } = useForm();
     
   
     const [vendorName, setVendorName] = useState('');
@@ -56,15 +54,9 @@ const PrintModalContainer = ({ open, close}) => {
     
     }, [] );
 
-
-
-
     const vendor = [{ title: "Dental.A 치과기공소" }, { title: "거래처명" }, { title: "거래처명2" }];
     const dash1 = [ { title: "시간별완성현황" }, { title: "일생산현황" }, { title: "치과매출현황" }, { title: "파트별매출현황" }, { title: "치과별월매출현황" },{ title: "월생산현황표" }];
   
-
-
-
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
     stringify: (option) => option.title,
@@ -72,8 +64,6 @@ const PrintModalContainer = ({ open, close}) => {
 
 
 const onSubmit = (data) => {
-
-   
 
     let vendor_seq_id = 0;
 
@@ -91,11 +81,6 @@ const onSubmit = (data) => {
         vendor_seq_id = 4;
     }
     
-    console.log(data.startDate);
-    console.log(data.endDate);
-    console.log(vendor_seq_id);
-    console.log(type);
-
     axios({
       method:"POST",
       url:"/api/sell/report/",

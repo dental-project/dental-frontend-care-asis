@@ -1,172 +1,136 @@
-import React, { useState, useEffect } from 'react'
-import Modal from 'components/Modal/Modal'
+import React, { useState, useEffect } from "react";
+import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
-import { makeStyles } from '@material-ui/core/styles';
-import { useForm, Controller } from "react-hook-form";
+import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { items } from "modules/items";
+import { parts } from "modules/parts";
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
 
-import { useDispatch, useSelector } from 'react-redux';
-
-import { parts } from 'modules/parts';
-import { items } from 'modules/items';
-
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-
-
-const useStyles = makeStyles((theme) => ({
-    textField: {
-      width: "95%",
-      margin: theme.spacing(1),
-      '& label.Mui-focused': {
-          color: '#00acc1',
-      },
-      '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-              borderColor: '#00acc1',
-          },
+const useStyles = makeStyles(theme => ({
+  textField: {
+    width: "95%",
+    margin: theme.spacing(1),
+    "& label.Mui-focused": {
+      color: "#00acc1",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#00acc1",
       },
     },
-    inputs: {
-      '& label.Mui-focused': {
-        color: '#26c6da',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: '#26c6da',
-      },
-      '& .MuiOutlinedInput-root': {
-        '&.Mui-focused fieldset': {
-          borderColor: '#26c6da',
-        },
+  },
+  inputs: {
+    "& label.Mui-focused": {
+      color: "#26c6da",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#26c6da",
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "#26c6da",
       },
     },
-    button: {
-      width: "100%"
+  },
+  button: {
+    width: "100%",
+  },
+}));
+
+const ItemModalContainer = ({
+  modalType,
+  open,
+  close,
+  seqId,
+  itemObj,
+}) => {
+  const classes = useStyles();
+  
+  const dispatch = useDispatch();
+  const partAutoData = useSelector(({ part }) => part.data);
+
+  useEffect(() => {
+    dispatch(parts.getPartMiddleware());
+  }, []);
+
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option,
+  });
+
+  const auto = [];
+  partAutoData.map(data => auto.push(data.part_name));
+
+  const onSubmit = (e) => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formData"));
+    const partName = formData.get("partName");
+    const itemName = formData.get("itemName");
+
+    if (partName === "" || itemName === "") return alert("빈칸없이 입력하세요");
+
+    const index = partAutoData.findIndex(
+      obj => obj.part_name === partName
+    );
+
+    if (modalType === "추가") {
+      const content = {
+        part_seq_id: partAutoData[index].seq_id,
+        item_name: itemName,
+      };
+      dispatch(items.addItemMiddleware(content));
+
+    } else if (modalType === "수정") {
+      const contents = {
+        seq_id: itemObj.seqId,
+        part_seq_id: partAutoData[index].seq_id,
+        item_name: itemName,
+      };
+      dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
+      
+    } else if (modalType === "삭제") {
+      dispatch(items.deleteItemMiddleware(seqId));
     }
-  }));
+  };
 
-const ItemModalContainer = ({ modalType, open, close, seqId, itemObj }) => {
-
-    const classes = useStyles();
-    const { watch,  handleSubmit, control } = useForm();
-    const dispatch = useDispatch();
-    const itemData = useSelector(({item}) => item.data);
-    const partData = useSelector(({part}) => part.data);
-   
-    const [autoSeqId, setAutoSeqId] = useState('');
-
-    useEffect(() => {
-      dispatch(items.getItemMiddleware());
-      dispatch(parts.getPartMiddleware());
-
-      console.log("렌더링");
-    
-    }, [itemData.length] );
-
-    const auto = [];
-    partData.map( (data) => auto.push({ part_name: data.part_name}) );
-
-    const onSubmit = (data) => {
-
-      if(modalType === "추가") {
-
-        if(autoSeqId == "") return alert("파트명을 선택하세요.");
-
-        const content = {
-          part_seq_id: autoSeqId,
-          item_name: data.itemName
-        };
-    
-        dispatch(items.addItemMiddleware(content));
-      } else if(modalType === "수정") {
-
-        if(autoSeqId == "") return alert("파트명을 선택하세요.");
-        
-        const contents = {
-          seq_id: itemObj.seqId,
-          part_seq_id: autoSeqId,
-          item_name: data.itemName
-        };
-        
-        dispatch(items.updateItemMiddleware(itemObj.seqId, contents))
-      } else if(modalType === "삭제") {
-        dispatch(items.deleteItemMiddleware(seqId));
-      }
-       
-    }
-
-    const filterOptions = createFilterOptions({
-      matchFrom: 'start',
-      stringify: (option) => option.part_name,
-    });
-
-
-    return (
-      <Modal open={open} modalType={modalType}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-        { 
-          modalType === "삭제"
-          ? null
-          : (
-            <>
-              <Autocomplete
-                className={classes.textField}
-                name="partName"
-                control={control}
-                options={auto}
-                getOptionLabel={(option) => option.part_name}
-                filterOptions={filterOptions}
-                onChange={(event, newValue) => { 
-                  console.log(newValue);
-                  if(newValue === null) {
-                      setAutoSeqId("");
-                  } else {
-                      const index = partData.findIndex(obj => obj.part_name === newValue.part_name) 
-                      const partSeqId = partData[index].seq_id
-                    
-                      setAutoSeqId(partSeqId)
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} label="파트명" variant="outlined" />}
-              />
-              <Controller
-                name="itemName"
-                control={control}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    className={classes.textField} 
-                    label="장치명"
-                    variant="outlined"
-                    defaultValue={itemObj.itemName?itemObj.itemName:""}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                  />
-                )}
-                rules={{ 
-                  required: "장치명을 입력하세요."
-                }}
-              />     
-            </>
-            )
-        }
-          <Button
-            type="submit"
-            className={classes.button} 
-            color="info" 
-            round
-          >
-            {modalType}
-          </Button> 
-        </form>
-        <Button
-          className={classes.button} 
-          color="danger" 
-          round
-          onClick={close}
-        >취소
+  return (
+    <Modal open={open} modalType={modalType}>
+      <form id="formData" onSubmit={onSubmit}>
+        {modalType === "삭제" ? null : (
+          <>
+            <Autocomplete
+              className={classes.textField}
+              options={auto}
+              filterOptions={filterOptions}
+              defaultValue={modalType === "수정" ? itemObj.partName : ""}
+              renderInput={params => (
+                <TextField {...params} name="partName" label="파트명" variant="outlined"  />
+              )}
+            />
+            <TextField
+              className={classes.textField}
+              name="itemName"
+              label="장치명"
+              variant="outlined"
+              defaultValue={modalType === "수정" ? itemObj.itemName : ""}
+            />
+          </>
+        )}
+        <Button type="submit" form="formData" className={classes.button} color="info" round>
+          {modalType}
         </Button>
-      </Modal>
-    )
-}
+      </form>
+      <Button className={classes.button} color="danger" round onClick={close}>
+        취소
+      </Button>
+    </Modal>
+  );
+};
 
 export default ItemModalContainer;

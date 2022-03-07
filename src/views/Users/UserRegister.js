@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from 'react-router-dom';
@@ -10,7 +10,6 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 import CSRFToken from "components/CSRF/CSRFToken"; 
 // Material
 import TextField from '@material-ui/core/TextField';
