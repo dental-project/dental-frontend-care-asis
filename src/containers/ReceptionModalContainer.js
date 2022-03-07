@@ -78,7 +78,7 @@ const ReceptionModalContainer = ({
   seqId,
   receptionObj,
   receptionData,
-  receptionDetailArr,
+  receptionDetailData,
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
@@ -89,6 +89,30 @@ const ReceptionModalContainer = ({
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, []);
+
+  //receptionDetailArr.map((data) => console.log(data))
+
+  //console.log(dentalAutoData);
+
+  //console.log(receptionDetailArr);
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option,
+  });
+
+  const auto1 = ["App", "Part"];
+  const auto2 = ["기공", "item"]
+
+
+
+
+
+
+
+
+
+
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -133,8 +157,6 @@ const ReceptionModalContainer = ({
         return { text: data.item_name, value: data.item_name };
       });
   }
-
-  console.log(something);
 
   
 
@@ -235,6 +257,24 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
+
+
+    // const qqq = formData.get("unitPrice_0");
+    // const qqq1 = formData.get("unitPrice_1");
+
+    // console.log(receiptDate);
+    // console.log(qqq);
+    // console.log(qqq1);
+
+    return;
+
+
+
+
+
+
+
+
 
     if (
       receiptDate === "" ||
@@ -615,6 +655,159 @@ const ReceptionModalContainer = ({
                 />
               </Grid>
               <Grid item xs={2}></Grid>
+
+
+
+
+
+
+
+
+
+
+
+                { 
+                  [0,0].map( (data, index) => {
+                    return (
+                      <Grid container spacing={1} key={index}>
+                        <Grid item xs={1}>
+                          <Autocomplete
+                            className={classes.textField}
+                            options={auto1}
+                            filterOptions={filterOptions}
+                            // defaultValue={
+                            //   modalType === "접수수정" 
+                            //     ? data.partName 
+                            //     : ""
+                            // }
+                            renderInput={(params) => <TextField {...params} name={"partName_" + index} label="파트명" variant="outlined" />}
+                          /> 
+                        </Grid>    
+                        <Grid item xs={1}>
+                          <Autocomplete
+                            className={classes.textField}
+                            options={auto2}
+                            filterOptions={filterOptions}
+                            // defaultValue={
+                            //   modalType === "접수수정" 
+                            //     ? data.itemName 
+                            //     : ""
+                            // }
+                            renderInput={(params) => <TextField {...params} name="itemName" label="장치명" variant="outlined" />}
+                          />
+                        </Grid>  
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField}
+                            name={"unitPrice_" + index}
+                            label="단가"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? "ㅁㄴㄻㄴㄹ" 
+                                : ""
+                            }
+                          />
+                        </Grid> 
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="amount"
+                            label="수량 (입력)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="totalPrice"
+                            label="정상가"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="realSellPrice"
+                            label="할인금액 (입력)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="finalPrice"
+                            label="최종금액"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField}
+                            name="discount"
+                            label="할인율 (%)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
+                            추가
+                          </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
+                            삭제
+                          </Button>
+                        </Grid> 
+                      
+                      </Grid>
+                    );
+                  })
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
             </Grid>
             <Grid
               container
@@ -627,7 +820,7 @@ const ReceptionModalContainer = ({
             <Button className={classes.button} color="info" round>
               이미지 업로드
             </Button>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Button
                 className={classes.button}
                 color="info"
@@ -661,7 +854,7 @@ const ReceptionModalContainer = ({
                   onAfterChange={onChange}
                 />
               )}
-            </Grid>
+            </Grid> */}
           </>
         )}
         <Button
