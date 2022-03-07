@@ -15,6 +15,7 @@ import { dentals } from "modules/dentals";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
+import { IndexKind } from "typescript";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -78,7 +79,7 @@ const ReceptionModalContainer = ({
   seqId,
   receptionObj,
   receptionData,
-  receptionDetailData,
+  selectDetailData,
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
@@ -108,7 +109,7 @@ const ReceptionModalContainer = ({
 
 
 
-
+  console.log(selectDetailData);
 
 
 
@@ -259,12 +260,24 @@ const ReceptionModalContainer = ({
     const appliance = formData.get("appliance");
 
 
-    // const qqq = formData.get("unitPrice_0");
-    // const qqq1 = formData.get("unitPrice_1");
+    const detailArr = [];
+    for (let i = 0; i < selectDetailData.length; i++) {
 
-    // console.log(receiptDate);
-    // console.log(qqq);
-    // console.log(qqq1);
+      detailArr.push({
+        part_name: formData.get("normalPrice_" + i),
+        item_name: formData.get("itemPrice_" + i),
+        unit_price: parseInt(formData.get("unitPrice_" + i)),
+        amount: parseInt(formData.get("amount_" + i)),
+        normal_price: parseInt(formData.get("normalPrice_" + i)),
+        discount_price: parseInt(formData.get("discountPrice_" + i)),
+        real_sell_price: parseInt(formData.get("realSellPrice_" + i)),
+        discount: formData.get("discount_" + i),
+      });
+    }
+
+    console.log(detailArr);
+
+
 
     return;
 
@@ -443,6 +456,139 @@ const ReceptionModalContainer = ({
   //   gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   // };
 
+
+
+
+
+
+
+
+
+
+
+
+
+  const PriceComponent = (index, data) => {
+    return (
+      <Grid container spacing={1} key={index}>
+        <Grid item xs={2}>
+          <Autocomplete
+            className={classes.textField}
+            options={auto1}
+            filterOptions={filterOptions}
+            defaultValue={modalType === "접수수정" ? data.part_name : ""}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name={"partName_" + index}
+                label="파트명"
+                variant="outlined"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <Autocomplete
+            className={classes.textField}
+            options={auto2}
+            filterOptions={filterOptions}
+            defaultValue={modalType === "접수수정" ? data.item_name : ""}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name={"itemName_" + index}
+                label="장치명"
+                variant="outlined"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"unitPrice_" + index}
+            label="단가"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.item_name : ""}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"amount_" + index}
+            label="수량 (입력)"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.amount : ""}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"normalPrice_" + index}
+            label="정상가"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.normal_price : ""}
+            InputProps={{ readOnly: true }}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"discountPrice_" + index}
+            label="할인금액 (입력)"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.discount_price : ""}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"realSellPrice_" + index}
+            label="최종금액"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.real_sell_price : ""}
+            InputProps={{ readOnly: true }}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            className={classes.textField}
+            name={"discount_" + index}
+            label="할인율 (%)"
+            variant="outlined"
+            defaultValue={modalType === "접수수정" ? data.discount : ""}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={removeReceptionDetail()}
+          >
+            추가
+          </Button>
+        </Grid>
+        <Grid item xs={1}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={removeReceptionDetail()}
+          >
+            삭제
+          </Button>
+        </Grid>
+      </Grid>
+    )
+  };
+
+
+
+
+
+
+
+
+
   return (
     <Modal
       open={open}
@@ -460,9 +606,7 @@ const ReceptionModalContainer = ({
                   name="receiptDate"
                   label="접수일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.receiptDate
-                      : ""
+                    modalType === "접수수정" ? receptionObj.receiptDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -474,9 +618,7 @@ const ReceptionModalContainer = ({
                   name="completionDate"
                   label="완성일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.completionDate
-                      : ""
+                    modalType === "접수수정" ? receptionObj.completionDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -488,9 +630,7 @@ const ReceptionModalContainer = ({
                   name="deliveryDate"
                   label="배달일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.deliveryDate
-                      : ""
+                    modalType === "접수수정" ? receptionObj.deliveryDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -501,20 +641,16 @@ const ReceptionModalContainer = ({
                   options={vendorNameAuto}
                   filterOptions={filterVendorName}
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.vendorName
-                      : ""
+                    modalType === "접수수정" ? receptionObj.vendorName : ""
                   }
                   onChange={(event, newValue) => {
-                   
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
                         obj => obj.vendor_name === newValue
                       );
-                      
+
                       const vendorSeqId = dentalAutoData[index].seq_id;
                       dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-
                     } else if (newValue === null) {
                     }
                   }}
@@ -535,9 +671,7 @@ const ReceptionModalContainer = ({
                   label="차트번호"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.chartNumber
-                      : ""
+                    modalType === "접수수정" ? receptionObj.chartNumber : ""
                   }
                 />
               </Grid>
@@ -548,9 +682,7 @@ const ReceptionModalContainer = ({
                   label="환자명"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.patientName
-                      : ""
+                    modalType === "접수수정" ? receptionObj.patientName : ""
                   }
                 />
               </Grid>
@@ -561,9 +693,7 @@ const ReceptionModalContainer = ({
                   label="비고"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.description
-                      : ""
+                    modalType === "접수수정" ? receptionObj.description : ""
                   }
                 />
               </Grid>
@@ -577,9 +707,7 @@ const ReceptionModalContainer = ({
                       name="upper"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.upper
-                          : false
+                        modalType === "접수수정" ? receptionObj.upper : false
                       }
                     />
                   }
@@ -594,9 +722,7 @@ const ReceptionModalContainer = ({
                       name="lower"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.lower
-                          : false
+                        modalType === "접수수정" ? receptionObj.lower : false
                       }
                     />
                   }
@@ -611,9 +737,7 @@ const ReceptionModalContainer = ({
                       name="bite"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.bite
-                          : false
+                        modalType === "접수수정" ? receptionObj.bite : false
                       }
                     />
                   }
@@ -638,160 +762,24 @@ const ReceptionModalContainer = ({
               </Grid>
               <Grid item xs={2}></Grid>
 
-
-
-
-
-
-
-
-
-
-
-                { 
-                  [0,0].map( (data, index) => {
-                    return (
-                      <Grid container spacing={1} key={index}>
-                        <Grid item xs={1}>
-                          <Autocomplete
-                            className={classes.textField}
-                            options={auto1}
-                            filterOptions={filterOptions}
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.partName 
-                                : ""
-                            }
-                            renderInput={(params) => <TextField {...params} name={"partName_" + index} label="파트명" variant="outlined" />}
-                          /> 
-                        </Grid>    
-                        <Grid item xs={1}>
-                          <Autocomplete
-                            className={classes.textField}
-                            options={auto2}
-                            filterOptions={filterOptions}
-                            // defaultValue={
-                            //   modalType === "접수수정" 
-                            //     ? data.itemName 
-                            //     : ""
-                            // }
-                            renderInput={(params) => <TextField {...params} name="itemName" label="장치명" variant="outlined" />}
-                          />
-                        </Grid>  
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField}
-                            name={"unitPrice_" + index}
-                            label="단가"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? "ㅁㄴㄻㄴㄹ" 
-                                : ""
-                            }
-                          />
-                        </Grid> 
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField} 
-                            name="amount"
-                            label="수량 (입력)"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.normalPrice 
-                                : ""
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField} 
-                            name="totalPrice"
-                            label="정상가"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.normalPrice 
-                                : ""
-                            }
-                            InputProps={{readOnly: true}}
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField} 
-                            name="realSellPrice"
-                            label="할인금액 (입력)"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.normalPrice 
-                                : ""
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField} 
-                            name="finalPrice"
-                            label="최종금액"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.normalPrice 
-                                : ""
-                            }
-                            InputProps={{readOnly: true}}
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <TextField
-                            className={classes.textField}
-                            name="discount"
-                            label="할인율 (%)"
-                            variant="outlined"
-                            defaultValue={
-                              modalType === "접수수정" 
-                                ? data.normalPrice 
-                                : ""
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
-                            추가
-                          </Button>
-                        </Grid>
-                        <Grid item xs={1}>
-                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
-                            삭제
-                          </Button>
-                        </Grid> 
-                      
-                      </Grid>
-                    );
-                  })
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               
+
+
+
+
+
+
+
+
+                {
+                  modalType === "접수수정"
+                  ? selectDetailData.map((data, index) => {
+                      return <PriceComponent key={index} data={data} />
+                    })
+                    : null
+                }   
+
+             
             </Grid>
             <Grid
               container
@@ -851,12 +839,7 @@ const ReceptionModalContainer = ({
           {modalType}
         </Button>
       </form>
-      <Button
-        className={classes.button}
-        color="danger"
-        round
-        onClick={close}
-      >
+      <Button className={classes.button} color="danger" round onClick={close}>
         취소
       </Button>
     </Modal>

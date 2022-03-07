@@ -22,6 +22,8 @@ export const apis = {
   deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
   // 접수 디테일 불러오기
   getReceptionDetail: () => instance.get('api/sell/detail/'),
+  // 접수 디테일 선택 불러오기
+  getReceptionDetailSelect: (seq_id) => instance.get(`api/sell/master/${seq_id}/details/`),
   // 접수 디테일 단가 추가
   createReceptionPrice: (contents) => instance.post('api/sell/detail/', contents),
   // 접수 디테일 단가 수정

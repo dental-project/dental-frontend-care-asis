@@ -35,6 +35,7 @@ import { receptionDetails } from "modules/receptionDetails";
 import { items } from "modules/items";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -74,24 +75,22 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
-  const itemData  = useSelector(({ item }) => item.data);
-  const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
+  const selectDetailData = useSelector(
+    ({ receptionDetail }) => receptionDetail.data
+  );
+  //const itemData  = useSelector(({ item }) => item.data);
+  //const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
   const [seqId, setSeqId] = useState();
   const [receptionObj, setReceptionObj] = useState({});
-  const [receptionDetailArr, setReceptionDetailArr] = useState([]);
+  
   
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
-    dispatch(receptionDetails.getReceptionDetailMiddleware());
+    //dispatch(receptionDetails.getReceptionDetailMiddleware());
     dispatch(items.getItemMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
-
-
-
-
-  console.log(receptionDetailData);
 
 
 
@@ -127,11 +126,15 @@ export default function ReceptionRegister() {
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
     
+    console.log(receptionObj);
+
+    const sellMasterId = receptionObj.seqId;
+    console.log(sellMasterId);
+
+    dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
 
 
-
-
-
+    
 
     // let detailArr = receptionDetailData.filter(
     //   data => data.sell_master_id === receptionObj.seqId
@@ -449,9 +452,10 @@ export default function ReceptionRegister() {
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
         seqId={seqId}
-        receptionObj={receptionObj}
-        receptionData={data}
-        receptionDetailData={receptionDetailData}
+        receptionObj={receptionObj} // 접수 수정 데이터
+        receptionData={data} // 접수 리스트 데이터
+        selectDetailData={selectDetailData}
+        //receptionDetailData={receptionDetailData}
       />
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
     </>
