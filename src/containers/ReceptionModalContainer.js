@@ -423,7 +423,7 @@ const ReceptionModalContainer = ({
   //   gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   // };
 
-  const PriceComponent = (index, data) => {
+  const PriceComponent = ({ data, index }) => {
     return (
       <Grid container spacing={1} key={index}>
         <Grid item xs={2}>
