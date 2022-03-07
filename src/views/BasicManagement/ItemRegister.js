@@ -10,6 +10,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
+import AddIcon from '@mui/icons-material/Add';
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
@@ -56,9 +57,6 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       color: "#1993A8",
     },
-  },
-  button: {
-    width: "100%",
   },
 }));
 
@@ -169,18 +167,7 @@ export default function ItemRegister() {
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => itemModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <Grid item xs={6} className={classes.grid}>
+              <Grid item xs={12} className={classes.grid}>
                 <Autocomplete
                   id="filter-demo"
                   className={classes.grid}
@@ -206,13 +193,26 @@ export default function ItemRegister() {
                 <Button
                   type="submit"
                   color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
+                  style={{ float: "left"}}
+                  variant="outlined"
                   //onClick={(e) => partModalOpen(e)}
                 >
                   검색
                 </Button>
+                <Button
+                type="submit"
+                color="info"
+                style={{ float: "right"}}
+                onClick={e => itemModalOpen(e)}
+              >
+                <AddIcon/>
+                추가
+              </Button>
               </Grid>
+
+            </CardHeader>
+            <CardBody>
+
               <BasicGrid type={"item"} columns={columns} data={data} />
             </CardBody>
           </Card>
