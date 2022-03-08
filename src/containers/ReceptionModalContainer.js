@@ -435,7 +435,6 @@ const ReceptionModalContainer = ({ modalType, open, close, seqId, receptionObj }
                        label="배달일자"
                        type="date"
                        defaultValue="2022-01-11"
-                       defaultValue={receptionObj.deliveryDate?receptionObj.deliveryDate:""}
                        onChange={onChange}
                        InputLabelProps={{ shrink: true, }}
                      />
