@@ -55,7 +55,7 @@ export const apis = {
   // 치과 불러오기
   getDental: () => instance.get('api/vendor/'),
   // 선택한 거래처의 파트명 불러오기
-  getSelectVendorPart: (seq_id) => instance.get(`api/vendor/${seq_id}/price/`),
+  getSelectVendorPart: (vendor_seq_id) => instance.get(`api/vendor/${vendor_seq_id}/price/`),
   // 치과 추가
   createDental: (contents) => instance.post('api/vendor/', contents),
   // 치과 수정

@@ -126,41 +126,9 @@ export default function ReceptionRegister() {
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
     
-    console.log(receptionObj);
-
     const sellMasterId = receptionObj.seqId;
-    console.log(sellMasterId);
-
+  
     dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
-
-
-    
-
-    // let detailArr = receptionDetailData.filter(
-    //   data => data.sell_master_id === receptionObj.seqId
-    // );
-
-    // const sss = [];
-    
-    // for (let i = 0; i<detailArr.length; i++) {
-     
-    //   const partArr = itemData.filter(
-    //     data => data.seq_id === detailArr[i].item_seq_id
-    //   );
-
-    //   sss.push({
-    //     partName: partArr[0].part_name,
-    //     itemName: detailArr[i].item_name,
-    //     unitPrice: detailArr[i].normal_price,
-    //     amount: detailArr[i].sell_count,
-    //     normalPrice: detailArr[i].normal_price * detailArr[i].sell_count,
-    //     discountPrice: detailArr[i].real_sell_price,
-    //     finalPrice: detailArr[i].normal_price - detailArr[i].real_sell_price,
-    //     discount: detailArr[i].discount,
-    //   });
-    // }
-    
-    // console.log(sss);
     setReceptionObj(receptionObj);
     //setReceptionDetailArr(sss);
 
