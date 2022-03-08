@@ -145,10 +145,10 @@ export default handleActions(
       produce(state, draft => {
         draft.data = action.payload.data;
       }),
-    [READ_VENDOR_PART]: (state, action) =>
-      produce(state, draft => {
-        draft.data = action.payload.data;
-      }),
+    // [READ_VENDOR_PART]: (state, action) =>
+    //   produce(state, draft => {
+    //     draft.data = action.payload.data;
+    //   }),
     [ADD_RECEPTION]: state =>
       produce(state, draft => {
         draft.count = draft.count + 1;

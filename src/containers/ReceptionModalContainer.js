@@ -89,7 +89,7 @@ const ReceptionModalContainer = ({
   const dentalAutoData = useSelector(({ dental }) => dental.data);
 
   const [rowData, setRowData] = useState(selectDetailData);
-  const [vendorSeqId, setVendorSeqId] = useState(0);
+ 
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
@@ -104,7 +104,7 @@ const ReceptionModalContainer = ({
     setRowData(selectDetailData);
   }, [selectDetailData]);
   
-
+ 
   // useEffect(() => {
   //   dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
   //   console.log(vendorSeqId);
@@ -522,8 +522,10 @@ const ReceptionModalContainer = ({
                         const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
                         const vendorSeqId = dentalAutoData[index].seq_id
                         console.log(vendorSeqId);
-                        dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                        //dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                         
+                      //setVendorSeqId(vendorSeqId);
+                        dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                     }
                   }}
                   renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
