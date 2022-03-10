@@ -10,12 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
-import { receptions } from "modules/receptions";
+
 import { dentals } from "modules/dentals";
 import "tui-grid/dist/tui-grid.css";
 
 import { apis } from "apis/axios";
-
+import axios from "axios";
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -88,6 +88,7 @@ const ReceptionModalContainer = ({
   const dentalAutoData = useSelector(({ dental }) => dental.data);
 
   const [rowData, setRowData] = useState(selectDetailData);
+  const [changeVendorSeqId, setChangeVendorSeqId] = useState("");
   const [partAutoData, setPartAutoData] = useState([]);
 
   useEffect(() => {
@@ -99,7 +100,47 @@ const ReceptionModalContainer = ({
     setRowData(selectDetailData);
   }, [selectDetailData]);
   
- 
+
+//   useEffect(() => {
+    
+//     if (changeVendorSeqId == "") return;
+
+//     console.log(changeVendorSeqId);
+
+//     //setPartAutoData([]);
+    
+//     async function fetchData() {
+//       const response = axios(
+//         `http://localhost:8000/api/vendor/${changeVendorSeqId}/price/`
+//       )
+//         .then(result => {
+//           const vendorPartData = result.data;
+//           console.log(vendorPartData);
+//           vendorPartData.map(data => {
+//             //console.log(data.part_name);
+
+
+// setTimeout(function () {
+//   setPartAutoData([...partAutoData, data.part_name]);
+// }, 3000);
+
+
+            
+//           });
+//         })
+//         .catch(error => {
+//           throw new Error(error);
+//         });
+//       console.log(response);      
+//     }
+//     fetchData();
+           
+//   }, [changeVendorSeqId]);
+
+
+
+
+  
   // useEffect(() => {
   //   dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
   //   console.log(vendorSeqId);
@@ -449,8 +490,6 @@ const ReceptionModalContainer = ({
 
 
 
-
-
   return (
     <Modal
       open={open}
@@ -507,59 +546,33 @@ const ReceptionModalContainer = ({
                   options={vendorNameAuto}
                   getOptionLabel={(option) => option.vendor_name}
                   filterOptions={filterVendorName}
-                  getOptionSelected={(option, value) => {
-                    //console.log(value);
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                  }}
+                  // getOptionSelected={(option, value) => {
+                  //   //console.log(value);
+                  //   return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
+                  // }}
                   onChange={(event, newValue) => {
-                    if(newValue !== null) {
-                        const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
-                        const vendorSeqId = dentalAutoData[index].seq_id
+                    if (newValue !== null) {
+                      const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name)
+                      const vendorSeqId = dentalAutoData[index].seq_id
                        
-                        setPartAutoData([]);
-
-                        apis
-                          .getSelectVendorPart(vendorSeqId)
-                          .then(result => {
-                            
-                            const vendorPartData = result.data;
-                            console.log(vendorPartData);
-                            vendorPartData.map( (data) => {
-                              //console.log(data.part_name);
-                              setPartAutoData([
-                                ...partAutoData,
-                                data.part_name
-                              ])
-
-
-                              
-                            });
-
-
-
-
-
-
-                            console.log(partAutoData)
-
-
-                            //setPartAutoData(vendorPartData);
-                            
-
-
-
-                            //const vendorNameAuto = [];
-                            //dentalAutoData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
-
-
-
-
-
-                          })
-                          .catch(err => {
-                            console.error(err);
-                          });
                         
+                      setPartAutoData([]);
+                            
+                      axios
+                        .get(
+                          `http://localhost:8000/api/vendor/${vendorSeqId}/price/`
+                        )
+                        .then(result => {
+                          const vendorPartData = result.data;
+                          console.log(vendorPartData);
+
+                          vendorPartData.map(data => {
+                            setPartAutoData([...partAutoData, data.part_name]);
+                          });
+                        })
+                        .catch(error => {
+                          throw new Error(error);
+                        });
                     }
                   }}
                   renderInput={(params) => <TextField {...params} name="vendorName" label="거래처명" variant="outlined" />}
