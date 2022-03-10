@@ -13,7 +13,7 @@ const REMOVE_RECEPTION = "REMOVE_RECEPTION";
 
 // action creators
 const readReception = createAction(READ_RECEPTION, data => ({ data }));
-const readVendorPart = createAction(READ_VENDOR_PART, data => ({ data }));
+//const readVendorPart = createAction(READ_VENDOR_PART, data => ({ data }));
 const addReception = createAction(ADD_RECEPTION, data => ({ data }));
 const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, data => ({ data }));
@@ -42,20 +42,7 @@ const getReceptionMiddleware = () => {
   };
 };
 
-const getVendorPartMiddleware = seqId => {
-  return dispatch => {
-    apis
-      .getSelectVendorPart(seqId)
-      .then(result => {
-        console.log(result);
-        const vendorPartData = result.data;
-        dispatch(readVendorPart(vendorPartData));
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  };
-};
+
 
 const addReceptionMiddleware = (contents, priceContents) => {
   return dispatch => {
@@ -179,7 +166,7 @@ export default handleActions(
 
 const receptions = {
   getReceptionMiddleware,
-  getVendorPartMiddleware,
+  //getVendorPartMiddleware,
   addReceptionMiddleware,
   addReceptionPriceMiddleware,
   updateReceptionMiddleware,

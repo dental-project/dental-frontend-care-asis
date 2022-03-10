@@ -14,8 +14,7 @@ import { receptions } from "modules/receptions";
 import { dentals } from "modules/dentals";
 import "tui-grid/dist/tui-grid.css";
 
-import { useForm, Controller } from "react-hook-form";
-import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
+import { apis } from "apis/axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,22 +82,18 @@ const ReceptionModalContainer = ({
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
-  const { handleSubmit, control } = useForm();
+
 
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
 
   const [rowData, setRowData] = useState(selectDetailData);
- 
+  const [partAutoData, setPartAutoData] = useState([]);
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
     
   }, []);
-
-  console.log(receptionData);
-  console.log(selectDetailData);
-
 
   useEffect(() => {
     setRowData(selectDetailData);
@@ -137,6 +132,8 @@ const ReceptionModalContainer = ({
 
   const vendorNameAuto = [];
     dentalAutoData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
+
+
 
   // const newArray = receptionData
   //   .filter(
@@ -506,10 +503,7 @@ const ReceptionModalContainer = ({
 
 
                 <Autocomplete
-                  freeSolo
                   className={classes.textField}
-                  name="vendorName"
-                  control={control}
                   options={vendorNameAuto}
                   getOptionLabel={(option) => option.vendor_name}
                   filterOptions={filterVendorName}
@@ -521,14 +515,54 @@ const ReceptionModalContainer = ({
                     if(newValue !== null) {
                         const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name) 
                         const vendorSeqId = dentalAutoData[index].seq_id
-                        console.log(vendorSeqId);
-                        //dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
+                       
+                        setPartAutoData([]);
+
+                        apis
+                          .getSelectVendorPart(vendorSeqId)
+                          .then(result => {
+                            
+                            const vendorPartData = result.data;
+                            console.log(vendorPartData);
+                            vendorPartData.map( (data) => {
+                              //console.log(data.part_name);
+                              setPartAutoData([
+                                ...partAutoData,
+                                data.part_name
+                              ])
+
+
+                              
+                            });
+
+
+
+
+
+
+                            console.log(partAutoData)
+
+
+                            //setPartAutoData(vendorPartData);
+                            
+
+
+
+                            //const vendorNameAuto = [];
+                            //dentalAutoData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
+
+
+
+
+
+                          })
+                          .catch(err => {
+                            console.error(err);
+                          });
                         
-                      //setVendorSeqId(vendorSeqId);
-                        dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
                     }
                   }}
-                  renderInput={(params) => <TextField {...params} label="거래처명" variant="outlined" />}
+                  renderInput={(params) => <TextField {...params} name="vendorName" label="거래처명" variant="outlined" />}
                 />
 
 
@@ -674,12 +708,15 @@ const ReceptionModalContainer = ({
 
 
 
-
-
-
-
-
-
+{/* <Autocomplete
+              className={classes.textField}
+              options={auto}
+              filterOptions={filterOptions}
+              defaultValue={modalType === "수정" ? itemObj.partName : ""}
+              renderInput={params => (
+                <TextField {...params} name="partName" label="파트명" variant="outlined"  />
+              )}
+            /> */}
 
 
               {rowData.map((data, index) => {
@@ -688,14 +725,12 @@ const ReceptionModalContainer = ({
                     <Grid item xs={2}>
                       <Autocomplete
                         className={classes.textField}
-                        options={auto1}
+                        options={partAutoData}
                         filterOptions={filterOptions}
                         defaultValue={
                           modalType === "접수수정" ? data.part_name : ""
                         }
-                        getOptionSelected={(option, value) => {
-                          return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                        }}
+                     
                         onChange={(event, newValue) => {
                           if(newValue !== null) {
                              
