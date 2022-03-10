@@ -555,7 +555,7 @@ const ReceptionModalContainer = ({
                       const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name)
                       const vendorSeqId = dentalAutoData[index].seq_id
                        
-                        
+                      
                       setPartAutoData([]);
                             
                       axios
@@ -564,11 +564,22 @@ const ReceptionModalContainer = ({
                         )
                         .then(result => {
                           const vendorPartData = result.data;
-                          console.log(vendorPartData);
+                         
+                          const newArray = vendorPartData
+                            .filter(
+                              (arr, index, callback) =>
+                                index === callback.findIndex(t => t.part_name === arr.part_name)
+                            )
+                            .map(data => {
+                              return data.part_name;
+                            });
+                          setPartAutoData(newArray);
+                          
+                          // vendorPartData.map(data => {
+                          //   setPartAutoData([...partAutoData, data.part_name]);
+                          // });
 
-                          vendorPartData.map(data => {
-                            setPartAutoData([...partAutoData, data.part_name]);
-                          });
+
                         })
                         .catch(error => {
                           throw new Error(error);
