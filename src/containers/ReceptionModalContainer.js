@@ -88,8 +88,8 @@ const ReceptionModalContainer = ({
   const dentalAutoData = useSelector(({ dental }) => dental.data);
 
   const [rowData, setRowData] = useState(selectDetailData);
-  const [changeVendorSeqId, setChangeVendorSeqId] = useState("");
   const [partAutoData, setPartAutoData] = useState([]);
+  const [itemAutoData, setItemAutoData] = useState([]);
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
@@ -555,7 +555,6 @@ const ReceptionModalContainer = ({
                       const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name)
                       const vendorSeqId = dentalAutoData[index].seq_id
                        
-                      
                       setPartAutoData([]);
                             
                       axios
@@ -564,7 +563,6 @@ const ReceptionModalContainer = ({
                         )
                         .then(result => {
                           const vendorPartData = result.data;
-                         
                           const newArray = vendorPartData
                             .filter(
                               (arr, index, callback) =>
@@ -573,13 +571,9 @@ const ReceptionModalContainer = ({
                             .map(data => {
                               return data.part_name;
                             });
+                         
                           setPartAutoData(newArray);
                           
-                          // vendorPartData.map(data => {
-                          //   setPartAutoData([...partAutoData, data.part_name]);
-                          // });
-
-
                         })
                         .catch(error => {
                           throw new Error(error);
@@ -589,43 +583,6 @@ const ReceptionModalContainer = ({
                   renderInput={(params) => <TextField {...params} name="vendorName" label="거래처명" variant="outlined" />}
                 />
 
-
-
-
-                {/* <Autocomplete
-                  className={classes.textField}
-                  name="vendorName"
-                  control={control}
-                  options={vendorNameAuto}
-                  
-                  getOptionLabel={(option) => option}
-                  filterOptions={filterVendorName}
-                  // defaultValue={
-                  //   modalType === "접수수정" ? receptionObj.vendorName : ""
-                  // }
-                  onChange={(event, newValue) => {
-                    if (newValue !== null) {
-                      const index = dentalAutoData.findIndex(
-                        obj => obj.vendor_name === newValue
-                      );
-
-                      const vendorSeqId = dentalAutoData[index].seq_id;
-                      console.log(vendorSeqId);
-                      
-                      //setVendorSeqId(dentalAutoData[index].seq_id);
-                      dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-                    } else if (newValue === null) {
-                    }
-                  }}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      name="vendorName"
-                      label="거래처명"
-                      variant="outlined"
-                    />
-                  )}
-                /> */}
               </Grid>
               <Grid item xs={4}>
                 <TextField
@@ -756,9 +713,64 @@ const ReceptionModalContainer = ({
                         }
                      
                         onChange={(event, newValue) => {
-                          if(newValue !== null) {
-                             
+                          if (newValue !== null) {
+
+
+ console.log(vendorPartData); // 여기서 뽑아야함
+
+
+                             //const vendorSeqId = dentalAutoData[index].seq_id;
+
+
+
+                            //  const index = dentalAutoData.findIndex(
+                            //    obj => obj.vendor_name === newValue.vendor_name
+                            //  );
+                            //  const vendorSeqId = dentalAutoData[index].seq_id;
+
+                            //  setPartAutoData([]);
+
+                            //  axios
+                            //    .get(
+                            //      `http://localhost:8000/api/vendor/${vendorSeqId}/price/`
+                            //    )
+                            //    .then(result => {
+                            //      const vendorPartData = result.data;
+                            //      const newArray = vendorPartData
+                            //        .filter(
+                            //          (arr, index, callback) =>
+                            //            index ===
+                            //            callback.findIndex(
+                            //              t => t.part_name === arr.part_name
+                            //            )
+                            //        )
+                            //        .map(data => {
+                            //          return data.part_name;
+                            //        });
+
+                            //      setPartAutoData(newArray);
+                            //    })
+                            //    .catch(error => {
+                            //      throw new Error(error);
+                            //    });
+                            
                           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          
                         }}
                         renderInput={params => (
                           <TextField
