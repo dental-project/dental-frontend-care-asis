@@ -17,7 +17,7 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 // Material
 import TextField from "@material-ui/core/TextField";
 
-import ReceptionModalContainer from "containers/ReceptionModalContainer";
+import ReceptionAddModalContainer from "containers/ReceptionAddModalContainer";
 //import PrintModal from "components/Modal/PrintModal.js"
 
 import PrintModalContainer from "containers/PrintModalContainer";
@@ -415,7 +415,7 @@ export default function ReceptionRegister() {
           </Card>
         </Grid>
       </Grid>
-      <ReceptionModalContainer
+      <ReceptionAddModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}

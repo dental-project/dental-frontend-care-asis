@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ReceptionModalContainer = ({
+const ReceptionAddModalContainer = ({
   modalType,
   open,
   close,
@@ -82,7 +82,6 @@ const ReceptionModalContainer = ({
   const classes = useStyles();
   const gridRef = React.createRef();
 
-
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
 
@@ -92,6 +91,7 @@ const ReceptionModalContainer = ({
   const [itemAutoData, setItemAutoData] = useState([]);
   const [inputUnitPrice, setInputUnitPrice] = useState("");
   const [inputNormalPrice, setInputNormalPrice] = useState("");
+  const [inputDiscountPrice, setInputDiscountPrice] = useState(0);
   const [inputRealSellPrice, setInputRealSellPrice] = useState("");
   const [inputDiscount, setInputDiscount] = useState("");
 
@@ -102,7 +102,6 @@ const ReceptionModalContainer = ({
   useEffect(() => {
     setRowData(selectDetailData);
   }, [selectDetailData]);
-  
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -120,14 +119,14 @@ const ReceptionModalContainer = ({
   const removeReceptionDetail = index => {};
 
   const filterVendorName = createFilterOptions({
-    matchFrom: 'start',
-    stringify: (option) => option.vendor_name,
+    matchFrom: "start",
+    stringify: option => option.vendor_name,
   });
 
   const vendorNameAuto = [];
-    dentalAutoData.map( (data) => vendorNameAuto.push({ vendor_name: data.vendor_name }));
-
-
+  dentalAutoData.map(data =>
+    vendorNameAuto.push({ vendor_name: data.vendor_name })
+  );
 
   // const newArray = receptionData
   //   .filter(
@@ -426,19 +425,18 @@ const ReceptionModalContainer = ({
   //   gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   // };
 
-
   const addRow = () => {
     const key = rowData.length;
 
     const row = {
       id: key,
-      part_name: "",
-      item_name: "",
-      unit_price: "",
+      partName: "",
+      itemName: "",
+      unitPrice: "",
       amount: "",
-      normal_price: "",
-      discount_price: "",
-      real_sell_price: "",
+      normalPrice: "",
+      discountPrice: "",
+      realSellPrice: "",
       discount: "",
     };
 
@@ -492,22 +490,20 @@ const ReceptionModalContainer = ({
                 />
               </Grid>
               <Grid item xs={4}>
-
-
-
-
                 <Autocomplete
                   className={classes.textField}
                   options={vendorNameAuto}
-                  getOptionLabel={(option) => option.vendor_name}
+                  getOptionLabel={option => option.vendor_name}
                   filterOptions={filterVendorName}
                   onChange={(event, newValue) => {
                     if (newValue !== null) {
-                      const index = dentalAutoData.findIndex(obj => obj.vendor_name === newValue.vendor_name)
-                      const vendorSeqId = dentalAutoData[index].seq_id
-                       
+                      const index = dentalAutoData.findIndex(
+                        obj => obj.vendor_name === newValue.vendor_name
+                      );
+                      const vendorSeqId = dentalAutoData[index].seq_id;
+
                       setPartAutoData([]);
-                            
+
                       axios
                         .get(
                           `http://localhost:8000/api/vendor/${vendorSeqId}/price/`
@@ -517,24 +513,32 @@ const ReceptionModalContainer = ({
                           const newArray = selectData
                             .filter(
                               (arr, index, callback) =>
-                                index === callback.findIndex(t => t.part_name === arr.part_name)
+                                index ===
+                                callback.findIndex(
+                                  t => t.part_name === arr.part_name
+                                )
                             )
                             .map(data => {
                               return data.part_name;
                             });
-                         
+
                           setVendorSelectData(selectData);
                           setPartAutoData(newArray);
-                          
                         })
                         .catch(error => {
                           throw new Error(error);
                         });
                     }
                   }}
-                  renderInput={(params) => <TextField {...params} name="vendorName" label="거래처명" variant="outlined" />}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      name="vendorName"
+                      label="거래처명"
+                      variant="outlined"
+                    />
+                  )}
                 />
-
               </Grid>
               <Grid item xs={4}>
                 <TextField
@@ -634,13 +638,6 @@ const ReceptionModalContainer = ({
               </Grid>
               <Grid item xs={2}></Grid>
 
-
-
-
-
-
-
-
               {rowData.map((data, index) => {
                 return (
                   <Grid container spacing={1} key={index}>
@@ -660,32 +657,11 @@ const ReceptionModalContainer = ({
                             //   (data) => data.part_name === newValue
                             // )
 
-                            const copy = [...rowData];
-
-                            //const deleteArr = copy.filter(data => data.seq_id !== selectSeqId) // 삭제 루틴
-
-                            //const updateArr = copy.map(data => data.seq_id !== selectSeqId)
-                            setRowData(
-                              copy.map(data => 
-                                data.id === index
-                                  ? {
-                                      ...data,
-                                      //item_name: "",
-                                      unit_price: "",
-                                      amount: "",
-                                      normal_price: "",
-                                      discount_price: "",
-                                      real_sell_price: "",
-                                      doscount: "",
-                                    }
-                                  : data
-                              )
-                            );
-                            
                             const item = vendorSelectData
                               .filter(data => data.part_name === newValue)
                               .map(data => data.item_name);
 
+                            console.log(item);
                             setItemAutoData(item);
                           }
                         }}
@@ -704,10 +680,8 @@ const ReceptionModalContainer = ({
                         className={classes.textField}
                         options={itemAutoData}
                         filterOptions={filterOptions}
-                        value={
-                          modalType === "접수수정"
-                            ? rowData[index].item_name
-                            : ""
+                        defaultValue={
+                          modalType === "접수수정" ? data.item_name : ""
                         }
                         onChange={(event, newValue) => {
                           console.log(newValue);
@@ -717,14 +691,25 @@ const ReceptionModalContainer = ({
                           );
                           const unitPrice =
                             vendorSelectData[unitPriceIndex].unit_price;
+                          const copy = [...rowData];
 
                           setRowData(
-                            [...rowData].map(data =>
+                            copy.map(data =>
                               data.id === index
-                                ? { ...data, unit_price: unitPrice }
+                                ? { ...data, unitPrice: unitPrice }
                                 : data
                             )
                           );
+
+                          console.log(rowData);
+
+                          // setRowData([
+                          //   ...rowData,
+                          //   rowData[index].unitPrice: unitPrice
+                          // ])
+
+                          //const copy = [...rowData[index].unitPrice_ + index];
+                          // console.log(copy)
                         }}
                         renderInput={params => (
                           <TextField
@@ -744,8 +729,8 @@ const ReceptionModalContainer = ({
                         variant="outlined"
                         value={
                           modalType === "접수수정"
-                            ? rowData[index].unit_price
-                            : rowData[index].unit_price
+                            ? data.unit_price
+                            : rowData[index].unitPrice
                         }
                         InputProps={{ readOnly: true }}
                       />
@@ -757,30 +742,32 @@ const ReceptionModalContainer = ({
                         label="수량 (입력)"
                         variant="outlined"
                         defaultValue={
-                          modalType === "접수수정" ? rowData[index].amount : ""
+                          modalType === "접수수정" ? data.amount : ""
                         }
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
 
                           {
+                            const copy = [...rowData];
+
                             setRowData(
-                              [...rowData].map(data =>
+                              copy.map(data =>
                                 data.id === index
                                   ? {
                                       ...data,
-                                      normal_price: rowData[index].unit_price * e.target.value,
-                                      discount_price: "",
-                                      real_sell_price: "",
-                                      discount: "",
+                                      normalPrice:
+                                        data.unitPrice * e.target.value,
+
+                                      discountPrice: 0,
+                                      realSellPrice: data.unitPrice * e.target.value,
+                                      discount: 0,
                                     }
                                   : data
                               )
                             );
-                          console.log(rowData);
-                        }
-                          
-                          
-                          
+
+                            setInputDiscountPrice(0);
+                          }
                         }
                       />
                     </Grid>
@@ -792,8 +779,8 @@ const ReceptionModalContainer = ({
                         variant="outlined"
                         value={
                           modalType === "접수수정"
-                            ? rowData[index].normal_price
-                            : rowData[index].normal_price
+                            ? data.normal_price
+                            : rowData[index].normalPrice
                         }
                         InputProps={{ readOnly: true }}
                       />
@@ -806,8 +793,8 @@ const ReceptionModalContainer = ({
                         variant="outlined"
                         defaultValue={
                           modalType === "접수수정"
-                            ? rowData[index].discount_price
-                            : rowData[index].discount_price
+                            ? data.discount_price
+                            : inputDiscountPrice
                         }
                         onChange={e => {
                           const copy = [...rowData];
@@ -816,8 +803,13 @@ const ReceptionModalContainer = ({
                               data.id === index
                                 ? {
                                     ...data,
-                                    real_sell_price: rowData[index].normal_price - e.target.value,
-                                    discount: (e.target.value / rowData[index].normal_price) * 100,
+                                    realSellPrice:
+                                      rowData[index].normalPrice -
+                                      e.target.value,
+                                    discount:
+                                      (e.target.value /
+                                        rowData[index].normalPrice) *
+                                      100,
                                   }
                                 : data
                             )
@@ -835,9 +827,11 @@ const ReceptionModalContainer = ({
                         label="최종금액"
                         variant="outlined"
                         value={
-                          modalType === "접수수정"
-                            ? rowData[index].real_sell_price
-                            : rowData[index].real_sell_price
+                          rowData[index].realSellPrice
+
+                          //   modalType === "접수수정"
+                          //     ? data.real_sell_price
+                          //     : rowData[index].amount
                         }
                         InputProps={{ readOnly: true }}
                       />
@@ -850,10 +844,9 @@ const ReceptionModalContainer = ({
                         variant="outlined"
                         value={
                           modalType === "접수수정"
-                            ? rowData[index].discount
+                            ? data.discount
                             : rowData[index].discount
                         }
-                        InputProps={{ readOnly: true }}
                       />
                     </Grid>
                     <Grid item xs={1}>
@@ -900,7 +893,6 @@ const ReceptionModalContainer = ({
               >
                 그리드 행추가
               </Button>
-
               {modalType === "접수수정" ? (
                 <ToastGrid
                   ref={gridRef}
@@ -945,4 +937,4 @@ const ReceptionModalContainer = ({
   );
 };
 
-export default ReceptionModalContainer;
+export default ReceptionAddModalContainer;
