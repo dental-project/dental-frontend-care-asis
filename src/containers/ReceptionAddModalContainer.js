@@ -751,12 +751,16 @@ e.target.reset();
                         label="수량 (입력)"
                         variant="outlined"
                         defaultValue={rowData[index].amount}
+                        value={inputAmount}
+                        InputProps={{ readOnly: false }}
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
 
                           {
+                            setInputAmount(e.target.value)
+                          
                             const copy = [...rowData];
-
+                            console.log("change")
                             setRowData(
                               copy.map(data =>
                                 data.id === index
