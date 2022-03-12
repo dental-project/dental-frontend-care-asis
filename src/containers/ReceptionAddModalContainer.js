@@ -750,8 +750,8 @@ e.target.reset();
                         name={"amount_" + index}
                         label="수량 (입력)"
                         variant="outlined"
-                        defaultValue={rowData[index].amount}
-                        value={inputAmount}
+                        // defaultValue={rowData[index].amount}
+                        value={inputAmount===null?rowData[index].amount:inputAmount}
                         InputProps={{ readOnly: false }}
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
