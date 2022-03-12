@@ -90,6 +90,9 @@ const ReceptionAddModalContainer = ({
   const [partAutoData, setPartAutoData] = useState([]);
   const [itemAutoData, setItemAutoData] = useState([]);
   const [inputUnitPrice, setInputUnitPrice] = useState("");
+
+  const [inputAmount, setInputAmount] = useState("");
+
   const [inputNormalPrice, setInputNormalPrice] = useState("");
   const [inputDiscountPrice, setInputDiscountPrice] = useState(0);
   const [inputRealSellPrice, setInputRealSellPrice] = useState("");
@@ -441,6 +444,7 @@ const ReceptionAddModalContainer = ({
     };
 
     setRowData(rowData.concat(row));
+    console.log(rowData);
   };
 
   return (
@@ -696,13 +700,21 @@ const ReceptionAddModalContainer = ({
                           setRowData(
                             copy.map(data =>
                               data.id === index
-                                ? { ...data, unitPrice: unitPrice }
+                                ? {
+                                    ...data,
+                                    unitPrice: unitPrice,
+                                    amount: "",
+                                    normalPrice: "",
+                                    discountPrice: 0,
+                                    realSellPrice: "",
+                                    discount: "",
+                                  }
                                 : data
                             )
                           );
 
                           console.log(rowData);
-
+                          setInputAmount("");
                           // setRowData([
                           //   ...rowData,
                           //   rowData[index].unitPrice: unitPrice
@@ -727,11 +739,7 @@ const ReceptionAddModalContainer = ({
                         name={"unitPrice_" + index}
                         label="단가"
                         variant="outlined"
-                        value={
-                          modalType === "접수수정"
-                            ? data.unit_price
-                            : rowData[index].unitPrice
-                        }
+                        value={rowData[index].unitPrice}
                         InputProps={{ readOnly: true }}
                       />
                     </Grid>
@@ -742,7 +750,7 @@ const ReceptionAddModalContainer = ({
                         label="수량 (입력)"
                         variant="outlined"
                         defaultValue={
-                          modalType === "접수수정" ? data.amount : ""
+                          rowData[index].amount ? rowData[index].amount : ""
                         }
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
@@ -759,14 +767,15 @@ const ReceptionAddModalContainer = ({
                                         data.unitPrice * e.target.value,
 
                                       discountPrice: 0,
-                                      realSellPrice: data.unitPrice * e.target.value,
+                                      realSellPrice:
+                                        data.unitPrice * e.target.value,
                                       discount: 0,
                                     }
                                   : data
                               )
                             );
 
-                            setInputDiscountPrice(0);
+                            setInputDiscountPrice(1);
                           }
                         }
                       />
@@ -777,11 +786,7 @@ const ReceptionAddModalContainer = ({
                         name={"normalPrice_" + index}
                         label="정상가"
                         variant="outlined"
-                        value={
-                          modalType === "접수수정"
-                            ? data.normal_price
-                            : rowData[index].normalPrice
-                        }
+                        value={rowData[index].normalPrice}
                         InputProps={{ readOnly: true }}
                       />
                     </Grid>
@@ -792,9 +797,8 @@ const ReceptionAddModalContainer = ({
                         label="할인금액 (입력)"
                         variant="outlined"
                         defaultValue={
-                          modalType === "접수수정"
-                            ? data.discount_price
-                            : inputDiscountPrice
+                          rowData[index].discountPrice
+                          //inputDiscountPrice
                         }
                         onChange={e => {
                           const copy = [...rowData];
@@ -843,9 +847,10 @@ const ReceptionAddModalContainer = ({
                         label="할인율 (%)"
                         variant="outlined"
                         value={
-                          modalType === "접수수정"
-                            ? data.discount
-                            : rowData[index].discount
+                          rowData[index].discount
+                          // modalType === "접수수정"
+                          //   ? data.discount
+                          //   : rowData[index].discount
                         }
                       />
                     </Grid>
