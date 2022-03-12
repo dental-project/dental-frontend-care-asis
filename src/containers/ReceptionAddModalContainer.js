@@ -238,38 +238,39 @@ const ReceptionAddModalContainer = ({
 
   const onSubmit = e => {
     e && e.preventDefault();
+e.target.reset();
 
-    let formData = new FormData(document.getElementById("formData"));
+    // let formData = new FormData(document.getElementById("formData"));
 
-    const receiptDate = formData.get("receiptDate");
-    const completionDate = formData.get("completionDate");
-    const deliveryDate = formData.get("deliveryDate");
-    const vendorName = formData.get("vendorName");
-    const chartNumber = formData.get("chartNumber");
-    const patientName = formData.get("patientName");
-    const description = formData.get("description");
-    const upper = formData.get("upper");
-    const lower = formData.get("lower");
-    const bite = formData.get("bite");
-    const appliance = formData.get("appliance");
+    // const receiptDate = formData.get("receiptDate");
+    // const completionDate = formData.get("completionDate");
+    // const deliveryDate = formData.get("deliveryDate");
+    // const vendorName = formData.get("vendorName");
+    // const chartNumber = formData.get("chartNumber");
+    // const patientName = formData.get("patientName");
+    // const description = formData.get("description");
+    // const upper = formData.get("upper");
+    // const lower = formData.get("lower");
+    // const bite = formData.get("bite");
+    // const appliance = formData.get("appliance");
 
-    const detailArr = [];
-    for (let i = 0; i < selectDetailData.length; i++) {
-      detailArr.push({
-        part_name: formData.get("normalPrice_" + i),
-        item_name: formData.get("itemPrice_" + i),
-        unit_price: parseInt(formData.get("unitPrice_" + i)),
-        amount: parseInt(formData.get("amount_" + i)),
-        normal_price: parseInt(formData.get("normalPrice_" + i)),
-        discount_price: parseInt(formData.get("discountPrice_" + i)),
-        real_sell_price: parseInt(formData.get("realSellPrice_" + i)),
-        discount: formData.get("discount_" + i),
-      });
-    }
+    // const detailArr = [];
+    // for (let i = 0; i < selectDetailData.length; i++) {
+    //   detailArr.push({
+    //     part_name: formData.get("normalPrice_" + i),
+    //     item_name: formData.get("itemPrice_" + i),
+    //     unit_price: parseInt(formData.get("unitPrice_" + i)),
+    //     amount: parseInt(formData.get("amount_" + i)),
+    //     normal_price: parseInt(formData.get("normalPrice_" + i)),
+    //     discount_price: parseInt(formData.get("discountPrice_" + i)),
+    //     real_sell_price: parseInt(formData.get("realSellPrice_" + i)),
+    //     discount: formData.get("discount_" + i),
+    //   });
+    // }
 
-    console.log(detailArr);
+    // console.log(detailArr);
 
-    return;
+    // return;
 
     // if (
     //   receiptDate === "" ||
@@ -749,9 +750,7 @@ const ReceptionAddModalContainer = ({
                         name={"amount_" + index}
                         label="수량 (입력)"
                         variant="outlined"
-                        defaultValue={
-                          rowData[index].amount ? rowData[index].amount : ""
-                        }
+                        defaultValue={rowData[index].amount}
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
 
