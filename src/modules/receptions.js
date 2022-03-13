@@ -94,7 +94,7 @@ const addReceptionPriceMiddleware = contents => {
 const updateReceptionMiddleware = (seqId, contents) => {
   return dispatch => {
     apis
-      .patchPart(seqId, contents)
+      .patchReception(seqId, contents)
       .then(result => {
         const data = { seq_id: seqId, contents: contents };
 

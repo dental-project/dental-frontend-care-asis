@@ -75,9 +75,7 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
-  const selectDetailData = useSelector(
-    ({ receptionDetail }) => receptionDetail.data
-  );
+  const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   //const itemData  = useSelector(({ item }) => item.data);
   //const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
@@ -85,6 +83,11 @@ export default function ReceptionRegister() {
   const [receptionObj, setReceptionObj] = useState({});
   
   
+
+
+
+
+
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     //dispatch(receptionDetails.getReceptionDetailMiddleware());
