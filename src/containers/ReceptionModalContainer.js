@@ -299,7 +299,7 @@ const ReceptionModalContainer = ({
         priceContents.push({
           sell_master_id: "",
           item_seq_id: element[0].item_seq_id,
-          sell_count: parseInt(gridArr[i].amount),
+          amount: parseInt(gridArr[i].amount),
           normal_price: parseInt(gridArr[i].normalPrice),
           real_sell_price: parseInt(gridArr[i].discountPrice),
           discount: parseFloat(gridArr[i].discount),
