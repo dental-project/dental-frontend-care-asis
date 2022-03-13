@@ -89,10 +89,10 @@ const ReceptionAddModalContainer = ({
   const [vendorSelectData, setVendorSelectData] = useState([]);
   const [partAutoData, setPartAutoData] = useState([]);
   const [itemAutoData, setItemAutoData] = useState([]);
+
+  const [rowInputAmount, setRowInputAmount] = useState([]);
+
   const [inputUnitPrice, setInputUnitPrice] = useState("");
-
-  const [inputAmount, setInputAmount] = useState("");
-
   const [inputNormalPrice, setInputNormalPrice] = useState("");
   const [inputDiscountPrice, setInputDiscountPrice] = useState(0);
   const [inputRealSellPrice, setInputRealSellPrice] = useState("");
@@ -238,7 +238,6 @@ const ReceptionAddModalContainer = ({
 
   const onSubmit = e => {
     e && e.preventDefault();
-e.target.reset();
 
     // let formData = new FormData(document.getElementById("formData"));
 
@@ -437,14 +436,20 @@ e.target.reset();
       partName: "",
       itemName: "",
       unitPrice: "",
-      amount: "",
       normalPrice: "",
       discountPrice: "",
       realSellPrice: "",
       discount: "",
     };
 
+    const rowAmount = {
+      id: key,
+      amount: "",
+    };
+
     setRowData(rowData.concat(row));
+    setRowInputAmount(rowInputAmount.concat(rowAmount));
+
     console.log(rowData);
   };
 
@@ -668,6 +673,10 @@ e.target.reset();
 
                             console.log(item);
                             setItemAutoData(item);
+
+                            
+
+
                           }
                         }}
                         renderInput={params => (
@@ -697,6 +706,7 @@ e.target.reset();
                           const unitPrice =
                             vendorSelectData[unitPriceIndex].unit_price;
                           const copy = [...rowData];
+                          const copyAmount = [...rowInputAmount];
 
                           setRowData(
                             copy.map(data =>
@@ -715,7 +725,17 @@ e.target.reset();
                           );
 
                           console.log(rowData);
-                          setInputAmount("");
+
+                          setRowInputAmount(
+                            copyAmount.map(data =>
+                              data.id === index
+                                ? {
+                                    ...data,
+                                    amount: "",
+                                  }
+                                : data
+                            )
+                          );
                           // setRowData([
                           //   ...rowData,
                           //   rowData[index].unitPrice: unitPrice
@@ -751,16 +771,30 @@ e.target.reset();
                         label="수량 (입력)"
                         variant="outlined"
                         // defaultValue={rowData[index].amount}
-                        value={inputAmount===null?rowData[index].amount:inputAmount}
-                        InputProps={{ readOnly: false }}
+                        value={
+                          rowInputAmount[index].amount === null
+                            ? rowData[index].amount
+                            : rowInputAmount[index].amount
+                        }
+                        //InputProps={{ readOnly: false }}
                         onChange={e =>
                           //setInputNormalPrice(inputUnitPrice * e.target.value)
 
                           {
-                            setInputAmount(e.target.value)
-                          
+                            const copyAmount = [...rowInputAmount];
+                            setRowInputAmount(
+                              copyAmount.map(data =>
+                                data.id === index
+                                  ? {
+                                      ...data,
+                                      amount: e.target.value,
+                                    }
+                                  : data
+                              )
+                            );
+
                             const copy = [...rowData];
-                            console.log("change")
+                            console.log("change");
                             setRowData(
                               copy.map(data =>
                                 data.id === index
@@ -768,7 +802,6 @@ e.target.reset();
                                       ...data,
                                       normalPrice:
                                         data.unitPrice * e.target.value,
-
                                       discountPrice: 0,
                                       realSellPrice:
                                         data.unitPrice * e.target.value,
