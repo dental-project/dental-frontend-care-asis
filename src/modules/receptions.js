@@ -57,18 +57,19 @@ const getVendorPartMiddleware = seqId => {
   };
 };
 
-const addReceptionMiddleware = (contents, priceContents) => {
+const addReceptionMiddleware = (data) => {
   return dispatch => {
     apis
-      .createReception(contents)
+      .createReception(data)
       .then(result => {
-        dispatch(addReception(contents));
+        dispatch(addReception(data));
 
-        for(let i=0; i<priceContents.length; i++) {
-          priceContents[i].sell_master_id = result.data.seq_id
-        };
-
-        dispatch(addReceptionPriceMiddleware(priceContents));
+        alert("접수 정보를 추가 하였습니다.");
+        // for(let i=0; i<priceContents.length; i++) {
+        //   priceContents[i].sell_master_id = result.data.seq_id
+        // };
+        
+        // dispatch(addReceptionPriceMiddleware(priceContents));
 
       })
       .catch(err => {
@@ -83,7 +84,7 @@ const addReceptionPriceMiddleware = contents => {
       .createReceptionPrice(contents)
       .then(result => {
         dispatch(addReceptionPrice(contents));
-        alert("접수 정보를 추가 하였습니다.");
+        alert("접수 정보를 추가 하였습니다.2");
       })
       .catch(err => {
         console.error(err);
