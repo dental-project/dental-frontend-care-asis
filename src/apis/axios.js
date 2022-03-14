@@ -15,7 +15,12 @@ export const apis = {
   // 접수 불러오기
   getReception: () => instance.get('api/sell/master/'),
   // 접수 추가
-  createReception: (contents) => instance.post('api/sell/master/', contents),
+  createReception: (contents) => instance.post('api/sell/master/', contents,{
+    headers: {
+      'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqiyKAqCAoFIw7Ob4'
+      // 'Content-Type': 'multipart/form-data;'
+    }
+  }),
   // 접수 수정
   patchReception: (seq_id, contents) => instance.patch(`api/sell/master/${seq_id}/`, contents),
   // 접수 삭제

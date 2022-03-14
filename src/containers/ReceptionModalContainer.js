@@ -235,6 +235,7 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
+    const request_form = formData.get("request_form");
 
     if (
       receiptDate === "" ||
@@ -259,11 +260,24 @@ const ReceptionModalContainer = ({
         bite: bite === "" ? true : false,
         appliance: appliance === "" ? true : false,
         patient_name: patientName,
-        request_form: "/test/test.png",
         description: description,
         vendor_seq_id: dentalAutoData[index].seq_id,
+        request_form : request_form
       };
-
+      const data = new FormData();
+      data.append("receipt_date",receiptDate) 
+      data.append("completion_date",completionDate) 
+      data.append("delivery_date",deliveryDate) 
+      data.append("chart_number",parseInt(chartNumber)) 
+      data.append("upper",upper === "" ? true : false) 
+      data.append("lower",lower === "" ? true : false) 
+      data.append("bite",bite === "" ? true : false) 
+      data.append("appliance",appliance === "" ? true : false) 
+      data.append("patient_name",patientName) 
+      data.append("description",description) 
+      data.append("vendor_seq_id",dentalAutoData[index].seq_id) 
+      data.append("request_form",request_form) 
+      
       const gridArr = gridRef.current.getInstance().getData();
 
       if (gridArr.length === 0)
@@ -290,7 +304,7 @@ const ReceptionModalContainer = ({
         }
       }
 
-      const priceContents = [];
+      const priceContents = new Array();
       for (let i = 0; i < gridArr.length; i++) {
         let element = receptionData.filter(
           data => data.item_name === gridArr[i].itemName
@@ -305,9 +319,12 @@ const ReceptionModalContainer = ({
           discount: parseFloat(gridArr[i].discount),
         });
       }
-      const data = {}
-      data['master'] = contents
-      data['detail'] = priceContents
+      // // const data = {}
+      // data['master'] = contents
+      // data['detail'] = priceContents
+      console.log(typeof JSON.stringify(priceContents))
+      console.log(JSON.stringify(priceContents))
+      data.append("detail",JSON.stringify(priceContents))
       dispatch(
         receptions.addReceptionMiddleware(data)
       );
@@ -626,9 +643,23 @@ const ReceptionModalContainer = ({
               {"image.png"}
             </Grid>
 
-            <Button className={classes.button} color="info" round>
+            {/* <Button className={classes.button} color="info" round>
               이미지 업로드
-            </Button>
+            </Button> */}
+            <input
+              accept="image/*"
+              className={classes.input}
+              style={{ display: 'none' }}
+              id="raised-button-file"
+              name="request_form"
+              multiple
+              type="file"
+            />
+            <label htmlFor="raised-button-file">
+              <Button variant="raised" component="span" className={classes.button} color="info" round>
+                Upload
+              </Button>
+            </label> 
             <Grid item xs={12}>
               <Button
                 className={classes.button}
