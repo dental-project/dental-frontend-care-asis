@@ -99,6 +99,12 @@ const updateReceptionMiddleware = (seqId, contents) => {
     apis
       .patchReception(seqId, contents)
       .then(result => {
+
+        console.log("-----------------");
+        console.log(seqId);
+        console.log(contents);
+        console.log(result);
+
         const data = { seq_id: seqId, contents: contents };
 
         dispatch(updateReception(data));

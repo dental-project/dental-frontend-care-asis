@@ -78,12 +78,12 @@ function PartRegister() {
     setOpenPartModal(false);
   }, [count]);
 
-  const auto1 = [{ part_name: "전체" }];
-  data.map( (data) => auto1.push({ part_name: data.part_name}) );
+  const auto1 = ["전체"];
+  data.map( (data) => auto1.push( data.part_name ));
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.part_name,
+    stringify: option => option,
   });
 
   const [seqId, setSeqId] = useState("");
@@ -152,12 +152,13 @@ function PartRegister() {
 
   const onClickSearch = e => {
 
-    if(searchData.part_name === "전체") {
+    if(searchData === "전체") {
       setGridData(data);
     } else {
       const searchArr = data.filter(
-        data => data.part_name === searchData.part_name
+        data => data.part_name === searchData
       );
+
       setGridData(searchArr);
     }
 
@@ -186,12 +187,10 @@ function PartRegister() {
                   className={classes.grid}
                   options={auto1}
                   defaultValue={auto1[0]}
-                  getOptionLabel={option => option.part_name}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px" }}
                   onChange={(event, newValue) => {
                     setSearchData(newValue);
-                    console.log(newValue);
                   }}
                   // getOptionSelected={(option, value) => {
                   //   return (

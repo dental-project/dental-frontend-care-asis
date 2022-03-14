@@ -65,18 +65,33 @@ export default function ItemRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ item }) => item);
+  
+
+  const [seqId, setSeqId] = useState();
+  const [itemObj, setItemObj] = useState({});
 
   useEffect(() => {
     dispatch(items.getItemMiddleware());
     setOpenItemModal(false);
   }, [count]);
 
-  const [seqId, setSeqId] = useState();
-  const [itemObj, setItemObj] = useState({});
+  
+  console.log(data);
+
+  const auto1 = ["전체"];
+  const auto2 = ["전체"];
+
+  data.map( (data) => {
+    auto1.push( data.part_name )
+    auto2.push( data.item_name )
+  });
+ 
+  
+
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.title,
+    stringify: option => option,
   });
 
   // 모달
@@ -146,21 +161,6 @@ export default function ItemRegister() {
     },
   ];
 
-  const auto1 = [
-    { title: "전체" },
-    { title: "Diagnostic Study Models" },
-    { title: "Removale App" },
-    { title: "Fixed App" },
-    { title: "Functional App" },
-  ];
-  const auto2 = [
-    { title: "전체" },
-    { title: "asdasdasd" },
-    { title: "테스트 기공" },
-    { title: "테스트 기공2" },
-    { title: "테스트 기공3" },
-  ];
-
   return (
     <>
       <Grid container>
@@ -169,10 +169,9 @@ export default function ItemRegister() {
             <CardHeader>
               <Grid item xs={12} className={classes.grid}>
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto1}
-                  getOptionLabel={option => option.title}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
                   style={{ float: "left", width: "300px", marginLeft: "20px" }}
                   renderInput={params => (
@@ -180,10 +179,9 @@ export default function ItemRegister() {
                   )}
                 />
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto2}
-                  getOptionLabel={option => option.title}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
                   style={{ float: "left", width: "300px" }}
                   renderInput={params => (

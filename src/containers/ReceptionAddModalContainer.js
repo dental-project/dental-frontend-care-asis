@@ -18,6 +18,9 @@ import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js
 
 import axios from "axios";
 
+import ButtonUpload from '@material-ui/core/Button';
+
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -90,35 +93,47 @@ const ReceptionModalContainer = ({
 
   const [vendorSelectData, setVendorSelectData] = useState([]);
 
-  console.log(receptionObj.seqId);
-
-  console.log(modalType);
+ 
   useEffect(() => {
     if (modalType === "접수수정") {
-      console.log(receptionObj.seqId);
+     
+      const index = dentalAutoData.findIndex(
+        obj => obj.vendor_name === receptionObj.vendorName
+      );
+      const vendorSeqId = dentalAutoData[index].seq_id;
 
       axios
-        .get(`http://localhost:8000/api/sell/master/${receptionObj.seqId}/details/`)
-        .then(result => {
-          console.log(result);
-          const selectData = result.data;
-          const newArray = selectData
-            .filter(
-              (arr, index, callback) =>
-                index === callback.findIndex(t => t.part_name === arr.part_name)
-            )
-            .map(data => {
-              return data.part_name;
-            });
+      .get(`http://localhost:8000/api/vendor/${vendorSeqId}/price/`)
+      .then(result => {
+        const selectData = result.data;
+        setVendorSelectData(selectData);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
 
-          setVendorSelectData(selectData);
-          //setPartAutoData(newArray);
-          console.log(selectData);
-          console.log(newArray);
-        })
-        .catch(error => {
-          throw new Error(error);
-        });
+      // axios
+      //   .get(`http://localhost:8000/api/sell/master/${receptionObj.seqId}/details/`)
+      //   .then(result => {
+      //     console.log(result);
+      //     const selectData = result.data;
+      //     // const newArray = selectData
+      //     //   .filter(
+      //     //     (arr, index, callback) =>
+      //     //       index === callback.findIndex(t => t.part_name === arr.part_name)
+      //     //   )
+      //     //   .map(data => {
+      //     //     return data.part_name;
+      //     //   });
+
+      //     setVendorSelectData(selectData);
+      //     //setPartAutoData(newArray);
+      //     //console.log(selectData);
+      //     //console.log(newArray);
+      //   })
+      //   .catch(error => {
+      //     throw new Error(error);
+      //   });
     }
   }, [receptionObj.seqId]);
   
@@ -174,7 +189,7 @@ const ReceptionModalContainer = ({
   }
 
   console.log(newArray);
-  console.log(something);
+  console.log(vendorSelectData);
 
   const columns = [
     {
@@ -258,8 +273,6 @@ const ReceptionModalContainer = ({
     },
   ];
 
-  console.log();
-
   const onSubmit = e => {
     e && e.preventDefault();
 
@@ -276,6 +289,11 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
+
+    const img = formData.get("raised-button-file");
+    console.log(img);
+   
+
 
     if (
       receiptDate === "" ||
@@ -299,7 +317,7 @@ const ReceptionModalContainer = ({
       bite: bite === "" ? true : false,
       appliance: appliance === "" ? true : false,
       patient_name: patientName,
-      request_form: "",
+      request_form: img,
       description: description,
       vendor_seq_id: dentalAutoData[index].seq_id,
     };
@@ -323,24 +341,33 @@ const ReceptionModalContainer = ({
       }
     }
 
+    console.log(gridArr);
+    console.log(vendorSelectData);
+  
     const detail = [];
     for (let i = 0; i < gridArr.length; i++) {
       let element = vendorSelectData.filter(
         data => data.item_name === gridArr[i].itemName
       );
 
+        console.log(element);
+
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
         item_seq_id: element[0].item_seq_id,
-        sell_count: parseInt(gridArr[i].amount),
-        normar_price: gridArr[i].normalPrice,
+        amount: parseInt(gridArr[i].amount),
+        normal_price: gridArr[i].normalPrice,
         real_sell_price: parseInt(gridArr[i].discountPrice),
         discount: parseFloat(gridArr[i].discount),
+
       });
     }
 
+    
     const data = { master, detail }
+
     console.log(data);
+    return;
     if (modalType === "추가") {
       dispatch(receptions.addReceptionMiddleware(data));
     } else if (modalType === "접수수정") {
@@ -358,7 +385,7 @@ const ReceptionModalContainer = ({
     let rowId = e.changes[0].rowKey;
     var regNumber = /^[0-9]*$/;
 
-    console.log(e.changes[0].columnName);
+    //console.log(e.changes[0].columnName);
 
     if (e.changes[0].columnName === "partName") {
       resetColumn(rowId, "itemReset");
@@ -514,8 +541,8 @@ const ReceptionModalContainer = ({
 
                           setVendorSelectData(selectData);
                           //setPartAutoData(newArray);
-                          console.log(selectData);
-                          console.log(newArray);
+                          //console.log(selectData);
+                          //console.log(newArray);
                         })
                         .catch(error => {
                           throw new Error(error);
@@ -639,9 +666,24 @@ const ReceptionModalContainer = ({
               {"image.png"}
             </Grid>
 
-            <Button className={classes.button} color="info" round>
-              이미지 업로드
-            </Button>
+
+
+            <input
+              accept="image/*"
+              className={classes.input}
+              style={{ display: 'none' }}
+              id="raised-button-file"
+              multiple
+              type="file"
+            />
+            <label htmlFor="raised-button-file">
+              <ButtonUpload component="span" className={classes.button}>
+                Upload
+              </ButtonUpload>
+            </label>
+
+
+
             <Grid item xs={12}>
               <Button
                 className={classes.button}
