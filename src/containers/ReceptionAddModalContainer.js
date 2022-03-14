@@ -289,65 +289,62 @@ const ReceptionModalContainer = ({
       obj => obj.vendor_name === vendorName
     );
 
-    console.log(dentalAutoData[index].seq_id);
+    const master = {
+      receipt_date: receiptDate,
+      completion_date: completionDate,
+      delivery_date: deliveryDate,
+      chart_number: parseInt(chartNumber),
+      upper: upper === "" ? true : false,
+      lower: lower === "" ? true : false,
+      bite: bite === "" ? true : false,
+      appliance: appliance === "" ? true : false,
+      patient_name: patientName,
+      request_form: "",
+      description: description,
+      vendor_seq_id: dentalAutoData[index].seq_id,
+    };
 
-    
-      const contents = {
-        receipt_date: receiptDate,
-        completion_date: completionDate,
-        delivery_date: deliveryDate,
-        chart_number: parseInt(chartNumber),
-        upper: upper === "" ? true : false,
-        lower: lower === "" ? true : false,
-        bite: bite === "" ? true : false,
-        appliance: appliance === "" ? true : false,
-        patient_name: patientName,
-        request_form: "/test/test.png",
-        description: description,
-        vendor_seq_id: dentalAutoData[index].seq_id,
-      };
+    const gridArr = gridRef.current.getInstance().getData();
 
-      const gridArr = gridRef.current.getInstance().getData();
+    if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
 
-      if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
-
-      for (let i = 0; i < gridArr.length; i++) {
-        if (gridArr[i].partName === null || gridArr[i].partName === "") {
-          return alert(i + 1 + "번째 행 파트명을 선택하세요.");
-        } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
-          return alert(i + 1 + "번째 행 장치명을 선택하세요.");
-        } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
-          return alert(i + 1 + "번째 행 수량을 입력하세요.");
-        } else if (
-          gridArr[i].discountPrice == null ||
-          gridArr[i].discountPrice === ""
-        ) {
-          return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
-        }
+    for (let i = 0; i < gridArr.length; i++) {
+      if (gridArr[i].partName === null || gridArr[i].partName === "") {
+        return alert(i + 1 + "번째 행 파트명을 선택하세요.");
+      } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
+        return alert(i + 1 + "번째 행 장치명을 선택하세요.");
+      } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
+        return alert(i + 1 + "번째 행 수량을 입력하세요.");
+      } else if (
+        gridArr[i].discountPrice == null ||
+        gridArr[i].discountPrice === ""
+      ) {
+        return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
       }
+    }
 
-      const priceContents = [];
-      for (let i = 0; i < gridArr.length; i++) {
-        let element = vendorSelectData.filter(
-          data => data.item_name === gridArr[i].itemName
-        );
+    const detail = [];
+    for (let i = 0; i < gridArr.length; i++) {
+      let element = vendorSelectData.filter(
+        data => data.item_name === gridArr[i].itemName
+      );
 
-        console.log(element);
+      detail.push({
+        //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
+        item_seq_id: element[0].item_seq_id,
+        sell_count: parseInt(gridArr[i].amount),
+        normar_price: gridArr[i].normalPrice,
+        real_sell_price: parseInt(gridArr[i].discountPrice),
+        discount: parseFloat(gridArr[i].discount),
+      });
+    }
 
-        priceContents.push({
-          sell_master_id: receptionObj.seqId, //  master_seq_id  // 
-          item_seq_id: element[0].item_seq_id,
-          sell_count: parseInt(gridArr[i].amount),
-          normar_price: gridArr[i].normalPrice,
-          real_sell_price: parseInt(gridArr[i].discountPrice),
-          discount: parseFloat(gridArr[i].discount),
-        });
-      }
-
+    const data = { master, detail }
+    console.log(data);
     if (modalType === "추가") {
-      dispatch(receptions.addReceptionMiddleware(contents, priceContents));
+      dispatch(receptions.addReceptionMiddleware(data));
     } else if (modalType === "접수수정") {
-      dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, contents));
+      dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, data));
     }
       
       //dispatch(receptions.addReceptionPriceMiddleware(priceContents));

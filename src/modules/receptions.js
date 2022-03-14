@@ -57,18 +57,21 @@ const getReceptionMiddleware = () => {
 //   };
 // };
 
-const addReceptionMiddleware = (contents, priceContents) => {
+const addReceptionMiddleware = (data) => {
   return dispatch => {
     apis
-      .createReception(contents)
+      .createReception(data)
       .then(result => {
-        dispatch(addReception(contents));
+        
+        console.log(result);
 
-        for(let i=0; i<priceContents.length; i++) {
-          priceContents[i].sell_master_id = result.data.seq_id
-        };
+        // for(let i=0; i<priceContents.length; i++) {
+        //   priceContents[i].sell_master_id = result.data.seq_id
+        // };
 
-        dispatch(addReceptionPriceMiddleware(priceContents));
+        dispatch(addReception(data));
+
+        //dispatch(addReceptionPriceMiddleware(priceContents));
 
       })
       .catch(err => {

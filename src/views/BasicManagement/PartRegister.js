@@ -60,18 +60,26 @@ const useStyles = makeStyles(theme => ({
 
 function PartRegister() {
   const classes = useStyles();
-  const gridRef = React.createRef();
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ part }) => part);
+  const [gridData, setGridData] = useState([]);
+  const [searchData, setSearchData] = useState("");
+
+  useEffect(() => {
+    setGridData(data)
+    console.log("렌더");
+  }, [data]);
+  
 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
+    
     setOpenPartModal(false);
   }, [count]);
 
   const auto1 = [{ part_name: "전체" }];
-  //part.map( (data) => auto1.push({ part_name: data.part_name}) );
+  data.map( (data) => auto1.push({ part_name: data.part_name}) );
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -143,8 +151,16 @@ function PartRegister() {
   ];
 
   const onClickSearch = e => {
-    console.log(gridRef.current.getInstance());
-    gridRef.current.getInstance().filter("name", { part_name: "Removale App" });
+
+    if(searchData.part_name === "전체") {
+      setGridData(data);
+    } else {
+      const searchArr = data.filter(
+        data => data.part_name === searchData.part_name
+      );
+      setGridData(searchArr);
+    }
+
   };
 
   return (
@@ -173,16 +189,16 @@ function PartRegister() {
                   getOptionLabel={option => option.part_name}
                   filterOptions={filterOptions}
                   style={{ float: "left", width: "300px" }}
-                  // onChange={(event, newValue) => {
-                  //   setValue(newValue);
-                  //   console.log(newValue);
-                  // }}
-                  getOptionSelected={(option, value) => {
-                    return (
-                      option?.id === value?.id ||
-                      option?.name.toLowerCase() === value?.name.toLowerCase()
-                    );
+                  onChange={(event, newValue) => {
+                    setSearchData(newValue);
+                    console.log(newValue);
                   }}
+                  // getOptionSelected={(option, value) => {
+                  //   return (
+                  //     option?.id === value?.id ||
+                  //     option?.name.toLowerCase() === value?.name.toLowerCase()
+                  //   );
+                  // }}
                   renderInput={params => (
                     <TextField {...params} label="파트명" variant="outlined" />
                   )}
@@ -197,7 +213,7 @@ function PartRegister() {
                   검색
                 </Button>
               </Grid>
-              <ToastGrid ref={gridRef} columns={columns} data={data} />
+              <ToastGrid columns={columns} data={gridData} />
             </CardBody>
           </Card>
         </Grid>
