@@ -289,10 +289,7 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
-
-    const img = formData.get("raised-button-file");
-    console.log(img);
-   
+    const request_form = formData.get("request_form");
 
 
     if (
@@ -317,10 +314,25 @@ const ReceptionModalContainer = ({
       bite: bite === "" ? true : false,
       appliance: appliance === "" ? true : false,
       patient_name: patientName,
-      request_form: img,
       description: description,
       vendor_seq_id: dentalAutoData[index].seq_id,
+      request_form: request_form,
     };
+
+    const form = new FormData();
+
+    form.append("receipt_date", receiptDate);
+    form.append("completion_date", completionDate);
+    form.append("delivery_date", deliveryDate);
+    form.append("chart_number", parseInt(chartNumber));
+    form.append("upper", upper === "" ? true : false);
+    form.append("lower", lower === "" ? true : false);
+    form.append("bite", bite === "" ? true : false);
+    form.append("appliance", appliance === "" ? true : false);
+    form.append("patient_name", patientName);
+    form.append("description", description);
+    form.append("vendor_seq_id", dentalAutoData[index].seq_id);
+    form.append("request_form", request_form); 
 
     const gridArr = gridRef.current.getInstance().getData();
 
@@ -341,16 +353,11 @@ const ReceptionModalContainer = ({
       }
     }
 
-    console.log(gridArr);
-    console.log(vendorSelectData);
-  
     const detail = [];
     for (let i = 0; i < gridArr.length; i++) {
       let element = vendorSelectData.filter(
         data => data.item_name === gridArr[i].itemName
       );
-
-        console.log(element);
 
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
@@ -363,15 +370,19 @@ const ReceptionModalContainer = ({
       });
     }
 
-    
-    const data = { master, detail }
+    form.append("detail", JSON.stringify(detail));
+    //const data = { form };
 
-    console.log(data);
-    return;
+    
+    console.log(form);
+    
+    
+
+
     if (modalType === "추가") {
-      dispatch(receptions.addReceptionMiddleware(data));
+      dispatch(receptions.addReceptionMiddleware(form));
     } else if (modalType === "접수수정") {
-      dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, data));
+      //dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, data));
     }
       
       //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
@@ -548,7 +559,6 @@ const ReceptionModalContainer = ({
                           throw new Error(error);
                         });
                     }
-
                   }}
                   renderInput={params => (
                     <TextField
@@ -666,23 +676,20 @@ const ReceptionModalContainer = ({
               {"image.png"}
             </Grid>
 
-
-
             <input
               accept="image/*"
               className={classes.input}
-              style={{ display: 'none' }}
-              id="raised-button-file"
+              style={{ display: "none" }}
+              id="request_form"
+              name="request_form"
               multiple
               type="file"
             />
-            <label htmlFor="raised-button-file">
+            <label htmlFor="request_form">
               <ButtonUpload component="span" className={classes.button}>
                 Upload
               </ButtonUpload>
             </label>
-
-
 
             <Grid item xs={12}>
               <Button
@@ -708,20 +715,18 @@ const ReceptionModalContainer = ({
               ) : (
                 <ToastGrid
                   ref={gridRef}
-                    data={
-                    selectDetailData.map(data => {
-                      return {
-                        partName: data.part_name,
-                        itemName: data.item_name,
-                        unitPrice: data.unit_price,
-                        amount: data.amount,
-                        normalPrice: data.normal_price,
-                        discountPrice: data.discount_price,
-                        realSellPrice: data.real_sell_price,
-                        discount: data.discount,
-                      };
-                    })
-                  }
+                  data={selectDetailData.map(data => {
+                    return {
+                      partName: data.part_name,
+                      itemName: data.item_name,
+                      unitPrice: data.unit_price,
+                      amount: data.amount,
+                      normalPrice: data.normal_price,
+                      discountPrice: data.discount_price,
+                      realSellPrice: data.real_sell_price,
+                      discount: data.discount,
+                    };
+                  })}
                   columns={columns}
                   rowHeight={20}
                   bodyHeight={200}
