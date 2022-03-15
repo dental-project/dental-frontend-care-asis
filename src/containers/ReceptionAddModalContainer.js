@@ -188,9 +188,6 @@ const ReceptionModalContainer = ({
       });
   }
 
-  console.log(newArray);
-  console.log(vendorSelectData);
-
   const columns = [
     {
       header: "파트명 (선택)",
@@ -198,9 +195,6 @@ const ReceptionModalContainer = ({
       editor: {
         type: "select",
         options: {
-
-          
-
           listItems: newArray,
         },
       },
@@ -354,10 +348,16 @@ const ReceptionModalContainer = ({
     }
 
     const detail = [];
+    const detailRemove = [];
+
     for (let i = 0; i < gridArr.length; i++) {
       let element = vendorSelectData.filter(
         data => data.item_name === gridArr[i].itemName
       );
+
+      detailRemove.push({
+        seq_id: gridArr[i].seqId
+      });
 
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
@@ -368,14 +368,18 @@ const ReceptionModalContainer = ({
         discount: parseFloat(gridArr[i].discount),
 
       });
+
     }
 
+    console.log(detailRemove);
+    
+    form.append("detailRemove", JSON.stringify(detailRemove))
     form.append("detail", JSON.stringify(detail));
-    //const data = { form };
+    
 
     
-    console.log(form);
     
+   
     
 
 
@@ -396,30 +400,26 @@ const ReceptionModalContainer = ({
     let rowId = e.changes[0].rowKey;
     var regNumber = /^[0-9]*$/;
 
-    //console.log(e.changes[0].columnName);
-
     if (e.changes[0].columnName === "partName") {
       resetColumn(rowId, "itemReset");
     } else if (e.changes[0].columnName === "itemName") {
-      let price = vendorSelectData.filter(
-        data =>
-          data.part_name === gridArr[rowId].partName &&
-          data.item_name === gridArr[rowId].itemName
+      let price = vendorSelectData.filter(data =>
+        data.part_name === gridArr[rowId].partName &&
+        data.item_name === gridArr[rowId].itemName
       );
 
       resetColumn(rowId, "itemReset");
       setColumnValue(rowId, "unitPrice", price[0].unit_price);
     } else if (e.changes[0].columnName === "amount") {
+
       if (regNumber.test(gridArr[rowId].amount) === false)
         return alert("정수만 입력 가능합니다.");
 
       resetColumn(rowId);
-      setColumnValue(
-        rowId,
-        "normalPrice",
-        gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)
-      );
+      setColumnValue(rowId, "normalPrice", gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount));
+
     } else if (e.changes[0].columnName === "discountPrice") {
+
       if (regNumber.test(gridArr[rowId].discountPrice) === false) {
         resetColumn(rowId);
         return alert("정수만 입력 가능합니다.");
@@ -428,19 +428,8 @@ const ReceptionModalContainer = ({
         resetColumn(rowId);
         return alert("할인금액이 정상가보다 금액이 큽니다.");
       }
-      setColumnValue(
-        rowId,
-        "realSellPrice",
-        gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice)
-      );
-      setColumnValue(
-        rowId,
-        "discount",
-        (
-          (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) *
-          100
-        ).toFixed(2) + "%"
-      );
+      setColumnValue(rowId, "realSellPrice", gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice));
+      setColumnValue(rowId, "discount", ((gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) * 100).toFixed(2) + "%");
     }
   };
 
@@ -717,6 +706,7 @@ const ReceptionModalContainer = ({
                   ref={gridRef}
                   data={selectDetailData.map(data => {
                     return {
+                      seqId: data.seq_id,
                       partName: data.part_name,
                       itemName: data.item_name,
                       unitPrice: data.unit_price,

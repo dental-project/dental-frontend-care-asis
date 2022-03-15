@@ -133,8 +133,6 @@ export default function ReceptionRegister() {
   
     dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
     setReceptionObj(receptionObj);
-    //setReceptionDetailArr(sss);
-
     handleReceptionModalOpen();
   };
 

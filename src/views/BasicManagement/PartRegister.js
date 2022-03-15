@@ -60,7 +60,8 @@ const useStyles = makeStyles(theme => ({
 
 function PartRegister() {
   const classes = useStyles();
-
+  const gridRef = React.createRef();
+  
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ part }) => part);
   const [gridData, setGridData] = useState([]);
@@ -106,7 +107,8 @@ function PartRegister() {
 
   const onUpdateButtonClicked = partObj => {
     setModalType("파트수정");
-    setPartObj(partObj);
+    console.log(partObj);
+    //setPartObj(partObj);
     handlePartModalOpen();
   };
 
@@ -152,15 +154,21 @@ function PartRegister() {
 
   const onClickSearch = e => {
 
-    if(searchData === "전체") {
-      setGridData(data);
-    } else {
-      const searchArr = data.filter(
-        data => data.part_name === searchData
-      );
+    // if(searchData === "전체") {
+    //   setGridData(data);
+    // } else {
+    //   const searchArr = data.filter(
+    //     data => data.part_name === searchData
+    //   );
+    //   console.log(searchArr);
+    //   //setGridData(searchArr);
+    // }
 
-      setGridData(searchArr);
-    }
+    const a = gridRef.current.getInstance().findRows({
+      part_name: "Functional App"
+    })
+    setGridData(a);
+    console.log(a);
 
   };
 
@@ -212,7 +220,7 @@ function PartRegister() {
                   검색
                 </Button>
               </Grid>
-              <ToastGrid columns={columns} data={gridData} />
+              <ToastGrid ref={gridRef} columns={columns} data={gridData} />
             </CardBody>
           </Card>
         </Grid>
