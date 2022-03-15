@@ -264,7 +264,10 @@ const ReceptionModalContainer = ({
         vendor_seq_id: dentalAutoData[index].seq_id,
         request_form : request_form
       };
+      
       const data = new FormData();
+
+      data.enctype="multipart/form-data"
       data.append("receipt_date",receiptDate) 
       data.append("completion_date",completionDate) 
       data.append("delivery_date",deliveryDate) 
