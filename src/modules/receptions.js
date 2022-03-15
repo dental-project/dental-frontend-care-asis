@@ -106,9 +106,9 @@ const updateReceptionMiddleware = (seqId, contents) => {
       .then(result => {
         console.log(result);
 
-        const data = { seqId: seqId, contents: contents };
+        //const data = { seqId: seqId, contents: contents };
 
-        dispatch(updateReception(data));
+        //dispatch(updateReception(data));
         alert("접수 정보를 수정 했습니다.");
       })
       .catch(err => {

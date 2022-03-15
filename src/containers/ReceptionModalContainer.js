@@ -393,7 +393,7 @@ const ReceptionModalContainer = ({
 
       form.append("deleteRow", detailRemove);
       console.log("-------------------------");
-      console.log(form);
+      console.log(completionDate);
       console.log(detail);
       console.log(detailRemove);
 
