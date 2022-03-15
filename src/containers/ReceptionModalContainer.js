@@ -303,35 +303,35 @@ const ReceptionModalContainer = ({
       obj => obj.vendorName === vendorName
     );
 
-    // const master = {
-    //   receiptDate: receiptDate,
-    //   completionDate: completionDate,
-    //   deliveryDate: deliveryDate,
-    //   chartNumber: parseInt(chartNumber),
-    //   upper: upper === "" ? true : false,
-    //   lower: lower === "" ? true : false,
-    //   bite: bite === "" ? true : false,
-    //   appliance: appliance === "" ? true : false,
-    //   patientName: patientName,
-    //   description: description,
-    //   vendorSeqId: dentalAutoData[index].seqId,
-    //   requestForm: requestForm,
-    // };
+    const master = {
+      receiptDate: receiptDate,
+      completionDate: completionDate,
+      deliveryDate: deliveryDate,
+      chartNumber: parseInt(chartNumber),
+      upper: upper === "" ? true : false,
+      lower: lower === "" ? true : false,
+      bite: bite === "" ? true : false,
+      appliance: appliance === "" ? true : false,
+      patientName: patientName,
+      description: description,
+      vendorSeqId: dentalAutoData[index].seqId,
+      requestForm: requestForm,
+    };
 
     const form = new FormData();
 
-    form.append("receiptDate", receiptDate);
-    form.append("completionDate", completionDate);
-    form.append("deliveryDate", deliveryDate);
-    form.append("chartNumber", parseInt(chartNumber));
-    form.append("upper", upper === "" ? true : false);
-    form.append("lower", lower === "" ? true : false);
-    form.append("bite", bite === "" ? true : false);
-    form.append("appliance", appliance === "" ? true : false);
-    form.append("patientName", patientName);
-    form.append("description", description);
-    form.append("vendorSeqId", dentalAutoData[index].seqId);
-    form.append("requestForm", requestForm); 
+    // form.append("receiptDate", receiptDate);
+    // form.append("completionDate", completionDate);
+    // form.append("deliveryDate", deliveryDate);
+    // form.append("chartNumber", parseInt(chartNumber));
+    // form.append("upper", upper === "" ? true : false);
+    // form.append("lower", lower === "" ? true : false);
+    // form.append("bite", bite === "" ? true : false);
+    // form.append("appliance", appliance === "" ? true : false);
+    // form.append("patientName", patientName);
+    // form.append("description", description);
+    // form.append("vendorSeqId", dentalAutoData[index].seqId);
+    // form.append("requestForm", requestForm); 
 
     const gridArr = gridRef.current.getInstance().getData();
 
@@ -374,22 +374,35 @@ const ReceptionModalContainer = ({
 
     }
 
-    console.log(detailRemove);
-    
-    form.append("detailRemove", JSON.stringify(detailRemove))
+    form.append("master", JSON.stringify(master));
     form.append("detail", JSON.stringify(detail));
-    
+    //const data = { form };
 
-    
     console.log(form);
-   
-    return;
-
 
     if (modalType === "추가") {
+      //form.append("detailRemove", JSON.stringify(detailRemove));
+
+    
+
       dispatch(receptions.addReceptionMiddleware(form));
     } else if (modalType === "접수수정") {
-      //dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, data));
+
+
+        // data = {
+        //   masterFormData,
+        //   ...
+        //   ...
+        //   detail:JSON.stringify([{디테일}]),
+        //   deleteRow : []
+        // }
+
+      const data = {  }
+
+
+
+
+      dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, data));
     }
       
       //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
