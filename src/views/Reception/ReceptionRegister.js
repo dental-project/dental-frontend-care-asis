@@ -17,7 +17,7 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 // Material
 import TextField from "@material-ui/core/TextField";
 
-import ReceptionAddModalContainer from "containers/ReceptionAddModalContainer";
+import ReceptionModalContainer from "containers/ReceptionModalContainer";
 //import PrintModal from "components/Modal/PrintModal.js"
 
 import PrintModalContainer from "containers/PrintModalContainer";
@@ -84,7 +84,7 @@ export default function ReceptionRegister() {
   
   
 
-
+  console.log(data);
 
 
 
@@ -145,7 +145,7 @@ export default function ReceptionRegister() {
   const columns = [
     { name: "seq_id", header: "codeNo", align: "center", hidden: true },
     {
-      name: "receipt_date",
+      name: "receiptDate",
       header: "접수일자",
       align: "center",
       whiteSpace: "normal",
@@ -154,7 +154,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "completion_date",
+      name: "completionDate",
       header: "완성일자",
       align: "center",
       whiteSpace: "normal",
@@ -163,7 +163,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "delivery_date",
+      name: "deliveryDate",
       header: "배달일자",
       align: "center",
       whiteSpace: "normal",
@@ -172,7 +172,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "vendor_name",
+      name: "vendorName",
       header: "거래처",
       align: "center",
       whiteSpace: "normal",
@@ -181,7 +181,7 @@ export default function ReceptionRegister() {
       filter: "select",
     },
     {
-      name: "chart_number",
+      name: "chartNumber",
       header: "차트번호",
       align: "center",
       whiteSpace: "normal",
@@ -226,7 +226,7 @@ export default function ReceptionRegister() {
       filter: "select",
     },
     {
-      name: "patient_name",
+      name: "patientName",
       header: "환자명",
       align: "center",
       whiteSpace: "normal",
@@ -416,7 +416,7 @@ export default function ReceptionRegister() {
           </Card>
         </Grid>
       </Grid>
-      <ReceptionAddModalContainer
+      <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}

@@ -65,33 +65,32 @@ const PrintModalContainer = ({ open, close}) => {
 
 const onSubmit = (data) => {
 
-    let vendor_seq_id = 0;
+    let vendorSeqId = 0;
 
     if(vendorName === "Dental.A 치과기공소") {
         console.log("d");
-        vendor_seq_id = 1;
+        vendorSeqId = 1;
     }
     else if(vendorName === "거래처명") {
-        vendor_seq_id = 2;
+        vendorSeqId = 2;
     }
     else if(vendorName === "거래처명2") {
-        vendor_seq_id = 3;
+        vendorSeqId = 3;
     }
     else if(vendorName === "fgdfg") {
-        vendor_seq_id = 4;
+        vendorSeqId = 4;
     }
     
     axios({
-      method:"POST",
-      url:"/api/sell/report/",
-      responseType: 'blob',
-      data:{
-        receipt_date: data.startDate,
-        completion_date: data.endDate,
-        vendor_seq_id: vendor_seq_id,
-        report_type: type
-      }
-
+      method: "POST",
+      url: "/api/sell/report/",
+      responseType: "blob",
+      data: {
+        receiptDate: data.startDate,
+        completionDate: data.endDate,
+        vendorSeqId: vendorSeqId,
+        reportType: type,
+      },
     })
       // .post("http://localhost:8000/api/sell/report/",{
       //   receipt_date: "2022-01-15",
@@ -99,35 +98,31 @@ const onSubmit = (data) => {
       //   vendor_id: 1,
       //   day: "day"
       // })
-      .then((result) => {
+      .then(result => {
         console.log(result);
         // var BOM = new Uint8Array([0xEF,0xBB,0xBF]);
         // const file = new Blob([BOM,result.data], { type: "application/pdf;charset=utf-18" });
         // // const file = new Blob(["\ufeff"+result.data], { type: "application/pdf;charset=utf-8" });
         // //Build a URL from the file
         // const fileURL = URL.createObjectURL(file);
-        
+
         // //Open the URL on new Window
         //  const pdfWindow = window.open();
-        //  pdfWindow.location.href = fileURL;    
-        
-        var b = new Blob([result.data],{type:"application/pdf;"});
-        var url = URL.createObjectURL(b);
-        window.open(url,"_blank","");
+        //  pdfWindow.location.href = fileURL;
 
-        })
-      .catch((error) => {
+        var b = new Blob([result.data], { type: "application/pdf;" });
+        var url = URL.createObjectURL(b);
+        window.open(url, "_blank", "");
+      })
+      .catch(error => {
         throw new Error(error);
-    })
+      });
       
     }
 
     return (
       <Modal open={open}>
         <form onSubmit={handleSubmit(onSubmit)}>
-        
-           
-             
                 <Controller
                   name="startDate"
                   control={control}

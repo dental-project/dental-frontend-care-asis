@@ -68,7 +68,7 @@ export default function DentalRegister() {
     dispatch(dentals.getDentalMiddleware());
     setOpenDentalModal(false);
   }, [count]);
-
+  console.log(data);
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option.title,
@@ -107,7 +107,7 @@ export default function DentalRegister() {
 
   const columns = [
     {
-      name: "vendor_name",
+      name: "vendorName",
       header: "거래처명",
       align: "center",
       whiteSpace: "normal",
@@ -143,7 +143,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "business_number",
+      name: "businessNumber",
       header: "사업자번호",
       align: "center",
       whiteSpace: "normal",
@@ -152,7 +152,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "business_type_name",
+      name: "businessTypeName",
       header: "업태",
       align: "center",
       whiteSpace: "normal",
@@ -161,7 +161,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "business_sector_name",
+      name: "businessSectorName",
       header: "업종",
       align: "center",
       whiteSpace: "normal",
@@ -170,7 +170,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "post_number",
+      name: "postNumber",
       header: "우편번호",
       align: "center",
       whiteSpace: "normal",
@@ -188,7 +188,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "bank_name",
+      name: "bankName",
       header: "은행",
       align: "center",
       whiteSpace: "normal",
@@ -197,7 +197,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "bank_account",
+      name: "bankAccount",
       header: "계좌번호",
       align: "center",
       whiteSpace: "normal",

@@ -64,7 +64,7 @@ const ItemModalContainer = ({
   });
 
   const auto = [];
-  partAutoData.map(data => auto.push(data.part_name));
+  partAutoData.map(data => auto.push(data.partName));
 
   const onSubmit = (e) => {
     e && e.preventDefault();
@@ -76,21 +76,21 @@ const ItemModalContainer = ({
     if (partName === "" || itemName === "") return alert("빈칸없이 입력하세요");
 
     const index = partAutoData.findIndex(
-      obj => obj.part_name === partName
+      obj => obj.partName === partName
     );
 
     if (modalType === "추가") {
       const content = {
-        part_seq_id: partAutoData[index].seq_id,
-        item_name: itemName,
+        partSeqId: partAutoData[index].seqId,
+        itemName: itemName,
       };
       dispatch(items.addItemMiddleware(content));
 
     } else if (modalType === "수정") {
       const contents = {
-        seq_id: itemObj.seqId,
-        part_seq_id: partAutoData[index].seq_id,
-        item_name: itemName,
+        seqId: itemObj.seqId,
+        partSeqId: partAutoData[index].seqId,
+        itemName: itemName,
       };
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       

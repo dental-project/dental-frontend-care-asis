@@ -72,7 +72,6 @@ function PartRegister() {
     console.log("렌더");
   }, [data]);
   
-
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
     
@@ -108,7 +107,7 @@ function PartRegister() {
   const onUpdateButtonClicked = partObj => {
     setModalType("파트수정");
     console.log(partObj);
-    //setPartObj(partObj);
+    setPartObj(partObj);
     handlePartModalOpen();
   };
 
@@ -122,7 +121,7 @@ function PartRegister() {
   const columns = [
     { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
     {
-      name: "part_name",
+      name: "partName",
       header: "파트명",
       align: "center",
       sortable: true,
@@ -165,7 +164,7 @@ function PartRegister() {
     // }
 
     const a = gridRef.current.getInstance().findRows({
-      part_name: "Functional App"
+      partName: "Functional App"
     })
     setGridData(a);
     console.log(a);
@@ -191,7 +190,6 @@ function PartRegister() {
             <CardBody>
               <Grid item xs={6} className={classes.grid}>
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto1}
                   defaultValue={auto1[0]}

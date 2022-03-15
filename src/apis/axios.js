@@ -19,19 +19,19 @@ export const apis = {
   // 접수 추가
   createReception: (contents) => instance.post('api/sell/master/', contents),
   // 접수 수정
-  patchReception: (seq_id, contents) => instance.patch(`api/sell/master/${seq_id}/`, contents),
+  patchReception: (seqId, contents) => instance.patch(`api/sell/master/${seqId}/`, contents),
   // 접수 삭제
-  deleteReception: (seq_id) => instance.delete(`api/sell/master/${seq_id}/`),
+  deleteReception: (seqId) => instance.delete(`api/sell/master/${seqId}/`),
   // 접수 디테일 불러오기
   getReceptionDetail: () => instance.get('api/sell/detail/'),
   // 접수 디테일 선택 불러오기
-  getReceptionDetailSelect: (seq_id) => instance.get(`api/sell/master/${seq_id}/details/`),
+  getReceptionDetailSelect: (seqId) => instance.get(`api/sell/master/${seqId}/details/`),
   // 접수 디테일 단가 추가
   createReceptionPrice: (contents) => instance.post('api/sell/detail/', contents),
   // 접수 디테일 단가 수정
   //patchReceptionDetail: (seq_id, contents) => instance.patch(`api/sell/detail/${seq_id}/`, contents),
   // 접수 디테일 단가 삭제
-  deleteReceptionDetail: (seq_id) => instance.delete(`api/sell/detail/${seq_id}/`),
+  deleteReceptionDetail: (seqId) => instance.delete(`api/sell/detail/${seqId}/`),
 
 
   // 파트 불러오기
@@ -39,9 +39,9 @@ export const apis = {
   // 파트 추가
   createPart: (contents) => instance.post('api/code/part/', contents),
   // 파트 수정
-  patchPart: (seq_id, contents) => instance.patch(`api/code/part/${seq_id}/`, contents),
+  patchPart: (seqId, contents) => instance.patch(`api/code/part/${seqId}/`, contents),
   // 파트 삭제
-  deletePart: (seq_id) => instance.delete(`api/code/part/${seq_id}/`),
+  deletePart: (seqId) => instance.delete(`api/code/part/${seqId}/`),
 
 
   // 장치 불러오기
@@ -49,21 +49,21 @@ export const apis = {
   // 장치 추가
   createItem: (contents) => instance.post('api/code/item/', contents),
   // 장치 수정
-  patchItem: (seq_id, contents) => instance.patch(`api/code/item/${seq_id}/`, contents),
+  patchItem: (seqId, contents) => instance.patch(`api/code/item/${seqId}/`, contents),
   // 장치 삭제
-  deleteItem: (seq_id) => instance.delete(`api/code/item/${seq_id}/`),
+  deleteItem: (seqId) => instance.delete(`api/code/item/${seqId}/`),
 
 
   // 치과 불러오기
   getDental: () => instance.get('api/vendor/'),
   // 선택한 거래처의 파트명 불러오기
-  getSelectVendorPart: (vendor_seq_id) => instance.get(`api/vendor/${vendor_seq_id}/price/`),
+  getSelectVendorPart: (vendorSeqId) => instance.get(`api/vendor/${vendorSeqId}/price/`),
   // 치과 추가
   createDental: (contents) => instance.post('api/vendor/', contents),
   // 치과 수정
-  patchDental: (seq_id, contents) => instance.patch(`api/vendor/${seq_id}/`, contents),
+  patchDental: (seqId, contents) => instance.patch(`api/vendor/${seqId}/`, contents),
   // 치과 삭제
-  deleteDental: (seq_id) => instance.delete(`api/vendor/${seq_id}/`),
+  deleteDental: (seqId) => instance.delete(`api/vendor/${seqId}/`),
 
 
   // 단가 불러오기
@@ -71,9 +71,9 @@ export const apis = {
   // 단가 추가
   createPrice: (contents) => instance.post('api/sell/price/', contents),
   // 단가 수정
-  patchPrice: (seq_id, contents) => instance.patch(`api/sell/price/${seq_id}/`, contents),
+  patchPrice: (seqId, contents) => instance.patch(`api/sell/price/${seqId}/`, contents),
   // 단가 삭제
-  deletePrice: (seq_id) => instance.delete(`api/sell/price/${seq_id}/`),
+  deletePrice: (seqId) => instance.delete(`api/sell/price/${seqId}/`),
 
   
   // 업태 불러오기

@@ -16,55 +16,53 @@ class UpdateRenderer {
     if (props.grid.store.data.rawData[rowKey] !== undefined) {
       if (updateType === "접수수정") {
         obj = {
-          seqId: props.grid.store.data.rawData[rowKey].seq_id,
-          receiptDate: props.grid.store.data.rawData[rowKey].receipt_date,
-          completionDate: props.grid.store.data.rawData[rowKey].completion_date,
-          deliveryDate: props.grid.store.data.rawData[rowKey].delivery_date,
-          vendorName: props.grid.store.data.rawData[rowKey].vendor_name,
-          chartNumber: props.grid.store.data.rawData[rowKey].chart_number,
+          seqId: props.grid.store.data.rawData[rowKey].seqId,
+          receiptDate: props.grid.store.data.rawData[rowKey].receiptDate,
+          completionDate: props.grid.store.data.rawData[rowKey].completionDate,
+          deliveryDate: props.grid.store.data.rawData[rowKey].deliveryDate,
+          vendorName: props.grid.store.data.rawData[rowKey].vendorName,
+          chartNumber: props.grid.store.data.rawData[rowKey].chartNumber,
           upper: props.grid.store.data.rawData[rowKey].upper,
           lower: props.grid.store.data.rawData[rowKey].lower,
           bite: props.grid.store.data.rawData[rowKey].bite,
           appliance: props.grid.store.data.rawData[rowKey].appliance,
-          patientName: props.grid.store.data.rawData[rowKey].patient_name,
-          requestForm: props.grid.store.data.rawData[rowKey].request_form,
+          patientName: props.grid.store.data.rawData[rowKey].patientName,
+          requestForm: props.grid.store.data.rawData[rowKey].requestForm,
           description: props.grid.store.data.rawData[rowKey].description,
         };
       } else if (updateType === "파트수정") {
         obj = {
-          seqId: props.grid.store.data.rawData[rowKey].seq_id,
-          partName: props.grid.store.data.rawData[rowKey].part_name,
+          seqId: props.grid.store.data.rawData[rowKey].seqId,
+          partName: props.grid.store.data.rawData[rowKey].partName,
         };
       } else if (updateType === "장치수정") {
         obj = {
-          seqId: props.grid.store.data.rawData[rowKey].seq_id,
-          partName: props.grid.store.data.rawData[rowKey].part_name,
-          itemName: props.grid.store.data.rawData[rowKey].item_name,
+          seqId: props.grid.store.data.rawData[rowKey].seqId,
+          partName: props.grid.store.data.rawData[rowKey].partName,
+          itemName: props.grid.store.data.rawData[rowKey].itemName,
         };
       } else if (updateType === "치과수정") {
         obj = {
-          seqId: props.grid.store.data.rawData[rowKey].seq_id,
-          vendorName: props.grid.store.data.rawData[rowKey].vendor_name,
+          seqId: props.grid.store.data.rawData[rowKey].seqId,
+          vendorName: props.grid.store.data.rawData[rowKey].vendorName,
           ceo: props.grid.store.data.rawData[rowKey].ceo,
           tel: props.grid.store.data.rawData[rowKey].tel,
           mobile: props.grid.store.data.rawData[rowKey].mobile,
           fax: props.grid.store.data.rawData[rowKey].fax,
-          businessNumber: props.grid.store.data.rawData[rowKey].business_number,
-          businessTypeName:
-            props.grid.store.data.rawData[rowKey].business_type_name,
-          businessSectorName:
-            props.grid.store.data.rawData[rowKey].business_sector_name,
-          postNumber: props.grid.store.data.rawData[rowKey].post_number,
+          businessNumber: props.grid.store.data.rawData[rowKey].businessNumber,
+          businessTypeName: props.grid.store.data.rawData[rowKey].businessTypeName,
+          businessSectorName: props.grid.store.data.rawData[rowKey].businessSectorName,
+          postNumber: props.grid.store.data.rawData[rowKey].postNumber,
           address: props.grid.store.data.rawData[rowKey].address,
-          bankName: props.grid.store.data.rawData[rowKey].bank_name,
-          bankAccount: props.grid.store.data.rawData[rowKey].bank_account,
+          bankName: props.grid.store.data.rawData[rowKey].bankName,
+          bankAccount: props.grid.store.data.rawData[rowKey].bankAccount,
           description: props.grid.store.data.rawData[rowKey].description,
         };
       } else if (updateType === "단가수정") {
         obj = {
-          seqId: props.grid.store.data.rawData[rowKey].seq_id,
-          vendorName: props.grid.store.data.rawData[rowKey].vendor_name,
-          itemName: props.grid.store.data.rawData[rowKey].item_name,
+          seqId: props.grid.store.data.rawData[rowKey].seqId,
+          vendorName: props.grid.store.data.rawData[rowKey].vendorName,
+          itemName: props.grid.store.data.rawData[rowKey].itemName,
           price: props.grid.store.data.rawData[rowKey].price,
         };
       }

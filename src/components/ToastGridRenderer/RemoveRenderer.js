@@ -16,7 +16,7 @@ class RemoveButtonRenderer {
         size="small"
         color="secondary"
         onClick={() =>
-          onRemoveButtonClicked(props.grid.store.data.rawData[rowKey].seq_id)
+          onRemoveButtonClicked(props.grid.store.data.rawData[rowKey].seqId)
         }
       />,
       this.element

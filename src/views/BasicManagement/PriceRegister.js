@@ -66,7 +66,7 @@ export default function PriceRegister() {
   const { data, count } = useSelector(({ price }) => price);
   const [seqId, setSeqId] = useState("");
   const [priceObj, setPriceObj] = useState({});
-
+  console.log(data);
   useEffect(() => {
     dispatch(prices.getPriceMiddleware());
     setOpenPriceModal(false);
@@ -107,7 +107,7 @@ export default function PriceRegister() {
 
   const columns = [
     {
-      name: "vendor_name",
+      name: "vendorName",
       header: "거래처명",
       align: "center",
       whiteSpace: "normal",
@@ -116,7 +116,7 @@ export default function PriceRegister() {
       filter: "select",
     },
     {
-      name: "part_name",
+      name: "partName",
       header: "파트명",
       align: "center",
       whiteSpace: "normal",
@@ -125,7 +125,7 @@ export default function PriceRegister() {
       filter: "select",
     },
     {
-      name: "item_name",
+      name: "itemName",
       header: "장치명",
       align: "center",
       whiteSpace: "normal",

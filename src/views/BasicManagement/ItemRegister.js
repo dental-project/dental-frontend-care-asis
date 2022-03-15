@@ -124,14 +124,14 @@ export default function ItemRegister() {
 
   const columns = [
     {
-      name: "part_name",
+      name: "partName",
       header: "파트명",
       align: "center",
       sortable: true,
       filter: "select",
     },
     {
-      name: "item_name",
+      name: "itemName",
       header: "장치명",
       align: "center",
       sortable: true,

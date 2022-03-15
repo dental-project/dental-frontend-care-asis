@@ -61,10 +61,10 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   });
 
   const auto1 = [];
-  dentalAutoData.map(data => auto1.push(data.vendor_name + "/" + data.ceo));
+  dentalAutoData.map(data => auto1.push(data.vendorName + "/" + data.ceo));
 
   const auto2 = [];
-  itemAutoData.map(data => auto2.push(data.item_name));
+  itemAutoData.map(data => auto2.push(data.itemName));
 
   const onSubmit = (e) => {
     e && e.preventDefault();
@@ -84,16 +84,16 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
       return alert("빈칸없이 입력하세요");
 
     const vendorNameIndex = dentalAutoData.findIndex(
-      obj => obj.vendor_name === vendorNameArr[0]
+      obj => obj.vendorName === vendorNameArr[0]
     );
     const itemNameIndex = itemAutoData.findIndex(
-      obj => obj.item_name === itemName
+      obj => obj.itemName === itemName
     );
 
     if (modalType === "추가") {
       const content = {
-        vendor_seq_id: dentalAutoData[vendorNameIndex].seq_id,
-        item_seq_id: itemAutoData[itemNameIndex].seq_id,
+        vendorSeqId: dentalAutoData[vendorNameIndex].seqId,
+        itemSeqId: itemAutoData[itemNameIndex].seqId,
         price: price,
       };
       
@@ -101,9 +101,9 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
 
     } else if (modalType === "단가수정") {
       const contents = {
-        seq_id: priceObj.seqId,
-        vendor_seq_id: dentalAutoData[vendorNameIndex].seq_id,
-        item_seq_id: itemAutoData[itemNameIndex].seq_id,
+        seqId: priceObj.seqId,
+        vendorSeqId: dentalAutoData[vendorNameIndex].seqId,
+        itemSeqId: itemAutoData[itemNameIndex].seqId,
         price: price,
       };
 
