@@ -81,6 +81,7 @@ const addReceptionMiddleware = (data) => {
 };
 
 const addReceptionPriceMiddleware = contents => {
+  console.log(contents);
   return dispatch => {
     apis
       .createReceptionPrice(contents)
@@ -95,17 +96,17 @@ const addReceptionPriceMiddleware = contents => {
 };
 
 const updateReceptionMiddleware = (seqId, contents) => {
+
+  console.log(seqId);
+  console.log(contents);
+
   return dispatch => {
     apis
       .patchReception(seqId, contents)
       .then(result => {
-
-        console.log("-----------------");
-        console.log(seqId);
-        console.log(contents);
         console.log(result);
 
-        const data = { seq_id: seqId, contents: contents };
+        const data = { seqId: seqId, contents: contents };
 
         dispatch(updateReception(data));
         alert("접수 정보를 수정 했습니다.");
