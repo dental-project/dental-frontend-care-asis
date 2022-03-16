@@ -134,15 +134,15 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       dispatch(dentals.addDentalMiddleware(contents));
     } else if (modalType === "치과수정") {
       const contents = {
-        seq_id: dentalObj.seqId,
+        seqId: dentalObj.seqId,
         vendorName: vendorName,
         ceo: ceo,
         tel: tel,
         mobile: mobile,
         fax: fax,
         businessNumber: businessNumber,
-        businessType_no: businessTypeAutoData[businessTypeIndex].typenNo,
-        businessSector_no: businessSectorAutoData[businessSectorIndex].sectorNo,
+        businessTypeNo: businessTypeAutoData[businessTypeIndex].typeNo,
+        businessSectorNo: businessSectorAutoData[businessSectorIndex].sectorNo,
         postNumber: postNumber,
         address: address,
         bankNo: bankAutoData[bankIndex].bankNo,

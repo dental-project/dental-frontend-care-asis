@@ -66,7 +66,7 @@ export default function PriceRegister() {
   const { data, count } = useSelector(({ price }) => price);
   const [seqId, setSeqId] = useState("");
   const [priceObj, setPriceObj] = useState({});
-  console.log(data);
+
   useEffect(() => {
     dispatch(prices.getPriceMiddleware());
     setOpenPriceModal(false);

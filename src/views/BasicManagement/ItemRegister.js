@@ -75,9 +75,6 @@ export default function ItemRegister() {
     setOpenItemModal(false);
   }, [count]);
 
-  
-  console.log(data);
-
   const auto1 = ["전체"];
   const auto2 = ["전체"];
 
@@ -86,9 +83,6 @@ export default function ItemRegister() {
     auto2.push( data.item_name )
   });
  
-  
-
-
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -210,7 +204,6 @@ export default function ItemRegister() {
 
             </CardHeader>
             <CardBody>
-
               <BasicGrid type={"item"} columns={columns} data={data} />
             </CardBody>
           </Card>

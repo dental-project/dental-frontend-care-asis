@@ -74,7 +74,6 @@ function PartRegister() {
   
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
-    
     setOpenPartModal(false);
   }, [count]);
 
@@ -106,7 +105,6 @@ function PartRegister() {
 
   const onUpdateButtonClicked = partObj => {
     setModalType("파트수정");
-    console.log(partObj);
     setPartObj(partObj);
     handlePartModalOpen();
   };

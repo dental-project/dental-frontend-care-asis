@@ -33,7 +33,7 @@ const getPartMiddleware = () => {
         dispatch(readPart(partData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -43,11 +43,17 @@ const addPartMiddleware = part => {
     apis
       .createPart(part)
       .then(result => {
-        dispatch(addPart(part));
-        alert("파트명을 추가 하였습니다.");
+        
+        if (result.data.status === "SUCCESS") {
+          dispatch(addPart(part));
+          alert("파트명을 추가 하였습니다.");
+        } else {
+          alert("파트명 추가를 실패 하였습니다.");
+        }
+
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -57,13 +63,18 @@ const updatePartMiddleware = (seqId, contents) => {
     apis
       .patchPart(seqId, contents)
       .then(result => {
-        const data = { seq_id: seqId, contents: contents };
+        
+        if (result.data.status === "SUCCESS") {
+         
+          dispatch(updatePart());
+          alert("파트명을 수정 했습니다.");
+        } else {
+          alert("파트명 수정을 실패 하였습니다.");
+        }
 
-        dispatch(updatePart(data));
-        alert("파트명을 수정 했습니다.");
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };
@@ -73,11 +84,17 @@ const deletePartMiddleware = seqId => {
     apis
       .deletePart(seqId)
       .then(result => {
-        dispatch(removePart(seqId));
-        alert("파트명을 삭제 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removePart(seqId));
+          alert("파트명을 삭제 했습니다.");
+        } else {
+          alert("파트명을 삭제를 실패 하였습니다.");
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };

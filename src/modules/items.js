@@ -42,8 +42,14 @@ const addItemMiddleware = contents => {
     apis
       .createItem(contents)
       .then(result => {
-        dispatch(addItem(contents));
-        alert("장치를 추가 하였습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(addItem(contents));
+          alert("장치를 추가 하였습니다.");
+        } else {
+          alert("장치 추가를 실패 하였습니다.");
+        }
+        
       })
       .catch(err => {
         console.error(err);
@@ -56,9 +62,14 @@ const updateItemMiddleware = (seqId, contents) => {
     apis
       .patchItem(seqId, contents)
       .then(result => {
-        const data = { seq_id: seqId, contents: contents };
-        dispatch(updateItem(data));
-        alert("장치를 수정 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(updateItem());
+          alert("장치를 수정 했습니다.");
+        } else {
+          alert("장치 수정을 실패 하였습니다.");
+        }
+        
       })
       .catch(err => {
         console.log(err);
