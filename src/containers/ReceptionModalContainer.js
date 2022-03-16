@@ -361,7 +361,9 @@ const ReceptionModalContainer = ({
       });
 
     }
-console.log(detail);
+
+    console.log(detail);
+    
     form.append("receiptDate", receiptDate);
     form.append("completionDate", completionDate);
     form.append("deliveryDate", deliveryDate);
@@ -379,8 +381,6 @@ console.log(detail);
     if (modalType === "추가") {
       //form.append("detailRemove", JSON.stringify(detailRemove));
 
-    
-
       dispatch(receptions.addReceptionMiddleware(form));
     } else if (modalType === "접수수정") {
 
@@ -397,8 +397,6 @@ console.log(detail);
 
       form.append("deleteRow", deleteDetailArr);
    
-
-      
       dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, form));
     }
       
