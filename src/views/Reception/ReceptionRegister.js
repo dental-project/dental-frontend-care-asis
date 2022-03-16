@@ -84,10 +84,6 @@ export default function ReceptionRegister() {
   
   
 
-  console.log(data);
-
-
-
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     //dispatch(receptionDetails.getReceptionDetailMiddleware());

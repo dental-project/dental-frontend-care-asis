@@ -93,6 +93,14 @@ const ReceptionModalContainer = ({
 
   const [vendorSelectData, setVendorSelectData] = useState([]);
 
+  const [detailDataArr, setDetailDataArr] = useState(selectDetailData);
+  const [deleteDetailArr, setDeleteDetailArr] = useState([]);
+
+  useEffect(() => {
+    setDetailDataArr(selectDetailData);
+  }, [selectDetailData]);
+
+
   useEffect(() => {
     if (modalType === "접수수정") {
      
@@ -112,30 +120,6 @@ const ReceptionModalContainer = ({
         throw new Error(error);
       });
 
-
-
-      // axios
-      //   .get(`http://localhost:8000/api/sell/master/${receptionObj.seqId}/details/`)
-      //   .then(result => {
-      //     console.log(result);
-      //     const selectData = result.data;
-      //     // const newArray = selectData
-      //     //   .filter(
-      //     //     (arr, index, callback) =>
-      //     //       index === callback.findIndex(t => t.part_name === arr.part_name)
-      //     //   )
-      //     //   .map(data => {
-      //     //     return data.part_name;
-      //     //   });
-
-      //     setVendorSelectData(selectData);
-      //     //setPartAutoData(newArray);
-      //     //console.log(selectData);
-      //     //console.log(newArray);
-      //   })
-      //   .catch(error => {
-      //     throw new Error(error);
-      //   });
     }
   }, [receptionObj.seqId]);
   
@@ -150,9 +134,23 @@ const ReceptionModalContainer = ({
     gridRef.current.getInstance().appendRow({});
   };
 
-  const onRemoveButtonClicked = rowKey => {
-    gridRef.current.getInstance().removeRow(rowKey);
+  const onRemoveButtonClicked = seqId => {
+
+    const detailArr = detailDataArr.filter((data) => 
+      data.seqId !== seqId 
+    )
+
+    setDeleteDetailArr([
+      ...deleteDetailArr,
+      seqId
+    ]);
+
+    setDetailDataArr(detailArr);
+    
   };
+
+
+
 
   const removeReceptionDetail = index => {};
 
@@ -287,6 +285,7 @@ const ReceptionModalContainer = ({
     const appliance = formData.get("appliance");
     const requestForm = formData.get("requestForm");
 
+    console.log(receiptDate);
 
     if (
       receiptDate === "" ||
@@ -317,20 +316,12 @@ const ReceptionModalContainer = ({
 
     const form = new FormData();
 
-    form.append("receiptDate", receiptDate);
-    form.append("completionDate", completionDate);
-    form.append("deliveryDate", deliveryDate);
-    form.append("chartNumber", parseInt(chartNumber));
-    form.append("upper", upper === "" ? true : false);
-    form.append("lower", lower === "" ? true : false);
-    form.append("bite", bite === "" ? true : false);
-    form.append("appliance", appliance === "" ? true : false);
-    form.append("patientName", patientName);
-    form.append("description", description);
-    form.append("vendorSeqId", dentalAutoData[index].seqId);
-    form.append("requestForm", requestForm); 
+    
 
     const gridArr = gridRef.current.getInstance().getData();
+
+    //console.log(gridArr);
+    //console.log(selectDetailData);
 
     if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
 
@@ -350,14 +341,14 @@ const ReceptionModalContainer = ({
     }
 
     const detail = [];
-    const detailRemove = [];
+   
 
     for (let i = 0; i < gridArr.length; i++) {
       let element = vendorSelectData.filter(
         data => data.itemName === gridArr[i].itemName
       );
 
-      detailRemove.push(gridArr[i].seqId);
+     
 
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
@@ -370,8 +361,19 @@ const ReceptionModalContainer = ({
       });
 
     }
-
-    
+console.log(detail);
+    form.append("receiptDate", receiptDate);
+    form.append("completionDate", completionDate);
+    form.append("deliveryDate", deliveryDate);
+    form.append("chartNumber", parseInt(chartNumber));
+    form.append("upper", upper === "" ? true : false);
+    form.append("lower", lower === "" ? true : false);
+    form.append("bite", bite === "" ? true : false);
+    form.append("appliance", appliance === "" ? true : false);
+    form.append("patientName", patientName);
+    form.append("description", description);
+    form.append("vendorSeqId", dentalAutoData[index].seqId);
+    form.append("requestForm", requestForm); 
     form.append("detail", JSON.stringify(detail));
    
     if (modalType === "추가") {
@@ -390,14 +392,13 @@ const ReceptionModalContainer = ({
         //   detail:JSON.stringify([{디테일}]),
         //   deleteRow : []
         // }
-
-      form.append("deleteRow", detailRemove);
-      console.log("-------------------------");
-      console.log(completionDate);
-      console.log(detail);
-      console.log(detailRemove);
+      console.log(deleteDetailArr);
 
 
+      form.append("deleteRow", deleteDetailArr);
+   
+
+      
       dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, form));
     }
       
@@ -718,7 +719,7 @@ const ReceptionModalContainer = ({
               ) : (
                 <ToastGrid
                   ref={gridRef}
-                  data={selectDetailData.map(data => {
+                  data={detailDataArr.map(data => {
                     return {
                       seqId: data.seqId,
                       partName: data.partName,
