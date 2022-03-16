@@ -348,10 +348,11 @@ const ReceptionModalContainer = ({
         data => data.itemName === gridArr[i].itemName
       );
 
-     
+      console.log(gridArr[i]);
 
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
+        seqId: gridArr[i].seqId,
         itemSeqId: element[0].itemSeqId,
         amount: parseInt(gridArr[i].amount),
         normalPrice: gridArr[i].normalPrice,
@@ -392,10 +393,12 @@ const ReceptionModalContainer = ({
         //   detail:JSON.stringify([{디테일}]),
         //   deleteRow : []
         // }
+      
       console.log(deleteDetailArr);
 
 
-      form.append("deleteRow", deleteDetailArr);
+
+      form.append("deleteRow", [deleteDetailArr]);
    
       dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, form));
     }
