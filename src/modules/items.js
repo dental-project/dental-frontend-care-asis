@@ -44,7 +44,7 @@ const addItemMiddleware = contents => {
       .then(result => {
 
         if (result.data.status === "SUCCESS") {
-          dispatch(addItem(contents));
+          dispatch(addItem());
           alert("장치를 추가 하였습니다.");
         } else {
           alert(result.data.message);
@@ -82,9 +82,9 @@ const deleteItemMiddleware = seqId => {
     apis
       .deleteItem(seqId)
       .then(result => {
-
+        console.log(result);
         if (result.data.status === "SUCCESS") {
-          dispatch(removeItem(seqId));
+          dispatch(removeItem());
           alert("장치를 삭제 했습니다.");
         } else {
           alert(result.data.message);

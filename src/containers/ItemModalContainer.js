@@ -9,7 +9,7 @@ import { parts } from "modules/parts";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
-
+import { apis } from "apis/axios";
 const useStyles = makeStyles(theme => ({
   textField: {
     width: "95%",
@@ -95,7 +95,30 @@ const ItemModalContainer = ({
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       
     } else if (modalType === "삭제") {
-      dispatch(items.deleteItemMiddleware(seqId));
+      //dispatch(items.deleteItemMiddleware(seqId));
+
+
+      apis
+        .deleteItem(seqId)
+        .then(result => {
+          console.log(result);
+          if (result.data.status === "SUCCESS") {
+            
+            //dispatch(removeItem());
+            alert("장치를 삭제 했습니다.");
+          } else {
+            alert(result.data.message);
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+
+
+
+
+
+
     }
   };
 

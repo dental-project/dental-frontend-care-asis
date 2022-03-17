@@ -45,7 +45,7 @@ const addPartMiddleware = part => {
       .then(result => {
         
         if (result.data.status === "SUCCESS") {
-          dispatch(addPart(part));
+          dispatch(addPart());
           alert("파트명을 추가 하였습니다.");
         } else {
           alert(result.data.message);
@@ -85,7 +85,7 @@ const deletePartMiddleware = seqId => {
       .then(result => {
 
         if (result.data.status === "SUCCESS") {
-          dispatch(removePart(seqId));
+          dispatch(removePart());
           alert("파트명을 삭제 했습니다.");
         } else {
           alert(result.data.message);

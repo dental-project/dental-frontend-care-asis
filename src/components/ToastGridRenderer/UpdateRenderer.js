@@ -13,10 +13,6 @@ class UpdateRenderer {
     const updateType = props.columnInfo.header;
     let obj;
 
-
-    console.log(props);
-    console.log(rowKey);
-
     if (props.grid.store.data.rawData[rowKey] !== undefined) {
       if (updateType === "접수수정") {
         obj = {
@@ -39,8 +35,6 @@ class UpdateRenderer {
           seqId: props.grid.store.data.rawData[rowKey].seqId,
           partName: props.grid.store.data.rawData[rowKey].partName,
         };
-        //console.log(props);
-        
       } else if (updateType === "장치수정") {
         obj = {
           seqId: props.grid.store.data.rawData[rowKey].seqId,

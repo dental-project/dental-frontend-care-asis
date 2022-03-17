@@ -25,34 +25,14 @@ const BasicGrid = ({
     cell: {
       header: {
         text: "#000",
-        
         background: "#EAEAEA",
- 
       },
       normal: {
         text: "#000",
         border: "#CCD5CC",
         background: "#fff",
-        
       }
     }
-
-    // cell: {
-    //   normal: {
-    //     text: '#ffffff',
-    //     background: '#2E2F3A',
-        
-    //     showVerticalBorder: false,
-    //     showHorizontalBorder: true
-    //   },
-    //   header: {
-    //     background: '#fff',
-    //     border: '#e0e0e0'
-    //   },
-    //   selectedHeader: {
-    //     background: '#e0e0e0'
-    //   }
-    // }
   });
  
   return(
