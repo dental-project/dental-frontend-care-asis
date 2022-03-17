@@ -342,13 +342,10 @@ const ReceptionModalContainer = ({
 
     const detail = [];
    
-
     for (let i = 0; i < gridArr.length; i++) {
       let element = vendorSelectData.filter(
         data => data.itemName === gridArr[i].itemName
       );
-
-      console.log(gridArr[i]);
 
       detail.push({
         //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
@@ -394,10 +391,6 @@ const ReceptionModalContainer = ({
         //   deleteRow : []
         // }
       
-      console.log(deleteDetailArr);
-
-
-
       form.append("deleteRow", [deleteDetailArr]);
    
       dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, form));
