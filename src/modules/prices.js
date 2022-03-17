@@ -30,7 +30,7 @@ const getPriceMiddleware = () => {
         dispatch(readPrice(priceData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -40,12 +40,17 @@ const addPriceMiddleware = contents => {
     apis
       .createPrice(contents)
       .then(result => {
-        console.log(result);
-        dispatch(addPrice(contents));
-        alert("단가를 추가 하였습니다.");
+        
+        if (result.data.status === "SUCCESS") {
+          dispatch(addPrice());
+          alert("단가를 추가 하였습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -55,13 +60,17 @@ const updatePriceMiddleware = (seqId, contents) => {
     apis
       .patchPrice(seqId, contents)
       .then(result => {
-        const data = { seq_id: seqId, contents: contents };
 
-        dispatch(updatePrice(data));
-        alert("단가를 수정 했습니다.");
+        if (result.data.status === "SUCCESS") {
+          dispatch(updatePrice());
+          alert("단가를 수정 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };
@@ -71,11 +80,17 @@ const deletePriceMiddleware = seqId => {
     apis
       .deletePrice(seqId)
       .then(result => {
-        dispatch(removePrice(seqId));
-        alert("단가를 삭제 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removePrice());
+          alert("단가를 삭제 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };

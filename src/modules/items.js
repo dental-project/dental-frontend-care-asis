@@ -32,7 +32,7 @@ const getItemMiddleware = () => {
         dispatch(readItem(itemData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -47,12 +47,12 @@ const addItemMiddleware = contents => {
           dispatch(addItem(contents));
           alert("장치를 추가 하였습니다.");
         } else {
-          alert("장치 추가를 실패 하였습니다.");
+          alert(result.data.message);
         }
         
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -67,12 +67,12 @@ const updateItemMiddleware = (seqId, contents) => {
           dispatch(updateItem());
           alert("장치를 수정 했습니다.");
         } else {
-          alert("장치 수정을 실패 하였습니다.");
+          alert(result.data.message);
         }
         
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };
@@ -82,11 +82,17 @@ const deleteItemMiddleware = seqId => {
     apis
       .deleteItem(seqId)
       .then(result => {
-        dispatch(removeItem(seqId));
-        alert("장치를 삭제 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removeItem(seqId));
+          alert("장치를 삭제 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };

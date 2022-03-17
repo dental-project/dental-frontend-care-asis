@@ -14,17 +14,17 @@ const initialState = {
 };
 
 const getBusinessTypeMiddleware = () => {
-    return (dispatch) => {
-        apis
-          .getBusinessType()
-          .then((result) => {        
-            const businessTypeData = result.data;
-            dispatch(readBusinessType(businessTypeData));
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      };
+  return (dispatch) => {
+    apis
+      .getBusinessType()
+      .then((result) => {        
+        const businessTypeData = result.data;
+        dispatch(readBusinessType(businessTypeData));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    };
 }
 
 // reducer

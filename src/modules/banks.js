@@ -14,17 +14,17 @@ const initialState = {
 };
 
 const getBankMiddleware = () => {
-    return (dispatch) => {
-        apis
-          .getBank()
-          .then((result) => {        
-            const bankData = result.data;
-            dispatch(readBank(bankData));
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      };
+  return (dispatch) => {
+    apis
+      .getBank()
+      .then((result) => {        
+        const bankData = result.data;
+        dispatch(readBank(bankData));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 }
 
 // reducer

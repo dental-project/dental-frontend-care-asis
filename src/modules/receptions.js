@@ -37,7 +37,7 @@ const getReceptionMiddleware = () => {
         dispatch(readReception(receptionData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -63,19 +63,20 @@ const addReceptionMiddleware = (data) => {
       .createReception(data)
       .then(result => {
         
-        console.log(result);
+        if (result.data.status === "SUCCESS") {
+          dispatch(addReception(data));
+          alert("접수 정보를 추가 하였습니다.");
+        } else {
+          alert(result.data.message);
+        }
 
         // for(let i=0; i<priceContents.length; i++) {
         //   priceContents[i].sell_master_id = result.data.seq_id
         // };
 
-        dispatch(addReception(data));
-
-        //dispatch(addReceptionPriceMiddleware(priceContents));
-
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -86,30 +87,35 @@ const addReceptionPriceMiddleware = contents => {
     apis
       .createReceptionPrice(contents)
       .then(result => {
-        dispatch(addReceptionPrice(contents));
-        alert("접수 정보를 추가 하였습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(addReceptionPrice(contents));
+          alert("접수 정보를 추가 하였습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
 
 const updateReceptionMiddleware = (seqId, contents) => {
 
-  //console.log(seqId);
-  //console.log(contents);
-
   return dispatch => {
     apis
       .patchReception(seqId, contents)
       .then(result => {
-        //console.log(result);
 
-        //const data = { seqId: seqId, contents: contents };
-
-        //dispatch(updateReception(data));
-        alert("접수 정보를 수정 했습니다.");
+        if (result.data.status === "SUCCESS") {
+          dispatch(updateReception());
+          alert("접수 정보를 수정 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+       
       })
       .catch(err => {
         console.log(err);
@@ -122,12 +128,17 @@ const deleteReceptionMiddleware = seqId => {
     apis
       .deleteReception(seqId)
       .then(result => {
-        console.log(result);
-        dispatch(removeReception(seqId));
-        alert("접수 정보를 삭제 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removeReception());
+          alert("접수 정보를 삭제 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };

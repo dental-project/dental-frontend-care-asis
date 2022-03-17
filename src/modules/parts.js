@@ -48,9 +48,9 @@ const addPartMiddleware = part => {
           dispatch(addPart(part));
           alert("파트명을 추가 하였습니다.");
         } else {
-          alert("파트명 추가를 실패 하였습니다.");
+          alert(result.data.message);
         }
-
+        
       })
       .catch(err => {
         alert(err);
@@ -65,11 +65,10 @@ const updatePartMiddleware = (seqId, contents) => {
       .then(result => {
         
         if (result.data.status === "SUCCESS") {
-         
           dispatch(updatePart());
           alert("파트명을 수정 했습니다.");
         } else {
-          alert("파트명 수정을 실패 하였습니다.");
+          alert(result.data.message);
         }
 
       })
@@ -89,7 +88,7 @@ const deletePartMiddleware = seqId => {
           dispatch(removePart(seqId));
           alert("파트명을 삭제 했습니다.");
         } else {
-          alert("파트명을 삭제를 실패 하였습니다.");
+          alert(result.data.message);
         }
         
       })
