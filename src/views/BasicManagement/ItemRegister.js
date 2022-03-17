@@ -79,8 +79,8 @@ export default function ItemRegister() {
   const auto2 = ["전체"];
 
   data.map( (data) => {
-    auto1.push( data.part_name )
-    auto2.push( data.item_name )
+    auto1.push( data.partName )
+    auto2.push( data.itemName )
   });
  
   const filterOptions = createFilterOptions({
@@ -165,19 +165,19 @@ export default function ItemRegister() {
                 <Autocomplete
                   className={classes.grid}
                   options={auto1}
+                  defaultValue={auto1[0]}
                   getOptionLabel={option => option}
                   filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px", marginLeft: "20px" }}
                   renderInput={params => (
                     <TextField {...params} label="파트명" variant="outlined" />
                   )}
                 />
                 <Autocomplete
+                  freeSolo
                   className={classes.grid}
                   options={auto2}
                   getOptionLabel={option => option}
                   filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px" }}
                   renderInput={params => (
                     <TextField {...params} label="장치명" variant="outlined" />
                   )}

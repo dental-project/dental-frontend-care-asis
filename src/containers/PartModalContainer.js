@@ -64,7 +64,6 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
 
       dispatch(parts.updatePartMiddleware(partObj.seqId, contents));
     } else if (modalType === "삭제") {
-      console.log(seqId);
       dispatch(parts.deletePartMiddleware(seqId));
     }
 

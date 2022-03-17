@@ -78,7 +78,7 @@ function PartRegister() {
   }, [count]);
 
   const auto1 = ["전체"];
-  data.map( (data) => auto1.push( data.part_name ));
+  data.map( (data) => auto1.push( data.partName ));
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -104,6 +104,10 @@ function PartRegister() {
   };
 
   const onUpdateButtonClicked = partObj => {
+
+    console.log(partObj);
+
+
     setModalType("파트수정");
     setPartObj(partObj);
     handlePartModalOpen();
@@ -117,7 +121,7 @@ function PartRegister() {
 
   // Toast Grid options value
   const columns = [
-    { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
+    { name: "seqId", header: "CodeNo", align: "center", hidden: true },
     {
       name: "partName",
       header: "파트명",
@@ -151,21 +155,32 @@ function PartRegister() {
 
   const onClickSearch = e => {
 
-    // if(searchData === "전체") {
-    //   setGridData(data);
-    // } else {
-    //   const searchArr = data.filter(
-    //     data => data.part_name === searchData
-    //   );
-    //   console.log(searchArr);
-    //   //setGridData(searchArr);
-    // }
+    if(searchData === "전체") {
+      setGridData(data);
+    } else {
+      // const searchArr = data.filter(
+      //   data => console.log(data)
+      // );
 
-    const a = gridRef.current.getInstance().findRows({
-      partName: "Functional App"
-    })
-    setGridData(a);
-    console.log(a);
+      //console.log(searchData);
+
+      const searchArr = data.filter(
+        data => data.partName === searchData
+      );
+      console.log(searchArr);
+      gridRef.current.getInstance().resetData(searchArr);
+      //setGridData(searchArr);
+    }
+
+    // const a = gridRef.current.getInstance().findRows({
+    //   partName: "Functional App"
+    // })
+    //setGridData(a);
+  
+    //gridRef.current.getInstance().resetData(a);
+
+
+    //console.log(a);
 
   };
 
@@ -196,12 +211,6 @@ function PartRegister() {
                   onChange={(event, newValue) => {
                     setSearchData(newValue);
                   }}
-                  // getOptionSelected={(option, value) => {
-                  //   return (
-                  //     option?.id === value?.id ||
-                  //     option?.name.toLowerCase() === value?.name.toLowerCase()
-                  //   );
-                  // }}
                   renderInput={params => (
                     <TextField {...params} label="파트명" variant="outlined" />
                   )}

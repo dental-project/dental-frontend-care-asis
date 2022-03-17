@@ -71,11 +71,27 @@ export default function DentalRegister() {
   console.log(data);
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.title,
+    stringify: option => option,
   });
 
   const [seqId, setSeqId] = useState("");
   const [dentalObj, setDentalObj] = useState({});
+
+  const auto1 = ["전체"];
+  const auto2 = ["전체"];
+  const auto3 = ["전체"];
+
+  data.map( (data) => {
+    auto1.push( data.vendorName )
+    auto2.push( data.ceo )
+    auto3.push( data.tel )
+  });
+
+
+  console.log(data);
+
+
+
 
   // 모달
   const [openDentalAddModal, setOpenDentalModal] = useState(false);
@@ -238,10 +254,6 @@ export default function DentalRegister() {
     },
   ];
 
-  const auto1 = [{ title: "전체" }, { title: "Dental.A 치과기공소" }];
-  const auto2 = [{ title: "전체" }, { title: "김남규" }];
-  const auto3 = [{ title: "전체" }, { title: "070-4147-6452" }];
-
   return (
     <>
       <Grid container>
@@ -261,12 +273,11 @@ export default function DentalRegister() {
             <CardBody>
               <Grid item xs={12} className={classes.grid}>
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto1}
-                  getOptionLabel={option => option.title}
+                  defaultValue={auto1[0]}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px", marginLeft: "20px" }}
                   renderInput={params => (
                     <TextField
                       {...params}
@@ -276,21 +287,20 @@ export default function DentalRegister() {
                   )}
                 />
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto2}
-                  getOptionLabel={option => option.title}
+                  defaultValue={auto2[0]}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px" }}
                   renderInput={params => (
                     <TextField {...params} label="대표" variant="outlined" />
                   )}
                 />
                 <Autocomplete
-                  id="filter-demo"
                   className={classes.grid}
                   options={auto3}
-                  getOptionLabel={option => option.title}
+                  defaultValue={auto2[0]}
+                  getOptionLabel={option => option}
                   filterOptions={filterOptions}
                   style={{ float: "left", width: "200px" }}
                   renderInput={params => (
