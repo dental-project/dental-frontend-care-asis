@@ -108,6 +108,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   // console.log(key)
   // console.log(collapseName)
   // console.log(key === collapseName)
+
     returnValue = (
       subItem ? (
         <SidenavDropdown
@@ -119,21 +120,24 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         />
       ) : (
         <NavLink to={layout + path} key={key}>
-          <SidenavCollapse
-            color={color}
-            key={key}
-            name={name}
-            icon={icon}
-            active={key === collapseName}
-            noCollapse={noCollapse}
-            subItem={subItem}
-          />
+          {
+            key !== "receptionDetail"
+              ? (
+                <SidenavCollapse
+                  color={color}
+                  key={key}
+                  name={name}
+                  icon={icon}
+                  active={key === collapseName}
+                  noCollapse={noCollapse}
+                  subItem={subItem}
+                />
+              )
+              : null
+          }
         </NavLink>
       )
      );
-    
-    
-    
     return returnValue;
   });
 
