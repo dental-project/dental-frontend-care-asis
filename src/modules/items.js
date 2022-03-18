@@ -84,7 +84,7 @@ const deleteItemMiddleware = seqId => {
       .then(result => {
         console.log(result);
         if (result.data.status === "SUCCESS") {
-          dispatch(removeItem());
+          dispatch(removeItem(seqId));
           alert("장치를 삭제 했습니다.");
         } else {
           alert(result.data.message);

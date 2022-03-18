@@ -107,7 +107,6 @@ function PartRegister() {
 
     console.log(partObj);
 
-
     setModalType("파트수정");
     setPartObj(partObj);
     handlePartModalOpen();

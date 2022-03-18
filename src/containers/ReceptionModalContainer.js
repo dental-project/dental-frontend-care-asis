@@ -81,7 +81,7 @@ const ReceptionModalContainer = ({
   open,
   close,
   seqId,
-  receptionObj,
+  selectReceptionData,
   selectDetailData,
 }) => {
   const classes = useStyles();
@@ -105,7 +105,7 @@ const ReceptionModalContainer = ({
     if (modalType === "접수수정") {
      
       const index = dentalAutoData.findIndex(
-        obj => obj.vendorName === receptionObj.vendorName
+        obj => obj.vendorName === selectReceptionData.vendorName
       );
       const vendorSeqId = dentalAutoData[index].seqId;
 
@@ -121,7 +121,7 @@ const ReceptionModalContainer = ({
       });
 
     }
-  }, [receptionObj.seqId]);
+  }, [selectReceptionData.seqId]);
   
   
 
@@ -393,7 +393,7 @@ const ReceptionModalContainer = ({
       
       form.append("deleteRow", [deleteDetailArr]);
    
-      dispatch(receptions.updateReceptionMiddleware(receptionObj.seqId, form));
+      dispatch(receptions.updateReceptionMiddleware(selectReceptionData.seqId, form));
     }
       
       //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
@@ -473,7 +473,7 @@ const ReceptionModalContainer = ({
                   name="receiptDate"
                   label="접수일자"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.receiptDate : ""
+                    modalType === "접수수정" ? selectReceptionData.receiptDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -485,7 +485,7 @@ const ReceptionModalContainer = ({
                   name="completionDate"
                   label="완성일자"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.completionDate : ""
+                    modalType === "접수수정" ? selectReceptionData.completionDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -497,7 +497,7 @@ const ReceptionModalContainer = ({
                   name="deliveryDate"
                   label="배달일자"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.deliveryDate : ""
+                    modalType === "접수수정" ? selectReceptionData.deliveryDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -509,7 +509,7 @@ const ReceptionModalContainer = ({
                   filterOptions={filterVendorName}
                   //disabled={modalType === "접수수정" ? true : false}
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.vendorName : ""
+                    modalType === "접수수정" ? selectReceptionData.vendorName : ""
                   }
                   onChange={(event, newValue) => {
                     if (newValue === null) {
@@ -575,7 +575,7 @@ const ReceptionModalContainer = ({
                   label="차트번호"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.chartNumber : ""
+                    modalType === "접수수정" ? selectReceptionData.chartNumber : ""
                   }
                 />
               </Grid>
@@ -586,7 +586,7 @@ const ReceptionModalContainer = ({
                   label="환자명"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.patientName : ""
+                    modalType === "접수수정" ? selectReceptionData.patientName : ""
                   }
                 />
               </Grid>
@@ -597,7 +597,7 @@ const ReceptionModalContainer = ({
                   label="비고"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정" ? receptionObj.patientName : ""
+                    modalType === "접수수정" ? selectReceptionData.patientName : ""
                   }
                 />
               </Grid>
@@ -611,7 +611,7 @@ const ReceptionModalContainer = ({
                       name="upper"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정" ? receptionObj.upper : false
+                        modalType === "접수수정" ? selectReceptionData.upper : false
                       }
                     />
                   }
@@ -626,7 +626,7 @@ const ReceptionModalContainer = ({
                       name="lower"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정" ? receptionObj.lower : false
+                        modalType === "접수수정" ? selectReceptionData.lower : false
                       }
                     />
                   }
@@ -641,7 +641,7 @@ const ReceptionModalContainer = ({
                       name="bite"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정" ? receptionObj.bite : false
+                        modalType === "접수수정" ? selectReceptionData.bite : false
                       }
                     />
                   }
@@ -657,7 +657,7 @@ const ReceptionModalContainer = ({
                       color="primary"
                       defaultChecked={
                         modalType === "접수수정"
-                          ? receptionObj.appliance
+                          ? selectReceptionData.appliance
                           : false
                       }
                     />
