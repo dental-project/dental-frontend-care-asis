@@ -35,7 +35,7 @@ const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
       if (prop.layout === "/dental") {
-        if(prop.subItem){
+        if (prop.subItem) {
           let subRoutes = new Object();
           subRoutes = prop.subItem.map((subProp,subKey)=>{
             return <Route
@@ -53,7 +53,8 @@ const switchRoutes = (
             subItem={prop.subItem}
           />);
           return subRoutes
-        }else{
+        } else {
+          
           return <Route
             path={prop.layout + prop.path}
             component={prop.component}

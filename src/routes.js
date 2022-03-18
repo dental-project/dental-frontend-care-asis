@@ -30,6 +30,14 @@ const routes = [
     layout: "/dental",
   },
   {
+    name: "접수 리스트 상세",
+    key: "receptionDetail",
+    icon: <AssignmentOutlinedIcon />,
+    component: ReceptionDetail,
+    path: "/receptionDetail",
+    layout: "/dental",
+  },
+  {
     name: "기초 등록",
     key: "standardRegister",
     icon: <ExpandMore />,

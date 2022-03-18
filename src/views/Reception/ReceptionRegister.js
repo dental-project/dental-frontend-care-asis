@@ -6,10 +6,6 @@ import { makeStyles } from "@material-ui/core";
 
 // core components
 import Grid from "@material-ui/core/Grid";
-// import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
 import BasicGrid from "components/ToastGrid/BasicGrid.js";
@@ -18,10 +14,7 @@ import BasicGrid from "components/ToastGrid/BasicGrid.js";
 import TextField from "@material-ui/core/TextField";
 
 import ReceptionModalContainer from "containers/ReceptionModalContainer";
-//import PrintModal from "components/Modal/PrintModal.js"
-
 import PrintModalContainer from "containers/PrintModalContainer";
-
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
@@ -90,22 +83,15 @@ export default function ReceptionRegister() {
   //const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
 
   const [seqId, setSeqId] = useState();
-  const [receptionObj, setReceptionObj] = useState({});
+  const [selectReceptionData, setSelectReceptionData] = useState({});
   
-  
-
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
-    //dispatch(receptionDetails.getReceptionDetailMiddleware());
     dispatch(items.getItemMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
 
-
-
-
   const [menu, setMenu] = useState(null);
-
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
 
@@ -129,8 +115,6 @@ export default function ReceptionRegister() {
     </Menu>
   );
 
-
-
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -152,10 +136,6 @@ export default function ReceptionRegister() {
     setOpenPrint(false);
   };
 
-  const onDetailButtonClicked = () => {
-    history.push("/dental/receptionDetail");
-  };
-
   const receptionModalOpen = () => {
     closeMenu();
     setModalType("추가");
@@ -168,8 +148,17 @@ export default function ReceptionRegister() {
     const sellMasterId = receptionObj.seqId;
   
     dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
-    setReceptionObj(receptionObj);
+    setSelectReceptionData(receptionObj);
     handleReceptionModalOpen();
+  };
+
+  const onDetailButtonClicked = receptionObj => {
+
+    history.push({
+      pathname: "/dental/receptionDetail",
+      seqId: receptionObj.seqId,
+      data: receptionObj
+    });
   };
 
   const onRemoveButtonClicked = seqId => {
@@ -590,8 +579,8 @@ export default function ReceptionRegister() {
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
         seqId={seqId}
-        receptionObj={receptionObj} // 접수 수정 데이터
-        receptionData={data} // 접수 리스트 데이터
+        selectReceptionData={selectReceptionData} // 접수 수정 데이터
+        //receptionData={data} // 접수 리스트 데이터
         selectDetailData={selectDetailData}
         //receptionDetailData={receptionDetailData}
       />

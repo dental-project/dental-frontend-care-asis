@@ -1,69 +1,139 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
 
-// core components
-import Grid from '@material-ui/core/Grid';
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
+// @mui material components
+import Card from "@mui/material/Card";
 
-const useStyles = makeStyles((theme) => ({
-  grid: {
-    padding: theme.spacing(1)
-  },
+// Soft UI Dashboard React components
+import SuiBox from "components/Sui/SuiBox";
+import SuiTypography from "components/Sui/SuiTypography";
 
-  textFieldDate: {
-    width: "100%"
-  },
-  textField: {
-    width: "100%",
-    margin: theme.spacing(1),
-    '& label.Mui-focused': {
-        color: '#00acc1',
+// Soft UI Dashboard React example components
+import Table from "components/Sui/SuiTable";
+
+import axios from "axios";
+
+
+
+export default function ReceptionDetail({location}) {
+
+  const [detailData, setDetailData] = useState();
+
+  useEffect(() => {
+
+    if(location.seqId === undefined || location.seqId === null || location.seqId === "") return;
+
+    const masterSeqId = location.seqId;
+    
+    axios
+    .get(`http://localhost:8000/api/sell/master/${masterSeqId}/details/`)
+      .then(result => {
+
+        setDetailData(result.data);
+        console.log(result);
+      
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+  }, []);
+  
+  //setSelectReceptionData(receptionObj);
+
+
+  //const { columns, rows } = authorsTableData;
+  //const { columns: prCols, rows: prRows } = projectsTableData;
+
+  const columns = [
+    {
+      name: "partName",
+      align: "left"
     },
-    '& .MuiOutlinedInput-root': {
-    '&.Mui-focused fieldset': {
-            borderColor: '#00acc1',
-        },
+    {
+      name: "itemName",
+      align: "left"
     },
-  },
-  customText: {
-    color: "#26c6da",
-    fontWeight: "bold",
-    cursor:"pointer",
-    "&:hover": {
-      color: "#1993A8"
-    }
-  },
-  button: {
-    width: "100%"
-  }
-}));
+    {
+      name: "unitPrice",
+      align: "left"
+    },
+    {
+      name: "amount",
+      align: "left"
+    },
+    {
+      name: "normalPrice",
+      align: "left"
+    },
+    {
+      name: "discountPrice",
+      align: "left"
+    },
+    {
+      name: "realSellPrice",
+      align: "left"
+    },
+    {
+      name: "discount",
+      align: "left"
+    },
+  ]
 
-export default function ReceptionDetail(props) {
 
-  const classes = useStyles();
- 
-  return (
-    <>
-      <Grid container>
-        <Grid item xs={12} className={classes.grid}>
-          <Card>
-            <CardHeader>
-             
-            </CardHeader>
-            <CardBody>
 
-                디테일
 
-            </CardBody>
-          </Card>
-        </Grid>
-      </Grid>
 
+  const prRows = [
+    {
      
-    </>
+      partName: (
+        <SuiTypography variant="button" color="text" fontWeight="medium">
+          $2,500
+        </SuiTypography>
+      ),
+      itemName: (
+        <SuiTypography variant="caption" color="text" fontWeight="medium">
+          working
+        </SuiTypography>
+      ),
+      
+      
+    }
+  ];
+
+
+
+
+
+
+
+
+
+
+
+
+  return (
+    <SuiBox py={3}>
+      
+      <Card>
+        <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          <SuiTypography variant="h6">Projects table</SuiTypography>
+        </SuiBox>
+        <SuiBox
+          sx={{
+            "& .MuiTableRow-root:not(:last-child)": {
+              "& td": {
+                borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                  `${borderWidth[1]} solid ${borderColor}`,
+              },
+            },
+          }}
+        >
+          <Table columns={columns} rows={prRows} />
+        </SuiBox>
+      </Card>
+    </SuiBox>
   );
 }
