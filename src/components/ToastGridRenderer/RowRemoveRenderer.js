@@ -9,7 +9,7 @@ class RemoveButtonRenderer {
     this.element = document.createElement("div");
 
     const { onRemoveButtonClicked } = props.columnInfo.renderer.options;
-    const { rowKey } = props;
+    const rowKey = props.rowKey;
     const seqId = props.grid.store.data.rawData[rowKey].seqId;
 
     render(

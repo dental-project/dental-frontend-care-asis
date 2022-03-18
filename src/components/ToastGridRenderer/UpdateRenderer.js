@@ -9,7 +9,7 @@ class UpdateRenderer {
     this.element = document.createElement("div");
 
     const { onUpdateButtonClicked } = props.columnInfo.renderer.options;
-    const { rowKey } = props;
+    const rowKey = props.rowKey;
     const updateType = props.columnInfo.header;
     let obj;
 
