@@ -136,6 +136,8 @@ const ReceptionModalContainer = ({
 
   const onRemoveButtonClicked = seqId => {
 
+    setDeleteDetailArr([]);
+
     const detailArr = detailDataArr.filter((data) => 
       data.seqId !== seqId 
     )
@@ -285,8 +287,6 @@ const ReceptionModalContainer = ({
     const appliance = formData.get("appliance");
     const requestForm = formData.get("requestForm");
 
-    console.log(receiptDate);
-
     if (
       receiptDate === "" ||
       completionDate === "" ||
@@ -353,15 +353,11 @@ const ReceptionModalContainer = ({
         itemSeqId: element[0].itemSeqId,
         amount: parseInt(gridArr[i].amount),
         normalPrice: gridArr[i].normalPrice,
-        realSellPrice: parseInt(gridArr[i].discountPrice),
+        realSellPrice: parseInt(gridArr[i].realSellPrice),
         discount: parseFloat(gridArr[i].discount),
-
       });
-
     }
 
-    console.log(detail);
-    
     form.append("receiptDate", receiptDate);
     form.append("completionDate", completionDate);
     form.append("deliveryDate", deliveryDate);
@@ -597,7 +593,7 @@ const ReceptionModalContainer = ({
                   label="비고"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정" ? selectReceptionData.patientName : ""
+                    modalType === "접수수정" ? selectReceptionData.description : ""
                   }
                 />
               </Grid>
