@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 
 // Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
+import ToastGrid from "@toast-ui/react-grid";
 
 // Material
 import TextField from "@material-ui/core/TextField";
@@ -157,7 +157,7 @@ export default function ReceptionRegister() {
     history.push({
       pathname: "/dental/receptionDetail",
       seqId: receptionObj.seqId,
-      data: receptionObj
+      data: [receptionObj]
     });
   };
 
@@ -455,134 +455,18 @@ export default function ReceptionRegister() {
               </Grid>
             </SuiBox>
             <SuiBox px={2}>
-              <BasicGrid columns={columns} data={data} />
+              <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </SuiBox>
           </Card>
         </SuiBox>
       </SuiBox>
-
-      {/* <Grid container>
-        <Grid item xs={12} className={classes.grid}>
-          <Card>
-            <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => receptionModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <form className={classes.container} noValidate>
-                <Grid
-                  item
-                  xs={4}
-                  className={classes.grid}
-                  style={{ float: "left" }}
-                >
-                  <TextField
-                    id="date"
-                    label="접수일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    style={{ width: "45%" }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                  <TextField
-                    id="date"
-                    label="완성일자"
-                    type="date"
-                    defaultValue="2022-01-12"
-                    className={classes.textField}
-                    style={{ width: "45%" }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  className={classes.grid}
-                  style={{ float: "left" }}
-                >
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    style={{
-                      float: "left",
-                      width: "200px",
-                      marginLeft: "20px",
-                    }}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="거래처명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    style={{ float: "left", width: "200px" }}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="환자명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    color="primary"
-                    round
-                    style={{ float: "left", width: "100px" }}
-                  >
-                    검색
-                  </Button>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  className={classes.grid}
-                  style={{ float: "right" }}
-                >
-                  <Button
-                    color="danger"
-                    round
-                    style={{ width: "100%" }}
-                    onClick={e => handleClickOpenPrint(e)}
-                  >
-                    출력
-                  </Button>
-                </Grid>
-              </form>
-              <BasicGrid columns={columns} data={data} />
-            </CardBody>
-          </Card>
-        </Grid>
-      </Grid> */}
       <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
         seqId={seqId}
         selectReceptionData={selectReceptionData} // 접수 수정 데이터
-        //receptionData={data} // 접수 리스트 데이터
         selectDetailData={selectDetailData}
-        //receptionDetailData={receptionDetailData}
       />
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
     </>

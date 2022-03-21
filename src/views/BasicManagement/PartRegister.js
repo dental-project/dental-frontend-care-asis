@@ -224,7 +224,7 @@ function PartRegister() {
                   검색
                 </Button>
               </Grid>
-              <ToastGrid ref={gridRef} columns={columns} data={gridData} />
+              <ToastGrid ref={gridRef} columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

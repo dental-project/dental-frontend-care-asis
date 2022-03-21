@@ -11,10 +11,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 import AddIcon from '@mui/icons-material/Add';
-
-// Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
-
 // Material
 import TextField from "@material-ui/core/TextField";
 
@@ -23,6 +19,10 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 
+// Toast Grid
+import ToastGrid from "@toast-ui/react-grid";
+
+import "tui-grid/dist/tui-grid.css";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
@@ -204,7 +204,7 @@ export default function ItemRegister() {
 
             </CardHeader>
             <CardBody>
-              <BasicGrid type={"item"} columns={columns} data={data} />
+              <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

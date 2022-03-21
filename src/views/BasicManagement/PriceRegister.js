@@ -9,8 +9,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 
-// Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
 
 import PriceModalContainer from "containers/PriceModalContainer";
 
@@ -19,6 +17,8 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
+// Toast Grid
+import ToastGrid from "@toast-ui/react-grid";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
@@ -247,7 +247,7 @@ export default function PriceRegister() {
                   검색
                 </Button>
               </Grid>
-              <BasicGrid type={"price"} columns={columns} data={data} />
+              <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

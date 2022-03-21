@@ -9,14 +9,15 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 
-// Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
+
 
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
+// Toast Grid
+import ToastGrid from "@toast-ui/react-grid";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 import DentalModalContainer from "containers/DentalModalContainer";
@@ -260,18 +261,7 @@ export default function DentalRegister() {
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => dentalModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <Grid item xs={12} className={classes.grid}>
+            <Grid item xs={12} className={classes.grid}>
                 <Autocomplete
                   className={classes.grid}
                   options={auto1}
@@ -322,7 +312,18 @@ export default function DentalRegister() {
                   검색
                 </Button>
               </Grid>
-              <BasicGrid columns={columns} data={data} />
+              <Button
+                type="submit"
+                className={classes.button}
+                color="info"
+                round
+                onClick={e => dentalModalOpen(e)}
+              >
+                추가
+              </Button>
+            </CardHeader>
+            <CardBody>
+              <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>
