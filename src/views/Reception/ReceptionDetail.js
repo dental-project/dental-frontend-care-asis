@@ -337,8 +337,8 @@ export default function ReceptionDetail({location}) {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3}>
                 <ImageCard
-                  image={"http://localhost:8000/media/1_501726.jpg"}
-                  label={location.aaa[0].requestForm}
+                  image={location.data[0].requestForm}
+                  label={"이미지1"}
                   title="이미지1"
                   description="기계장비 설명"
                   action={{}}
