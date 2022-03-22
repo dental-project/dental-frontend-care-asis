@@ -16,6 +16,11 @@ import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
 
+import axios from "axios";
+
+import ButtonUpload from '@material-ui/core/Button';
+
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -76,9 +81,8 @@ const ReceptionModalContainer = ({
   open,
   close,
   seqId,
-  receptionObj,
-  receptionData,
-  receptionDetailArr,
+  selectReceptionData,
+  selectDetailData,
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
@@ -88,6 +92,43 @@ const ReceptionModalContainer = ({
   const receptionData = useSelector(({ reception }) => reception.data);
 
   const [vendorSelectData, setVendorSelectData] = useState([]);
+
+  const [detailDataArr, setDetailDataArr] = useState(selectDetailData);
+  const [deleteDetailArr, setDeleteDetailArr] = useState([]);
+
+  useEffect(() => {
+    setDetailDataArr(selectDetailData);
+  }, [selectDetailData]);
+
+
+  useEffect(() => {
+    if (modalType === "접수수정") {
+     
+      const index = dentalAutoData.findIndex(
+        obj => obj.vendorName === selectReceptionData.vendorName
+      );
+      const vendorSeqId = dentalAutoData[index].seqId;
+
+      axios
+      .get(`http://localhost:8000/api/vendor/${vendorSeqId}/price/`)
+        .then(result => {
+  
+        const selectData = result.data;
+        setVendorSelectData(selectData);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+
+    }
+  }, [selectReceptionData.seqId]);
+  
+  
+
+  
+  useEffect(() => {
+    dispatch(dentals.getDentalMiddleware());
+  }, [dispatch]);
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -148,12 +189,6 @@ const ReceptionModalContainer = ({
         return { text: data.itemName, value: data.itemName };
       });
   }
-
-  console.log(something);
-
-  
-
-
 
   const columns = [
     {
@@ -250,7 +285,7 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
-    const request_form = formData.get("request_form");
+    const requestForm = formData.get("requestForm");
 
     if (
       receiptDate === "" ||
@@ -264,88 +299,83 @@ const ReceptionModalContainer = ({
       obj => obj.vendorName === vendorName
     );
 
-    if (modalType === "추가") {
-      const contents = {
-        receipt_date: receiptDate,
-        completion_date: completionDate,
-        delivery_date: deliveryDate,
-        chart_number: parseInt(chartNumber),
-        upper: upper === "" ? true : false,
-        lower: lower === "" ? true : false,
-        bite: bite === "" ? true : false,
-        appliance: appliance === "" ? true : false,
-        patient_name: patientName,
-        description: description,
-        vendor_seq_id: dentalAutoData[index].seq_id,
-        request_form : request_form
-      };
-      
-      const data = new FormData();
+    // const master = {
+    //   receiptDate: receiptDate,
+    //   completionDate: completionDate,
+    //   deliveryDate: deliveryDate,
+    //   chartNumber: parseInt(chartNumber),
+    //   upper: upper === "" ? true : false,
+    //   lower: lower === "" ? true : false,
+    //   bite: bite === "" ? true : false,
+    //   appliance: appliance === "" ? true : false,
+    //   patientName: patientName,
+    //   description: description,
+    //   vendorSeqId: dentalAutoData[index].seqId,
+    //   requestForm: requestForm,
+    // };
 
-      data.enctype="multipart/form-data"
-      data.append("receipt_date",receiptDate) 
-      data.append("completion_date",completionDate) 
-      data.append("delivery_date",deliveryDate) 
-      data.append("chart_number",parseInt(chartNumber)) 
-      data.append("upper",upper === "" ? true : false) 
-      data.append("lower",lower === "" ? true : false) 
-      data.append("bite",bite === "" ? true : false) 
-      data.append("appliance",appliance === "" ? true : false) 
-      data.append("patient_name",patientName) 
-      data.append("description",description) 
-      data.append("vendor_seq_id",dentalAutoData[index].seq_id) 
-      data.append("request_form",request_form) 
-      
-      const gridArr = gridRef.current.getInstance().getData();
+    const form = new FormData();
 
-      if (gridArr.length === 0)
-        return alert("그리드 행을 추가 해주세요.");
+    
 
-      for (let i = 0; i < gridArr.length; i++) {
-        if (gridArr[i].partName === null || gridArr[i].partName === "") {
-          return alert(i + 1 + "번째 행 파트명을 선택하세요.");
-        } else if (
-          gridArr[i].itemName === null ||
-          gridArr[i].itemName === ""
-        ) {
-          return alert(i + 1 + "번째 행 장치명을 선택하세요.");
-        } else if (
-          gridArr[i].amount === null ||
-          gridArr[i].amount === ""
-        ) {
-          return alert(i + 1 + "번째 행 수량을 입력하세요.");
-        } else if (
-          gridArr[i].discountPrice == null ||
-          gridArr[i].discountPrice === ""
-        ) {
-          return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
-        }
+    const gridArr = gridRef.current.getInstance().getData();
+
+    //console.log(gridArr);
+    //console.log(selectDetailData);
+
+    if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
+
+    for (let i = 0; i < gridArr.length; i++) {
+      if (gridArr[i].partName === null || gridArr[i].partName === "") {
+        return alert(i + 1 + "번째 행 파트명을 선택하세요.");
+      } else if (gridArr[i].itemName === null || gridArr[i].itemName === "") {
+        return alert(i + 1 + "번째 행 장치명을 선택하세요.");
+      } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
+        return alert(i + 1 + "번째 행 수량을 입력하세요.");
+      } else if (
+        gridArr[i].discountPrice == null ||
+        gridArr[i].discountPrice === ""
+      ) {
+        return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
       }
+    }
 
-      const priceContents = new Array();
-      for (let i = 0; i < gridArr.length; i++) {
-        let element = receptionData.filter(
-          data => data.item_name === gridArr[i].itemName
-        );
-
-        priceContents.push({
-          sell_master_id: "",
-          item_seq_id: element[0].item_seq_id,
-          amount: parseInt(gridArr[i].amount),
-          normal_price: parseInt(gridArr[i].normalPrice),
-          real_sell_price: parseInt(gridArr[i].discountPrice),
-          discount: parseFloat(gridArr[i].discount),
-        });
-      }
-      // // const data = {}
-      // data['master'] = contents
-      // data['detail'] = priceContents
-      console.log(typeof JSON.stringify(priceContents))
-      console.log(JSON.stringify(priceContents))
-      data.append("detail",JSON.stringify(priceContents))
-      dispatch(
-        receptions.addReceptionMiddleware(data)
+    const detail = [];
+   
+    for (let i = 0; i < gridArr.length; i++) {
+      let element = vendorSelectData.filter(
+        data => data.itemName === gridArr[i].itemName
       );
+
+      detail.push({
+        //master_seq_id: "", //  master_seq_id  // receptionObj.seqId
+        seqId: gridArr[i].seqId,
+        itemSeqId: element[0].itemSeqId,
+        amount: parseInt(gridArr[i].amount),
+        normalPrice: gridArr[i].normalPrice,
+        realSellPrice: parseInt(gridArr[i].realSellPrice),
+        discount: parseFloat(gridArr[i].discount),
+      });
+    }
+
+    form.append("receiptDate", receiptDate);
+    form.append("completionDate", completionDate);
+    form.append("deliveryDate", deliveryDate);
+    form.append("chartNumber", parseInt(chartNumber));
+    form.append("upper", upper === "" ? true : false);
+    form.append("lower", lower === "" ? true : false);
+    form.append("bite", bite === "" ? true : false);
+    form.append("appliance", appliance === "" ? true : false);
+    form.append("patientName", patientName);
+    form.append("description", description);
+    form.append("vendorSeqId", dentalAutoData[index].seqId);
+    form.append("requestForm", requestForm); 
+    form.append("detail", JSON.stringify(detail));
+   
+    if (modalType === "추가") {
+      //form.append("detailRemove", JSON.stringify(detailRemove));
+
+      dispatch(receptions.addReceptionMiddleware(form));
     } else if (modalType === "접수수정") {
 
 
@@ -376,76 +406,49 @@ const ReceptionModalContainer = ({
     if (e.changes[0].columnName === "partName") {
       resetColumn(rowId, "itemReset");
     } else if (e.changes[0].columnName === "itemName") {
-      let price = receptionData.filter(
-        data =>
-          data.part_name === gridArr[rowId].partName &&
-          data.item_name === gridArr[rowId].itemName
+      let price = vendorSelectData.filter(data =>
+        data.partName === gridArr[rowId].partName &&
+        data.itemName === gridArr[rowId].itemName
       );
 
       resetColumn(rowId, "itemReset");
-      setColumnValue(rowId, "unitPrice", price[0].unit_price);
+      setColumnValue(rowId, "unitPrice", price[0].unitPrice);
     } else if (e.changes[0].columnName === "amount") {
+
       if (regNumber.test(gridArr[rowId].amount) === false)
         return alert("정수만 입력 가능합니다.");
 
       resetColumn(rowId);
-      setColumnValue(
-        rowId,
-        "normalPrice",
-        gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount)
-      );
+      setColumnValue(rowId, "normalPrice", gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount));
+
     } else if (e.changes[0].columnName === "discountPrice") {
+
       if (regNumber.test(gridArr[rowId].discountPrice) === false) {
         resetColumn(rowId);
         return alert("정수만 입력 가능합니다.");
       }
-      if (
-        parseInt(gridArr[rowId].discountPrice) >
-        gridArr[rowId].normalPrice
-      ) {
+      if (parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) {
         resetColumn(rowId);
         return alert("할인금액이 정상가보다 금액이 큽니다.");
       }
-      setColumnValue(
-        rowId,
-        "finalPrice",
-        gridArr[rowId].normalPrice -
-          parseInt(gridArr[rowId].discountPrice)
-      );
-      setColumnValue(
-        rowId,
-        "discount",
-        (
-          (gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) *
-          100
-        ).toFixed(2) + "%"
-      );
+      setColumnValue(rowId, "realSellPrice", gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice));
+      setColumnValue(rowId, "discount", ((gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) * 100).toFixed(2) + "%");
     }
   };
 
   const setColumnValue = (rowId, columnName, value) => {
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, columnName, value, false);
+    gridRef.current.getInstance().setValue(rowId, columnName, value, false);
   };
 
   const resetColumn = (rowId, type) => {
     if (type === "itemReset") {
-      gridRef.current
-        .getInstance()
-        .setValue(rowId, "unitPrice", "", false);
+      gridRef.current.getInstance().setValue(rowId, "unitPrice", "", false);
       gridRef.current.getInstance().setValue(rowId, "amount", "", false);
-      gridRef.current
-        .getInstance()
-        .setValue(rowId, "normalPrice", "", false);
+      gridRef.current.getInstance().setValue(rowId, "normalPrice", "", false);
     }
 
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, "discountPrice", "", false);
-    gridRef.current
-      .getInstance()
-      .setValue(rowId, "finalPrice", "", false);
+    gridRef.current.getInstance().setValue(rowId, "discountPrice", "", false);
+    gridRef.current.getInstance().setValue(rowId, "realSellPrice", "", false);
     gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   };
 
@@ -466,9 +469,7 @@ const ReceptionModalContainer = ({
                   name="receiptDate"
                   label="접수일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.receiptDate
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.receiptDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -480,9 +481,7 @@ const ReceptionModalContainer = ({
                   name="completionDate"
                   label="완성일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.completionDate
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.completionDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -494,9 +493,7 @@ const ReceptionModalContainer = ({
                   name="deliveryDate"
                   label="배달일자"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.deliveryDate
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.deliveryDate : ""
                   }
                   InputLabelProps={{ shrink: true }}
                 />
@@ -508,39 +505,53 @@ const ReceptionModalContainer = ({
                   filterOptions={filterVendorName}
                   //disabled={modalType === "접수수정" ? true : false}
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.vendorName
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.vendorName : ""
                   }
                   onChange={(event, newValue) => {
-                    //  gridRef.current.getInstance().resetData([], {});
-
-                    //  if (newValue === null) {
-                    //    setVendorId("");
-                    //  }
-                    //  if (newValue !== null) {
-                    //    const index = dentalData.findIndex(
-                    //      obj => obj.vendor_name === newValue.vendor_name
-                    //    );
-                    //    const vendorSeqId = dentalData[index].seq_id;
-                    //    resetColumn("vendorSelect");
-                    //    dispatch(receptions.getVendorPartMiddleware(vendorSeqId));
-                    //    setVendorId(vendorSeqId);
-                    //  }
-
+                    if (newValue === null) {
+                      //setVendorId("");
+                    }
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
                         obj => obj.vendorName === newValue
                       );
-                      console.log(newValue);
-                      const vendorSeqId = dentalAutoData[index].seq_id;
-                      // gridRef.current.getInstance().restore();
-                      gridRef.current.getInstance().resetData([], {});
+                      const vendorSeqId = dentalAutoData[index].seqId;
+                     
+                      // const length = gridRef.current.getInstance().getData().length;
 
-                      dispatch(
-                        receptions.getVendorPartMiddleware(vendorSeqId)
-                      );
-                    } else if (newValue === null) {
+                      // // for(let i=0; i<length; i++) {
+                      // //   resetColumn(i,"allReset");
+                      // // }
+
+                      gridRef.current.getInstance().restore();
+
+                      axios
+                        .get(
+                          `http://localhost:8000/api/vendor/${vendorSeqId}/price/`
+                        )
+                        .then(result => {
+       
+                          const selectData = result.data;
+                          const newArray = selectData
+                            .filter(
+                              (arr, index, callback) =>
+                                index ===
+                                callback.findIndex(
+                                  t => t.partName === arr.partName
+                                )
+                            )
+                            .map(data => {
+                              return data.partName;
+                            });
+
+                          setVendorSelectData(selectData);
+                          //setPartAutoData(newArray);
+                          //console.log(selectData);
+                          //console.log(newArray);
+                        })
+                        .catch(error => {
+                          throw new Error(error);
+                        });
                     }
                   }}
                   renderInput={params => (
@@ -560,9 +571,7 @@ const ReceptionModalContainer = ({
                   label="차트번호"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.chartNumber
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.chartNumber : ""
                   }
                 />
               </Grid>
@@ -573,9 +582,7 @@ const ReceptionModalContainer = ({
                   label="환자명"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.patientName
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.patientName : ""
                   }
                 />
               </Grid>
@@ -586,9 +593,7 @@ const ReceptionModalContainer = ({
                   label="비고"
                   variant="outlined"
                   defaultValue={
-                    modalType === "접수수정"
-                      ? receptionObj.description
-                      : ""
+                    modalType === "접수수정" ? selectReceptionData.description : ""
                   }
                 />
               </Grid>
@@ -602,9 +607,7 @@ const ReceptionModalContainer = ({
                       name="upper"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.upper
-                          : false
+                        modalType === "접수수정" ? selectReceptionData.upper : false
                       }
                     />
                   }
@@ -619,9 +622,7 @@ const ReceptionModalContainer = ({
                       name="lower"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.lower
-                          : false
+                        modalType === "접수수정" ? selectReceptionData.lower : false
                       }
                     />
                   }
@@ -636,9 +637,7 @@ const ReceptionModalContainer = ({
                       name="bite"
                       color="primary"
                       defaultChecked={
-                        modalType === "접수수정"
-                          ? receptionObj.bite
-                          : false
+                        modalType === "접수수정" ? selectReceptionData.bite : false
                       }
                     />
                   }
@@ -671,23 +670,21 @@ const ReceptionModalContainer = ({
               {"image.png"}
             </Grid>
 
-            {/* <Button className={classes.button} color="info" round>
-              이미지 업로드
-            </Button> */}
             <input
               accept="image/*"
               className={classes.input}
-              style={{ display: 'none' }}
-              id="raised-button-file"
-              name="request_form"
+              style={{ display: "none" }}
+              id="requestForm"
+              name="requestForm"
               multiple
               type="file"
             />
-            <label htmlFor="raised-button-file">
-              <Button variant="raised" component="span" className={classes.button} color="info" round>
+            <label htmlFor="requestForm">
+              <ButtonUpload component="span" className={classes.button}>
                 Upload
-              </Button>
-            </label> 
+              </ButtonUpload>
+            </label>
+
             <Grid item xs={12}>
               <Button
                 className={classes.button}
@@ -747,12 +744,7 @@ const ReceptionModalContainer = ({
           {modalType}
         </Button>
       </form>
-      <Button
-        className={classes.button}
-        color="danger"
-        round
-        onClick={close}
-      >
+      <Button className={classes.button} color="danger" round onClick={close}>
         취소
       </Button>
     </Modal>
