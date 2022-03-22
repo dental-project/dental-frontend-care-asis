@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { apis } from "apis/axios";
-
+import axios from 'axios';
 // action 생성
 const READ_RECEPTION = "READ_RECEPTION";
 const READ_VENDOR_PART = "READ_VENDOR_PART";
@@ -62,17 +62,18 @@ const addReceptionMiddleware = (data) => {
     apis
       .createReception(data)
       .then(result => {
-        
-        if (result.data.status === "SUCCESS") {
+        if(result.status=="ERROR"){
+          alert(result.message)
+        }else{
           dispatch(addReception(data));
+  
           alert("접수 정보를 추가 하였습니다.");
-        } else {
-          alert(result.data.message);
         }
-
         // for(let i=0; i<priceContents.length; i++) {
         //   priceContents[i].sell_master_id = result.data.seq_id
         // };
+        
+        // dispatch(addReceptionPriceMiddleware(priceContents));
 
       })
       .catch(err => {
@@ -87,14 +88,8 @@ const addReceptionPriceMiddleware = contents => {
     apis
       .createReceptionPrice(contents)
       .then(result => {
-
-        if (result.data.status === "SUCCESS") {
-          dispatch(addReceptionPrice(contents));
-          alert("접수 정보를 추가 하였습니다.");
-        } else {
-          alert(result.data.message);
-        }
-        
+        dispatch(addReceptionPrice(contents));
+        alert("접수 정보를 추가 하였습니다.2");
       })
       .catch(err => {
         alert(err);

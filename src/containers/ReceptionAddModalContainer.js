@@ -78,40 +78,49 @@ const ReceptionModalContainer = ({
   seqId,
   receptionObj,
   receptionData,
-  receptionDetailArr,
+  receptionDetailData,
 }) => {
   const classes = useStyles();
   const gridRef = React.createRef();
 
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
-  const receptionData = useSelector(({ reception }) => reception.data);
 
-  const [vendorSelectData, setVendorSelectData] = useState([]);
+  useEffect(() => {
+    dispatch(dentals.getDentalMiddleware());
+  }, []);
+
+  //receptionDetailArr.map((data) => console.log(data))
+
+  //console.log(dentalAutoData);
+
+  //console.log(receptionDetailArr);
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option,
+  });
+
+  const auto1 = ["App", "Part"];
+  const auto2 = ["기공", "item"]
+
+
+
+
+
+
+
+
+
+
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
   };
 
-  const onRemoveButtonClicked = seqId => {
-
-    setDeleteDetailArr([]);
-
-    const detailArr = detailDataArr.filter((data) => 
-      data.seqId !== seqId 
-    )
-
-    setDeleteDetailArr([
-      ...deleteDetailArr,
-      seqId
-    ]);
-
-    setDetailDataArr(detailArr);
-    
+  const onRemoveButtonClicked = rowKey => {
+    gridRef.current.getInstance().removeRow(rowKey);
   };
-
-
-
 
   const removeReceptionDetail = index => {};
 
@@ -121,15 +130,15 @@ const ReceptionModalContainer = ({
   });
 
   const vendorNameAuto = [];
-  dentalAutoData.map(data => vendorNameAuto.push(data.vendorName));
+  dentalAutoData.map(data => vendorNameAuto.push(data.vendor_name));
 
-  const newArray = vendorSelectData
+  const newArray = receptionData
     .filter(
       (arr, index, callback) =>
-        index === callback.findIndex(t => t.partName === arr.partName)
+        index === callback.findIndex(t => t.part_name === arr.part_name)
     )
     .map(data => {
-      return { text: data.partName, value: data.partName };
+      return { text: data.part_name, value: data.part_name };
     });
 
   const deduplication = (name, val) => {
@@ -142,14 +151,12 @@ const ReceptionModalContainer = ({
   var something = {};
 
   for (let i = 0; i < newArray.length; i++) {
-    something[newArray[i].value] = vendorSelectData
-      .filter(data => data.partName === newArray[i].value)
+    something[newArray[i].value] = receptionData
+      .filter(data => data.part_name === newArray[i].value)
       .map(data => {
-        return { text: data.itemName, value: data.itemName };
+        return { text: data.item_name, value: data.item_name };
       });
   }
-
-  console.log(something);
 
   
 
@@ -213,7 +220,7 @@ const ReceptionModalContainer = ({
     },
     {
       header: "최종금액",
-      name: "realSellPrice",
+      name: "finalPrice",
       validation: { required: true },
     },
     {
@@ -250,7 +257,24 @@ const ReceptionModalContainer = ({
     const lower = formData.get("lower");
     const bite = formData.get("bite");
     const appliance = formData.get("appliance");
-    const request_form = formData.get("request_form");
+
+
+    // const qqq = formData.get("unitPrice_0");
+    // const qqq1 = formData.get("unitPrice_1");
+
+    // console.log(receiptDate);
+    // console.log(qqq);
+    // console.log(qqq1);
+
+    return;
+
+
+
+
+
+
+
+
 
     if (
       receiptDate === "" ||
@@ -259,9 +283,9 @@ const ReceptionModalContainer = ({
       patientName === ""
     )
       return alert("빈칸없이 입력하세요");
-    
+
     const index = dentalAutoData.findIndex(
-      obj => obj.vendorName === vendorName
+      obj => obj.vendor_name === vendorName
     );
 
     if (modalType === "추가") {
@@ -275,27 +299,11 @@ const ReceptionModalContainer = ({
         bite: bite === "" ? true : false,
         appliance: appliance === "" ? true : false,
         patient_name: patientName,
+        request_form: "/test/test.png",
         description: description,
         vendor_seq_id: dentalAutoData[index].seq_id,
-        request_form : request_form
       };
-      
-      const data = new FormData();
 
-      data.enctype="multipart/form-data"
-      data.append("receipt_date",receiptDate) 
-      data.append("completion_date",completionDate) 
-      data.append("delivery_date",deliveryDate) 
-      data.append("chart_number",parseInt(chartNumber)) 
-      data.append("upper",upper === "" ? true : false) 
-      data.append("lower",lower === "" ? true : false) 
-      data.append("bite",bite === "" ? true : false) 
-      data.append("appliance",appliance === "" ? true : false) 
-      data.append("patient_name",patientName) 
-      data.append("description",description) 
-      data.append("vendor_seq_id",dentalAutoData[index].seq_id) 
-      data.append("request_form",request_form) 
-      
       const gridArr = gridRef.current.getInstance().getData();
 
       if (gridArr.length === 0)
@@ -322,7 +330,7 @@ const ReceptionModalContainer = ({
         }
       }
 
-      const priceContents = new Array();
+      const priceContents = [];
       for (let i = 0; i < gridArr.length; i++) {
         let element = receptionData.filter(
           data => data.item_name === gridArr[i].itemName
@@ -331,40 +339,26 @@ const ReceptionModalContainer = ({
         priceContents.push({
           sell_master_id: "",
           item_seq_id: element[0].item_seq_id,
-          amount: parseInt(gridArr[i].amount),
+          sell_count: parseInt(gridArr[i].amount),
           normal_price: parseInt(gridArr[i].normalPrice),
           real_sell_price: parseInt(gridArr[i].discountPrice),
           discount: parseFloat(gridArr[i].discount),
         });
       }
-      // // const data = {}
-      // data['master'] = contents
-      // data['detail'] = priceContents
-      console.log(typeof JSON.stringify(priceContents))
-      console.log(JSON.stringify(priceContents))
-      data.append("detail",JSON.stringify(priceContents))
+
       dispatch(
-        receptions.addReceptionMiddleware(data)
+        receptions.addReceptionMiddleware(contents, priceContents)
       );
     } else if (modalType === "접수수정") {
+      const gridArr = gridRef.current.getInstance().getData();
+      console.log(gridArr);
+    } else if (modalType === "삭제") {
+      // const arr = receptionDetailData.filter(
+      //   data => data.sell_master_id === seqId
+      // );
 
-
-        // data = {
-        //   masterFormData,
-        //   ...
-        //   ...
-        //   detail:JSON.stringify([{디테일}]),
-        //   deleteRow : []
-        // }
-      
-      form.append("deleteRow", [deleteDetailArr]);
-   
-      dispatch(receptions.updateReceptionMiddleware(selectReceptionData.seqId, form));
+      dispatch(receptions.deleteReceptionMiddleware(seqId));
     }
-      
-      //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
-   
-
   };
 
   const onChange = e => {
@@ -506,7 +500,6 @@ const ReceptionModalContainer = ({
                   className={classes.textField}
                   options={vendorNameAuto}
                   filterOptions={filterVendorName}
-                  //disabled={modalType === "접수수정" ? true : false}
                   defaultValue={
                     modalType === "접수수정"
                       ? receptionObj.vendorName
@@ -530,7 +523,7 @@ const ReceptionModalContainer = ({
 
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
-                        obj => obj.vendorName === newValue
+                        obj => obj.vendor_name === newValue
                       );
                       console.log(newValue);
                       const vendorSeqId = dentalAutoData[index].seq_id;
@@ -654,7 +647,7 @@ const ReceptionModalContainer = ({
                       color="primary"
                       defaultChecked={
                         modalType === "접수수정"
-                          ? selectReceptionData.appliance
+                          ? receptionObj.appliance
                           : false
                       }
                     />
@@ -662,6 +655,159 @@ const ReceptionModalContainer = ({
                 />
               </Grid>
               <Grid item xs={2}></Grid>
+
+
+
+
+
+
+
+
+
+
+
+                { 
+                  [0,0].map( (data, index) => {
+                    return (
+                      <Grid container spacing={1} key={index}>
+                        <Grid item xs={1}>
+                          <Autocomplete
+                            className={classes.textField}
+                            options={auto1}
+                            filterOptions={filterOptions}
+                            // defaultValue={
+                            //   modalType === "접수수정" 
+                            //     ? data.partName 
+                            //     : ""
+                            // }
+                            renderInput={(params) => <TextField {...params} name={"partName_" + index} label="파트명" variant="outlined" />}
+                          /> 
+                        </Grid>    
+                        <Grid item xs={1}>
+                          <Autocomplete
+                            className={classes.textField}
+                            options={auto2}
+                            filterOptions={filterOptions}
+                            // defaultValue={
+                            //   modalType === "접수수정" 
+                            //     ? data.itemName 
+                            //     : ""
+                            // }
+                            renderInput={(params) => <TextField {...params} name="itemName" label="장치명" variant="outlined" />}
+                          />
+                        </Grid>  
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField}
+                            name={"unitPrice_" + index}
+                            label="단가"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? "ㅁㄴㄻㄴㄹ" 
+                                : ""
+                            }
+                          />
+                        </Grid> 
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="amount"
+                            label="수량 (입력)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="totalPrice"
+                            label="정상가"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="realSellPrice"
+                            label="할인금액 (입력)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField} 
+                            name="finalPrice"
+                            label="최종금액"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <TextField
+                            className={classes.textField}
+                            name="discount"
+                            label="할인율 (%)"
+                            variant="outlined"
+                            defaultValue={
+                              modalType === "접수수정" 
+                                ? data.normalPrice 
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
+                            추가
+                          </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="outlined" color="primary" onClick={removeReceptionDetail()} >
+                            삭제
+                          </Button>
+                        </Grid> 
+                      
+                      </Grid>
+                    );
+                  })
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
             </Grid>
             <Grid
               container
@@ -671,24 +817,10 @@ const ReceptionModalContainer = ({
               {"image.png"}
             </Grid>
 
-            {/* <Button className={classes.button} color="info" round>
+            <Button className={classes.button} color="info" round>
               이미지 업로드
-            </Button> */}
-            <input
-              accept="image/*"
-              className={classes.input}
-              style={{ display: 'none' }}
-              id="raised-button-file"
-              name="request_form"
-              multiple
-              type="file"
-            />
-            <label htmlFor="raised-button-file">
-              <Button variant="raised" component="span" className={classes.button} color="info" round>
-                Upload
-              </Button>
-            </label> 
-            <Grid item xs={12}>
+            </Button>
+            {/* <Grid item xs={12}>
               <Button
                 className={classes.button}
                 color="info"
@@ -698,7 +830,7 @@ const ReceptionModalContainer = ({
                 그리드 행추가
               </Button>
 
-              {modalType === "추가" ? (
+              {modalType === "접수수정" ? (
                 <ToastGrid
                   ref={gridRef}
                   columns={columns}
@@ -708,23 +840,11 @@ const ReceptionModalContainer = ({
                   heightResizable={true}
                   rowHeaders={["rowNum"]}
                   onAfterChange={onChange}
+                  data={receptionDetailArr}
                 />
               ) : (
                 <ToastGrid
                   ref={gridRef}
-                  data={detailDataArr.map(data => {
-                    return {
-                      seqId: data.seqId,
-                      partName: data.partName,
-                      itemName: data.itemName,
-                      unitPrice: data.unitPrice,
-                      amount: data.amount,
-                      normalPrice: data.normalPrice,
-                      discountPrice: data.discountPrice,
-                      realSellPrice: data.realSellPrice,
-                      discount: data.discount,
-                    };
-                  })}
                   columns={columns}
                   rowHeight={20}
                   bodyHeight={200}
@@ -734,7 +854,7 @@ const ReceptionModalContainer = ({
                   onAfterChange={onChange}
                 />
               )}
-            </Grid>
+            </Grid> */}
           </>
         )}
         <Button
