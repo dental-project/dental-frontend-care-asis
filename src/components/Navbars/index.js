@@ -37,10 +37,12 @@ import {
   setOpenConfigurator,
 } from "context";
 
-
 function Navbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
+
+  console.log(controller);
+
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const urls = useLocation().pathname.split("/").slice(1);
@@ -55,6 +57,7 @@ function Navbar({ absolute, light, isMini }) {
 
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
+      console.log("asdasd");
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
     }
 
@@ -62,7 +65,7 @@ function Navbar({ absolute, light, isMini }) {
      The event listener that's calling the handleTransparentNavbar function when 
      scrolling the window.
     */
-    window.addEventListener("scroll", handleTransparentNavbar);
+    window.addEventListener("scroll", handleTransparentNavbar, true);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
     handleTransparentNavbar();
@@ -94,7 +97,7 @@ function Navbar({ absolute, light, isMini }) {
 
   return (
     <AppBar
-      position={absolute ? "absolute" : navbarType}
+      position={absolute ? "relative" : navbarType}
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >

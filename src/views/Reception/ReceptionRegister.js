@@ -160,7 +160,6 @@ export default function ReceptionRegister() {
       pathname: "/dental/receptionDetail",
       seqId: receptionObj.seqId,
       data: [receptionObj],
-      aaa: data
     });
   };
 

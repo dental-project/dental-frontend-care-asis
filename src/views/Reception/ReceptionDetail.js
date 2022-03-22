@@ -348,6 +348,22 @@ export default function ReceptionDetail({location}) {
           </SuiBox>
         </Card>
       </SuiBox>
+
+
+
+
+
+      {/* <Modal>
+
+
+      </Modal> */}
+
+
+
+
+
+
+
     </SuiBox>
   );
 }
