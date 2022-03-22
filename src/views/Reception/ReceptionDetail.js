@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-// @material-ui/core
-import { makeStyles } from "@material-ui/core";
-
 // @mui material components
 import Card from "@mui/material/Card";
 
@@ -340,18 +337,9 @@ export default function ReceptionDetail({location}) {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3}>
                 <ImageCard
-                  image={homeDecor1}
-                  label="테스트1"
+                  image={"http://localhost:8000/media/1_501726.jpg"}
+                  label={location.aaa[0].requestForm}
                   title="이미지1"
-                  description="기계장비 설명"
-                  action={{}}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <ImageCard
-                  image={homeDecor2}
-                  label="테스트2"
-                  title="이미지2"
                   description="기계장비 설명"
                   action={{}}
                 />

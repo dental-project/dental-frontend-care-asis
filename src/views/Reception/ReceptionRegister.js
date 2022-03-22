@@ -91,6 +91,8 @@ export default function ReceptionRegister() {
     setOpenReceptionModal(false);
   }, [count]);
 
+  console.log(data);
+
   const [menu, setMenu] = useState(null);
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -157,7 +159,8 @@ export default function ReceptionRegister() {
     history.push({
       pathname: "/dental/receptionDetail",
       seqId: receptionObj.seqId,
-      data: [receptionObj]
+      data: [receptionObj],
+      aaa: data
     });
   };
 
