@@ -30,6 +30,8 @@ import { items } from "modules/items";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import axios from 'axios';
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -155,6 +157,47 @@ export default function ItemRegister() {
     },
   ];
 
+
+
+  const onSubmit = (e) => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formData"));
+    const partName = formData.get("partName");
+    const itemName = formData.get("itemName");
+
+    console.log(partName);
+    console.log(itemName);
+
+    axios
+      .post("http://localhost:8000/api/item/", {
+        partName: partName,
+        itemName: itemName,
+      })
+      .then((result) => {
+        console.log(result);
+        if (result.data.status === "SUCCESS") {
+        
+        } else {
+          alert(result.data.message);
+        }
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+
+
+
+
+
+  }
+
+
+
+
+
+
+
   return (
     <>
       <Grid container>
@@ -162,43 +205,44 @@ export default function ItemRegister() {
           <Card>
             <CardHeader>
               <Grid item xs={12} className={classes.grid}>
-                <Autocomplete
-                  className={classes.grid}
-                  options={auto1}
-                  defaultValue={auto1[0]}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  renderInput={params => (
-                    <TextField {...params} label="파트명" variant="outlined" />
-                  )}
-                />
-                <Autocomplete
-                  freeSolo
-                  className={classes.grid}
-                  options={auto2}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  renderInput={params => (
-                    <TextField {...params} label="장치명" variant="outlined" />
-                  )}
-                />
+                <form id="formData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto1}
+                    defaultValue={auto1[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField {...params} name="partName" label="파트명" variant="outlined" />
+                    )}
+                  />
+                  <Autocomplete
+                    freeSolo
+                    className={classes.grid}
+                    options={auto2}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField {...params} name="itemName" label="장치명" variant="outlined" />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formData"
+                    style={{ float: "left"}}
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
+
                 <Button
                   type="submit"
-                  color="primary"
-                  style={{ float: "left"}}
-                  variant="outlined"
-                  //onClick={(e) => partModalOpen(e)}
+                  color="info"
+                  style={{ float: "right"}}
+                  onClick={e => itemModalOpen(e)}
                 >
-                  검색
-                </Button>
-                <Button
-                type="submit"
-                color="info"
-                style={{ float: "right"}}
-                onClick={e => itemModalOpen(e)}
-              >
-                <AddIcon/>
-                추가
+                <AddIcon/>추가
               </Button>
               </Grid>
 

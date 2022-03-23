@@ -52,6 +52,8 @@ export const apis = {
   patchItem: (seqId, contents) => instance.patch(`api/code/item/${seqId}/`, contents),
   // 장치 삭제
   deleteItem: (seqId) => instance.delete(`api/code/item/${seqId}/`),
+  // 장치 검색
+  searchItem: (contents) => instance.get('api/item/', contents),
 
 
   // 치과 불러오기

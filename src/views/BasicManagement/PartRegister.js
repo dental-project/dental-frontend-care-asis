@@ -169,7 +169,10 @@ function PartRegister() {
       console.log(searchArr);
       gridRef.current.getInstance().resetData(searchArr);
       //setGridData(searchArr);
+      
     }
+
+    console.log( gridRef.current.getInstance().getData());
 
     // const a = gridRef.current.getInstance().findRows({
     //   partName: "Functional App"
