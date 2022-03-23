@@ -124,7 +124,7 @@ const ReceptionModalContainer = ({
   }, [selectReceptionData.seqId]);
   
   
-
+console.log(selectReceptionData);
   
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
@@ -287,6 +287,8 @@ const ReceptionModalContainer = ({
     const appliance = formData.get("appliance");
     const requestForm = formData.get("requestForm");
 
+    console.log(receiptDate);
+
     if (
       receiptDate === "" ||
       completionDate === "" ||
@@ -369,9 +371,17 @@ const ReceptionModalContainer = ({
     form.append("patientName", patientName);
     form.append("description", description);
     form.append("vendorSeqId", dentalAutoData[index].seqId);
-    form.append("requestForm", requestForm); 
+    if(modalType === "접수수정") {
+      //form.append("requestForm", selectReceptionData.requestForm); 
+      
+    } else {
+      form.append("requestForm", requestForm); 
+    }
+    
     form.append("detail", JSON.stringify(detail));
    
+    console.log(requestForm);
+
     if (modalType === "추가") {
       //form.append("detailRemove", JSON.stringify(detailRemove));
 
@@ -675,6 +685,7 @@ const ReceptionModalContainer = ({
               className={classes.input}
               style={{ display: "none" }}
               id="requestForm"
+              //name={modalType === "접수수정" ? selectReceptionData.requestForm : "requestForm"}
               name="requestForm"
               multiple
               type="file"

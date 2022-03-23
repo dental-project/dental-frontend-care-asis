@@ -25,11 +25,9 @@ import Grid from "@mui/material/Grid";
 
 
 
-// Images
-import homeDecor1 from "assets/img/home-decor-1.jpg";
-import homeDecor2 from "assets/img/home-decor-2.jpg";
-import homeDecor3 from "assets/img/home-decor-2.jpg";
+
 import ImageCard from "components/ImageCard";
+import ImageModalContainer from "containers/ImageModalContainer";
 
 
 
@@ -61,11 +59,16 @@ export default function ReceptionDetail({location}) {
     });
   }, []);
   
-  //setSelectReceptionData(receptionObj);
+ 
+  // 추가 모달
+  const [openReceptionDetailModal, setOpenReceptionDetailModal] = useState(false);
 
-
-  //const { columns, rows } = authorsTableData;
-  //const { columns: prCols, rows: prRows } = projectsTableData;
+  const handleReceptionDetailModalOpen = () => {
+    setOpenReceptionDetailModal(true);
+  };
+  const handleReceptionDetailModalClose = () => {
+    setOpenReceptionDetailModal(false);
+  };
 
 
   const masterColumns = [
@@ -342,6 +345,10 @@ export default function ReceptionDetail({location}) {
                   title="이미지1"
                   description="기계장비 설명"
                   action={{}}
+
+                  //onClick={handleReceptionModalOpen()}
+
+
                 />
               </Grid>
             </Grid>
@@ -350,13 +357,12 @@ export default function ReceptionDetail({location}) {
       </SuiBox>
 
 
+      <ImageModalContainer
+        open={openReceptionDetailModal}
+        close={handleReceptionDetailModalClose}
+        
+      />
 
-
-
-      {/* <Modal>
-
-
-      </Modal> */}
 
 
 
