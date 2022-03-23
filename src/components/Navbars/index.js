@@ -58,7 +58,7 @@ function Navbar({ absolute, light, isMini }) {
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
       // setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
-      setTransparentNavbar(dispatch, (fixedNavbar && false) || !fixedNavbar);
+      setTransparentNavbar(dispatch, false);
     }
 
     /** 
