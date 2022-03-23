@@ -247,10 +247,14 @@ export default function ReceptionDetail({location}) {
     prRows.push({
       //" ": [toothImg],
       파트명: (
-        <SuiBadge variant="gradient" badgeContent={data.partName} color="success" size="lg" container />
+        <SuiTypography variant="caption" color="text" fontWeight="medium">
+          {data.partName}
+        </SuiTypography>
       ),
       장치명: (
-        <SuiBadge variant="gradient" badgeContent={data.itemName} color="info" size="lg" container />
+        <SuiTypography variant="caption" color="text" fontWeight="medium">
+          {data.itemName}
+        </SuiTypography>
       ),
       단가: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
@@ -278,9 +282,7 @@ export default function ReceptionDetail({location}) {
         </SuiTypography>
       ),
       최종금액: (
-        <SuiTypography variant="caption" color="info" fontWeight="medium">
-          {data.realSellPrice} 원
-        </SuiTypography>
+        <SuiBadge variant="gradient" badgeContent={data.realSellPrice + "원"}  color="info" size="lg" container />
       )
     })
   });
@@ -291,10 +293,6 @@ export default function ReceptionDetail({location}) {
   }
 
 
-  var aaa = document.getElementsByTagName("aaa");
-  for (var x = 0; x < aaa.length; x++) {
-    aaa.item(x).onclick=function() {window.open(this.src)}; 
-  }
   
   return (
     <SuiBox py={3}>
@@ -354,22 +352,21 @@ export default function ReceptionDetail({location}) {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
-                  name="aaa"
                   image={location.data[0].requestForm}
-                  label={"이미지1"}
-                  title="이미지1"
-                  description="기계장비 설명"
-                  action={{
-                    // type: "button",
-                    // route: "/pages/profile/profile-overview",
-                    // color: "info",
-                    // label: "view project",
-                  }}
+                  // label={"이미지1"}
+                  // title="이미지1"
+                  // description="기계장비 설명"
+                  // action={{
+                  //   // type: "button",
+                  //   // route: "/pages/profile/profile-overview",
+                  //   // color: "info",
+                  //   // label: "view project",
+                  // }}
                   
                  
                 />
                 
-                <SuiButton variant="outlined" color="info" size="small" onClick={() => loginBtn()}>
+                <SuiButton variant="outlined" color="info" size="small" style={{width: "100%", marginTop: "15px"}} onClick={() => loginBtn()}>
                     확대
                 </SuiButton>
                 

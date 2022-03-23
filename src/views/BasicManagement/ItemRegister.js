@@ -169,22 +169,22 @@ export default function ItemRegister() {
     console.log(partName);
     console.log(itemName);
 
-    axios
-      .post("http://localhost:8000/api/item/", {
-        partName: partName,
-        itemName: itemName,
-      })
-      .then((result) => {
-        console.log(result);
-        if (result.data.status === "SUCCESS") {
+    // axios
+    //   .post("http://localhost:8000/api/item/", {
+    //     partName: partName,
+    //     itemName: itemName,
+    //   })
+    //   .then((result) => {
+    //     console.log(result);
+    //     if (result.data.status === "SUCCESS") {
         
-        } else {
-          alert(result.data.message);
-        }
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    //     } else {
+    //       alert(result.data.message);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error);
+    //   });
 
 
 
