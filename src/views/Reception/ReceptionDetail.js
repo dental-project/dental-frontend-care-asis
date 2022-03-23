@@ -39,7 +39,7 @@ import SuiButton from "components/Sui/SuiButton";
 export default function ReceptionDetail({location}) {
 
   const [detailData, setDetailData] = useState([]);
-  console.log(location);
+  
 
   useEffect(() => {
 
@@ -288,9 +288,14 @@ export default function ReceptionDetail({location}) {
   const loginBtn = () => {
     setZoomImage(location.data[0].requestForm);
     handleReceptionDetailModalOpen();
-    
   }
 
+
+  var aaa = document.getElementsByTagName("aaa");
+  for (var x = 0; x < aaa.length; x++) {
+    aaa.item(x).onclick=function() {window.open(this.src)}; 
+  }
+  
   return (
     <SuiBox py={3}>
       <SuiBox mb={3}>
@@ -349,6 +354,7 @@ export default function ReceptionDetail({location}) {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
+                  name="aaa"
                   image={location.data[0].requestForm}
                   label={"이미지1"}
                   title="이미지1"
@@ -362,6 +368,7 @@ export default function ReceptionDetail({location}) {
                   
                  
                 />
+                
                 <SuiButton variant="outlined" color="info" size="small" onClick={() => loginBtn()}>
                     확대
                 </SuiButton>
@@ -376,7 +383,7 @@ export default function ReceptionDetail({location}) {
       <ImageModalContainer
         open={openReceptionDetailModal}
         close={handleReceptionDetailModalClose}
-        image={zoomImage}
+        image={location.data[0].requestForm}
       />
 
     </SuiBox>
