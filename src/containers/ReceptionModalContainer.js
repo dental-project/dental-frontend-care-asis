@@ -123,9 +123,6 @@ const ReceptionModalContainer = ({
     }
   }, [selectReceptionData.seqId]);
   
-  
-console.log(selectReceptionData);
-  
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, [dispatch]);
@@ -287,8 +284,6 @@ console.log(selectReceptionData);
     const appliance = formData.get("appliance");
     const requestForm = formData.get("requestForm");
 
-    console.log(receiptDate);
-
     if (
       receiptDate === "" ||
       completionDate === "" ||
@@ -371,9 +366,10 @@ console.log(selectReceptionData);
     form.append("patientName", patientName);
     form.append("description", description);
     form.append("vendorSeqId", dentalAutoData[index].seqId);
-    if(modalType === "접수수정") {
+
+    if(modalType === "접수수정" && requestForm.name === "") {
       //form.append("requestForm", selectReceptionData.requestForm); 
-      
+      console.log("dz");
     } else {
       form.append("requestForm", requestForm); 
     }
