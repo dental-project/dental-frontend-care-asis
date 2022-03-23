@@ -3,9 +3,7 @@ import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
-import Autocomplete, {
-  createFilterOptions,
-} from "@material-ui/lab/Autocomplete";
+
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -39,21 +37,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ImageModalContainer = ({
-  modalType,
   open,
   close,
-  seqId
+  image,
 }) => {
   const classes = useStyles();
   
   useEffect(() => {
    
   }, []);
-
+console.log(image);
   return (
-    <Modal open={open} modalType={modalType}>
+    <Modal open={open} >
   
-        
+      <img src={image.data[0].requestForm} />
     
       <Button className={classes.button} color="danger" round onClick={close}>
         취소

@@ -29,7 +29,7 @@ import Grid from "@mui/material/Grid";
 import ImageCard from "components/ImageCard";
 import ImageModalContainer from "containers/ImageModalContainer";
 
-
+import SuiButton from "components/Sui/SuiButton";
 
 
 
@@ -59,7 +59,10 @@ export default function ReceptionDetail({location}) {
     });
   }, []);
   
- 
+  const [zoomImage, setZoomImage] = useState("");
+
+
+
   // 추가 모달
   const [openReceptionDetailModal, setOpenReceptionDetailModal] = useState(false);
 
@@ -282,6 +285,12 @@ export default function ReceptionDetail({location}) {
     })
   });
 
+  const loginBtn = () => {
+    setZoomImage(location.data[0].requestForm);
+    handleReceptionDetailModalOpen();
+    
+  }
+
   return (
     <SuiBox py={3}>
       <SuiBox mb={3}>
@@ -338,18 +347,25 @@ export default function ReceptionDetail({location}) {
           </SuiBox>
           <SuiBox p={2}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6} xl={3}>
+              <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
                   image={location.data[0].requestForm}
                   label={"이미지1"}
                   title="이미지1"
                   description="기계장비 설명"
-                  action={{}}
-
-                  //onClick={handleReceptionModalOpen()}
-
-
+                  action={{
+                    // type: "button",
+                    // route: "/pages/profile/profile-overview",
+                    // color: "info",
+                    // label: "view project",
+                  }}
+                  
+                 
                 />
+                <SuiButton variant="outlined" color="info" size="small" onClick={() => loginBtn()}>
+                    확대
+                </SuiButton>
+                
               </Grid>
             </Grid>
           </SuiBox>
@@ -360,15 +376,8 @@ export default function ReceptionDetail({location}) {
       <ImageModalContainer
         open={openReceptionDetailModal}
         close={handleReceptionDetailModalClose}
-        
+        image={zoomImage}
       />
-
-
-
-
-
-
-
 
     </SuiBox>
   );
