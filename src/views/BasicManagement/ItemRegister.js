@@ -166,29 +166,22 @@ export default function ItemRegister() {
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
 
-    console.log(partName);
-    console.log(itemName);
-
-    // axios
-    //   .post("http://localhost:8000/api/item/", {
-    //     partName: partName,
-    //     itemName: itemName,
-    //   })
-    //   .then((result) => {
-    //     console.log(result);
-    //     if (result.data.status === "SUCCESS") {
+    axios
+      .post("http://localhost:8000/api/item/", {
+        partName: partName === "전체" ? "" : partName,
+        itemName: itemName === "전체" ? "" : itemName,
+      })
+      .then((result) => {
+        console.log(result);
+        if (result.data.status === "SUCCESS") {
         
-    //     } else {
-    //       alert(result.data.message);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error);
-    //   });
-
-
-
-
+        } else {
+          alert(result.data.message);
+        }
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
   }
 
