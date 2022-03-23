@@ -3,7 +3,8 @@ import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
-
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -41,22 +42,20 @@ const ImageModalContainer = ({
   close,
   image,
 }) => {
-  const classes = useStyles();
-  
-  useEffect(() => {
-   
-  }, []);
-console.log(image);
+ 
   return (
-    <Modal open={open} >
-  
-      <img src={image.data[0].requestForm} />
-    
-      <Button className={classes.button} color="danger" round onClick={close}>
-        취소
-      </Button>
+    <Modal open={open} close={close}>
+      <div style={{width: "100%", textAlign: "right"}}>
+        <IconButton aria-label="close" onClick={close} >
+          <CloseIcon />
+        </IconButton>
+      </div>
+      <div>
+        <img src={image} />
+      </div>
     </Modal>
-  );
+     
+  )
 };
 
 export default ImageModalContainer;
