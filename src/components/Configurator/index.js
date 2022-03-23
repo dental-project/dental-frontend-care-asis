@@ -82,12 +82,12 @@ function Configurator() {
         pb={0.8}
         px={3}
       >
-        <SuiBox>
+        {/* <SuiBox>
           <SuiTypography variant="h5">Soft UI Configurator</SuiTypography>
           <SuiTypography variant="body2" color="text">
             See our dashboard options.
           </SuiTypography>
-        </SuiBox>
+        </SuiBox> */}
 
         <Icon
           sx={({ typography: { size, fontWeightBold }, palette: { dark } }) => ({
