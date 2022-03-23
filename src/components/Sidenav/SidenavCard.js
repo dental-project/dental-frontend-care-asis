@@ -47,10 +47,15 @@ function SidenavCard() {
         </SuiBox> */}
         <SuiBox lineHeight={1}>
           <SuiTypography variant="h6" color="white">
-            Dental.A
+            Dental.A 
           </SuiTypography>
-          <SuiBox mb={1.825} mt={-1}>
+          <SuiBox>
             <SuiTypography variant="caption" color="white" fontWeight="medium">
+            {time.toLocaleDateString()}
+            </SuiTypography>
+          </SuiBox>
+          <SuiBox mb={1.825} mt={0.5}>
+            <SuiTypography variant="H6" color="white" fontWeight="medium">
               {time.toLocaleTimeString()}
             </SuiTypography>
           </SuiBox>
