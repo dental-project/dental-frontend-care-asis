@@ -173,11 +173,14 @@ export default function ItemRegister() {
       data.partName === partName
     );
 
+
     axios
-      .get("http://localhost:8000/api/code/item/", {
+    .get("http://localhost:8000/api/code/item/", {
+      params : {
         partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
         itemName: itemName === "전체" ? "" : itemName,
-      })
+      }
+    })
       .then((result) => {
         console.log(result);
         
