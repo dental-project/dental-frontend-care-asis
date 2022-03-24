@@ -167,7 +167,7 @@ export default function ItemRegister() {
     const itemName = formData.get("itemName");
 
     axios
-      .post("http://localhost:8000/api/code/item/", {
+      .get("http://localhost:8000/api/code/item/", {
         partName: partName === "전체" ? "" : partName,
         itemName: itemName === "전체" ? "" : itemName,
       })
