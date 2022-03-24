@@ -157,7 +157,7 @@ export default function ItemRegister() {
     },
   ];
 
-
+  console.log(data);
 
   const onSubmit = (e) => {
     e && e.preventDefault();
@@ -166,18 +166,23 @@ export default function ItemRegister() {
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
 
+    
+
+    
+    const dataArr = data.filter(data => 
+      data.partName === partName
+    );
+
     axios
       .get("http://localhost:8000/api/code/item/", {
-        partName: partName === "전체" ? "" : partName,
+        partName: partName === "전체" ? "" : dataArr[0].partSeqId,
         itemName: itemName === "전체" ? "" : itemName,
       })
       .then((result) => {
         console.log(result);
-        if (result.data.status === "SUCCESS") {
         
-        } else {
-          alert(result.data.message);
-        }
+
+
       })
       .catch((error) => {
         throw new Error(error);
@@ -213,6 +218,7 @@ export default function ItemRegister() {
                     freeSolo
                     className={classes.grid}
                     options={auto2}
+                    defaultValue={auto2[0]}
                     getOptionLabel={option => option}
                     filterOptions={filterOptions}
                     renderInput={params => (
