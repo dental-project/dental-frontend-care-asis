@@ -40,9 +40,6 @@ import {
 function Navbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
-
-  console.log(controller);
-
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const urls = useLocation().pathname.split("/").slice(1);

@@ -53,7 +53,7 @@ export const apis = {
   // 장치 삭제
   deleteItem: (seqId) => instance.delete(`api/code/item/${seqId}/`),
   // 장치 검색
-  searchItem: (contents) => instance.get('api/item/', contents),
+  //searchItem: (contents) => instance.get('api/item/', contents),
 
 
   // 치과 불러오기

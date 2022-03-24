@@ -31,21 +31,58 @@ import ImageModalContainer from "containers/ImageModalContainer";
 
 import SuiButton from "components/Sui/SuiButton";
 
-
+import { useHistory } from 'react-router-dom';
 
 
 
 
 export default function ReceptionDetail({location}) {
 
+  const [masterData, setMasterData] = useState([]);
   const [detailData, setDetailData] = useState([]);
-  
+  const [image, setImage] = useState("");
 
+  const history = useHistory();
   useEffect(() => {
+    
+    // const json = '{"result":true, "count":42}';
+    // const obj = JSON.parse(json);
 
-    if(location.seqId === undefined || location.seqId === null || location.seqId === "") return;
 
-    const masterSeqId = location.seqId;
+    // localStorage.setItem("obj", JSON.stringify(location));
+    // console.log(localStorage.obj);
+
+    // const masterSeqId = localStorage.obj.seqId;
+    // console.log(masterSeqId);
+
+    const masterSeqId = history.location.data[0].seqId;
+    const data = history.location.data;
+
+   
+
+    //localStorage.setItem("seqId", JSON.stringify(history.location.seqId));
+    localStorage.setItem("obj", JSON.stringify(history.location.data));
+    localStorage.setItem("image", JSON.stringify(JSON.parse(history.location.data[0].requestForm)));
+
+
+    console.log(JSON.parse(localStorage.obj));
+
+    setMasterData(JSON.parse(localStorage.obj));
+    setImage(JSON.parse(localStorage.image));
+    console.log(masterData);
+
+
+    // location 으로 오는 requestForm 이랑 비교
+
+
+
+    //console.log(localStorage.seqId);
+    //console.log(JSON.parse(localStorage.obj));
+    
+    
+    //if(location.seqId === undefined || location.seqId === null || location.seqId === "") return;
+
+    //const masterSeqId = localStorage.seqId;
     
     axios
     .get(`http://localhost:8000/api/sell/master/${masterSeqId}/details/`)
@@ -61,6 +98,7 @@ export default function ReceptionDetail({location}) {
   
   const [zoomImage, setZoomImage] = useState("");
 
+  console.log(image);
 
 
   // 추가 모달
@@ -180,7 +218,7 @@ export default function ReceptionDetail({location}) {
   const masterRows = [];
   const prRows = [];
 
-  location.data.map((data,key) => {
+  masterData.map((data,key) => {
     masterRows.push({
       //" ": [toothImg],
       접수일자: (
@@ -288,10 +326,9 @@ export default function ReceptionDetail({location}) {
   });
 
   const loginBtn = () => {
-    setZoomImage(location.data[0].requestForm);
+    setZoomImage(image);
     handleReceptionDetailModalOpen();
   }
-
 
   
   return (
@@ -352,7 +389,7 @@ export default function ReceptionDetail({location}) {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
-                  image={location.data[0].requestForm}
+                  image={image}
                   // label={"이미지1"}
                   // title="이미지1"
                   // description="기계장비 설명"
@@ -380,7 +417,7 @@ export default function ReceptionDetail({location}) {
       <ImageModalContainer
         open={openReceptionDetailModal}
         close={handleReceptionDetailModalClose}
-        image={location.data[0].requestForm}
+        image={image}
       />
 
     </SuiBox>

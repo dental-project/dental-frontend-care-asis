@@ -376,8 +376,6 @@ const ReceptionModalContainer = ({
     
     form.append("detail", JSON.stringify(detail));
    
-    console.log(requestForm);
-
     if (modalType === "추가") {
       //form.append("detailRemove", JSON.stringify(detailRemove));
 
