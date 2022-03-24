@@ -67,10 +67,14 @@ export default function ItemRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ item }) => item);
-  
+  const [gridData, setGridData] = useState([]);
 
   const [seqId, setSeqId] = useState();
   const [itemObj, setItemObj] = useState({});
+
+  useEffect(() => {
+    setGridData(data)
+  }, [data]);
 
   useEffect(() => {
     dispatch(items.getItemMiddleware());
@@ -157,8 +161,6 @@ export default function ItemRegister() {
     },
   ];
 
-  console.log(data);
-
   const onSubmit = (e) => {
     e && e.preventDefault();
 
@@ -166,25 +168,22 @@ export default function ItemRegister() {
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
 
-    
-
-    
     const dataArr = data.filter(data => 
       data.partName === partName
     );
 
 
     axios
-    .get("http://localhost:8000/api/code/item/", {
+    .get("/api/code/item/", {
       params : {
         partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
         itemName: itemName === "전체" ? "" : itemName,
       }
     })
       .then((result) => {
-        console.log(result);
+        console.log(result.data);
         
-
+        setGridData(result.data)
 
       })
       .catch((error) => {
@@ -250,7 +249,7 @@ export default function ItemRegister() {
 
             </CardHeader>
             <CardBody>
-              <ToastGrid columns={columns} data={data} bodyHeight={500} />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

@@ -157,7 +157,7 @@ export default function ReceptionRegister() {
     history.push({
       pathname: "/dental/receptionDetail",
       seqId: receptionObj.seqId,
-      data: [receptionObj],
+      state: [receptionObj],
     });
   };
 

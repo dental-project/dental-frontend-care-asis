@@ -40,49 +40,36 @@ export default function ReceptionDetail({location}) {
 
   const [masterData, setMasterData] = useState([]);
   const [detailData, setDetailData] = useState([]);
+  const [seqId, setSeqId] = useState("");
   const [image, setImage] = useState("");
 
   const history = useHistory();
+  //const masterSeqId = history.location.state[0].seqId;
+
   useEffect(() => {
     
-    // const json = '{"result":true, "count":42}';
-    // const obj = JSON.parse(json);
+    localStorage.setItem("seqId", JSON.stringify(history.location.state[0].seqId));
+    localStorage.setItem("obj", JSON.stringify(history.location.state));
+    localStorage.setItem("image", JSON.stringify(history.location.state[0].requestForm));
 
+    const masterSeqId = localStorage.getItem("seqId");
+    const obj = localStorage.getItem("obj");
+    const img = localStorage.getItem("image");
 
-    // localStorage.setItem("obj", JSON.stringify(location));
-    // console.log(localStorage.obj);
-
-    // const masterSeqId = localStorage.obj.seqId;
-    // console.log(masterSeqId);
-
-    const masterSeqId = history.location.data[0].seqId;
-    const data = history.location.data;
-
-   
-
-    //localStorage.setItem("seqId", JSON.stringify(history.location.seqId));
-    localStorage.setItem("obj", JSON.stringify(history.location.data));
-    localStorage.setItem("image", JSON.stringify(JSON.parse(history.location.data[0].requestForm)));
-
-
-    console.log(JSON.parse(localStorage.obj));
-
-    setMasterData(JSON.parse(localStorage.obj));
-    setImage(JSON.parse(localStorage.image));
-    console.log(masterData);
-
-
-    // location 으로 오는 requestForm 이랑 비교
-
-
-
-    //console.log(localStorage.seqId);
-    //console.log(JSON.parse(localStorage.obj));
     
-    
-    //if(location.seqId === undefined || location.seqId === null || location.seqId === "") return;
+    if (masterSeqId !== null) {
+      setSeqId(JSON.parse(masterSeqId));
+    }
 
-    //const masterSeqId = localStorage.seqId;
+    if (obj !== null) {
+      setMasterData(JSON.parse(obj));
+    }
+
+    
+
+    if (img !== null) {
+      setImage(JSON.parse(img));
+    }
     
     axios
     .get(`http://localhost:8000/api/sell/master/${masterSeqId}/details/`)
@@ -97,9 +84,6 @@ export default function ReceptionDetail({location}) {
   }, []);
   
   const [zoomImage, setZoomImage] = useState("");
-
-  console.log(image);
-
 
   // 추가 모달
   const [openReceptionDetailModal, setOpenReceptionDetailModal] = useState(false);
