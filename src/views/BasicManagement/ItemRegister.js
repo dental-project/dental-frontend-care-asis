@@ -175,7 +175,7 @@ export default function ItemRegister() {
 
     axios
       .get("http://localhost:8000/api/code/item/", {
-        partName: partName === "전체" ? "" : dataArr[0].partSeqId,
+        partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
         itemName: itemName === "전체" ? "" : itemName,
       })
       .then((result) => {
