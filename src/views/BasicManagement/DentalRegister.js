@@ -261,7 +261,7 @@ export default function DentalRegister() {
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
-            <Grid item xs={12} className={classes.grid}>
+              <Grid item xs={12} className={classes.grid}>
                 <Autocomplete
                   className={classes.grid}
                   options={auto1}
@@ -301,9 +301,9 @@ export default function DentalRegister() {
                     />
                   )}
                 />
-
                 <Button
                   type="submit"
+                  form="formSearchData"
                   color="primary"
                   round
                   style={{ float: "left", width: "100px" }}

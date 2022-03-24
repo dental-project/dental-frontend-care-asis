@@ -62,7 +62,6 @@ const updateItemMiddleware = (seqId, contents) => {
     apis
       .patchItem(seqId, contents)
       .then(result => {
-
         if (result.data.status === "SUCCESS") {
           dispatch(updateItem());
           alert("장치를 수정 했습니다.");

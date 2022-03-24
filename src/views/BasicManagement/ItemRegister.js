@@ -81,14 +81,20 @@ export default function ItemRegister() {
     setOpenItemModal(false);
   }, [count]);
 
-  const auto1 = ["전체"];
-  const auto2 = ["전체"];
+  const partNameArr = ["전체"];
+  const itemNameArr = ["전체"];
 
   data.map( (data) => {
-    auto1.push( data.partName )
-    auto2.push( data.itemName )
+    partNameArr.push( data.partName )
+    itemNameArr.push( data.itemName )
   });
  
+  const set1 = new Set(partNameArr);
+  const set2 = new Set(itemNameArr);
+
+  const auto1 = [...set1];
+  const auto2 = [...set2];
+
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -164,39 +170,35 @@ export default function ItemRegister() {
   const onSubmit = (e) => {
     e && e.preventDefault();
 
-    let formData = new FormData(document.getElementById("formData"));
+    let formData = new FormData(document.getElementById("formSearchData"));
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
+
+    if (partName === "" || itemName === "") {
+      return alert("검색어를 입력하세요.");
+    }
 
     const dataArr = data.filter(data => 
       data.partName === partName
     );
 
-
     axios
-    .get("/api/code/item/", {
-      params : {
-        partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
-        itemName: itemName === "전체" ? "" : itemName,
-      }
-    })
+      .get("/api/code/item/", {
+        params : {
+          partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
+          itemName: itemName === "전체" ? "" : itemName,
+        }
+      })
       .then((result) => {
-        console.log(result.data);
-        
+        console.log(result);
         setGridData(result.data)
-
+        alert("검색을 완료 하였습니다.");
       })
       .catch((error) => {
         throw new Error(error);
       });
 
   }
-
-
-
-
-
-
 
   return (
     <>
@@ -205,7 +207,7 @@ export default function ItemRegister() {
           <Card>
             <CardHeader>
               <Grid item xs={12} className={classes.grid}>
-                <form id="formData" onSubmit={onSubmit}>
+                <form id="formSearchData" onSubmit={onSubmit}>
                   <Autocomplete
                     className={classes.grid}
                     options={auto1}
@@ -229,14 +231,13 @@ export default function ItemRegister() {
                   />
                   <Button
                     type="submit"
-                    form="formData"
+                    form="formSearchData"
                     style={{ float: "left"}}
                     variant="outlined"
                   >
                     검색
                   </Button>
                 </form>
-
                 <Button
                   type="submit"
                   color="info"
