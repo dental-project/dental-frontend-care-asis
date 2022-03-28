@@ -296,6 +296,7 @@ export default function DentalRegister() {
               <Grid item xs={12} className={classes.grid}>
                 <form id="formSearchData" onSubmit={onSubmit}>
                   <Autocomplete
+                    freeSolo
                     className={classes.grid}
                     options={auto1}
                     defaultValue={auto1[0]}
