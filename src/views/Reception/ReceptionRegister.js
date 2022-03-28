@@ -33,6 +33,8 @@ import SuiBox from "components/Sui/SuiBox";
 import SuiTypography from "components/Sui/SuiTypography";
 import SuiButton from "components/Sui/SuiButton";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
+import Project from "components/SuiProject";
+
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -40,7 +42,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -79,9 +80,6 @@ export default function ReceptionRegister() {
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
-  //const itemData  = useSelector(({ item }) => item.data);
-  //const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
-
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
   
@@ -369,26 +367,33 @@ export default function ReceptionRegister() {
           </Grid>
         </SuiBox>
         <SuiBox mb={3}>
-          <Card>
-            <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SuiBox>
-                <SuiTypography variant="h6" gutterBottom>
-                  접수 리스트   
-                </SuiTypography>
-                <SuiBox display="flex" alignItems="center" lineHeight={0}>
-                  <PlaylistAddCheckIcon fontSize="medium" />
-                  <SuiTypography variant="button" fontWeight="regular" color="text">
-                    &nbsp;<strong>All</strong> list
-                  </SuiTypography>
-                </SuiBox>
-              </SuiBox>
-              <SuiBox color="text" px={2}>
+          <Project renderMenu={renderMenu}>
+            
+            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+            </SuiBox> */}
+              {/* <SuiBox color="text" px={2}>
                 <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                   more_vert
                 </MoreVertIcon>
               </SuiBox>
-              {renderMenu}
-            </SuiBox>
+              {renderMenu} */}
+            {/* <Menu
+              id="simple-menu"
+              anchorEl={menu}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(menu)}
+              onClose={closeMenu}
+            >
+              <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+              <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+            </Menu> */}
             <SuiBox display="flex" px={2}>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={2} xl={2}>
@@ -457,7 +462,30 @@ export default function ReceptionRegister() {
             <SuiBox px={2}>
               <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </SuiBox>
-          </Card>
+          </Project>
+         
+          {/* <Card> */}
+            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <SuiBox>
+                <SuiTypography variant="h6" gutterBottom>
+                  접수 리스트   
+                </SuiTypography>
+                <SuiBox display="flex" alignItems="center" lineHeight={0}>
+                  <PlaylistAddCheckIcon fontSize="medium" />
+                  <SuiTypography variant="button" fontWeight="regular" color="text">
+                    &nbsp;<strong>All</strong> list
+                  </SuiTypography>
+                </SuiBox>
+              </SuiBox>
+              <SuiBox color="text" px={2}>
+                <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+                  more_vert
+                </MoreVertIcon>
+              </SuiBox>
+              {renderMenu}
+            </SuiBox> */}
+            
+          {/* </Card> */}
         </SuiBox>
       </SuiBox>
       <ReceptionModalContainer

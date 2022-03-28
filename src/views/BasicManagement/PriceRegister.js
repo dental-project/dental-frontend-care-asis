@@ -230,13 +230,13 @@ export default function PriceRegister() {
     //console.log(itemData);
 
     axios
-    .get("/api/sell/price/", {
-      params : {
-        vendorSeqId: vendorName === "전체" ? "" : vendorData[0].vendorSeqId,
-        partSeqId: partName === "전체" ? "" : partData[0].partSeqId,
-        itemSeqId: itemName === "전체" ? "" : itemData[0].itemSeqId,
-      }
-    })
+      .get("/api/sell/price/", {
+        params : {
+          vendorSeqId: vendorName === "전체" ? "" : vendorData[0].vendorSeqId,
+          partSeqId: partName === "전체" ? "" : partData[0].partSeqId,
+          itemSeqId: itemName === "전체" ? "" : itemData[0].itemSeqId,
+        }
+      })
       .then((result) => {
         console.log(result);
         setGridData(result.data)
@@ -245,8 +245,6 @@ export default function PriceRegister() {
       .catch((error) => {
         throw new Error(error);
       });
-
-
   }
 
 

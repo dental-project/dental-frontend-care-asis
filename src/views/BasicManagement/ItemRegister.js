@@ -190,9 +190,7 @@ export default function ItemRegister() {
         }
       })
       .then((result) => {
-        console.log(result);
         setGridData(result.data)
-        alert("검색을 완료 하였습니다.");
       })
       .catch((error) => {
         throw new Error(error);

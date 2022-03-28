@@ -11,20 +11,10 @@ import SuiBadge from "components/Sui/SuiBadge";
 // Soft UI Dashboard React example components
 import Table from "components/Sui/SuiTable";
 
-
-import toothImg from "assets/img/toothImg.svg";
-
 import axios from "axios";
-
-
-
-
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-
-
-
 
 import ImageCard from "components/ImageCard";
 import ImageModalContainer from "containers/ImageModalContainer";
@@ -33,10 +23,19 @@ import SuiButton from "components/Sui/SuiButton";
 
 import { useHistory } from 'react-router-dom';
 
+// @material-ui/core
+import { makeStyles } from "@material-ui/core";
 
+const useStyles = makeStyles(theme => ({
+  button: {
+    width: "100%",
+    marginTop: "15px"
+  },
+}))
 
+export default function ReceptionDetail() {
 
-export default function ReceptionDetail({location}) {
+  const classes = useStyles();
 
   const [masterData, setMasterData] = useState([]);
   const [detailData, setDetailData] = useState([]);
@@ -386,11 +385,9 @@ export default function ReceptionDetail({location}) {
                   
                  
                 />
-                
-                <SuiButton variant="outlined" color="info" size="small" style={{width: "100%", marginTop: "15px"}} onClick={() => loginBtn()}>
+                <SuiButton className={classes.button} variant="outlined" color="info" size="small" onClick={() => loginBtn()}>
                     확대
                 </SuiButton>
-                
               </Grid>
             </Grid>
           </SuiBox>
