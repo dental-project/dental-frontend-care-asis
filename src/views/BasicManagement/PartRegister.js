@@ -79,7 +79,7 @@ function PartRegister() {
 
 
 
-
+  
   
   const auto1 = ["전체"];
   data.map( (data) => auto1.push( data.partName ));
@@ -177,6 +177,12 @@ function PartRegister() {
       });
   };
 
+  const [autoReset, setAutoReset] = useState("전체");
+
+  useEffect(() => {
+    setAutoReset("전체");
+  }, [autoReset]);
+
   return (
     <>
       <Grid container>
@@ -200,9 +206,15 @@ function PartRegister() {
                     freeSolo
                     className={classes.grid}
                     options={auto1}
-                    defaultValue={auto1[0]}
+                    //defaultValue={aaa}
+                    value={autoReset}
                     getOptionLabel={option => option}
                     filterOptions={filterOptions}
+                    onChange={(event, newValue) => {
+                      if (newValue === null) {
+                        setAutoReset("");
+                      }
+                    }}
                     renderInput={params => (
                       <TextField
                         {...params}
@@ -221,11 +233,7 @@ function PartRegister() {
                   </Button>
                 </form>
               </Grid>
-              <ToastGrid
-                columns={columns}
-                data={gridData}
-                bodyHeight={500}
-              />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>
