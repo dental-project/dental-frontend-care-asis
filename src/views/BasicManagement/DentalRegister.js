@@ -26,6 +26,8 @@ import { dentals } from "modules/dentals";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import axios from "axios";
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -64,12 +66,17 @@ export default function DentalRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ dental }) => dental);
+  const [gridData, setGridData] = useState([]);
+  
+  useEffect(() => {
+    setGridData(data);
+  }, [data]);
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
     setOpenDentalModal(false);
   }, [count]);
-  console.log(data);
+  
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -78,22 +85,15 @@ export default function DentalRegister() {
   const [seqId, setSeqId] = useState("");
   const [dentalObj, setDentalObj] = useState({});
 
-  const auto1 = ["전체"];
-  const auto2 = ["전체"];
-  const auto3 = ["전체"];
+  const vendorNameArr = ["전체"];
 
   data.map( (data) => {
-    auto1.push( data.vendorName )
-    auto2.push( data.ceo )
-    auto3.push( data.tel )
+    vendorNameArr.push(data.vendorName);
   });
 
-
-  console.log(data);
-
-
-
-
+  const set1 = new Set(vendorNameArr);
+  const auto1 = [...set1];
+  
   // 모달
   const [openDentalAddModal, setOpenDentalModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -203,7 +203,7 @@ export default function DentalRegister() {
       name: "address",
       header: "주소",
       align: "center",
-      whiteSpace: "normal",
+      
       resizable: true,
       sortable: true,
       filter: "select",
@@ -259,6 +259,34 @@ export default function DentalRegister() {
     },
   ];
 
+  const onSubmit = e => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const vendorName = formData.get("vendorName");
+    
+    if (vendorName === "") 
+      return alert("검색어를 입력하세요.");
+    
+
+    const dataArr = data.filter(data =>
+      data.vendorName === vendorName
+    );
+
+    axios
+      .get("/api/vendor/", {
+        params: {
+          vendorName: vendorName === "전체" ? "" : vendorName,
+        },
+      })
+      .then(result => {
+        setGridData(result.data);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  };
+
   return (
     <>
       <Grid container>
@@ -266,55 +294,30 @@ export default function DentalRegister() {
           <Card>
             <CardHeader>
               <Grid item xs={12} className={classes.grid}>
-                <Autocomplete
-                  className={classes.grid}
-                  options={auto1}
-                  defaultValue={auto1[0]}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label="거래처명"
-                      variant="outlined"
-                    />
-                  )}
-                />
-                <Autocomplete
-                  className={classes.grid}
-                  options={auto2}
-                  defaultValue={auto2[0]}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  renderInput={params => (
-                    <TextField {...params} label="대표" variant="outlined" />
-                  )}
-                />
-                <Autocomplete
-                  className={classes.grid}
-                  options={auto3}
-                  defaultValue={auto2[0]}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px" }}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label="전화번호"
-                      variant="outlined"
-                    />
-                  )}
-                />
-                <Button
-                  type="submit"
-                  form="formSearchData"
-                  color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
-                  //onClick={(e) => partModalOpen(e)}
-                >
-                  검색
-                </Button>
+                <form id="formSearchData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto1}
+                    defaultValue={auto1[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        name="vendorName"
+                        label="거래처명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formSearchData"
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
               </Grid>
               <Button
                 type="submit"
@@ -327,7 +330,7 @@ export default function DentalRegister() {
               </Button>
             </CardHeader>
             <CardBody>
-              <ToastGrid columns={columns} data={data} bodyHeight={500} />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>
