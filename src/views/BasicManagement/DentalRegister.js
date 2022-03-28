@@ -167,6 +167,7 @@ export default function DentalRegister() {
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
       name: "businessTypeName",
@@ -176,6 +177,7 @@ export default function DentalRegister() {
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
       name: "businessSectorName",
@@ -185,6 +187,7 @@ export default function DentalRegister() {
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
       name: "postNumber",
@@ -194,6 +197,7 @@ export default function DentalRegister() {
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
       name: "address",
