@@ -268,11 +268,6 @@ export default function DentalRegister() {
     if (vendorName === "") 
       return alert("검색어를 입력하세요.");
     
-
-    const dataArr = data.filter(data =>
-      data.vendorName === vendorName
-    );
-
     axios
       .get("/api/vendor/", {
         params: {

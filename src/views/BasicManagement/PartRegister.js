@@ -26,6 +26,8 @@ import PartModalContainer from "containers/PartModalContainer";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 
+import axios from "axios";
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -60,23 +62,25 @@ const useStyles = makeStyles(theme => ({
 
 function PartRegister() {
   const classes = useStyles();
-  const gridRef = React.createRef();
+  
   
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ part }) => part);
   const [gridData, setGridData] = useState([]);
-  const [searchData, setSearchData] = useState("");
-
-  useEffect(() => {
-    setGridData(data)
-    console.log("렌더");
-  }, [data]);
   
+  useEffect(() => {
+    setGridData(data);
+  }, [data]);
+
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
     setOpenPartModal(false);
   }, [count]);
 
+
+
+
+  
   const auto1 = ["전체"];
   data.map( (data) => auto1.push( data.partName ));
 
@@ -104,9 +108,6 @@ function PartRegister() {
   };
 
   const onUpdateButtonClicked = partObj => {
-
-    console.log(partObj);
-
     setModalType("파트수정");
     setPartObj(partObj);
     handlePartModalOpen();
@@ -152,38 +153,28 @@ function PartRegister() {
     },
   ];
 
-  const onClickSearch = e => {
+  const onSubmit = e => {
+    e && e.preventDefault();
 
-    if(searchData === "전체") {
-      setGridData(data);
-    } else {
-      // const searchArr = data.filter(
-      //   data => console.log(data)
-      // );
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const partName = formData.get("partName");
 
-      //console.log(searchData);
+    if (partName === "") return alert("검색어를 입력하세요.");
 
-      const searchArr = data.filter(
-        data => data.partName === searchData
-      );
-      console.log(searchArr);
-      gridRef.current.getInstance().resetData(searchArr);
-      //setGridData(searchArr);
-      
-    }
+    console.log(partName);
 
-    console.log( gridRef.current.getInstance().getData());
-
-    // const a = gridRef.current.getInstance().findRows({
-    //   partName: "Functional App"
-    // })
-    //setGridData(a);
-  
-    //gridRef.current.getInstance().resetData(a);
-
-
-    //console.log(a);
-
+    axios
+      .get("/api/code/part/", {
+        params: {
+          partName: partName === "전체" ? "" : partName,
+        },
+      })
+      .then(result => {
+        setGridData(result.data);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   };
 
   return (
@@ -204,30 +195,37 @@ function PartRegister() {
             </CardHeader>
             <CardBody>
               <Grid item xs={6} className={classes.grid}>
-                <Autocomplete
-                  className={classes.grid}
-                  options={auto1}
-                  defaultValue={auto1[0]}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  onChange={(event, newValue) => {
-                    setSearchData(newValue);
-                  }}
-                  renderInput={params => (
-                    <TextField {...params} label="파트명" variant="outlined" />
-                  )}
-                />
-                <Button
-                  type="submit"
-                  color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
-                  onClick={e => onClickSearch(e)}
-                >
-                  검색
-                </Button>
+                <form id="formSearchData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    freeSolo
+                    className={classes.grid}
+                    options={auto1}
+                    defaultValue={auto1[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        name="partName"
+                        label="파트명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formSearchData"
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
               </Grid>
-              <ToastGrid ref={gridRef} columns={columns} data={gridData} bodyHeight={500} />
+              <ToastGrid
+                columns={columns}
+                data={gridData}
+                bodyHeight={500}
+              />
             </CardBody>
           </Card>
         </Grid>
