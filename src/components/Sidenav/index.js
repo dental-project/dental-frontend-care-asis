@@ -30,14 +30,7 @@ import sidenavLogoLabel from "components/Sidenav/styles/sidenav";
 import { useSoftUIController, setMiniSidenav } from "context";
 
 import { makeStyles } from "@material-ui/core/styles";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import StarsIcon from "@material-ui/icons/Stars";
-import StarBorder from "@material-ui/icons/StarBorder";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
+import CloseIcon from '@mui/icons-material/Close';
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -108,6 +101,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   // console.log(key)
   // console.log(collapseName)
   // console.log(key === collapseName)
+
     returnValue = (
       subItem ? (
         <SidenavDropdown
@@ -119,28 +113,31 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         />
       ) : (
         <NavLink to={layout + path} key={key}>
-          <SidenavCollapse
-            color={color}
-            key={key}
-            name={name}
-            icon={icon}
-            active={key === collapseName}
-            noCollapse={noCollapse}
-            subItem={subItem}
-          />
+          {
+            key !== "receptionDetail"
+              ? (
+                <SidenavCollapse
+                  color={color}
+                  key={key}
+                  name={name}
+                  icon={icon}
+                  active={key === collapseName}
+                  noCollapse={noCollapse}
+                  subItem={subItem}
+                />
+              )
+              : null
+          }
         </NavLink>
       )
      );
-    
-    
-    
     return returnValue;
   });
 
   return (
     <SidenavRoot {...rest} variant="permanent" ownerState={{ transparentSidenav, miniSidenav }}>
       <SuiBox pt={3} pb={1} px={4} textAlign="center">
-        <SuiBox
+      <SuiBox
           display={{ xs: "block", xl: "none" }}
           position="absolute"
           top={0}
@@ -150,7 +147,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           sx={{ cursor: "pointer" }}
         >
           <SuiTypography variant="h6" color="secondary">
-            <Icon sx={{ fontWeight: "bold" }}>close</Icon>
+            <CloseIcon fontWeight={"bold"} />
           </SuiTypography>
         </SuiBox>
         <SuiBox component={NavLink} to="/" display="flex" alignItems="center">

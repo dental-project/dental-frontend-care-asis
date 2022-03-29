@@ -55,7 +55,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     dispatch(businessSectors.getBusinessSectorMiddleware());
     dispatch(banks.getBankMiddleware());
   }, []);
-  
+
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -63,17 +63,17 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
   const autoType = [];
   businessTypeAutoData.map(data =>
-    autoType.push(data.type_name)
+    autoType.push(data.typeName)
   );
 
   const autoSector = [];
   businessSectorAutoData.map(data =>
-    autoSector.push(data.sector_name)
+    autoSector.push(data.sectorName)
   );
 
   const autoBank = [];
   bankAutoData.map(data =>
-    autoBank.push(data.bank_name)
+    autoBank.push(data.bankName)
   );
   
   const onSubmit = (e) => {
@@ -104,52 +104,52 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       return alert("빈칸없이 입력하세요");
 
     const businessTypeIndex = businessTypeAutoData.findIndex(
-      obj => obj.type_name === businessTypeName
+      obj => obj.typeName === businessTypeName
     );
    
     const businessSectorIndex = businessSectorAutoData.findIndex(
-      obj => obj.sector_name === businessSectorName
+      obj => obj.sectorName === businessSectorName
     );
 
     const bankIndex = bankAutoData.findIndex(
-      obj => obj.bank_name === bankName
+      obj => obj.bankName === bankName
     );
  
     if (modalType === "추가") {
       const contents = {
-        vendor_name: vendorName,
+        vendorName: vendorName,
         ceo: ceo,
         tel: tel,
         mobile: mobile,
         fax: fax,
-        business_number: businessNumber,
-        business_type_no: businessTypeAutoData[businessTypeIndex].type_no,
-        business_sector_no: businessSectorAutoData[businessSectorIndex].sector_no,
-        post_number: postNumber,
+        businessNumber: businessNumber,
+        businessTypeNo: businessTypeAutoData[businessTypeIndex].typeNo,
+        businessSectorNo: businessSectorAutoData[businessSectorIndex].sectorNo,
+        postNumber: postNumber,
         address: address,
-        bank_no: bankAutoData[bankIndex].bank_no,
-        bank_account: bankAccount,
+        bankNo: bankAutoData[bankIndex].banknNo,
+        bankAccount: bankAccount,
         description: description,
       };
       dispatch(dentals.addDentalMiddleware(contents));
     } else if (modalType === "치과수정") {
       const contents = {
-        seq_id: dentalObj.seqId,
-        vendor_name: vendorName,
+        seqId: dentalObj.seqId,
+        vendorName: vendorName,
         ceo: ceo,
         tel: tel,
         mobile: mobile,
         fax: fax,
-        business_number: businessNumber,
-        business_type_no: businessTypeAutoData[businessTypeIndex].type_no,
-        business_sector_no: businessSectorAutoData[businessSectorIndex].sector_no,
-        post_number: postNumber,
+        businessNumber: businessNumber,
+        businessTypeNo: businessTypeAutoData[businessTypeIndex].typeNo,
+        businessSectorNo: businessSectorAutoData[businessSectorIndex].sectorNo,
+        postNumber: postNumber,
         address: address,
-        bank_no: bankAutoData[bankIndex].bank_no,
-        bank_account: bankAccount,
+        bankNo: bankAutoData[bankIndex].bankNo,
+        bankAccount: bankAccount,
         description: description,
       };
-      console.log(contents);
+      
       dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents));
     } else if (modalType === "삭제") {
       dispatch(dentals.deleteDentalMiddleware(seqId));

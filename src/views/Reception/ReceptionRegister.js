@@ -6,22 +6,15 @@ import { makeStyles } from "@material-ui/core";
 
 // core components
 import Grid from "@material-ui/core/Grid";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import Button from "components/CustomButtons/Button.js";
 
 // Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
+import ToastGrid from "@toast-ui/react-grid";
 
 // Material
 import TextField from "@material-ui/core/TextField";
 
 import ReceptionModalContainer from "containers/ReceptionModalContainer";
-//import PrintModal from "components/Modal/PrintModal.js"
-
 import PrintModalContainer from "containers/PrintModalContainer";
-
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
@@ -35,15 +28,26 @@ import { receptionDetails } from "modules/receptionDetails";
 import { items } from "modules/items";
 import { useDispatch, useSelector } from "react-redux";
 
+// Soft UI Dashboard React components
+import SuiBox from "components/Sui/SuiBox";
+import SuiTypography from "components/Sui/SuiTypography";
+import SuiButton from "components/Sui/SuiButton";
+import MiniStatisticsCard from "components/MiniStatisticsCard";
+import Project from "components/SuiProject";
+
+
+// @mui material components
+import Card from "@mui/material/Card";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
 
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
   },
 
-  textFieldDate: {
-    width: "100%",
-  },
   textField: {
     width: "100%",
     margin: theme.spacing(1),
@@ -75,24 +79,39 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
-  const selectDetailData = useSelector(
-    ({ receptionDetail }) => receptionDetail.data
-  );
-  //const itemData  = useSelector(({ item }) => item.data);
-  //const receptionDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
-
+  const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
-  const [receptionObj, setReceptionObj] = useState({});
-  
+  const [selectReceptionData, setSelectReceptionData] = useState({});
   
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
-    //dispatch(receptionDetails.getReceptionDetailMiddleware());
     dispatch(items.getItemMiddleware());
     setOpenReceptionModal(false);
   }, [count]);
 
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
 
+  const renderMenu = (
+    <Menu
+      id="simple-menu"
+      anchorEl={menu}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+      <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+    </Menu>
+  );
 
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
@@ -108,17 +127,15 @@ export default function ReceptionRegister() {
   // 출력 모달
   const [openPrint, setOpenPrint] = useState(false);
   const handleClickOpenPrint = () => {
+    closeMenu();
     setOpenPrint(true);
   };
   const handleClosePrint = () => {
     setOpenPrint(false);
   };
 
-  const onDetailButtonClicked = () => {
-    history.push("/dental/receptionDetail");
-  };
-
   const receptionModalOpen = () => {
+    closeMenu();
     setModalType("추가");
     handleReceptionModalOpen();
   };
@@ -126,45 +143,20 @@ export default function ReceptionRegister() {
   const onUpdateButtonClicked = receptionObj => {
     setModalType("접수수정");
     
-    console.log(receptionObj);
-
     const sellMasterId = receptionObj.seqId;
-    console.log(sellMasterId);
-
+  
     dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
-
-
-    
-
-    // let detailArr = receptionDetailData.filter(
-    //   data => data.sell_master_id === receptionObj.seqId
-    // );
-
-    // const sss = [];
-    
-    // for (let i = 0; i<detailArr.length; i++) {
-     
-    //   const partArr = itemData.filter(
-    //     data => data.seq_id === detailArr[i].item_seq_id
-    //   );
-
-    //   sss.push({
-    //     partName: partArr[0].part_name,
-    //     itemName: detailArr[i].item_name,
-    //     unitPrice: detailArr[i].normal_price,
-    //     amount: detailArr[i].sell_count,
-    //     normalPrice: detailArr[i].normal_price * detailArr[i].sell_count,
-    //     discountPrice: detailArr[i].real_sell_price,
-    //     finalPrice: detailArr[i].normal_price - detailArr[i].real_sell_price,
-    //     discount: detailArr[i].discount,
-    //   });
-    // }
-    
-    // console.log(sss);
-    setReceptionObj(receptionObj);
-    //setReceptionDetailArr(sss);
-
+    setSelectReceptionData(receptionObj);
     handleReceptionModalOpen();
+  };
+
+  const onDetailButtonClicked = receptionObj => {
+
+    history.push({
+      pathname: "/dental/receptionDetail",
+      seqId: receptionObj.seqId,
+      state: [receptionObj],
+    });
   };
 
   const onRemoveButtonClicked = seqId => {
@@ -176,7 +168,7 @@ export default function ReceptionRegister() {
   const columns = [
     { name: "seq_id", header: "codeNo", align: "center", hidden: true },
     {
-      name: "receipt_date",
+      name: "receiptDate",
       header: "접수일자",
       align: "center",
       whiteSpace: "normal",
@@ -185,7 +177,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "completion_date",
+      name: "completionDate",
       header: "완성일자",
       align: "center",
       whiteSpace: "normal",
@@ -194,7 +186,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "delivery_date",
+      name: "deliveryDate",
       header: "배달일자",
       align: "center",
       whiteSpace: "normal",
@@ -203,7 +195,7 @@ export default function ReceptionRegister() {
       filter: { type: "date", options: { format: "yyyy.MM.dd" } },
     },
     {
-      name: "vendor_name",
+      name: "vendorName",
       header: "거래처",
       align: "center",
       whiteSpace: "normal",
@@ -212,7 +204,7 @@ export default function ReceptionRegister() {
       filter: "select",
     },
     {
-      name: "chart_number",
+      name: "chartNumber",
       header: "차트번호",
       align: "center",
       whiteSpace: "normal",
@@ -257,7 +249,7 @@ export default function ReceptionRegister() {
       filter: "select",
     },
     {
-      name: "patient_name",
+      name: "patientName",
       header: "환자명",
       align: "center",
       whiteSpace: "normal",
@@ -334,67 +326,108 @@ export default function ReceptionRegister() {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} className={classes.grid}>
-          <Card>
-            <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => receptionModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <form className={classes.container} noValidate>
-                <Grid
-                  item
-                  xs={4}
-                  className={classes.grid}
-                  style={{ float: "left" }}
-                >
+      <SuiBox py={3}>
+        <SuiBox mb={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "전체 리스트" }}
+                count="100개"
+                percentage={{ color: "success", text: "EA" }}
+                icon={{ color: "info", component: "AllList" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "today's users" }}
+                count="2,300"
+                percentage={{ color: "success", text: "+3%" }}
+                icon={{ color: "info", component: "public" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "new clients" }}
+                count="+3,462"
+                percentage={{ color: "error", text: "-2%" }}
+                icon={{ color: "info", component: "emoji_events" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "sales" }}
+                count="$103,430"
+                percentage={{ color: "success", text: "+5%" }}
+                icon={{
+                  color: "info",
+                  component: "shopping_cart",
+                }}
+              />
+            </Grid>
+          </Grid>
+        </SuiBox>
+        <SuiBox mb={3}>
+          <Project renderMenu={renderMenu}>
+            
+            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+            </SuiBox> */}
+              {/* <SuiBox color="text" px={2}>
+                <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+                  more_vert
+                </MoreVertIcon>
+              </SuiBox>
+              {renderMenu} */}
+            {/* <Menu
+              id="simple-menu"
+              anchorEl={menu}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(menu)}
+              onClose={closeMenu}
+            >
+              <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+              <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+            </Menu> */}
+            <SuiBox display="flex" px={2}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <TextField
                     id="date"
                     label="접수일자"
                     type="date"
                     defaultValue="2022-01-11"
                     className={classes.textField}
-                    style={{ width: "45%" }}
+                    variant="outlined"
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
+                </Grid>
+                <Grid item xs={12} sm={2} xl={2}>
                   <TextField
                     id="date"
                     label="완성일자"
                     type="date"
                     defaultValue="2022-01-12"
                     className={classes.textField}
-                    style={{ width: "45%" }}
+                    variant="outlined"
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
                 </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  className={classes.grid}
-                  style={{ float: "left" }}
-                >
+                <Grid item xs={12} sm={3} xl={2}>
                   <Autocomplete
                     className={classes.grid}
                     options={auto1}
                     getOptionLabel={option => option.title}
                     filterOptions={filterOptions}
-                    style={{
-                      float: "left",
-                      width: "200px",
-                      marginLeft: "20px",
-                    }}
                     renderInput={params => (
                       <TextField
                         {...params}
@@ -403,12 +436,13 @@ export default function ReceptionRegister() {
                       />
                     )}
                   />
+                </Grid>
+                <Grid item xs={12} sm={3} xl={2}>
                   <Autocomplete
                     className={classes.grid}
                     options={auto2}
                     getOptionLabel={option => option.title}
                     filterOptions={filterOptions}
-                    style={{ float: "left", width: "200px" }}
                     renderInput={params => (
                       <TextField
                         {...params}
@@ -417,45 +451,50 @@ export default function ReceptionRegister() {
                       />
                     )}
                   />
-                  <Button
-                    type="submit"
-                    color="primary"
-                    round
-                    style={{ float: "left", width: "100px" }}
-                  >
+                </Grid>
+                <Grid item xs={12} sm={2} xl={2}>
+                  <SuiButton variant="outlined" color="info" size="large" style={{marginTop: "10px"}}>
                     검색
-                  </Button>
+                  </SuiButton>
                 </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  className={classes.grid}
-                  style={{ float: "right" }}
-                >
-                  <Button
-                    color="danger"
-                    round
-                    style={{ width: "100%" }}
-                    onClick={e => handleClickOpenPrint(e)}
-                  >
-                    출력
-                  </Button>
-                </Grid>
-              </form>
-              <BasicGrid columns={columns} data={data} />
-            </CardBody>
-          </Card>
-        </Grid>
-      </Grid>
+              </Grid>
+            </SuiBox>
+            <SuiBox px={2}>
+              <ToastGrid columns={columns} data={data} bodyHeight={500} />
+            </SuiBox>
+          </Project>
+         
+          {/* <Card> */}
+            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <SuiBox>
+                <SuiTypography variant="h6" gutterBottom>
+                  접수 리스트   
+                </SuiTypography>
+                <SuiBox display="flex" alignItems="center" lineHeight={0}>
+                  <PlaylistAddCheckIcon fontSize="medium" />
+                  <SuiTypography variant="button" fontWeight="regular" color="text">
+                    &nbsp;<strong>All</strong> list
+                  </SuiTypography>
+                </SuiBox>
+              </SuiBox>
+              <SuiBox color="text" px={2}>
+                <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+                  more_vert
+                </MoreVertIcon>
+              </SuiBox>
+              {renderMenu}
+            </SuiBox> */}
+            
+          {/* </Card> */}
+        </SuiBox>
+      </SuiBox>
       <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
         close={handleReceptionModalClose}
         seqId={seqId}
-        receptionObj={receptionObj} // 접수 수정 데이터
-        receptionData={data} // 접수 리스트 데이터
+        selectReceptionData={selectReceptionData} // 접수 수정 데이터
         selectDetailData={selectDetailData}
-        //receptionDetailData={receptionDetailData}
       />
       <PrintModalContainer open={openPrint} close={handleClosePrint} />
     </>

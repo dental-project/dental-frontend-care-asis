@@ -30,7 +30,7 @@ const getDentalMiddleware = () => {
         dispatch(readDental(dentalData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -40,11 +40,17 @@ const addDentalMiddleware = contents => {
     apis
       .createDental(contents)
       .then(result => {
-        dispatch(addDental(contents));
-        alert("추가를 완료 하였습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(addDental(contents));
+          alert("추가를 완료 하였습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
@@ -54,13 +60,17 @@ const updateDentalMiddleware = (seqId, contents) => {
     apis
       .patchDental(seqId, contents)
       .then(result => {
-        const data = { seq_id: seqId, contents: contents };
 
-        dispatch(updateDental(data));
-        alert("수정을 완료 했습니다.");
+        if (result.data.status === "SUCCESS") {
+          dispatch(updateDental());
+          alert("수정을 완료 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };
@@ -70,11 +80,17 @@ const deleteDentalMiddleware = seqId => {
     apis
       .deleteDental(seqId)
       .then(result => {
-        dispatch(removeDental(seqId));
-        alert("삭제를 완료 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removeDental());
+          alert("삭제를 완료 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+       
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };

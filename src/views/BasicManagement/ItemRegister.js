@@ -10,10 +10,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
-
-// Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
-
+import AddIcon from '@mui/icons-material/Add';
 // Material
 import TextField from "@material-ui/core/TextField";
 
@@ -22,12 +19,18 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 
+// Toast Grid
+import ToastGrid from "@toast-ui/react-grid";
+
+import "tui-grid/dist/tui-grid.css";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
 import { items } from "modules/items";
 
 import { useDispatch, useSelector } from "react-redux";
+
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -57,9 +60,6 @@ const useStyles = makeStyles(theme => ({
       color: "#1993A8",
     },
   },
-  button: {
-    width: "100%",
-  },
 }));
 
 export default function ItemRegister() {
@@ -67,18 +67,37 @@ export default function ItemRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ item }) => item);
+  const [gridData, setGridData] = useState([]);
+
+  const [seqId, setSeqId] = useState();
+  const [itemObj, setItemObj] = useState({});
+
+  useEffect(() => {
+    setGridData(data)
+  }, [data]);
 
   useEffect(() => {
     dispatch(items.getItemMiddleware());
     setOpenItemModal(false);
   }, [count]);
 
-  const [seqId, setSeqId] = useState();
-  const [itemObj, setItemObj] = useState({});
+  const partNameArr = ["전체"];
+  const itemNameArr = ["전체"];
+
+  data.map( (data) => {
+    partNameArr.push( data.partName )
+    itemNameArr.push( data.itemName )
+  });
+ 
+  const set1 = new Set(partNameArr);
+  const set2 = new Set(itemNameArr);
+
+  const auto1 = [...set1];
+  const auto2 = [...set2];
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.title,
+    stringify: option => option,
   });
 
   // 모달
@@ -111,14 +130,14 @@ export default function ItemRegister() {
 
   const columns = [
     {
-      name: "part_name",
+      name: "partName",
       header: "파트명",
       align: "center",
       sortable: true,
       filter: "select",
     },
     {
-      name: "item_name",
+      name: "itemName",
       header: "장치명",
       align: "center",
       sortable: true,
@@ -148,20 +167,36 @@ export default function ItemRegister() {
     },
   ];
 
-  const auto1 = [
-    { title: "전체" },
-    { title: "Diagnostic Study Models" },
-    { title: "Removale App" },
-    { title: "Fixed App" },
-    { title: "Functional App" },
-  ];
-  const auto2 = [
-    { title: "전체" },
-    { title: "asdasdasd" },
-    { title: "테스트 기공" },
-    { title: "테스트 기공2" },
-    { title: "테스트 기공3" },
-  ];
+  const onSubmit = (e) => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const partName = formData.get("partName");
+    const itemName = formData.get("itemName");
+
+    if (partName === "" || itemName === "") {
+      return alert("검색어를 입력하세요.");
+    }
+
+    const dataArr = data.filter(data => 
+      data.partName === partName
+    );
+
+    axios
+      .get("/api/code/item/", {
+        params : {
+          partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
+          itemName: itemName === "전체" ? "" : itemName,
+        }
+      })
+      .then((result) => {
+        setGridData(result.data)
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+
+  }
 
   return (
     <>
@@ -169,51 +204,51 @@ export default function ItemRegister() {
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => itemModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <Grid item xs={6} className={classes.grid}>
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto1}
-                  getOptionLabel={option => option.title}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px", marginLeft: "20px" }}
-                  renderInput={params => (
-                    <TextField {...params} label="파트명" variant="outlined" />
-                  )}
-                />
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto2}
-                  getOptionLabel={option => option.title}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px" }}
-                  renderInput={params => (
-                    <TextField {...params} label="장치명" variant="outlined" />
-                  )}
-                />
+              <Grid item xs={12} className={classes.grid}>
+                <form id="formSearchData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto1}
+                    defaultValue={auto1[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField {...params} name="partName" label="파트명" variant="outlined" />
+                    )}
+                  />
+                  <Autocomplete
+                    freeSolo
+                    className={classes.grid}
+                    options={auto2}
+                    defaultValue={auto2[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField {...params} name="itemName" label="장치명" variant="outlined" />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formSearchData"
+                    style={{ float: "left"}}
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
                 <Button
                   type="submit"
-                  color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
-                  //onClick={(e) => partModalOpen(e)}
+                  color="info"
+                  style={{ float: "right"}}
+                  onClick={e => itemModalOpen(e)}
                 >
-                  검색
-                </Button>
+                <AddIcon/>추가
+              </Button>
               </Grid>
-              <BasicGrid type={"item"} columns={columns} data={data} />
+
+            </CardHeader>
+            <CardBody>
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

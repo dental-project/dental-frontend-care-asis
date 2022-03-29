@@ -37,74 +37,85 @@ const getReceptionMiddleware = () => {
         dispatch(readReception(receptionData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
 
-const getVendorPartMiddleware = seqId => {
-  return dispatch => {
-    apis
-      .getSelectVendorPart(seqId)
-      .then(result => {
-        console.log(result);
-        const vendorPartData = result.data;
-        dispatch(readVendorPart(vendorPartData));
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  };
-};
+// const getVendorPartMiddleware = (seqId) => {
+//   return dispatch => {
+//     apis
+//       .getSelectVendorPart(seqId)
+//       .then(result => {
+      
+//         const vendorPartData = result.data;
+//         dispatch(readVendorPart(vendorPartData));
+//       })
+//       .catch(err => {
+//         console.error(err);
+//       });
+//   };
+// };
 
 const addReceptionMiddleware = (data) => {
   return dispatch => {
     apis
       .createReception(data)
       .then(result => {
-        if(result.status=="ERROR"){
-          alert(result.message)
-        }else{
+        
+        if (result.data.status === "SUCCESS") {
           dispatch(addReception(data));
-  
           alert("접수 정보를 추가 하였습니다.");
+        } else {
+          alert(result.data.message);
         }
+
         // for(let i=0; i<priceContents.length; i++) {
         //   priceContents[i].sell_master_id = result.data.seq_id
         // };
-        
-        // dispatch(addReceptionPriceMiddleware(priceContents));
 
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
 
 const addReceptionPriceMiddleware = contents => {
+  console.log(contents);
   return dispatch => {
     apis
       .createReceptionPrice(contents)
       .then(result => {
-        dispatch(addReceptionPrice(contents));
-        alert("접수 정보를 추가 하였습니다.2");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(addReceptionPrice(contents));
+          alert("접수 정보를 추가 하였습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };
 
 const updateReceptionMiddleware = (seqId, contents) => {
+
   return dispatch => {
     apis
-      .patchPart(seqId, contents)
+      .patchReception(seqId, contents)
       .then(result => {
-        const data = { seq_id: seqId, contents: contents };
 
-        dispatch(updateReception(data));
-        alert("접수 정보를 수정 했습니다.");
+        if (result.data.status === "SUCCESS") {
+          dispatch(updateReception());
+          alert("접수 정보를 수정 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+       
       })
       .catch(err => {
         console.log(err);
@@ -117,12 +128,17 @@ const deleteReceptionMiddleware = seqId => {
     apis
       .deleteReception(seqId)
       .then(result => {
-        console.log(result);
-        dispatch(removeReception(seqId));
-        alert("접수 정보를 삭제 했습니다.");
+
+        if (result.data.status === "SUCCESS") {
+          dispatch(removeReception());
+          alert("접수 정보를 삭제 했습니다.");
+        } else {
+          alert(result.data.message);
+        }
+        
       })
       .catch(err => {
-        console.log(err);
+        alert(err);
       });
   };
 };
@@ -150,10 +166,10 @@ export default handleActions(
       produce(state, draft => {
         draft.data = action.payload.data;
       }),
-    [READ_VENDOR_PART]: (state, action) =>
-      produce(state, draft => {
-        draft.data = action.payload.data;
-      }),
+    // [READ_VENDOR_PART]: (state, action) =>
+    //   produce(state, draft => {
+    //     draft.data = action.payload.data;
+    //   }),
     [ADD_RECEPTION]: state =>
       produce(state, draft => {
         draft.count = draft.count + 1;
@@ -184,7 +200,7 @@ export default handleActions(
 
 const receptions = {
   getReceptionMiddleware,
-  getVendorPartMiddleware,
+  //getVendorPartMiddleware,
   addReceptionMiddleware,
   addReceptionPriceMiddleware,
   updateReceptionMiddleware,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -20,6 +20,15 @@ function SidenavCard() {
   const [controller] = useSoftUIController();
   const { miniSidenav, sidenavColor } = controller;
 
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return (() => clearInterval(id))
+  }, []);
+
   return (
     <Card sx={(theme) => card(theme, { miniSidenav })}>
       <CardContent sx={(theme) => cardContent(theme, { sidenavColor })}>
@@ -38,11 +47,16 @@ function SidenavCard() {
         </SuiBox> */}
         <SuiBox lineHeight={1}>
           <SuiTypography variant="h6" color="white">
-            Dental.A
+            Dental.A 
           </SuiTypography>
-          <SuiBox mb={1.825} mt={-1}>
+          <SuiBox>
             <SuiTypography variant="caption" color="white" fontWeight="medium">
-              Please check our docs
+            {time.toLocaleDateString()}
+            </SuiTypography>
+          </SuiBox>
+          <SuiBox mb={1.825} mt={0.5}>
+            <SuiTypography variant="H6" color="white" fontWeight="medium">
+              {time.toLocaleTimeString()}
             </SuiTypography>
           </SuiBox>
           {/* <SuiButton

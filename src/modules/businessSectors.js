@@ -14,18 +14,18 @@ const initialState = {
 };
 
 const getBusinessSectorMiddleware = () => {
-    return (dispatch) => {
-        apis
-          .getBusinessSector()
-          .then((result) => {        
-           
-            const businessSectorData = result.data;
-            dispatch(readBusinessSector(businessSectorData));
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      };
+  return (dispatch) => {
+    apis
+      .getBusinessSector()
+      .then((result) => {        
+        
+        const businessSectorData = result.data;
+        dispatch(readBusinessSector(businessSectorData));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 }
 
 // reducer

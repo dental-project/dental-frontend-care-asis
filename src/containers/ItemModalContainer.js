@@ -64,11 +64,11 @@ const ItemModalContainer = ({
   });
 
   const auto = [];
-  partAutoData.map(data => auto.push(data.part_name));
+  partAutoData.map(data => auto.push(data.partName));
 
   const onSubmit = (e) => {
     e && e.preventDefault();
-
+    console.log("asfasfasf");
     let formData = new FormData(document.getElementById("formData"));
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
@@ -76,26 +76,47 @@ const ItemModalContainer = ({
     if (partName === "" || itemName === "") return alert("빈칸없이 입력하세요");
 
     const index = partAutoData.findIndex(
-      obj => obj.part_name === partName
+      obj => obj.partName === partName
     );
 
     if (modalType === "추가") {
       const content = {
-        part_seq_id: partAutoData[index].seq_id,
-        item_name: itemName,
+        partSeqId: partAutoData[index].seqId,
+        itemName: itemName,
       };
       dispatch(items.addItemMiddleware(content));
 
     } else if (modalType === "수정") {
+      console.log("---");
       const contents = {
-        seq_id: itemObj.seqId,
-        part_seq_id: partAutoData[index].seq_id,
-        item_name: itemName,
+        seqId: itemObj.seqId,
+        partSeqId: partAutoData[index].seqId,
+        itemName: itemName,
       };
+      console.log(itemObj.seqId);
+      console.log(contents);
+
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       
     } else if (modalType === "삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
+
+        // apis
+        //   .deleteItem(seqId)
+        //   .then(result => {
+        //     console.log(result);
+        //     if (result.data.status === "SUCCESS") {
+              
+        //       //dispatch(removeItem());
+        //       alert("장치를 삭제 했습니다.");
+        //     } else {
+        //       alert(result.data.message);
+        //     }
+        //   })
+        //   .catch(err => {
+        //     alert(err);
+        //   });
+
     }
   };
 

@@ -8,50 +8,31 @@ const BasicGrid = ({
   columns,
 }) => {
 
-  TuiGrid.applyTheme('striped', {
+  TuiGrid.applyTheme('clean', {
     
-    // scrollbar: {
-    //   background: '#f5f5f5',
-    //   thumb: '#339BD8'
-    // },
-    // row: {
-    //   even: {
-    //     background: '#272833'
-    //   },
-    //   hover: {
-    //     background: '#339BD8'
-    //   }
-    // },
-    // cell: {
-    //   normal: {
-    //     text: '#fff',
-    //     background: '#272833',
-    //     border: '#272833'
-    //   },
-    //   header: {
-    //     text: '#339BD8',
-    //     background: '#173C4F',
-    //     border: '#173C4F'
-    //   },
-     
-    // }
-
-    // cell: {
-    //   normal: {
-    //     text: '#ffffff',
-    //     background: '#2E2F3A',
-        
-    //     showVerticalBorder: false,
-    //     showHorizontalBorder: true
-    //   },
-    //   header: {
-    //     background: '#fff',
-    //     border: '#e0e0e0'
-    //   },
-    //   selectedHeader: {
-    //     background: '#e0e0e0'
-    //   }
-    // }
+    scrollbar: {
+      background: "#f5f5f5",
+      thumb: "#EAEAEA"
+    },
+    row: {
+      even: {
+        background: "#F6F6F6"
+      },
+      hover: {
+        background: "#EAEAEA"
+      }
+    },
+    cell: {
+      header: {
+        text: "#000",
+        background: "#EAEAEA",
+      },
+      normal: {
+        text: "#000",
+        border: "#CCD5CC",
+        background: "#fff",
+      }
+    }
   });
  
   return(

@@ -40,7 +40,7 @@ const getReceptionDetailSelectMiddleware = (seqId) => {
         dispatch(readReceptionDetailSelect(receptionDetailSelectData));
       })
       .catch(err => {
-        console.error(err);
+        alert(err);
       });
   };
 };

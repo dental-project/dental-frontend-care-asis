@@ -26,6 +26,8 @@ import PartModalContainer from "containers/PartModalContainer";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 
+import axios from "axios";
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -60,22 +62,31 @@ const useStyles = makeStyles(theme => ({
 
 function PartRegister() {
   const classes = useStyles();
-  const gridRef = React.createRef();
-
+  
+  
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ part }) => part);
+  const [gridData, setGridData] = useState([]);
+  
+  useEffect(() => {
+    setGridData(data);
+  }, [data]);
 
   useEffect(() => {
     dispatch(parts.getPartMiddleware());
     setOpenPartModal(false);
   }, [count]);
 
-  const auto1 = [{ part_name: "전체" }];
-  //part.map( (data) => auto1.push({ part_name: data.part_name}) );
+
+
+  
+  
+  const auto1 = ["전체"];
+  data.map( (data) => auto1.push( data.partName ));
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.part_name,
+    stringify: option => option,
   });
 
   const [seqId, setSeqId] = useState("");
@@ -110,9 +121,9 @@ function PartRegister() {
 
   // Toast Grid options value
   const columns = [
-    { name: "seq_id", header: "CodeNo", align: "center", hidden: true },
+    { name: "seqId", header: "CodeNo", align: "center", hidden: true },
     {
-      name: "part_name",
+      name: "partName",
       header: "파트명",
       align: "center",
       sortable: true,
@@ -142,10 +153,35 @@ function PartRegister() {
     },
   ];
 
-  const onClickSearch = e => {
-    console.log(gridRef.current.getInstance());
-    gridRef.current.getInstance().filter("name", { part_name: "Removale App" });
+  const onSubmit = e => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const partName = formData.get("partName");
+
+    if (partName === "") return alert("검색어를 입력하세요.");
+
+    console.log(partName);
+
+    axios
+      .get("/api/code/part/", {
+        params: {
+          partName: partName === "전체" ? "" : partName,
+        },
+      })
+      .then(result => {
+        setGridData(result.data);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   };
+
+  const [autoReset, setAutoReset] = useState("전체");
+
+  useEffect(() => {
+    setAutoReset("전체");
+  }, [autoReset]);
 
   return (
     <>
@@ -165,39 +201,39 @@ function PartRegister() {
             </CardHeader>
             <CardBody>
               <Grid item xs={6} className={classes.grid}>
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto1}
-                  defaultValue={auto1[0]}
-                  getOptionLabel={option => option.part_name}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "300px" }}
-                  // onChange={(event, newValue) => {
-                  //   setValue(newValue);
-                  //   console.log(newValue);
-                  // }}
-                  getOptionSelected={(option, value) => {
-                    return (
-                      option?.id === value?.id ||
-                      option?.name.toLowerCase() === value?.name.toLowerCase()
-                    );
-                  }}
-                  renderInput={params => (
-                    <TextField {...params} label="파트명" variant="outlined" />
-                  )}
-                />
-                <Button
-                  type="submit"
-                  color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
-                  onClick={e => onClickSearch(e)}
-                >
-                  검색
-                </Button>
+                <form id="formSearchData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    freeSolo
+                    className={classes.grid}
+                    options={auto1}
+                    //defaultValue={aaa}
+                    value={autoReset}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    onChange={(event, newValue) => {
+                      if (newValue === null) {
+                        setAutoReset("");
+                      }
+                    }}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        name="partName"
+                        label="파트명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formSearchData"
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
               </Grid>
-              <ToastGrid ref={gridRef} columns={columns} data={data} />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

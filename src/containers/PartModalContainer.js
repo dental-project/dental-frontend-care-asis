@@ -3,7 +3,6 @@ import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
-import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { parts } from "modules/parts";
 
@@ -53,17 +52,18 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
     if (modalType === "추가") {
 
       const content = {
-        part_name: partName,
+        partName: partName,
       };
       dispatch(parts.addPartMiddleware(content));
     } else if(modalType === "파트수정") {
 
       const contents = {
-        seq_id: seqId,
-        part_name: partName,
+        seqId: seqId,
+        partName: partName,
       };
+
       dispatch(parts.updatePartMiddleware(partObj.seqId, contents));
-    } else if(modalType === "삭제") {
+    } else if (modalType === "삭제") {
       dispatch(parts.deletePartMiddleware(seqId));
     }
 

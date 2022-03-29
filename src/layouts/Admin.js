@@ -16,7 +16,7 @@ import toothImg from "assets/img/toothImg.svg";
 import SuiBox from "components/Sui/SuiBox";
 import Icon from "@mui/material/Icon";
 import Sidenav from "components/Sidenav";
-import Configurator from "components/Configurator";
+// import Configurator from "components/Configurator";
 import Navbar from "components/Navbars";
 // Soft UI Dashboard PRO React contexts
 
@@ -35,7 +35,7 @@ const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
       if (prop.layout === "/dental") {
-        if(prop.subItem){
+        if (prop.subItem) {
           let subRoutes = new Object();
           subRoutes = prop.subItem.map((subProp,subKey)=>{
             return <Route
@@ -53,7 +53,8 @@ const switchRoutes = (
             subItem={prop.subItem}
           />);
           return subRoutes
-        }else{
+        } else {
+          
           return <Route
             path={prop.layout + prop.path}
             component={prop.component}
@@ -198,15 +199,18 @@ export default function Admin({ ...rest }) {
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}
         />
-        <Configurator />
+        {/* <Configurator /> */}
         {/* {configsButton} */}
       </>
       <div className={classes.mainPanel} ref={mainPanel}>
-      <Navbar />
+      
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
+            <div className={classes.container}>
+              <Navbar />
+              {switchRoutes}
+            </div>
           </div>
         ) : (
           <div className={classes.map}>{switchRoutes}</div>

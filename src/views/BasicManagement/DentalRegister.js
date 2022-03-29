@@ -9,14 +9,15 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 
-// Toast Grid
-import BasicGrid from "components/ToastGrid/BasicGrid.js";
+
 
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
+// Toast Grid
+import ToastGrid from "@toast-ui/react-grid";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 import DentalModalContainer from "containers/DentalModalContainer";
@@ -24,6 +25,8 @@ import DentalModalContainer from "containers/DentalModalContainer";
 import { dentals } from "modules/dentals";
 
 import { useDispatch, useSelector } from "react-redux";
+
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -63,20 +66,34 @@ export default function DentalRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ dental }) => dental);
+  const [gridData, setGridData] = useState([]);
+  
+  useEffect(() => {
+    setGridData(data);
+  }, [data]);
 
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
     setOpenDentalModal(false);
   }, [count]);
-
+  
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.title,
+    stringify: option => option,
   });
 
   const [seqId, setSeqId] = useState("");
   const [dentalObj, setDentalObj] = useState({});
 
+  const vendorNameArr = ["전체"];
+
+  data.map( (data) => {
+    vendorNameArr.push(data.vendorName);
+  });
+
+  const set1 = new Set(vendorNameArr);
+  const auto1 = [...set1];
+  
   // 모달
   const [openDentalAddModal, setOpenDentalModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -107,7 +124,7 @@ export default function DentalRegister() {
 
   const columns = [
     {
-      name: "vendor_name",
+      name: "vendorName",
       header: "거래처명",
       align: "center",
       whiteSpace: "normal",
@@ -143,52 +160,56 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "business_number",
+      name: "businessNumber",
       header: "사업자번호",
       align: "center",
       whiteSpace: "normal",
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
-      name: "business_type_name",
+      name: "businessTypeName",
       header: "업태",
       align: "center",
       whiteSpace: "normal",
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
-      name: "business_sector_name",
+      name: "businessSectorName",
       header: "업종",
       align: "center",
       whiteSpace: "normal",
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
-      name: "post_number",
+      name: "postNumber",
       header: "우편번호",
       align: "center",
       whiteSpace: "normal",
       resizable: true,
       sortable: true,
       filter: "select",
+      hidden: true,
     },
     {
       name: "address",
       header: "주소",
       align: "center",
-      whiteSpace: "normal",
+      
       resizable: true,
       sortable: true,
       filter: "select",
     },
     {
-      name: "bank_name",
+      name: "bankName",
       header: "은행",
       align: "center",
       whiteSpace: "normal",
@@ -197,7 +218,7 @@ export default function DentalRegister() {
       filter: "select",
     },
     {
-      name: "bank_account",
+      name: "bankAccount",
       header: "계좌번호",
       align: "center",
       whiteSpace: "normal",
@@ -238,9 +259,28 @@ export default function DentalRegister() {
     },
   ];
 
-  const auto1 = [{ title: "전체" }, { title: "Dental.A 치과기공소" }];
-  const auto2 = [{ title: "전체" }, { title: "김남규" }];
-  const auto3 = [{ title: "전체" }, { title: "070-4147-6452" }];
+  const onSubmit = e => {
+    e && e.preventDefault();
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const vendorName = formData.get("vendorName");
+    
+    if (vendorName === "") 
+      return alert("검색어를 입력하세요.");
+    
+    axios
+      .get("/api/vendor/", {
+        params: {
+          vendorName: vendorName === "전체" ? "" : vendorName,
+        },
+      })
+      .then(result => {
+        setGridData(result.data);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  };
 
   return (
     <>
@@ -248,6 +288,33 @@ export default function DentalRegister() {
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
+              <Grid item xs={12} className={classes.grid}>
+                <form id="formSearchData" onSubmit={onSubmit}>
+                  <Autocomplete
+                    freeSolo
+                    className={classes.grid}
+                    options={auto1}
+                    defaultValue={auto1[0]}
+                    getOptionLabel={option => option}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        name="vendorName"
+                        label="거래처명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    form="formSearchData"
+                    variant="outlined"
+                  >
+                    검색
+                  </Button>
+                </form>
+              </Grid>
               <Button
                 type="submit"
                 className={classes.button}
@@ -259,60 +326,7 @@ export default function DentalRegister() {
               </Button>
             </CardHeader>
             <CardBody>
-              <Grid item xs={12} className={classes.grid}>
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto1}
-                  getOptionLabel={option => option.title}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px", marginLeft: "20px" }}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label="거래처명"
-                      variant="outlined"
-                    />
-                  )}
-                />
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto2}
-                  getOptionLabel={option => option.title}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px" }}
-                  renderInput={params => (
-                    <TextField {...params} label="대표" variant="outlined" />
-                  )}
-                />
-                <Autocomplete
-                  id="filter-demo"
-                  className={classes.grid}
-                  options={auto3}
-                  getOptionLabel={option => option.title}
-                  filterOptions={filterOptions}
-                  style={{ float: "left", width: "200px" }}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label="전화번호"
-                      variant="outlined"
-                    />
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  color="primary"
-                  round
-                  style={{ float: "left", width: "100px" }}
-                  //onClick={(e) => partModalOpen(e)}
-                >
-                  검색
-                </Button>
-              </Grid>
-              <BasicGrid columns={columns} data={data} />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </CardBody>
           </Card>
         </Grid>

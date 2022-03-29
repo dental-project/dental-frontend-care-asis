@@ -10,6 +10,9 @@ import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
+import IconButton from "@mui/material/IconButton";
+import DehazeIcon from '@mui/icons-material/Dehaze';
+import CloseIcon from '@mui/icons-material/Close';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/Sui/SuiBox";
@@ -34,8 +37,7 @@ import {
   setOpenConfigurator,
 } from "context";
 
-
-function DashboardNavbar({ absolute, light, isMini }) {
+function Navbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -52,14 +54,15 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
-      setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
+      // setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
+      setTransparentNavbar(dispatch, false);
     }
 
     /** 
      The event listener that's calling the handleTransparentNavbar function when 
      scrolling the window.
     */
-    window.addEventListener("scroll", handleTransparentNavbar);
+    window.addEventListener("scroll", handleTransparentNavbar, true);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
     handleTransparentNavbar();
@@ -91,7 +94,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   return (
     <AppBar
-      position={absolute ? "absolute" : navbarType}
+      position={absolute ? "relative" : navbarType}
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
@@ -99,23 +102,40 @@ function DashboardNavbar({ absolute, light, isMini }) {
         <SuiBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
           <Breadcrumbs icon="home" title={urls[urls.length - 1]} urls={urls} light={light} />
         </SuiBox>
+        {isMini ? null : (
+          <SuiBox sx={(theme) => navbarRow(theme, { isMini })}>
+            <SuiBox color={light ? "white" : "inherit"}>
+              <IconButton
+                size="small"
+                color="inherit"
+                sx={navbarMobileMenu}
+                onClick={handleMiniSidenav}
+              >
+                {/* <Icon className={light ? "text-white" : "text-dark"}> */}
+                  {miniSidenav ? <DehazeIcon fontSize="medium" /> : <CloseIcon fontSize="medium" />}
+                {/* </Icon> */}
+              </IconButton>
+              {renderMenu()}
+            </SuiBox>
+          </SuiBox>
+        )}
       </Toolbar>
     </AppBar>
   );
 }
 
 // Setting default values for the props of DashboardNavbar
-DashboardNavbar.defaultProps = {
+Navbar.defaultProps = {
   absolute: false,
   light: false,
   isMini: false,
 };
 
 // Typechecking props for the DashboardNavbar
-DashboardNavbar.propTypes = {
+Navbar.propTypes = {
   absolute: PropTypes.bool,
   light: PropTypes.bool,
   isMini: PropTypes.bool,
 };
 
-export default DashboardNavbar;
+export default Navbar;
