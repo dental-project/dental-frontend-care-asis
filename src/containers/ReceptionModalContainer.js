@@ -187,12 +187,6 @@ const ReceptionModalContainer = ({
       });
   }
 
-  console.log(something);
-
-  
-
-
-
   const columns = [
     {
       header: "파트명 (선택)",
@@ -755,12 +749,7 @@ const ReceptionModalContainer = ({
           {modalType}
         </Button>
       </form>
-      <Button
-        className={classes.button}
-        color="danger"
-        round
-        onClick={close}
-      >
+      <Button className={classes.button} color="danger" round onClick={close}>
         취소
       </Button>
     </Modal>

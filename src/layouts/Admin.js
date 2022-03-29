@@ -208,9 +208,8 @@ export default function Admin({ ...rest }) {
         {getRoute() ? (
           <div className={classes.content}>
             <div className={classes.container}>
-              <Navbar />
-              {switchRoutes}
-            </div>
+            <Navbar />
+              {switchRoutes}</div>
           </div>
         ) : (
           <div className={classes.map}>{switchRoutes}</div>

@@ -21,6 +21,10 @@ function navbar(theme, ownerState) {
   const { rgba, pxToRem } = functions;
   const { borderRadius } = borders;
 
+  // console.log("transparentNavbar = " + transparentNavbar)
+  // console.log("absolute = " + absolute)
+  // console.log(navbarBoxShadow)
+  // console.log(rgba(white.main, 0.8))
   return {
     boxShadow: transparentNavbar || absolute ? "none" : navbarBoxShadow,
     backdropFilter: transparentNavbar || absolute ? "none" : `saturate(200%) blur(${pxToRem(30)})`,

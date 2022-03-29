@@ -54,8 +54,14 @@ function Navbar({ absolute, light, isMini }) {
 
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
+      if(window.scrollY!==0){
+        console.log(window.scrollY);
+        console.log(document.body.scrollTop);
+        console.log(document.documentElement.scrollTop);
+      }
+      
       // setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
-      setTransparentNavbar(dispatch, false);
+      setTransparentNavbar(dispatch, (fixedNavbar && false) || !fixedNavbar);
     }
 
     /** 
@@ -68,7 +74,7 @@ function Navbar({ absolute, light, isMini }) {
     handleTransparentNavbar();
 
     // Remove event listener on cleanup
-    return () => window.removeEventListener("scroll", handleTransparentNavbar);
+    return () => window.removeEventListener("scroll", handleTransparentNavbar, true);
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
