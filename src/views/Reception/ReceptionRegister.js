@@ -18,6 +18,7 @@ import PrintModalContainer from "containers/PrintModalContainer";
 import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js";
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
+import DateRangePicker from "components/DateRangePicker";
 
 import Autocomplete, {
   createFilterOptions,
@@ -396,8 +397,9 @@ export default function ReceptionRegister() {
             </Menu> */}
             <SuiBox display="flex" px={2}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <TextField
+                <Grid item xs={12} sm={4} xl={2}>
+                  <DateRangePicker label={"접수일자"}/>
+                  {/* <TextField
                     id="date"
                     label="접수일자"
                     type="date"
@@ -407,7 +409,7 @@ export default function ReceptionRegister() {
                     InputLabelProps={{
                       shrink: true,
                     }}
-                  />
+                  /> */}
                 </Grid>
                 <Grid item xs={12} sm={2} xl={2}>
                   <TextField
