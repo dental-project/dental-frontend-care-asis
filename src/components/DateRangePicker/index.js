@@ -70,8 +70,10 @@ function DateRangePicker({label}){
         setShowCalendar(true);
     };
 
-    const handleClickCloseCalendar = () => {
-        setShowCalendar(true);
+    const handleClickCloseCalendar = (item) => {
+        setState([item.selection])
+        console.log(item)
+        // setShowCalendar(false);
     };
 
     console.log(state)
@@ -147,27 +149,25 @@ function DateRangePicker({label}){
             // />
             <DateRange
                 editableDateInputs={true}
-                onChange={item => setState([item.selection])}
+                onChange={item => handleClickCloseCalendar(item)}
                 moveRangeOnFirstSelection={false}
                 ranges={state}
                 />
         )}
         <div>
           <TextField 
-           type="date"
            label={label}
            variant="outlined"
-        //    defaultValue={dateFormat(state[0]["startDate"])}
+           defaultValue={dateFormat(state[0]["startDate"])}
            onClick={handleClickOpenCalendar}
            InputLabelProps={{
              shrink: true,
            }}           
           />
           <TextField 
-           type="date"
            label={label}
            variant="outlined"
-        //    defaultValue={dateFormat(state[0]["endDate"])}
+           defaultValue={dateFormat(state[0]["endDate"])}
            onClick={handleClickOpenCalendar}
            InputLabelProps={{
              shrink: true,
