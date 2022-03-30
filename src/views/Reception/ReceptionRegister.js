@@ -68,6 +68,7 @@ import 'react-google-flight-datepicker/dist/main.css';
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
+    marginTop: "30px"
   },
 
   textField: {
@@ -457,86 +458,107 @@ export default function ReceptionRegister() {
               <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
             </Menu> */}
             <SuiBox display="flex" px={2}>
-              
-              <SuiBox pt={1.5} pb={2} px={2} lineHeight={1.25}>
-                
-                  <SuiBox>
-                    <FormControlLabel value="female" control={<Radio color="primary" />}  />
-                    <SuiTypography variant="caption" fontWeight="regular" color="text">
-                      접수일자
-                    </SuiTypography>
+              <Grid container spacing={3}>
+                <SuiBox pt={1.5} pb={2} px={2} lineHeight={1.25}>
+                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
+                    <SuiBox>
+                      <FormControlLabel value="female" control={<Radio color="primary" />}  />
+                      <SuiTypography variant="caption" fontWeight="regular" color="text">
+                        접수일자
+                      </SuiTypography>
+                    </SuiBox>
                   </SuiBox>
-                
-               
-                  <RangeDatePicker
-                    startDate={"2020-01-01"}
-                    endDate={"2020-01-01"}
-                    onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
-                    minDate={new Date(1900, 0, 1)}
-                    maxDate={new Date(2100, 0, 1)}
-                    locale={"ko"}
-                    monthFormat="YYYY MM"
-                    disabled={false}
-                    className="my-own-class-name"
-                  />
-               
-
-
-
-            
-                <SuiBox width="100%" display="flex" py={1} mb={0.25}>
-                  <SuiBox>
-                    <FormControlLabel value="female" control={<Radio color="primary" />}  />
-                    <SuiTypography variant="caption" fontWeight="regular" color="text">
-                      접수일자
-                    </SuiTypography>
+                  <SuiBox width="100%" >
+                    <RangeDatePicker
+                      startDate={"2020-01-01"}
+                      endDate={"2020-01-01"}
+                      onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                      minDate={new Date(1900, 0, 1)}
+                      maxDate={new Date(2100, 0, 1)}
+                      locale={"ko"}
+                      monthFormat="YYYY MM"
+                      disabled={false}
+                      className="my-own-class-name"
+                    />
                   </SuiBox>
-                </SuiBox>
-                <SuiBox width="100%" display="flex" py={1} mb={0.25}>
-                
-                  <RangeDatePicker
-                    startDate={"2020-01-01"}
-                    endDate={"2020-01-01"}
-                    onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
-                    minDate={new Date(1900, 0, 1)}
-                    maxDate={new Date(2100, 0, 1)}
-                    locale={"ko"}
-                    monthFormat="YYYY MM"
-                    disabled={false}
-                    className="my-own-class-name"
-                  />
-                
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="거래처명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="환자명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <SuiButton variant="outlined" color="info" size="large">
+
+
+
+
+                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
+                    <SuiBox>
+                      <FormControlLabel value="female" control={<Radio color="primary" />}  />
+                      <SuiTypography variant="caption" fontWeight="regular" color="text">
+                        접수일자
+                      </SuiTypography>
+                    </SuiBox>
+                  </SuiBox>
+                  <SuiBox width="100%" >
+                    <RangeDatePicker
+                      startDate={"2020-01-01"}
+                      endDate={"2020-01-01"}
+                      onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                      minDate={new Date(1900, 0, 1)}
+                      maxDate={new Date(2100, 0, 1)}
+                      locale={"ko"}
+                      monthFormat="YYYY MM"
+                      disabled={false}
+                      className="my-own-class-name"
+                    />
+                  </SuiBox>
+                  <SuiBox width="100%" >
+                    <Autocomplete
+                      className={classes.grid}
+                      options={auto1}
+                      getOptionLabel={option => option.title}
+                      filterOptions={filterOptions}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          label="거래처명"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <Autocomplete
+                      className={classes.grid}
+                      options={auto2}
+                      getOptionLabel={option => option.title}
+                      filterOptions={filterOptions}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          label="환자명"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <SuiButton variant="outlined" color="info" size="large" style={{marginTop: "40px"}}>
                     검색
                   </SuiButton>
+                  </SuiBox>
+
+
                 </SuiBox>
-              </SuiBox>
+
+
+
+
+
+
+
+
+
+                <Grid item xs={12} sm={2} xl={2}>
+                  
+                </Grid>
+                <Grid item xs={12} sm={2} xl={2}>
+                  
+                </Grid>
+                <Grid item xs={12} sm={2} xl={2}>
+                  
+                </Grid>
+              </Grid>
             </SuiBox>
 
 {/* 
