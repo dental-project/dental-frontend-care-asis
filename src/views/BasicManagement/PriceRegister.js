@@ -28,6 +28,11 @@ import { prices } from "modules/prices";
 
 import axios from 'axios';
 
+
+import { RangeDatePicker } from 'react-google-flight-datepicker';
+import 'react-google-flight-datepicker/dist/main.css';
+
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -247,7 +252,10 @@ export default function PriceRegister() {
       });
   }
 
-
+  const onDateChange = (startDate, endDate) => {
+    console.log(startDate);
+    console.log(endDate);
+  }
 
 
   return (
@@ -269,6 +277,19 @@ export default function PriceRegister() {
             <CardBody>
               <Grid item xs={12} className={classes.grid}>
                 <form id="formSearchData" onSubmit={onSubmit}>
+
+                <RangeDatePicker
+                  startDate={"2020-01-01"}
+                  endDate={"2020-01-01"}
+                  onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                  minDate={new Date(1900, 0, 1)}
+                  maxDate={new Date(2100, 0, 1)}
+                  locale={"ko"}
+                  monthFormat="YYYY MM"
+                  disabled={false}
+                  className="my-own-class-name"
+                />
+
                   <Autocomplete
                     className={classes.grid}
                     options={auto1}

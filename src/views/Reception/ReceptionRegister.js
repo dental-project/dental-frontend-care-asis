@@ -43,6 +43,28 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 
+import "react-dates/initialize";
+import { DateRangePicker } from "react-dates";
+import "react-dates/lib/css/_datepicker.css";
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+
+
+import Switch from "@mui/material/Switch";
+
+
+import { RangeDatePicker } from 'react-google-flight-datepicker';
+import 'react-google-flight-datepicker/dist/main.css';
+
+
+
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -74,6 +96,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ReceptionRegister() {
+
+  const [followsMe, setFollowsMe] = useState(true);
+  const [answersPost, setAnswersPost] = useState(false);
+  const [mentionsMe, setMentionsMe] = useState(true);
+  const [newLaunches, setNewLaunches] = useState(false);
+  const [productUpdate, setProductUpdate] = useState(true);
+  const [newsletter, setNewsletter] = useState(true);
+
+
+
+
+
   const classes = useStyles();
   let history = useHistory();
 
@@ -324,6 +358,34 @@ export default function ReceptionRegister() {
     { title: "조유나" },
   ];
 
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const handleDatesChange = ({ startDate, endDate }) => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+  };
+
+  const [startDate2, setStartDate2] = useState(null);
+  const [endDate2, setEndDate2] = useState(null);
+  const [focusedInput2, setFocusedInput2] = useState(null);
+  const handleDatesChange2 = ({ startDate, endDate }) => {
+    setStartDate2(startDate);
+    setEndDate2(endDate);
+  };
+
+  const [value, setValue] = React.useState('female');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onDateChange = (startDate, endDate) => {
+    console.log(startDate);
+    console.log(endDate);
+  }
+
+
   return (
     <>
       <SuiBox py={3}>
@@ -395,33 +457,92 @@ export default function ReceptionRegister() {
               <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
             </Menu> */}
             <SuiBox display="flex" px={2}>
+              
+              <SuiBox pt={1.5} pb={2} px={2} lineHeight={1.25}>
+                
+                  <SuiBox>
+                    <FormControlLabel value="female" control={<Radio color="primary" />}  />
+                    <SuiTypography variant="caption" fontWeight="regular" color="text">
+                      접수일자
+                    </SuiTypography>
+                  </SuiBox>
+                
+               
+                  <RangeDatePicker
+                    startDate={"2020-01-01"}
+                    endDate={"2020-01-01"}
+                    onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                    minDate={new Date(1900, 0, 1)}
+                    maxDate={new Date(2100, 0, 1)}
+                    locale={"ko"}
+                    monthFormat="YYYY MM"
+                    disabled={false}
+                    className="my-own-class-name"
+                  />
+               
+
+
+
+            
+                <SuiBox width="100%" display="flex" py={1} mb={0.25}>
+                  <SuiBox>
+                    <FormControlLabel value="female" control={<Radio color="primary" />}  />
+                    <SuiTypography variant="caption" fontWeight="regular" color="text">
+                      접수일자
+                    </SuiTypography>
+                  </SuiBox>
+                </SuiBox>
+                <SuiBox width="100%" display="flex" py={1} mb={0.25}>
+                
+                  <RangeDatePicker
+                    startDate={"2020-01-01"}
+                    endDate={"2020-01-01"}
+                    onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                    minDate={new Date(1900, 0, 1)}
+                    maxDate={new Date(2100, 0, 1)}
+                    locale={"ko"}
+                    monthFormat="YYYY MM"
+                    disabled={false}
+                    className="my-own-class-name"
+                  />
+                
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto1}
+                    getOptionLabel={option => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="거래처명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto2}
+                    getOptionLabel={option => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="환자명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <SuiButton variant="outlined" color="info" size="large">
+                    검색
+                  </SuiButton>
+                </SuiBox>
+              </SuiBox>
+            </SuiBox>
+
+{/* 
+            <SuiBox display="flex" px={2}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <TextField
-                    id="date"
-                    label="접수일자"
-                    type="date"
-                    defaultValue="2022-01-11"
-                    className={classes.textField}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <TextField
-                    id="date"
-                    label="완성일자"
-                    type="date"
-                    defaultValue="2022-01-12"
-                    className={classes.textField}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
+                
                 <Grid item xs={12} sm={3} xl={2}>
                   <Autocomplete
                     className={classes.grid}
@@ -458,7 +579,11 @@ export default function ReceptionRegister() {
                   </SuiButton>
                 </Grid>
               </Grid>
-            </SuiBox>
+
+            </SuiBox> */}
+
+
+
             <SuiBox px={2}>
               <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </SuiBox>
