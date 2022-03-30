@@ -68,9 +68,7 @@ import 'react-google-flight-datepicker/dist/main.css';
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
-    marginTop: "30px"
   },
-
   textField: {
     width: "100%",
     margin: theme.spacing(1),
@@ -431,10 +429,9 @@ export default function ReceptionRegister() {
         </SuiBox>
         <SuiBox mb={3}>
           <Project renderMenu={renderMenu}>
-            
             {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
             </SuiBox> */}
-              {/* <SuiBox color="text" px={2}>
+            {/* <SuiBox color="text" px={2}>
                 <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                   more_vert
                 </MoreVertIcon>
@@ -457,47 +454,62 @@ export default function ReceptionRegister() {
               <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
               <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
             </Menu> */}
-            <SuiBox display="flex" px={2}>
+
+            {/* <SuiBox display="flex" px={2}>
               <Grid container spacing={3}>
                 <SuiBox pt={1.5} pb={2} px={2} lineHeight={1.25}>
                   <SuiBox width="100%" display="flex" py={1} mb={0.25}>
                     <SuiBox>
-                      <FormControlLabel value="female" control={<Radio color="primary" />}  />
-                      <SuiTypography variant="caption" fontWeight="regular" color="text">
+                      <FormControlLabel
+                        value="female"
+                        control={<Radio color="primary" />}
+                      />
+                      <SuiTypography
+                        variant="caption"
+                        fontWeight="regular"
+                        color="text"
+                      >
                         접수일자
                       </SuiTypography>
                     </SuiBox>
                   </SuiBox>
-                  <SuiBox width="100%" >
+                  <SuiBox width="100%">
                     <RangeDatePicker
                       startDate={"2020-01-01"}
                       endDate={"2020-01-01"}
-                      onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                      onChange={(startDate, endDate) =>
+                        onDateChange(startDate, endDate)
+                      }
                       minDate={new Date(1900, 0, 1)}
                       maxDate={new Date(2100, 0, 1)}
-                      locale={"ko"}
                       monthFormat="YYYY MM"
                       disabled={false}
                       className="my-own-class-name"
                     />
                   </SuiBox>
-
-
-
 
                   <SuiBox width="100%" display="flex" py={1} mb={0.25}>
                     <SuiBox>
-                      <FormControlLabel value="female" control={<Radio color="primary" />}  />
-                      <SuiTypography variant="caption" fontWeight="regular" color="text">
+                      <FormControlLabel
+                        value="female"
+                        control={<Radio color="primary" />}
+                      />
+                      <SuiTypography
+                        variant="caption"
+                        fontWeight="regular"
+                        color="text"
+                      >
                         접수일자
                       </SuiTypography>
                     </SuiBox>
                   </SuiBox>
-                  <SuiBox width="100%" >
+                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
                     <RangeDatePicker
                       startDate={"2020-01-01"}
                       endDate={"2020-01-01"}
-                      onChange={(startDate, endDate) => onDateChange(startDate, endDate)}
+                      onChange={(startDate, endDate) =>
+                        onDateChange(startDate, endDate)
+                      }
                       minDate={new Date(1900, 0, 1)}
                       maxDate={new Date(2100, 0, 1)}
                       locale={"ko"}
@@ -505,8 +517,6 @@ export default function ReceptionRegister() {
                       disabled={false}
                       className="my-own-class-name"
                     />
-                  </SuiBox>
-                  <SuiBox width="100%" >
                     <Autocomplete
                       className={classes.grid}
                       options={auto1}
@@ -520,6 +530,8 @@ export default function ReceptionRegister() {
                         />
                       )}
                     />
+                  </SuiBox>
+                  <SuiBox width="100%">
                     <Autocomplete
                       className={classes.grid}
                       options={auto2}
@@ -533,35 +545,120 @@ export default function ReceptionRegister() {
                         />
                       )}
                     />
-                    <SuiButton variant="outlined" color="info" size="large" style={{marginTop: "40px"}}>
-                    검색
-                  </SuiButton>
+                    <SuiButton
+                      variant="outlined"
+                      color="info"
+                      size="large"
+                      style={{ marginTop: "40px" }}
+                    >
+                      검색
+                    </SuiButton>
                   </SuiBox>
-
-
                 </SuiBox>
 
+                <Grid item xs={12} sm={2} xl={2}></Grid>
+                <Grid item xs={12} sm={2} xl={2}></Grid>
+                <Grid item xs={12} sm={2} xl={2}></Grid>
+              </Grid>
+            </SuiBox> */}
 
+            {/* 
+              xs (extra-small) : 0px ~ 600px
+              sm (small) : 600px ~ 960px
+              md (medium): 960px ~ 1280px
+              lg (large) : 1280px ~ 1920px
+              xl (extra-large) : 1920px ~ 
+            */}
 
-
-
-
-
-
+            <SuiBox display="flex" px={2}>
+              <Grid container spacing={3}>
+                <FormControlLabel
+                  value="female"
+                  control={<Radio color="primary" />}
+                  label="접수일자"
+                />
+                <Grid item xs={12} sm={4} xl={4}>
+                  <RangeDatePicker
+                    startDate={"2020-01-01"}
+                    endDate={"2020-01-01"}
+                    onChange={(startDate, endDate) =>
+                      onDateChange(startDate, endDate)
+                    }
+                    minDate={new Date(1900, 0, 1)}
+                    maxDate={new Date(2100, 0, 1)}
+                    monthFormat="YYYY MM"
+                    disabled={false}
+                    className="my-own-class-name"
+                  />
+                </Grid>
+              </Grid>
+            </SuiBox>
+            <SuiBox display="flex" px={2}>
+              <Grid container spacing={3}>
+                <FormControlLabel
+                  value="female"
+                  control={<Radio color="primary" />}
+                  label="완성일자"
+                />
+                <Grid item xs={12} sm={4} xl={4}>
+                  <RangeDatePicker
+                    startDate={"2020-01-01"}
+                    endDate={"2020-01-01"}
+                    onChange={(startDate, endDate) =>
+                      onDateChange(startDate, endDate)
+                    }
+                    minDate={new Date(1900, 0, 1)}
+                    maxDate={new Date(2100, 0, 1)}
+                    monthFormat="YYYY MM"
+                    disabled={false}
+                    className="my-own-class-name"
+                  />
+                </Grid>
 
                 <Grid item xs={12} sm={2} xl={2}>
-                  
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto1}
+                    getOptionLabel={option => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="거래처명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={2} xl={2}>
-                  
+                  <Autocomplete
+                    className={classes.grid}
+                    options={auto2}
+                    getOptionLabel={option => option.title}
+                    filterOptions={filterOptions}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label="환자명"
+                        variant="outlined"
+                      />
+                    )}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={2} xl={2}>
-                  
+                  <SuiButton
+                    variant="outlined"
+                    color="info"
+                    size="large"
+                    style={{width: "100%"}}
+                  >
+                    검색
+                  </SuiButton>
                 </Grid>
               </Grid>
             </SuiBox>
 
-{/* 
+            {/* 
             <SuiBox display="flex" px={2}>
               <Grid container spacing={3}>
                 
@@ -604,15 +701,13 @@ export default function ReceptionRegister() {
 
             </SuiBox> */}
 
-
-
             <SuiBox px={2}>
               <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </SuiBox>
           </Project>
-         
+
           {/* <Card> */}
-            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
               <SuiBox>
                 <SuiTypography variant="h6" gutterBottom>
                   접수 리스트   
@@ -631,7 +726,7 @@ export default function ReceptionRegister() {
               </SuiBox>
               {renderMenu}
             </SuiBox> */}
-            
+
           {/* </Card> */}
         </SuiBox>
       </SuiBox>
