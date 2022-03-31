@@ -92,24 +92,8 @@ const onSubmit = (data) => {
         reportType: type,
       },
     })
-      // .post("http://localhost:8000/api/sell/report/",{
-      //   receipt_date: "2022-01-15",
-      //   completion_date: "2022-01-22",
-      //   vendor_id: 1,
-      //   day: "day"
-      // })
       .then(result => {
         console.log(result);
-        // var BOM = new Uint8Array([0xEF,0xBB,0xBF]);
-        // const file = new Blob([BOM,result.data], { type: "application/pdf;charset=utf-18" });
-        // // const file = new Blob(["\ufeff"+result.data], { type: "application/pdf;charset=utf-8" });
-        // //Build a URL from the file
-        // const fileURL = URL.createObjectURL(file);
-
-        // //Open the URL on new Window
-        //  const pdfWindow = window.open();
-        //  pdfWindow.location.href = fileURL;
-
         var b = new Blob([result.data], { type: "application/pdf;" });
         var url = URL.createObjectURL(b);
         window.open(url, "_blank", "");
