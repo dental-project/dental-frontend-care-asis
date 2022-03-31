@@ -413,8 +413,7 @@ export default function ReceptionRegister() {
         chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
       }
     }
-    console.log(dateSelect === "reception" ? receptionParams : completeParams);
-    return;
+  
     axios
       .get("/api/sell/master/", {
         params : 
