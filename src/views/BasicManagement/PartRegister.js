@@ -300,7 +300,7 @@ function PartRegister() {
                         variant="outlined"
                         color="info"
                         size="large"
-                        style={{width: "100%"}}
+                        style={{width: "95%", margin: "10px"}}
                       >
                         검색
                       </SuiButton>

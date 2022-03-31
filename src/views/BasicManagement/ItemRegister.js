@@ -297,7 +297,7 @@ export default function ItemRegister() {
                         variant="outlined"
                         color="info"
                         size="large"
-                        style={{width: "100%"}}
+                        style={{width: "95%", margin: "10px"}}
                       >
                         검색
                       </SuiButton>
@@ -312,63 +312,6 @@ export default function ItemRegister() {
           </Card>
         </SuiBox>
       </SuiBox>
-
-
-
-
-      {/* <Grid container>
-        <Grid item xs={12} className={classes.grid}>
-          <Card>
-            <CardHeader>
-              <Grid item xs={12} className={classes.grid}>
-                <form id="formSearchData" onSubmit={onSubmit}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    defaultValue={auto1[0]}
-                    getOptionLabel={option => option}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField {...params} name="partName" label="파트명" variant="outlined" />
-                    )}
-                  />
-                  <Autocomplete
-                    freeSolo
-                    className={classes.grid}
-                    options={auto2}
-                    defaultValue={auto2[0]}
-                    getOptionLabel={option => option}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField {...params} name="itemName" label="장치명" variant="outlined" />
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    form="formSearchData"
-                    style={{ float: "left"}}
-                    variant="outlined"
-                  >
-                    검색
-                  </Button>
-                </form>
-                <Button
-                  type="submit"
-                  color="info"
-                  style={{ float: "right"}}
-                  onClick={e => itemModalOpen(e)}
-                >
-                <AddIcon/>추가
-              </Button>
-              </Grid>
-
-            </CardHeader>
-            <CardBody>
-              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
-            </CardBody>
-          </Card>
-        </Grid>
-      </Grid> */}
       <ItemModalContainer
         modalType={modalType}
         open={openItemAddModal}

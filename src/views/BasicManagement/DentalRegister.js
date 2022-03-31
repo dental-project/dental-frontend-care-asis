@@ -359,112 +359,61 @@ export default function DentalRegister() {
             </Grid>
           </Grid>
         </SuiBox>
-      </SuiBox>
+   
 
-      <SuiBox mb={3}>
-        <Card>
-          <ProjectHeader title={"치과 리스트"} subTitle={"All List"}>
-            <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
-              more_vert
-            </MoreVertIcon>
-            {renderMenu}
-          </ProjectHeader>
-          <ProjectBody>         
-          
-            <form id="formSearchData" onSubmit={onSubmit}>
-              <SuiBox display="flex" px={2}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={3} xl={3}>
-                    <Autocomplete
-                      freeSolo
-                      className={classes.grid}
-                      options={auto1}
-                      defaultValue={auto1[0]}
-                      getOptionLabel={option => option}
-                      filterOptions={filterOptions}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          name="vendorName"
-                          label="거래처명"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3} xl={3}>
-                    <SuiButton
-                      type="submit"
-                      form="formSearchData"
-                      variant="outlined"
-                      color="info"
-                      size="large"
-                      style={{width: "100%"}}
-                    >
-                      검색
-                    </SuiButton>
-                  </Grid>
-                </Grid>
-              </SuiBox>
-            </form>
-            <SuiBox px={2}>
-              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
-            </SuiBox>
-          </ProjectBody>
-        </Card>
-      </SuiBox>
-
-
-
-
-      {/* <Grid container>
-        <Grid item xs={12} className={classes.grid}>
+        <SuiBox mb={3}>
           <Card>
-            <CardHeader>
-              <Grid item xs={12} className={classes.grid}>
-                <form id="formSearchData" onSubmit={onSubmit}>
-                  <Autocomplete
-                    freeSolo
-                    className={classes.grid}
-                    options={auto1}
-                    defaultValue={auto1[0]}
-                    getOptionLabel={option => option}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        name="vendorName"
-                        label="거래처명"
-                        variant="outlined"
+            <ProjectHeader title={"치과 리스트"} subTitle={"All List"}>
+              <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+                more_vert
+              </MoreVertIcon>
+              {renderMenu}
+            </ProjectHeader>
+            <ProjectBody>         
+            
+              <form id="formSearchData" onSubmit={onSubmit}>
+                <SuiBox display="flex" px={2}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={3} xl={3}>
+                      <Autocomplete
+                        freeSolo
+                        className={classes.grid}
+                        options={auto1}
+                        defaultValue={auto1[0]}
+                        getOptionLabel={option => option}
+                        filterOptions={filterOptions}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            name="vendorName"
+                            label="거래처명"
+                            variant="outlined"
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    form="formSearchData"
-                    variant="outlined"
-                  >
-                    검색
-                  </Button>
-                </form>
-              </Grid>
-              <Button
-                type="submit"
-                className={classes.button}
-                color="info"
-                round
-                onClick={e => dentalModalOpen(e)}
-              >
-                추가
-              </Button>
-            </CardHeader>
-            <CardBody>
-              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
-            </CardBody>
+                    </Grid>
+                    <Grid item xs={12} sm={3} xl={3}>
+                      <SuiButton
+                        type="submit"
+                        form="formSearchData"
+                        variant="outlined"
+                        color="info"
+                        size="large"
+                        style={{width: "95%", margin: "10px"}}
+                      >
+                        검색
+                      </SuiButton>
+                    </Grid>
+                  </Grid>
+                </SuiBox>
+              </form>
+              <SuiBox px={2}>
+                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+              </SuiBox>
+            </ProjectBody>
           </Card>
-        </Grid>
-      </Grid> */}
-
+        </SuiBox>
+      </SuiBox>
       <DentalModalContainer
         modalType={modalType}
         open={openDentalAddModal}
