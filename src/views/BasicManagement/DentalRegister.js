@@ -4,11 +4,6 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import Button from "components/CustomButtons/Button.js";
-
 
 
 import Autocomplete, {
@@ -27,6 +22,22 @@ import { dentals } from "modules/dentals";
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
+
+// Soft UI Dashboard React components
+import SuiBox from "components/Sui/SuiBox";
+import SuiTypography from "components/Sui/SuiTypography";
+import SuiButton from "components/Sui/SuiButton";
+import MiniStatisticsCard from "components/MiniStatisticsCard";
+
+import ProjectHeader from "components/SuiProject/ProjectHeader";
+import ProjectBody from "components/SuiProject/ProjectBody";
+
+
+// @mui material components
+import Card from "@mui/material/Card";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -77,6 +88,29 @@ export default function DentalRegister() {
     setOpenDentalModal(false);
   }, [count]);
   
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
+
+  const renderMenu = (
+    <Menu
+      id="simple-menu"
+      anchorEl={menu}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={e => dentalModalOpen(e)}>치과 추가</MenuItem>
+    </Menu>
+  );
+
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -106,6 +140,7 @@ export default function DentalRegister() {
   };
 
   const dentalModalOpen = e => {
+    closeMenu();
     setModalType("추가");
     handleDentalModalOpen();
   };
@@ -284,7 +319,105 @@ export default function DentalRegister() {
 
   return (
     <>
-      <Grid container>
+      <SuiBox py={3}>
+        <SuiBox mb={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "전체 리스트" }}
+                count="100개"
+                percentage={{ color: "success", text: "EA" }}
+                icon={{ color: "info", component: "AllList" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "today's users" }}
+                count="2,300"
+                percentage={{ color: "success", text: "+3%" }}
+                icon={{ color: "info", component: "public" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "new clients" }}
+                count="+3,462"
+                percentage={{ color: "error", text: "-2%" }}
+                icon={{ color: "info", component: "emoji_events" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                title={{ text: "sales" }}
+                count="$103,430"
+                percentage={{ color: "success", text: "+5%" }}
+                icon={{
+                  color: "info",
+                  component: "shopping_cart",
+                }}
+              />
+            </Grid>
+          </Grid>
+        </SuiBox>
+      </SuiBox>
+
+      <SuiBox mb={3}>
+        <Card>
+          <ProjectHeader title={"치과 리스트"} subTitle={"All List"}>
+            <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+              more_vert
+            </MoreVertIcon>
+            {renderMenu}
+          </ProjectHeader>
+          <ProjectBody>         
+          
+            <form id="formSearchData" onSubmit={onSubmit}>
+              <SuiBox display="flex" px={2}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={3} xl={3}>
+                    <Autocomplete
+                      freeSolo
+                      className={classes.grid}
+                      options={auto1}
+                      defaultValue={auto1[0]}
+                      getOptionLabel={option => option}
+                      filterOptions={filterOptions}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          name="vendorName"
+                          label="거래처명"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={3} xl={3}>
+                    <SuiButton
+                      type="submit"
+                      form="formSearchData"
+                      variant="outlined"
+                      color="info"
+                      size="large"
+                      style={{width: "100%"}}
+                    >
+                      검색
+                    </SuiButton>
+                  </Grid>
+                </Grid>
+              </SuiBox>
+            </form>
+            <SuiBox px={2}>
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+            </SuiBox>
+          </ProjectBody>
+        </Card>
+      </SuiBox>
+
+
+
+
+      {/* <Grid container>
         <Grid item xs={12} className={classes.grid}>
           <Card>
             <CardHeader>
@@ -330,7 +463,7 @@ export default function DentalRegister() {
             </CardBody>
           </Card>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       <DentalModalContainer
         modalType={modalType}
