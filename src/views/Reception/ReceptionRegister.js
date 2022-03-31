@@ -33,7 +33,9 @@ import SuiBox from "components/Sui/SuiBox";
 import SuiTypography from "components/Sui/SuiTypography";
 import SuiButton from "components/Sui/SuiButton";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
-import Project from "components/SuiProject";
+
+import ProjectHeader from "components/SuiProject/ProjectHeader";
+import ProjectBody from "components/SuiProject/ProjectBody";
 
 
 // @mui material components
@@ -383,8 +385,8 @@ export default function ReceptionRegister() {
     
     if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
 
-    let receptionParams = {};
-    let completeParams = {};
+    let receptionParams;
+    let completeParams;
 
     if(dateSelect === "reception") {
       receptionParams = {
@@ -412,7 +414,6 @@ export default function ReceptionRegister() {
           dateSelect === "reception" ? receptionParams : completeParams
       })
       .then((result) => {
-        console.log(result);
         setGridData(result.data)
       })
       .catch((error) => {
@@ -464,138 +465,123 @@ export default function ReceptionRegister() {
           </Grid>
         </SuiBox>
         <SuiBox mb={3}>
-          <Project>
-            <form id="formSearchData" onSubmit={onSubmit}>
-              <SuiBox display="flex" px={2}>
-                <Grid container spacing={3}>
-                  <FormControlLabel
-                    checked={selectedValue === "reception"}
-                    onChange={handleChangeRadio}
-                    name="dateSelect"
-                    value="reception"
-                    control={<Radio color="primary" />}
-                    label="접수일자"
-                  />
-                  <Grid item xs={12} sm={4} xl={4}>
-                    <RangeDatePicker
-                      name="receiptDate"
-                      startDate={receptionStartDate}
-                      endDate={receptionEndDate}
-                      onChange={(startDate, endDate) =>
-                        onReceptionDateChange(startDate, endDate)
-                      }
-                      minDate={new Date(1900, 0, 1)}
-                      maxDate={new Date(2100, 0, 1)}
-                      startDatePlaceholder="시작 날짜"
-                      endDatePlaceholder="종료 날짜"
-                      monthFormat="YYYY MM"
-                      disabled={false}
-                    />
-                  </Grid>
-                </Grid>
-              </SuiBox>
-              <SuiBox display="flex" px={2}>
-                <Grid container spacing={3}>
-                  <FormControlLabel
-                    checked={selectedValue === "complete"}
-                    onChange={handleChangeRadio}
-                    name="dateSelect"
-                    value="complete"
-                    control={<Radio color="primary" />}
-                    label="완성일자"
-                  />
-                  <Grid item xs={12} sm={4} xl={4}>
-                    <RangeDatePicker
-                      name="completeDate"
-                      startDate={completeStartDate}
-                      endDate={completeEndDate}
-                      onChange={(startDate, endDate) =>
-                        onCompleteDateChange(startDate, endDate)
-                      }
-                      minDate={new Date(1900, 0, 1)}
-                      maxDate={new Date(2100, 0, 1)}
-                      monthFormat="YYYY MM"
-                      disabled={false}
-                    
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={2} xl={2}>
-                    <Autocomplete
-                      freeSolo
-                      className={classes.grid}
-                      options={auto1}
-                      defaultValue={auto1[0]}
-                      getOptionLabel={option => option}
-                      filterOptions={filterOptions}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          name="vendorName"
-                          label="거래처명"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={2} xl={2}>
-                    <Autocomplete
-                      freeSolo
-                      className={classes.grid}
-                      options={auto2}
-                      defaultValue={auto2[0]}
-                      filterOptions={filterOptions}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          name="chartNumber"
-                          label="차트번호"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={2} xl={2}>
-                    <SuiButton
-                      type="submit"
-                      form="formSearchData"
-                      variant="outlined"
-                      color="info"
-                      size="large"
-                      style={{width: "100%"}}
-                    >
-                      검색
-                    </SuiButton>
-                  </Grid>
-                </Grid>
-              </SuiBox>
-            </form>
-            <SuiBox px={2}>
-              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
-            </SuiBox>
-          </Project>
-
-          {/* <Card> */}
-          {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SuiBox>
-                <SuiTypography variant="h6" gutterBottom>
-                  접수 리스트   
-                </SuiTypography>
-                <SuiBox display="flex" alignItems="center" lineHeight={0}>
-                  <PlaylistAddCheckIcon fontSize="medium" />
-                  <SuiTypography variant="button" fontWeight="regular" color="text">
-                    &nbsp;<strong>All</strong> list
-                  </SuiTypography>
-                </SuiBox>
-              </SuiBox>
-              <SuiBox color="text" px={2}>
-                <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
-                  more_vert
-                </MoreVertIcon>
-              </SuiBox>
+          <Card>
+            <ProjectHeader title={"접수 리스트"} subTitle={"All List"}>
+              <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+                more_vert
+              </MoreVertIcon>
               {renderMenu}
-            </SuiBox> */}
-
-          {/* </Card> */}
+            </ProjectHeader>
+            <ProjectBody>
+              <form id="formSearchData" onSubmit={onSubmit}>
+                <SuiBox display="flex" px={2}>
+                  <Grid container spacing={3}>
+                    <FormControlLabel
+                      checked={selectedValue === "reception"}
+                      onChange={handleChangeRadio}
+                      name="dateSelect"
+                      value="reception"
+                      control={<Radio color="primary" />}
+                      label="접수일자"
+                    />
+                    <Grid item xs={12} sm={4} xl={4}>
+                      <RangeDatePicker
+                        name="receiptDate"
+                        startDate={receptionStartDate}
+                        endDate={receptionEndDate}
+                        onChange={(startDate, endDate) =>
+                          onReceptionDateChange(startDate, endDate)
+                        }
+                        minDate={new Date(1900, 0, 1)}
+                        maxDate={new Date(2100, 0, 1)}
+                        startDatePlaceholder="시작 날짜"
+                        endDatePlaceholder="종료 날짜"
+                        monthFormat="YYYY MM"
+                        disabled={false}
+                      />
+                    </Grid>
+                  </Grid>
+                </SuiBox>
+                <SuiBox display="flex" px={2}>
+                  <Grid container spacing={3}>
+                    <FormControlLabel
+                      checked={selectedValue === "complete"}
+                      onChange={handleChangeRadio}
+                      name="dateSelect"
+                      value="complete"
+                      control={<Radio color="primary" />}
+                      label="완성일자"
+                    />
+                    <Grid item xs={12} sm={4} xl={4}>
+                      <RangeDatePicker
+                        name="completeDate"
+                        startDate={completeStartDate}
+                        endDate={completeEndDate}
+                        onChange={(startDate, endDate) =>
+                          onCompleteDateChange(startDate, endDate)
+                        }
+                        minDate={new Date(1900, 0, 1)}
+                        maxDate={new Date(2100, 0, 1)}
+                        monthFormat="YYYY MM"
+                        disabled={false}
+                      
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={2} xl={2}>
+                      <Autocomplete
+                        freeSolo
+                        className={classes.grid}
+                        options={auto1}
+                        defaultValue={auto1[0]}
+                        getOptionLabel={option => option}
+                        filterOptions={filterOptions}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            name="vendorName"
+                            label="거래처명"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={2} xl={2}>
+                      <Autocomplete
+                        freeSolo
+                        className={classes.grid}
+                        options={auto2}
+                        defaultValue={auto2[0]}
+                        filterOptions={filterOptions}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            name="chartNumber"
+                            label="차트번호"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={2} xl={2}>
+                      <SuiButton
+                        type="submit"
+                        form="formSearchData"
+                        variant="outlined"
+                        color="info"
+                        size="large"
+                        style={{width: "100%"}}
+                      >
+                        검색
+                      </SuiButton>
+                    </Grid>
+                  </Grid>
+                </SuiBox>
+              </form>
+              <SuiBox px={2}>
+                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+              </SuiBox>
+            </ProjectBody>
+          </Card>
         </SuiBox>
       </SuiBox>
       <ReceptionModalContainer
