@@ -87,23 +87,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ReceptionRegister() {
-
-  const [followsMe, setFollowsMe] = useState(true);
-  const [answersPost, setAnswersPost] = useState(false);
-  const [mentionsMe, setMentionsMe] = useState(true);
-  const [newLaunches, setNewLaunches] = useState(false);
-  const [productUpdate, setProductUpdate] = useState(true);
-  const [newsletter, setNewsletter] = useState(true);
-
-
-
-
-
   const classes = useStyles();
   let history = useHistory();
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
+  const [gridData, setGridData] = useState([]);
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
@@ -121,6 +110,10 @@ export default function ReceptionRegister() {
 
   const auto1 = [...set1];
   const auto2 = [...set2];
+
+  useEffect(() => {
+    setGridData(data)
+  }, [data]);
 
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
@@ -399,7 +392,7 @@ export default function ReceptionRegister() {
           startDate: dateFormat(receptionStartDate), 
           endDate: dateFormat(receptionEndDate) 
         },
-        vendorName: vendorName,
+        vendorName: vendorName === "전체" ? "" : vendorName,
         chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
       }
     } else {
@@ -408,7 +401,7 @@ export default function ReceptionRegister() {
           startDate: dateFormat(completeStartDate), 
           endDate: dateFormat(completeEndDate) 
         },
-        vendorName: vendorName,
+        vendorName: vendorName === "전체" ? "" : vendorName,
         chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
       }
     }
@@ -420,7 +413,7 @@ export default function ReceptionRegister() {
       })
       .then((result) => {
         console.log(result);
-        //setGridData(result.data)
+        setGridData(result.data)
       })
       .catch((error) => {
         throw new Error(error);
@@ -577,7 +570,7 @@ export default function ReceptionRegister() {
               </SuiBox>
             </form>
             <SuiBox px={2}>
-              <ToastGrid columns={columns} data={data} bodyHeight={500} />
+              <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
             </SuiBox>
           </Project>
 
