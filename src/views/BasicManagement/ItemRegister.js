@@ -72,15 +72,6 @@ export default function ItemRegister() {
   const [seqId, setSeqId] = useState();
   const [itemObj, setItemObj] = useState({});
 
-  useEffect(() => {
-    setGridData(data)
-  }, [data]);
-
-  useEffect(() => {
-    dispatch(items.getItemMiddleware());
-    setOpenItemModal(false);
-  }, [count]);
-
   const partNameArr = ["전체"];
   const itemNameArr = ["전체"];
 
@@ -94,6 +85,17 @@ export default function ItemRegister() {
 
   const auto1 = [...set1];
   const auto2 = [...set2];
+
+  useEffect(() => {
+    setGridData(data)
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(items.getItemMiddleware());
+    setOpenItemModal(false);
+  }, [count]);
+
+ 
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",

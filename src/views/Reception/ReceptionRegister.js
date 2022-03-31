@@ -44,19 +44,10 @@ import MenuItem from "@mui/material/MenuItem";
 
 
 import "react-dates/initialize";
-import { DateRangePicker } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
 
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-
-
-
-import Switch from "@mui/material/Switch";
 
 
 import { RangeDatePicker } from 'react-google-flight-datepicker';
@@ -64,6 +55,7 @@ import 'react-google-flight-datepicker/dist/main.css';
 
 
 
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -115,7 +107,22 @@ export default function ReceptionRegister() {
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
-  
+  console.log(data);
+
+  const vendorNameArr = ["전체"];
+  const chartNumberArr = ["전체"];
+
+  data.map( data => {
+    vendorNameArr.push( data.vendorName )
+    chartNumberArr.push( data.chartNumber.toString() )
+  });
+
+  const set1 = new Set(vendorNameArr);
+  const set2 = new Set(chartNumberArr);
+
+  const auto1 = [...set1];
+  const auto2 = [...set2];
+
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
     dispatch(items.getItemMiddleware());
@@ -336,52 +343,89 @@ export default function ReceptionRegister() {
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: option => option.title,
+    stringify: option => option,
   });
 
-  const auto1 = [
-    { title: "전체" },
-    { title: "리더스탑치과" },
-    { title: "이바른치과" },
-    { title: "연세두리치과" },
-    { title: "서울스위트치과" },
-    { title: "연세바로치과" },
-    { title: "서울시카고" },
-  ];
-  const auto2 = [
-    { title: "전체" },
-    { title: "최진실" },
-    { title: "전윤화" },
-    { title: "정보경" },
-    { title: "이유림" },
-    { title: "조유나" },
-  ];
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [focusedInput, setFocusedInput] = useState(null);
-  const handleDatesChange = ({ startDate, endDate }) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
+  const [receptionStartDate, setReceptionStartDate] = useState(new Date());
+  const [receptionEndDate, setReceptionEndDate] = useState(new Date());
+
+  const [completeStartDate, setCompleteStartDate] = useState(new Date());
+  const [completeEndDate, setCompleteEndDate] = useState(new Date());
+
+  function dateFormat(date) {
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    month = month >= 10 ? month : '0' + month;
+    day = day >= 10 ? day : '0' + day;
+    
+    return date.getFullYear() + '-' + month + '-' + day;
+}
+
+
+  const onReceptionDateChange = (startDate, endDate) => {
+    setReceptionStartDate(startDate);
+    setReceptionEndDate(endDate);
+  }
+
+  const onCompleteDateChange = (startDate, endDate) => {
+    setCompleteStartDate(startDate);
+    setCompleteEndDate(endDate);
+  }
+
+
+  const [selectedValue, setSelectedValue] = useState("reception");
+
+  const handleChangeRadio = (event) => {
+    setSelectedValue(event.target.value);
   };
 
-  const [startDate2, setStartDate2] = useState(null);
-  const [endDate2, setEndDate2] = useState(null);
-  const [focusedInput2, setFocusedInput2] = useState(null);
-  const handleDatesChange2 = ({ startDate, endDate }) => {
-    setStartDate2(startDate);
-    setEndDate2(endDate);
-  };
+  const onSubmit = (e) => {
+    e && e.preventDefault();
 
-  const [value, setValue] = React.useState('female');
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const dateSelect = formData.get("dateSelect");
+    const vendorName = formData.get("vendorName");
+    const chartNumber = formData.get("chartNumber");
+    
+    let receptionParams = {};
+    let completeParams = {};
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+    if(dateSelect === "reception") {
+      receptionParams = {
+        receptionDate: { 
+          startDate: dateFormat(receptionStartDate), 
+          endDate: dateFormat(receptionEndDate) 
+        },
+        vendorName: vendorName,
+        chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
+      }
+    } else {
+      completeParams = {
+        completeDate: { 
+          startDate: dateFormat(completeStartDate), 
+          endDate: dateFormat(completeEndDate) 
+        },
+        vendorName: vendorName,
+        chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
+      }
+    }
+    
+    axios
+      .get("/api/sell/master/", {
+        params : 
+          dateSelect === "reception" ? receptionParams : completeParams
+      })
+      .then((result) => {
+        console.log(result);
+        //setGridData(result.data)
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
-  const onDateChange = (startDate, endDate) => {
-    console.log(startDate);
-    console.log(endDate);
+
   }
 
 
@@ -429,278 +473,110 @@ export default function ReceptionRegister() {
         </SuiBox>
         <SuiBox mb={3}>
           <Project renderMenu={renderMenu}>
-            {/* <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-            </SuiBox> */}
-            {/* <SuiBox color="text" px={2}>
-                <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
-                  more_vert
-                </MoreVertIcon>
+            <form id="formSearchData" onSubmit={onSubmit}>
+              <SuiBox display="flex" px={2}>
+                <Grid container spacing={3}>
+                  <FormControlLabel
+                    checked={selectedValue === "reception"}
+                    onChange={handleChangeRadio}
+                    name="dateSelect"
+                    value="reception"
+                    control={<Radio color="primary" />}
+                    label="접수일자"
+                  />
+                  <Grid item xs={12} sm={4} xl={4}>
+                    <RangeDatePicker
+                      name="receiptDate"
+                      startDate={receptionStartDate}
+                      endDate={receptionEndDate}
+                      onChange={(startDate, endDate) =>
+                        onReceptionDateChange(startDate, endDate)
+                      }
+                      minDate={new Date(1900, 0, 1)}
+                      maxDate={new Date(2100, 0, 1)}
+                      startDatePlaceholder="시작 날짜"
+                      endDatePlaceholder="종료 날짜"
+                      monthFormat="YYYY MM"
+                      disabled={false}
+                    />
+                  </Grid>
+                </Grid>
               </SuiBox>
-              {renderMenu} */}
-            {/* <Menu
-              id="simple-menu"
-              anchorEl={menu}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(menu)}
-              onClose={closeMenu}
-            >
-              <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
-              <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
-            </Menu> */}
-
-            {/* <SuiBox display="flex" px={2}>
-              <Grid container spacing={3}>
-                <SuiBox pt={1.5} pb={2} px={2} lineHeight={1.25}>
-                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
-                    <SuiBox>
-                      <FormControlLabel
-                        value="female"
-                        control={<Radio color="primary" />}
-                      />
-                      <SuiTypography
-                        variant="caption"
-                        fontWeight="regular"
-                        color="text"
-                      >
-                        접수일자
-                      </SuiTypography>
-                    </SuiBox>
-                  </SuiBox>
-                  <SuiBox width="100%">
+              <SuiBox display="flex" px={2}>
+                <Grid container spacing={3}>
+                  <FormControlLabel
+                    checked={selectedValue === "complete"}
+                    onChange={handleChangeRadio}
+                    name="dateSelect"
+                    value="complete"
+                    control={<Radio color="primary" />}
+                    label="완성일자"
+                  />
+                  <Grid item xs={12} sm={4} xl={4}>
                     <RangeDatePicker
-                      startDate={"2020-01-01"}
-                      endDate={"2020-01-01"}
+                      name="completeDate"
+                      startDate={completeStartDate}
+                      endDate={completeEndDate}
                       onChange={(startDate, endDate) =>
-                        onDateChange(startDate, endDate)
+                        onCompleteDateChange(startDate, endDate)
                       }
                       minDate={new Date(1900, 0, 1)}
                       maxDate={new Date(2100, 0, 1)}
                       monthFormat="YYYY MM"
                       disabled={false}
-                      className="my-own-class-name"
+                    
                     />
-                  </SuiBox>
-
-                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
-                    <SuiBox>
-                      <FormControlLabel
-                        value="female"
-                        control={<Radio color="primary" />}
-                      />
-                      <SuiTypography
-                        variant="caption"
-                        fontWeight="regular"
-                        color="text"
-                      >
-                        접수일자
-                      </SuiTypography>
-                    </SuiBox>
-                  </SuiBox>
-                  <SuiBox width="100%" display="flex" py={1} mb={0.25}>
-                    <RangeDatePicker
-                      startDate={"2020-01-01"}
-                      endDate={"2020-01-01"}
-                      onChange={(startDate, endDate) =>
-                        onDateChange(startDate, endDate)
-                      }
-                      minDate={new Date(1900, 0, 1)}
-                      maxDate={new Date(2100, 0, 1)}
-                      locale={"ko"}
-                      monthFormat="YYYY MM"
-                      disabled={false}
-                      className="my-own-class-name"
-                    />
+                  </Grid>
+                  <Grid item xs={12} sm={2} xl={2}>
                     <Autocomplete
+                      freeSolo
                       className={classes.grid}
                       options={auto1}
-                      getOptionLabel={option => option.title}
+                      defaultValue={auto1[0]}
+                      getOptionLabel={option => option}
                       filterOptions={filterOptions}
                       renderInput={params => (
                         <TextField
                           {...params}
+                          name="vendorName"
                           label="거래처명"
                           variant="outlined"
                         />
                       )}
                     />
-                  </SuiBox>
-                  <SuiBox width="100%">
+                  </Grid>
+                  <Grid item xs={12} sm={2} xl={2}>
                     <Autocomplete
+                      freeSolo
                       className={classes.grid}
                       options={auto2}
-                      getOptionLabel={option => option.title}
+                      defaultValue={auto2[0]}
                       filterOptions={filterOptions}
                       renderInput={params => (
                         <TextField
                           {...params}
-                          label="환자명"
+                          name="chartNumber"
+                          label="차트번호"
                           variant="outlined"
                         />
                       )}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={2} xl={2}>
                     <SuiButton
+                      type="submit"
+                      form="formSearchData"
                       variant="outlined"
                       color="info"
                       size="large"
-                      style={{ marginTop: "40px" }}
+                      style={{width: "100%"}}
                     >
                       검색
                     </SuiButton>
-                  </SuiBox>
-                </SuiBox>
-
-                <Grid item xs={12} sm={2} xl={2}></Grid>
-                <Grid item xs={12} sm={2} xl={2}></Grid>
-                <Grid item xs={12} sm={2} xl={2}></Grid>
-              </Grid>
-            </SuiBox> */}
-
-            {/* 
-              xs (extra-small) : 0px ~ 600px
-              sm (small) : 600px ~ 960px
-              md (medium): 960px ~ 1280px
-              lg (large) : 1280px ~ 1920px
-              xl (extra-large) : 1920px ~ 
-            */}
-
-            <SuiBox display="flex" px={2}>
-              <Grid container spacing={3}>
-                <FormControlLabel
-                  value="female"
-                  control={<Radio color="primary" />}
-                  label="접수일자"
-                />
-                <Grid item xs={12} sm={4} xl={4}>
-                  <RangeDatePicker
-                    startDate={"2020-01-01"}
-                    endDate={"2020-01-01"}
-                    onChange={(startDate, endDate) =>
-                      onDateChange(startDate, endDate)
-                    }
-                    minDate={new Date(1900, 0, 1)}
-                    maxDate={new Date(2100, 0, 1)}
-                    monthFormat="YYYY MM"
-                    disabled={false}
-                    className="my-own-class-name"
-                  />
+                  </Grid>
                 </Grid>
-              </Grid>
-            </SuiBox>
-            <SuiBox display="flex" px={2}>
-              <Grid container spacing={3}>
-                <FormControlLabel
-                  value="female"
-                  control={<Radio color="primary" />}
-                  label="완성일자"
-                />
-                <Grid item xs={12} sm={4} xl={4}>
-                  <RangeDatePicker
-                    startDate={"2020-01-01"}
-                    endDate={"2020-01-01"}
-                    onChange={(startDate, endDate) =>
-                      onDateChange(startDate, endDate)
-                    }
-                    minDate={new Date(1900, 0, 1)}
-                    maxDate={new Date(2100, 0, 1)}
-                    monthFormat="YYYY MM"
-                    disabled={false}
-                    className="my-own-class-name"
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={2} xl={2}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="거래처명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="환자명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <SuiButton
-                    variant="outlined"
-                    color="info"
-                    size="large"
-                    style={{width: "100%"}}
-                  >
-                    검색
-                  </SuiButton>
-                </Grid>
-              </Grid>
-            </SuiBox>
-
-            {/* 
-            <SuiBox display="flex" px={2}>
-              <Grid container spacing={3}>
-                
-                <Grid item xs={12} sm={3} xl={2}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto1}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="거래처명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={3} xl={2}>
-                  <Autocomplete
-                    className={classes.grid}
-                    options={auto2}
-                    getOptionLabel={option => option.title}
-                    filterOptions={filterOptions}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="환자명"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={2} xl={2}>
-                  <SuiButton variant="outlined" color="info" size="large" style={{marginTop: "10px"}}>
-                    검색
-                  </SuiButton>
-                </Grid>
-              </Grid>
-
-            </SuiBox> */}
-
+              </SuiBox>
+            </form>
             <SuiBox px={2}>
               <ToastGrid columns={columns} data={data} bodyHeight={500} />
             </SuiBox>
