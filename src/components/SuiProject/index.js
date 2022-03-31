@@ -12,14 +12,13 @@ import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import SuiBox from "components/Sui/SuiBox";
 import SuiTypography from "components/Sui/SuiTypography";
 
-function Projects({children}) {
+function Projects({children, renderMenu}) {
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
 
-  //console.log(renderMenu);
-  const renderMenu = (
+  const a = (
     <Menu
       id="simple-menu"
       anchorEl={menu}
@@ -40,7 +39,31 @@ function Projects({children}) {
     </Menu>
   );
 
-  console.log(children)
+  // const renderMenu = (
+  //   <Menu
+  //     id="simple-menu"
+  //     anchorEl={menu}
+  //     anchorOrigin={{
+  //       vertical: "top",
+  //       horizontal: "left",
+  //     }}
+  //     transformOrigin={{
+  //       vertical: "top",
+  //       horizontal: "right",
+  //     }}
+  //     open={Boolean(menu)}
+  //     onClose={closeMenu}
+  //   >
+  //     <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+  //     <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+  //   </Menu>
+  // );
+
+
+  console.log(renderMenu);
+  console.log(a);
+
+
 
   return (
     <Card>

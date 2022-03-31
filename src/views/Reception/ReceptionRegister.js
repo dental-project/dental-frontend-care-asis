@@ -107,7 +107,6 @@ export default function ReceptionRegister() {
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
-  console.log(data);
 
   const vendorNameArr = ["전체"];
   const chartNumberArr = ["전체"];
@@ -401,7 +400,7 @@ export default function ReceptionRegister() {
           endDate: dateFormat(receptionEndDate) 
         },
         vendorName: vendorName,
-        chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
+        chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
       }
     } else {
       completeParams = {
@@ -410,7 +409,7 @@ export default function ReceptionRegister() {
           endDate: dateFormat(completeEndDate) 
         },
         vendorName: vendorName,
-        chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
+        chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
       }
     }
   
@@ -427,9 +426,7 @@ export default function ReceptionRegister() {
         throw new Error(error);
       });
 
-
   }
-
 
   return (
     <>
@@ -474,7 +471,7 @@ export default function ReceptionRegister() {
           </Grid>
         </SuiBox>
         <SuiBox mb={3}>
-          <Project renderMenu={renderMenu}>
+          <Project>
             <form id="formSearchData" onSubmit={onSubmit}>
               <SuiBox display="flex" px={2}>
                 <Grid container spacing={3}>
