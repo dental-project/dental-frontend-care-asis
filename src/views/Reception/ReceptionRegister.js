@@ -389,6 +389,8 @@ export default function ReceptionRegister() {
     const vendorName = formData.get("vendorName");
     const chartNumber = formData.get("chartNumber");
     
+    if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
+
     let receptionParams = {};
     let completeParams = {};
 
@@ -411,7 +413,8 @@ export default function ReceptionRegister() {
         chartNumber: chartNumber === "전체" ? "전체" : parseInt(chartNumber),
       }
     }
-    
+    console.log(dateSelect === "reception" ? receptionParams : completeParams);
+    return;
     axios
       .get("/api/sell/master/", {
         params : 
