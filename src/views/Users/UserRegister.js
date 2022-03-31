@@ -91,28 +91,6 @@ export default function Signup() {
 
 
 
-//       axios.post('http://localhost:8000/api/users', 
-//           { 
-//             userid: data.userid, 
-//             password: data.passwd,
-//             username: data.userName,
-//             email: data.email,
-//             tel: data.tel,
-//             vendor_id: data.vendorid
-//           }
-//         )
-//         .then((result) => { 
-
-// console.log(result);
-
-//           //result.data.returnCode === "200" && history.push('/admin');
-//           //result.data.returnCode === "801" && alert("이미 존재하는 아이디 입니다.");
-//         })
-//         .catch(error => {
-//           alert(error);
-//           throw new Error(error);
-//         });
-
     }
 
     return (

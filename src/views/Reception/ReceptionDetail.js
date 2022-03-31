@@ -71,7 +71,7 @@ export default function ReceptionDetail() {
     }
     
     axios
-    .get(`http://localhost:8000/api/sell/master/${masterSeqId}/details/`)
+    .get(`/api/sell/master/${masterSeqId}/details/`)
       .then(result => {
 
         //console.log(result);

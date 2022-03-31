@@ -110,7 +110,7 @@ const ReceptionModalContainer = ({
       const vendorSeqId = dentalAutoData[index].seqId;
 
       axios
-      .get(`http://localhost:8000/api/vendor/${vendorSeqId}/price/`)
+      .get(`/api/vendor/${vendorSeqId}/price/`)
         .then(result => {
   
         const selectData = result.data;
@@ -531,7 +531,7 @@ const ReceptionModalContainer = ({
 
                       axios
                         .get(
-                          `http://localhost:8000/api/vendor/${vendorSeqId}/price/`
+                          `/api/vendor/${vendorSeqId}/price/`
                         )
                         .then(result => {
        
