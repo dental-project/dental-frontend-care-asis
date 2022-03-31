@@ -30,7 +30,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
-import SuiTypography from "components/Sui/SuiTypography";
 import SuiButton from "components/Sui/SuiButton";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
 
