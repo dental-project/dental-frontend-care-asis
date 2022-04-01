@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
@@ -100,22 +100,6 @@ const ItemModalContainer = ({
       
     } else if (modalType === "삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
-
-        // apis
-        //   .deleteItem(seqId)
-        //   .then(result => {
-        //     console.log(result);
-        //     if (result.data.status === "SUCCESS") {
-              
-        //       //dispatch(removeItem());
-        //       alert("장치를 삭제 했습니다.");
-        //     } else {
-        //       alert(result.data.message);
-        //     }
-        //   })
-        //   .catch(err => {
-        //     alert(err);
-        //   });
 
     }
   };

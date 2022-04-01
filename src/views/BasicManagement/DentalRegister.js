@@ -25,13 +25,10 @@ import axios from "axios";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
-import SuiTypography from "components/Sui/SuiTypography";
 import SuiButton from "components/Sui/SuiButton";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
-
 import ProjectHeader from "components/SuiProject/ProjectHeader";
 import ProjectBody from "components/SuiProject/ProjectBody";
-
 
 // @mui material components
 import Card from "@mui/material/Card";

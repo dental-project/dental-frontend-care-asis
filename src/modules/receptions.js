@@ -4,7 +4,6 @@ import { apis } from "apis/axios";
 
 // action 생성
 const READ_RECEPTION = "READ_RECEPTION";
-const READ_VENDOR_PART = "READ_VENDOR_PART";
 const ADD_RECEPTION = "ADD_RECEPTION";
 const ADD_RECEPTION_PRICE = "ADD_RECEPTION_PRICE";
 const UPDATE_RECEPTION = "UPDATE_RECEPTION";
@@ -13,7 +12,6 @@ const REMOVE_RECEPTION = "REMOVE_RECEPTION";
 
 // action creators
 const readReception = createAction(READ_RECEPTION, data => ({ data }));
-const readVendorPart = createAction(READ_VENDOR_PART, data => ({ data }));
 const addReception = createAction(ADD_RECEPTION, data => ({ data }));
 const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, data => ({ data }));
@@ -69,10 +67,6 @@ const addReceptionMiddleware = (data) => {
         } else {
           alert(result.data.message);
         }
-
-        // for(let i=0; i<priceContents.length; i++) {
-        //   priceContents[i].sell_master_id = result.data.seq_id
-        // };
 
       })
       .catch(err => {
