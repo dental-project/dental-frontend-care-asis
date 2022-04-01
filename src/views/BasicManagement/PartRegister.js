@@ -79,6 +79,12 @@ function PartRegister() {
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ part }) => part);
   const [gridData, setGridData] = useState([]);
+  const [autoReset, setAutoReset] = useState("전체");
+  const [seqId, setSeqId] = useState("");
+  const [partObj, setPartObj] = useState({});
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
 
   useEffect(() => {
     setGridData(data);
@@ -89,30 +95,11 @@ function PartRegister() {
     setOpenPartModal(false);
   }, [count]);
 
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
+  useEffect(() => {
+    setAutoReset("전체");
+  }, [autoReset]);
 
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={e => partModalOpen(e)}>파트 추가</MenuItem>
-    </Menu>
-  );
-  
-  
+  // 자동완성
   const auto1 = ["전체"];
   data.map( (data) => auto1.push( data.partName ));
 
@@ -120,9 +107,6 @@ function PartRegister() {
     matchFrom: "start",
     stringify: option => option,
   });
-
-  const [seqId, setSeqId] = useState("");
-  const [partObj, setPartObj] = useState({});
 
   // 모달
   const [modalType, setModalType] = useState("");
@@ -210,12 +194,6 @@ function PartRegister() {
       });
   };
 
-  const [autoReset, setAutoReset] = useState("전체");
-
-  useEffect(() => {
-    setAutoReset("전체");
-  }, [autoReset]);
-
   return (
     <>
       <SuiBox py={3}>
@@ -264,7 +242,22 @@ function PartRegister() {
               <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
-              {renderMenu}
+              <Menu
+                id="simple-menu"
+                anchorEl={menu}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(menu)}
+                onClose={closeMenu}
+              >
+                <MenuItem onClick={e => partModalOpen(e)}>파트 추가</MenuItem>
+              </Menu>
             </ProjectHeader>
             <ProjectBody>
               <form id="formSearchData" onSubmit={onSubmit}>

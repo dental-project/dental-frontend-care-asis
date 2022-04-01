@@ -149,10 +149,6 @@ const ReceptionModalContainer = ({
   };
 
 
-
-
-  const removeReceptionDetail = index => {};
-
   const filterVendorName = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
@@ -269,6 +265,13 @@ const ReceptionModalContainer = ({
   const onSubmit = e => {
     e && e.preventDefault();
 
+    if(modalType === "삭제") {
+      
+      dispatch(receptions.deleteReceptionMiddleware(seqId));
+     
+    }
+
+
     let formData = new FormData(document.getElementById("formData"));
 
     const receiptDate = formData.get("receiptDate");
@@ -316,9 +319,6 @@ const ReceptionModalContainer = ({
     
 
     const gridArr = gridRef.current.getInstance().getData();
-
-    //console.log(gridArr);
-    //console.log(selectDetailData);
 
     if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
 
@@ -394,9 +394,9 @@ const ReceptionModalContainer = ({
       form.append("deleteRow", [deleteDetailArr]);
    
       dispatch(receptions.updateReceptionMiddleware(selectReceptionData.seqId, form));
-    }
+    } 
       
-      //dispatch(receptions.addReceptionPriceMiddleware(priceContents));
+     
    
 
   };

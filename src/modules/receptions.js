@@ -82,7 +82,6 @@ const addReceptionMiddleware = (data) => {
 };
 
 const addReceptionPriceMiddleware = contents => {
-  console.log(contents);
   return dispatch => {
     apis
       .createReceptionPrice(contents)
@@ -103,7 +102,6 @@ const addReceptionPriceMiddleware = contents => {
 };
 
 const updateReceptionMiddleware = (seqId, contents) => {
-
   return dispatch => {
     apis
       .patchReception(seqId, contents)

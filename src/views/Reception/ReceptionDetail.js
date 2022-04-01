@@ -29,7 +29,7 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   button: {
     width: "100%",
-    marginTop: "15px"
+    marginTop: "30px"
   },
 }))
 
@@ -74,7 +74,7 @@ export default function ReceptionDetail() {
     .get(`/api/sell/master/${masterSeqId}/details/`)
       .then(result => {
 
-        //console.log(result);
+        console.log(result);
         setDetailData(result.data);
     })
     .catch(error => {
@@ -359,7 +359,7 @@ export default function ReceptionDetail() {
           <SuiBox pt={2} px={2}>
             <SuiBox mb={0.5}>
               <SuiTypography variant="h6" fontWeight="medium">
-                Projects
+                이미지
               </SuiTypography>
             </SuiBox>
             <SuiBox mb={1}>
@@ -372,7 +372,7 @@ export default function ReceptionDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
-                  image={image}
+                  image={image} 
                   // label={"이미지1"}
                   // title="이미지1"
                   // description="기계장비 설명"

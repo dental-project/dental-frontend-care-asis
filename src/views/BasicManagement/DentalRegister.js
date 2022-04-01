@@ -78,7 +78,14 @@ export default function DentalRegister() {
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ dental }) => dental);
   const [gridData, setGridData] = useState([]);
-  
+  const [vendorAutoReset, setVendorAutoReset] = useState("전체");
+  const [seqId, setSeqId] = useState("");
+  const [dentalObj, setDentalObj] = useState({});
+
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
+
   useEffect(() => {
     setGridData(data);
   }, [data]);
@@ -88,36 +95,14 @@ export default function DentalRegister() {
     setOpenDentalModal(false);
   }, [count]);
   
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
-
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={e => dentalModalOpen(e)}>치과 추가</MenuItem>
-    </Menu>
-  );
+  useEffect(() => {
+    setVendorAutoReset("전체");
+  }, [vendorAutoReset]);
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: option => option,
   });
-
-  const [seqId, setSeqId] = useState("");
-  const [dentalObj, setDentalObj] = useState({});
 
   const vendorNameArr = ["전체"];
 
@@ -359,18 +344,30 @@ export default function DentalRegister() {
             </Grid>
           </Grid>
         </SuiBox>
-   
-
         <SuiBox mb={3}>
           <Card>
             <ProjectHeader title={"치과 리스트"} subTitle={"All List"}>
               <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
-              {renderMenu}
+              <Menu
+                id="simple-menu"
+                anchorEl={menu}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(menu)}
+                onClose={closeMenu}
+              >
+                <MenuItem onClick={e => dentalModalOpen(e)}>치과 추가</MenuItem>
+              </Menu>
             </ProjectHeader>
             <ProjectBody>         
-            
               <form id="formSearchData" onSubmit={onSubmit}>
                 <SuiBox display="flex" px={2}>
                   <Grid container spacing={3}>
@@ -379,9 +376,14 @@ export default function DentalRegister() {
                         freeSolo
                         className={classes.grid}
                         options={auto1}
-                        defaultValue={auto1[0]}
+                        value={vendorAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setVendorAutoReset("");
+                          }
+                        }}
                         renderInput={params => (
                           <TextField
                             {...params}

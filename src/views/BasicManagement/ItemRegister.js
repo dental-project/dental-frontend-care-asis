@@ -57,9 +57,14 @@ export default function ItemRegister() {
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ item }) => item);
   const [gridData, setGridData] = useState([]);
-
+  const [partAutoReset, setPartAutoReset] = useState("전체");
+  const [itemAutoReset, setItemAutoReset] = useState("전체");
   const [seqId, setSeqId] = useState();
   const [itemObj, setItemObj] = useState({});
+
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
 
   const partNameArr = ["전체"];
   const itemNameArr = ["전체"];
@@ -84,28 +89,9 @@ export default function ItemRegister() {
     setOpenItemModal(false);
   }, [count]);
 
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
-
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={e => itemModalOpen(e)}>장치 추가</MenuItem>
-    </Menu>
-  );
+  useEffect(() => {
+    setItemAutoReset("전체");
+  }, [itemAutoReset]);
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -186,7 +172,7 @@ export default function ItemRegister() {
     let formData = new FormData(document.getElementById("formSearchData"));
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
-
+    console.log(partName);
     if (partName === "" || itemName === "") {
       return alert("검색어를 입력하세요.");
     }
@@ -259,7 +245,22 @@ export default function ItemRegister() {
               <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
-              {renderMenu}
+              <Menu
+                id="simple-menu"
+                anchorEl={menu}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(menu)}
+                onClose={closeMenu}
+              >
+                <MenuItem onClick={e => itemModalOpen(e)}>장치 추가</MenuItem>
+              </Menu>
             </ProjectHeader>
             <ProjectBody>
               <form id="formSearchData" onSubmit={onSubmit}>
@@ -269,9 +270,16 @@ export default function ItemRegister() {
                       <Autocomplete
                         className={classes.grid}
                         options={auto1}
-                        defaultValue={auto1[0]}
+                        value={partAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setPartAutoReset("전체");
+                          } else {
+                            setPartAutoReset(newValue);
+                          }
+                        }}
                         renderInput={params => (
                           <TextField {...params} name="partName" label="파트명" variant="outlined" />
                         )}
@@ -282,9 +290,14 @@ export default function ItemRegister() {
                         freeSolo
                         className={classes.grid}
                         options={auto2}
-                        defaultValue={auto2[0]}
+                        value={itemAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setItemAutoReset("");
+                          }
+                        }}
                         renderInput={params => (
                           <TextField {...params} name="itemName" label="장치명" variant="outlined" />
                         )}

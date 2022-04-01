@@ -8,13 +8,10 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
-import bgImage from "assets/img/sidebar-2.jpg";
 import toothImg from "assets/img/toothImg.svg";
 
 // # NEW
 // Soft UI Dashboard PRO React components
-import SuiBox from "components/Sui/SuiBox";
-import Icon from "@mui/material/Icon";
 import Sidenav from "components/Sidenav";
 // import Configurator from "components/Configurator";
 import Navbar from "components/Navbars";
@@ -25,9 +22,6 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
-
-
-// # NEW
 
 let ps;
 
@@ -95,7 +89,6 @@ export default function Admin({ ...rest }) {
   const {
     miniSidenav,
     direction,
-    layout,
     openConfigurator,
     sidenavColor,
   } = controller;
@@ -125,16 +118,8 @@ export default function Admin({ ...rest }) {
   const mainPanel = React.createRef();
   // states and functions
   const [image, setImage] = React.useState(toothImg);
-  const [color, setColor] = React.useState("blue");
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const handleImageClick = image => {
-    setImage(image);
-  };
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  
   const getRoute = () => {
     return window.location.pathname !== "/dental/maps";
   };
@@ -162,30 +147,6 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
-
-  const configsButton = (
-    <SuiBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.5rem"
-      height="3.5rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="default" color="inherit">
-        settings
-      </Icon>
-    </SuiBox>
-  );
 
   return (
     <div className={classes.wrapper}>

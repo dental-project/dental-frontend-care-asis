@@ -97,6 +97,17 @@ export default function ReceptionRegister() {
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
+  const [selectedValue, setSelectedValue] = useState("reception");
+  const [receptionStartDate, setReceptionStartDate] = useState(new Date());
+  const [receptionEndDate, setReceptionEndDate] = useState(new Date());
+  const [completeStartDate, setCompleteStartDate] = useState(new Date());
+  const [completeEndDate, setCompleteEndDate] = useState(new Date());
+  const [vendorAutoReset, setVendorAutoReset] = useState("전체");
+  const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
+
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
 
   const vendorNameArr = ["전체"];
   const chartNumberArr = ["전체"];
@@ -122,29 +133,13 @@ export default function ReceptionRegister() {
     setOpenReceptionModal(false);
   }, [count]);
 
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
+  useEffect(() => {
+    setVendorAutoReset("전체");
+  }, [vendorAutoReset]);
 
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
-      <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
-    </Menu>
-  );
+  useEffect(() => {
+    setChartNumberAutoReset("전체");
+  }, [chartNumberAutoReset]);
 
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
@@ -339,14 +334,7 @@ export default function ReceptionRegister() {
     stringify: option => option,
   });
 
-
-  const [receptionStartDate, setReceptionStartDate] = useState(new Date());
-  const [receptionEndDate, setReceptionEndDate] = useState(new Date());
-
-  const [completeStartDate, setCompleteStartDate] = useState(new Date());
-  const [completeEndDate, setCompleteEndDate] = useState(new Date());
-
-  function dateFormat(date) {
+  const dateFormat = (date) => {
     let month = date.getMonth() + 1;
     let day = date.getDate();
 
@@ -355,7 +343,6 @@ export default function ReceptionRegister() {
     
     return date.getFullYear() + '-' + month + '-' + day;
 }
-
 
   const onReceptionDateChange = (startDate, endDate) => {
     setReceptionStartDate(startDate);
@@ -366,8 +353,6 @@ export default function ReceptionRegister() {
     setCompleteStartDate(startDate);
     setCompleteEndDate(endDate);
   }
-
-  const [selectedValue, setSelectedValue] = useState("reception");
 
   const handleChangeRadio = (event) => {
     setSelectedValue(event.target.value);
@@ -417,7 +402,6 @@ export default function ReceptionRegister() {
       .catch((error) => {
         throw new Error(error);
       });
-
   }
 
   return (
@@ -468,7 +452,23 @@ export default function ReceptionRegister() {
               <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
-              {renderMenu}
+              <Menu
+                id="simple-menu"
+                anchorEl={menu}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(menu)}
+                onClose={closeMenu}
+              >
+                <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+                <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+              </Menu>
             </ProjectHeader>
             <ProjectBody>
               <form id="formSearchData" onSubmit={onSubmit}>
@@ -530,9 +530,14 @@ export default function ReceptionRegister() {
                         freeSolo
                         className={classes.grid}
                         options={auto1}
-                        defaultValue={auto1[0]}
+                        value={vendorAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setVendorAutoReset("");
+                          }
+                        }}
                         renderInput={params => (
                           <TextField
                             {...params}
@@ -548,8 +553,13 @@ export default function ReceptionRegister() {
                         freeSolo
                         className={classes.grid}
                         options={auto2}
-                        defaultValue={auto2[0]}
+                        value={chartNumberAutoReset}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setChartNumberAutoReset("");
+                          }
+                        }}
                         renderInput={params => (
                           <TextField
                             {...params}

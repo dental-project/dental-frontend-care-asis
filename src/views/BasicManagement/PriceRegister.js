@@ -4,10 +4,6 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import Button from "components/CustomButtons/Button.js";
-
 
 import PriceModalContainer from "containers/PriceModalContainer";
 
@@ -29,7 +25,6 @@ import axios from 'axios';
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
-import SuiTypography from "components/Sui/SuiTypography";
 import SuiButton from "components/Sui/SuiButton";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
 
@@ -84,6 +79,13 @@ export default function PriceRegister() {
   const [gridData, setGridData] = useState([]);
   const [seqId, setSeqId] = useState("");
   const [priceObj, setPriceObj] = useState({});
+  const [vendorAutoReset, setVendorAutoReset] = useState("전체");
+  const [partAutoReset, setPartAutoReset] = useState("전체");
+  const [itemAutoReset, setItemAutoReset] = useState("전체");
+
+  const [menu, setMenu] = useState(null);
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
 
   useEffect(() => {
     setGridData(data)
@@ -98,30 +100,6 @@ export default function PriceRegister() {
     matchFrom: "start",
     stringify: option => option,
   });
-
-
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
-
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={e => priceModalOpen(e)}>단가 추가</MenuItem>
-    </Menu>
-  );
 
   const vemndorNameArr = ["전체"];
   const partNameArr = ["전체"];
@@ -231,9 +209,6 @@ export default function PriceRegister() {
     },
   ];
 
-
-
-
   const onSubmit = (e) => {
 
     e && e.preventDefault();
@@ -247,8 +222,6 @@ export default function PriceRegister() {
       return alert("검색어를 선택하세요.");
     }
 
-    console.log(data);
-   
     const vendorData = data.filter(data => 
       data.vendorName === vendorName
     );
@@ -260,13 +233,6 @@ export default function PriceRegister() {
     const itemData = data.filter(data => 
       data.itemName === itemName
     );
-
-    
-    console.log(vendorName === "전체" ? "" : vendorData[0].vendorSeqId);
-    console.log(partName === "전체" ? "" : partData[0].partSeqId);
-    console.log(itemName === "전체" ? "" : itemData[0].itemSeqId);
-    //console.log(partData);
-    //console.log(itemData);
 
     axios
       .get("/api/sell/price/", {
@@ -328,15 +294,28 @@ export default function PriceRegister() {
             </Grid>
           </Grid>
         </SuiBox>
-  
-
         <SuiBox mb={3}>
           <Card>
             <ProjectHeader title={"단가 리스트"} subTitle={"All List"}>
               <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
-              {renderMenu}
+                <Menu
+                  id="simple-menu"
+                  anchorEl={menu}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(menu)}
+                  onClose={closeMenu}
+                >
+                <MenuItem onClick={e => priceModalOpen(e)}>단가 추가</MenuItem>
+              </Menu>
             </ProjectHeader>
             <ProjectBody>
               <form id="formSearchData" onSubmit={onSubmit}>
@@ -346,9 +325,16 @@ export default function PriceRegister() {
                       <Autocomplete
                         className={classes.grid}
                         options={auto1}
-                        defaultValue={auto1[0]}
+                        value={vendorAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setVendorAutoReset("전체");
+                          } else {
+                            setVendorAutoReset(newValue);
+                          }
+                        }}
                         renderInput={params => (
                           <TextField
                             {...params}
@@ -363,9 +349,16 @@ export default function PriceRegister() {
                       <Autocomplete
                         className={classes.grid}
                         options={auto2}
-                        defaultValue={auto2[0]}
+                        value={partAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setPartAutoReset("전체");
+                          } else {
+                            setPartAutoReset(newValue);
+                          }
+                        }}
                         renderInput={params => (
                           <TextField {...params} name="partName" label="파트명" variant="outlined" />
                         )}
@@ -375,9 +368,16 @@ export default function PriceRegister() {
                       <Autocomplete
                         className={classes.grid}
                         options={auto3}
-                        defaultValue={auto3[0]}
+                        value={itemAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setItemAutoReset("전체");
+                          } else {
+                            setItemAutoReset(newValue);
+                          }
+                        }}
                         renderInput={params => (
                           <TextField {...params} name="itemName" label="장치명" variant="outlined" />
                         )}
