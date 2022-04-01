@@ -43,7 +43,9 @@ function SignIn() {
       [name]: value,
     });
   };
-  
+  axios.defaults.xsrfCookieName = 'csrftoken';
+  axios.defaults.xsrfHeaderName = 'x-CSRFToken';
+  axios.defaults.withCredentials = true
   const loginBtn = () => {
     axios
       .post("/api/users/login/", {
@@ -52,6 +54,7 @@ function SignIn() {
       })
       .then((result) => {
         //  console.log(result);
+        
         if (result.data.status === "SUCCESS") {
           // history.push("/dashboard");
           history.push("/dental");
