@@ -367,7 +367,6 @@ export default function ReceptionRegister() {
     setCompleteEndDate(endDate);
   }
 
-
   const [selectedValue, setSelectedValue] = useState("reception");
 
   const handleChangeRadio = (event) => {
@@ -429,7 +428,7 @@ export default function ReceptionRegister() {
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: "전체 리스트" }}
-                count="100개"
+                count={data.length}
                 percentage={{ color: "success", text: "EA" }}
                 icon={{ color: "info", component: "AllList" }}
               />

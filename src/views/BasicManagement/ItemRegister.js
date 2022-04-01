@@ -219,7 +219,7 @@ export default function ItemRegister() {
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: "전체 리스트" }}
-                count="100개"
+                count={data.length}
                 percentage={{ color: "success", text: "EA" }}
                 icon={{ color: "info", component: "AllList" }}
               />
