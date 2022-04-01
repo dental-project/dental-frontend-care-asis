@@ -23,6 +23,10 @@ import toothImg from "assets/img/toothImg.svg";
 // Axios
 import axios from "axios";
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'x-CSRFToken';
+axios.defaults.withCredentials = true
+
 function SignIn() {
     const [rememberMe, setRememberMe] = useState(true);
 
@@ -43,9 +47,7 @@ function SignIn() {
       [name]: value,
     });
   };
-  axios.defaults.xsrfCookieName = 'csrftoken';
-  axios.defaults.xsrfHeaderName = 'x-CSRFToken';
-  axios.defaults.withCredentials = true
+
   const loginBtn = () => {
     axios
       .post("/api/users/login/", {
