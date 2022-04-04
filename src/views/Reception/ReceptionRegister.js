@@ -50,7 +50,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
 
-import axios from 'axios';
+import { apis } from "apis/axios";
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -385,17 +385,17 @@ export default function ReceptionRegister() {
       }
     }
   
-    axios
-      .get("/api/sell/master/", {
-        params : 
-          dateSelect === "reception" ? receptionParams : completeParams
+    apis
+      .receptionSearch({
+        params:  dateSelect === "reception" ? receptionParams : completeParams,
       })
-      .then((result) => {
-        setGridData(result.data)
+      .then(result => {
+        setGridData(result.data);
       })
-      .catch((error) => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+
   }
 
   return (

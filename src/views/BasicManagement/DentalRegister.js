@@ -21,7 +21,7 @@ import { dentals } from "modules/dentals";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import axios from "axios";
+import { apis } from "apis/axios";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
@@ -285,18 +285,17 @@ export default function DentalRegister() {
     if (vendorName === "") 
       return alert("검색어를 입력하세요.");
     
-    axios
-      .get("/api/vendor/", {
-        params: {
-          vendorName: vendorName === "전체" ? "" : vendorName,
-        },
+    apis
+      .dentalSearch({
+        params: { vendorName: vendorName === "전체" ? "" : vendorName },
       })
       .then(result => {
         setGridData(result.data);
       })
-      .catch(error => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+    
   };
 
   return (

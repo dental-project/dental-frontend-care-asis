@@ -16,10 +16,9 @@ import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
 
+import { apis } from "apis/axios";
 import axios from "axios";
-
 import ButtonUpload from '@material-ui/core/Button';
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,10 +88,7 @@ const ReceptionModalContainer = ({
 
   const dispatch = useDispatch();
   const dentalAutoData = useSelector(({ dental }) => dental.data);
-  const receptionData = useSelector(({ reception }) => reception.data);
-
   const [vendorSelectData, setVendorSelectData] = useState([]);
-
   const [detailDataArr, setDetailDataArr] = useState(selectDetailData);
   const [deleteDetailArr, setDeleteDetailArr] = useState([]);
 
@@ -100,28 +96,41 @@ const ReceptionModalContainer = ({
     setDetailDataArr(selectDetailData);
   }, [selectDetailData]);
 
+  console.log(dentalAutoData);
 
-  useEffect(() => {
-    if (modalType === "접수수정") {
+  // useEffect(() => {
+  //   if (modalType === "접수수정") {
      
-      const index = dentalAutoData.findIndex(
-        obj => obj.vendorName === selectReceptionData.vendorName
-      );
-      const vendorSeqId = dentalAutoData[index].seqId;
+  //     const index = dentalAutoData.findIndex(
+  //       obj => obj.vendorName === selectReceptionData.vendorName
+  //     );
+  //     const vendorSeqId = dentalAutoData[index].seqId;
 
-      axios
-      .get(`/api/vendor/${vendorSeqId}/price/`)
-        .then(result => {
-  
-        const selectData = result.data;
-        setVendorSelectData(selectData);
-      })
-      .catch(error => {
-        throw new Error(error);
-      });
+  //     apis
+  //       .vendorSelectPrice({
+  //         vendorSeqId: vendorSeqId,
+  //       })
+  //       .then(result => {
+  //         const selectData = result.data;
+  //         setVendorSelectData(selectData);
+  //       })
+  //       .catch(err => {
+  //         alert(err);
+  //       });
 
-    }
-  }, [selectReceptionData.seqId]);
+  //     // axios
+  //     // .get(`/api/vendor/${vendorSeqId}/price/`)
+  //     //   .then(result => {
+  //     //     console.log(result);
+  //     //   const selectData = result.data;
+  //     //   setVendorSelectData(selectData);
+  //     // })
+  //     // .catch(error => {
+  //     //   throw new Error(error);
+  //     // });
+
+  //   }
+  // }, [selectReceptionData.seqId]);
   
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
@@ -377,28 +386,15 @@ const ReceptionModalContainer = ({
     form.append("detail", JSON.stringify(detail));
    
     if (modalType === "추가") {
-      //form.append("detailRemove", JSON.stringify(detailRemove));
-
+ 
       dispatch(receptions.addReceptionMiddleware(form));
     } else if (modalType === "접수수정") {
 
-
-        // data = {
-        //   masterFormData,
-        //   ...
-        //   ...
-        //   detail:JSON.stringify([{디테일}]),
-        //   deleteRow : []
-        // }
-      
       form.append("deleteRow", [deleteDetailArr]);
    
       dispatch(receptions.updateReceptionMiddleware(selectReceptionData.seqId, form));
     } 
       
-     
-   
-
   };
 
   const onChange = e => {
@@ -507,36 +503,26 @@ const ReceptionModalContainer = ({
                   className={classes.textField}
                   options={vendorNameAuto}
                   filterOptions={filterVendorName}
-                  //disabled={modalType === "접수수정" ? true : false}
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.vendorName : ""
                   }
                   onChange={(event, newValue) => {
-                    if (newValue === null) {
-                      //setVendorId("");
-                    }
+
                     if (newValue !== null) {
                       const index = dentalAutoData.findIndex(
                         obj => obj.vendorName === newValue
                       );
                       const vendorSeqId = dentalAutoData[index].seqId;
-                     
-                      // const length = gridRef.current.getInstance().getData().length;
-
-                      // // for(let i=0; i<length; i++) {
-                      // //   resetColumn(i,"allReset");
-                      // // }
-
                       gridRef.current.getInstance().restore();
 
-                      axios
-                        .get(
-                          `/api/vendor/${vendorSeqId}/price/`
+
+                      apis
+                        .vendorSelectPrice(
+                          vendorSeqId,
                         )
                         .then(result => {
-       
                           const selectData = result.data;
-                          const newArray = selectData
+                          selectData
                             .filter(
                               (arr, index, callback) =>
                                 index ===
@@ -549,13 +535,36 @@ const ReceptionModalContainer = ({
                             });
 
                           setVendorSelectData(selectData);
-                          //setPartAutoData(newArray);
-                          //console.log(selectData);
-                          //console.log(newArray);
                         })
-                        .catch(error => {
-                          throw new Error(error);
+                        .catch(err => {
+                          alert(err);
                         });
+
+
+                      // axios
+                      //   .get(
+                      //     `/api/vendor/${vendorSeqId}/price/`
+                      //   )
+                      //   .then(result => {
+       
+                      //     const selectData = result.data;
+                      //     selectData
+                      //       .filter(
+                      //         (arr, index, callback) =>
+                      //           index ===
+                      //           callback.findIndex(
+                      //             t => t.partName === arr.partName
+                      //           )
+                      //       )
+                      //       .map(data => {
+                      //         return data.partName;
+                      //       });
+
+                      //     setVendorSelectData(selectData);
+                      //   })
+                      //   .catch(error => {
+                      //     throw new Error(error);
+                      //   });
                     }
                   }}
                   renderInput={params => (
@@ -679,7 +688,6 @@ const ReceptionModalContainer = ({
               className={classes.input}
               style={{ display: "none" }}
               id="requestForm"
-              //name={modalType === "접수수정" ? selectReceptionData.requestForm : "requestForm"}
               name="requestForm"
               multiple
               type="file"

@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { prices } from "modules/prices";
 
-import axios from 'axios';
+import { apis } from "apis/axios";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
@@ -234,22 +234,21 @@ export default function PriceRegister() {
       data.itemName === itemName
     );
 
-    axios
-      .get("/api/sell/price/", {
-        params : {
+    apis
+      .priceSearch({
+        params: {
           vendorSeqId: vendorName === "전체" ? "" : vendorData[0].vendorSeqId,
           partSeqId: partName === "전체" ? "" : partData[0].partSeqId,
           itemSeqId: itemName === "전체" ? "" : itemData[0].itemSeqId,
-        }
+        },
       })
-      .then((result) => {
-        console.log(result);
-        setGridData(result.data)
-
+      .then(result => {
+        setGridData(result.data);
       })
-      .catch((error) => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+
   }
 
   return (

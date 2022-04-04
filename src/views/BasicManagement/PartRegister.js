@@ -24,7 +24,7 @@ import PartModalContainer from "containers/PartModalContainer";
 import "tui-grid/dist/tui-grid.css";
 import ToastGrid from "@toast-ui/react-grid";
 
-import axios from "axios";
+import { apis } from "apis/axios";
 
 
 // Soft UI Dashboard React components
@@ -178,20 +178,17 @@ function PartRegister() {
 
     if (partName === "") return alert("검색어를 입력하세요.");
 
-    console.log(partName);
-
-    axios
-      .get("/api/code/part/", {
-        params: {
-          partName: partName === "전체" ? "" : partName,
-        },
+    apis
+      .partSearch({
+        params: { partName: partName === "전체" ? "" : partName },
       })
       .then(result => {
         setGridData(result.data);
       })
-      .catch(error => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+
   };
 
   return (

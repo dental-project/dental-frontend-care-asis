@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true
 
 const instance = axios.create({
   // 기본적으로 우리가 바라볼 서버의 주소
-  baseURL: '/api',
+  baseURL: 'http://localhost:8000/api',
   withCredentials: false,
   
   // headers: {
@@ -88,5 +88,26 @@ export const apis = {
   getBusinessSector: () => instance.get('/code/businessSector/'),
   // 치과 불러오기
   getBank: () => instance.get('/code/bank/'),
+
+
+  // 로그인
+  login: (contents) => instance.post('/users/login/', contents),
+
+  // 접수 리스트 검색
+  receptionSearch: (contents) => instance.get('/sell/master/', contents),
+  // 파트 검색
+  partSearch: (contents) => instance.get('/code/part/', contents),
+  // 장치 검색
+  itemSearch: (contents) => instance.get('/code/item/', contents),
+  // 치과 검색
+  dentalSearch: (contents) => instance.get('/vendor/', contents),
+  // 단가 검색
+  priceSearch: (contents) => instance.get('/sell/price/', contents),
+
+
+  // 거래처에 해당하는 단가
+  vendorSelectPrice: (vendorSeqId) => instance.get(`/vendor/${vendorSeqId}/price/`)
+  // 거래처 선택시 파트명 가져오기
+  
 
 };

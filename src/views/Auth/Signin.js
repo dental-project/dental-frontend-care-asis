@@ -20,12 +20,7 @@ import Separator from "layouts/authentication/Separator";
 import curved6 from "assets/img/curved-images/curved14.jpg";
 import toothImg from "assets/img/toothImg.svg";
 
-// Axios
-import axios from "axios";
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'x-CSRFToken';
-axios.defaults.withCredentials = true
+import { apis } from "apis/axios";
 
 function SignIn() {
     const [rememberMe, setRememberMe] = useState(true);
@@ -49,24 +44,24 @@ function SignIn() {
   };
 
   const loginBtn = () => {
-    axios
-      .post("/api/users/login/", {
+
+    apis
+      .login({
         userid: inputs.userid,
         password: inputs.passwd,
       })
-      .then((result) => {
-        //  console.log(result);
+      .then(result => {
         
         if (result.data.status === "SUCCESS") {
-          // history.push("/dashboard");
           history.push("/dental");
         } else {
           alert(result.data.message);
         }
       })
-      .catch((error) => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+
   };
 
   return (

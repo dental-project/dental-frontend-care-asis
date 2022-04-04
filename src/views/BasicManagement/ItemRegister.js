@@ -27,7 +27,7 @@ import { items } from "modules/items";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import axios from 'axios';
+import { apis } from "apis/axios";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/Sui/SuiBox";
@@ -181,18 +181,18 @@ export default function ItemRegister() {
       data.partName === partName
     );
 
-    axios
-      .get("/api/code/item/", {
-        params : {
+    apis
+      .itemSearch({
+        params: {
           partSeqId: partName === "전체" ? "" : dataArr[0].partSeqId,
           itemName: itemName === "전체" ? "" : itemName,
-        }
+        },
       })
-      .then((result) => {
-        setGridData(result.data)
+      .then(result => {
+        setGridData(result.data);
       })
-      .catch((error) => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
 
   }
