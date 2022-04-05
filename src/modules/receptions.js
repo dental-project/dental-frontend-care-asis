@@ -122,6 +122,7 @@ const deleteReceptionMiddleware = seqId => {
       .then(result => {
 
         if (result.data.status === "SUCCESS") {
+          console.log(result)
           dispatch(removeReception());
           alert("접수 정보를 삭제 했습니다.");
         } else {
@@ -170,12 +171,12 @@ export default handleActions(
       produce(state, draft => {
         draft.count = draft.count + 1;
       }),
-    [REMOVE_RECEPTION]: (state, action) =>
+    [REMOVE_RECEPTION]: state =>
       produce(state, draft => {
-        const index = draft.data.findIndex(
-          element => element.seq_id === action.payload.seqId
-        );
-        draft.data.splice(index, 1);
+        // const index = draft.data.findIndex(
+        //   element => element.seq_id === action.payload.seqId
+        // );
+        // draft.data.splice(index, 1);
         draft.count = draft.count + 1;
       }),
     // [REMOVE_RECEPTION_DETAIL]: (state, action) =>

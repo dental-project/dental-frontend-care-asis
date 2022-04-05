@@ -5,7 +5,7 @@ import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from "react-hook-form";
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import axios from 'axios';
+import { apis } from "apis/axios";
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -81,26 +81,44 @@ const onSubmit = (data) => {
         vendorSeqId = 4;
     }
     
-    axios({
-      method: "POST",
-      url: "/api/sell/report/",
-      responseType: "blob",
-      data: {
-        receiptDate: data.startDate,
-        completionDate: data.endDate,
-        vendorSeqId: vendorSeqId,
-        reportType: type,
-      },
-    })
+    apis
+      .receptionReport({
+        data: {
+          receiptDate: data.startDate,
+          completionDate: data.endDate,
+          vendorSeqId: vendorSeqId,
+          reportType: type,
+        },
+      })
       .then(result => {
-        console.log(result);
         var b = new Blob([result.data], { type: "application/pdf;" });
         var url = URL.createObjectURL(b);
         window.open(url, "_blank", "");
       })
-      .catch(error => {
-        throw new Error(error);
+      .catch(err => {
+        alert(err);
       });
+
+    // axios({
+    //   method: "POST",
+    //   url: "/api/sell/report/",
+    //   responseType: "blob",
+    //   data: {
+    //     receiptDate: data.startDate,
+    //     completionDate: data.endDate,
+    //     vendorSeqId: vendorSeqId,
+    //     reportType: type,
+    //   },
+    // })
+    //   .then(result => {
+    //     console.log(result);
+    //     var b = new Blob([result.data], { type: "application/pdf;" });
+    //     var url = URL.createObjectURL(b);
+    //     window.open(url, "_blank", "");
+    //   })
+    //   .catch(error => {
+    //     throw new Error(error);
+    //   });
       
     }
 

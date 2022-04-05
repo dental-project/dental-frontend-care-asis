@@ -11,7 +11,7 @@ import SuiBadge from "components/Sui/SuiBadge";
 // Soft UI Dashboard React example components
 import Table from "components/Sui/SuiTable";
 
-import axios from "axios";
+import { apis } from "apis/axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -55,7 +55,6 @@ export default function ReceptionDetail() {
     const obj = localStorage.getItem("obj");
     const img = localStorage.getItem("image");
 
-    
     if (masterSeqId !== null) {
       setSeqId(JSON.parse(masterSeqId));
     }
@@ -64,22 +63,30 @@ export default function ReceptionDetail() {
       setMasterData(JSON.parse(obj));
     }
 
-    
-
     if (img !== null) {
       setImage(JSON.parse(img));
     }
     
-    axios
-    .get(`/api/sell/master/${masterSeqId}/details/`)
-      .then(result => {
 
-        console.log(result);
+
+    apis
+      .getReceptionDetailSelect(masterSeqId)
+      .then(result => {
         setDetailData(result.data);
-    })
-    .catch(error => {
-      throw new Error(error);
-    });
+      })
+      .catch(err => {
+        alert(err);
+      });
+
+    // axios
+    // .get(`/api/sell/master/${masterSeqId}/details/`)
+    //   .then(result => {
+
+    //     setDetailData(result.data);
+    // })
+    // .catch(error => {
+    //   throw new Error(error);
+    // });
   }, []);
   
   const [zoomImage, setZoomImage] = useState("");
@@ -146,12 +153,6 @@ export default function ReceptionDetail() {
     }
   ];
 
-
-
-
-
-
-
   const columns = [
     {
       name: " ",
@@ -191,17 +192,10 @@ export default function ReceptionDetail() {
     },
   ]
 
-
-
-
-
-
-
-
   const masterRows = [];
   const prRows = [];
 
-  masterData.map((data,key) => {
+  masterData.map((data) => {
     masterRows.push({
       //" ": [toothImg],
       접수일자: (
@@ -262,9 +256,7 @@ export default function ReceptionDetail() {
     })
   });
 
-  
-
-  detailData.map((data,key) => {
+  detailData.map((data) => {
     prRows.push({
       //" ": [toothImg],
       파트명: (
@@ -313,7 +305,6 @@ export default function ReceptionDetail() {
     handleReceptionDetailModalOpen();
   }
 
-  
   return (
     <SuiBox py={3}>
       <SuiBox mb={3}>

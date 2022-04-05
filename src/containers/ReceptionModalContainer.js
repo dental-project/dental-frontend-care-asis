@@ -17,7 +17,6 @@ import ToastGrid from "@toast-ui/react-grid";
 import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js";
 
 import { apis } from "apis/axios";
-import axios from "axios";
 import ButtonUpload from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
@@ -96,8 +95,6 @@ const ReceptionModalContainer = ({
     setDetailDataArr(selectDetailData);
   }, [selectDetailData]);
 
-  console.log(dentalAutoData);
-
   // useEffect(() => {
   //   if (modalType === "접수수정") {
      
@@ -154,7 +151,7 @@ const ReceptionModalContainer = ({
     ]);
 
     setDetailDataArr(detailArr);
-    
+    console.log("remove");
   };
 
 
@@ -274,13 +271,10 @@ const ReceptionModalContainer = ({
   const onSubmit = e => {
     e && e.preventDefault();
 
-    if(modalType === "삭제") {
-      
-      dispatch(receptions.deleteReceptionMiddleware(seqId));
-     
+    if (modalType === "삭제") {
+      return dispatch(receptions.deleteReceptionMiddleware(seqId));
     }
-
-
+    
     let formData = new FormData(document.getElementById("formData"));
 
     const receiptDate = formData.get("receiptDate");
@@ -308,25 +302,7 @@ const ReceptionModalContainer = ({
       obj => obj.vendorName === vendorName
     );
 
-    // const master = {
-    //   receiptDate: receiptDate,
-    //   completionDate: completionDate,
-    //   deliveryDate: deliveryDate,
-    //   chartNumber: parseInt(chartNumber),
-    //   upper: upper === "" ? true : false,
-    //   lower: lower === "" ? true : false,
-    //   bite: bite === "" ? true : false,
-    //   appliance: appliance === "" ? true : false,
-    //   patientName: patientName,
-    //   description: description,
-    //   vendorSeqId: dentalAutoData[index].seqId,
-    //   requestForm: requestForm,
-    // };
-
     const form = new FormData();
-
-    
-
     const gridArr = gridRef.current.getInstance().getData();
 
     if (gridArr.length === 0) return alert("그리드 행을 추가 해주세요.");
@@ -375,6 +351,11 @@ const ReceptionModalContainer = ({
     form.append("patientName", patientName);
     form.append("description", description);
     form.append("vendorSeqId", dentalAutoData[index].seqId);
+
+
+
+
+
 
     if(modalType === "접수수정" && requestForm.name === "") {
       //form.append("requestForm", selectReceptionData.requestForm); 
