@@ -68,7 +68,7 @@ const ItemModalContainer = ({
 
   const onSubmit = (e) => {
     e && e.preventDefault();
-    console.log("asfasfasf");
+    
     let formData = new FormData(document.getElementById("formData"));
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
@@ -115,7 +115,7 @@ const ItemModalContainer = ({
               filterOptions={filterOptions}
               defaultValue={modalType === "수정" ? itemObj.partName : ""}
               renderInput={params => (
-                <TextField {...params} name="partName" label="파트명" variant="outlined"  />
+                <TextField {...params} name="partName" label="파트명" variant="outlined" />
               )}
             />
             <TextField

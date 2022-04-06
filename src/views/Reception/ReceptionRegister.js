@@ -596,19 +596,6 @@ export default function ReceptionRegister() {
                   data={searchType === "" ? data : gridData}
                   bodyHeight={500}
                 />
-                {/* {searchType === "" ? (
-                  <ToastGrid
-                    columns={columns}
-                    data={data}
-                    bodyHeight={500}
-                  />
-                ) : (
-                  <ToastGrid
-                    columns={columns}
-                    data={gridData}
-                    bodyHeight={500}
-                  />
-                )} */}
               </SuiBox>
             </ProjectBody>
           </Card>

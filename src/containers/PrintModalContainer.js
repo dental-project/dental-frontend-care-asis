@@ -3,9 +3,13 @@ import Modal from 'components/Modal/Modal'
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
-import { useForm, Controller } from "react-hook-form";
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { apis } from "apis/axios";
+
+import { useDispatch, useSelector } from "react-redux";
+import { dentals } from "modules/dentals";
+
+
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -42,62 +46,77 @@ const useStyles = makeStyles((theme) => ({
 
 const PrintModalContainer = ({ open, close}) => {
 
-    const classes = useStyles();
-    const { handleSubmit, control } = useForm();
-    
+  const classes = useStyles();
   
-    const [vendorName, setVendorName] = useState('');
-    const [type, setType] = useState('');
+  const dispatch = useDispatch();
+  const { data, count } = useSelector(({ dental }) => dental);
+
+  const [vendorName, setVendorName] = useState('');
+  const [type, setType] = useState('');
+
+  const [startDateValue, setStartDateValue] = useState(new Date());
+  const [endDateValue, setEndDateValue] = useState(new Date());
 
 
-    useEffect(() => {
-    
-    }, [] );
+  const vendorNameArr = [];
 
-    const vendor = [{ title: "Dental.A 치과기공소" }, { title: "거래처명" }, { title: "거래처명2" }];
-    const dash1 = [ { title: "시간별완성현황" }, { title: "일생산현황" }, { title: "치과매출현황" }, { title: "파트별매출현황" }, { title: "치과별월매출현황" },{ title: "월생산현황표" }];
+  data.map(data => {
+    vendorNameArr.push(data.vendorName);
+  });
+
+  const set1 = new Set(vendorNameArr);
+  const vendorAutoData = [...set1];
+
+  useEffect(() => {
+    dispatch(dentals.getDentalMiddleware());
+  }, [] );
+
+  const vendor = ["Dental.A 치과기공소", "거래처명", "거래처명2"];
+  const dash1 = ["시간별완성현황", "일생산현황", "치과매출현황", "파트별매출현황", "치과별월매출현황", "월생산현황표"];
   
+
+
+  
+
+
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option) => option.title,
+    stringify: (option) => option,
   });
 
 
-const onSubmit = (data) => {
+const onSubmit = (e) => {
+  e && e.preventDefault();
 
-    let vendorSeqId = 0;
+  let formData = new FormData(document.getElementById("formData"));
+  const startDate = formData.get("startDate");
+  const endDate = formData.get("endDate");
+  const vendorName = formData.get("vendorName");
+  const type = formData.get("type");
 
-    if(vendorName === "Dental.A 치과기공소") {
-        console.log("d");
-        vendorSeqId = 1;
-    }
-    else if(vendorName === "거래처명") {
-        vendorSeqId = 2;
-    }
-    else if(vendorName === "거래처명2") {
-        vendorSeqId = 3;
-    }
-    else if(vendorName === "fgdfg") {
-        vendorSeqId = 4;
-    }
-    
-    apis
-      .receptionReport({
-        data: {
-          receiptDate: data.startDate,
-          completionDate: data.endDate,
-          vendorSeqId: vendorSeqId,
-          reportType: type,
-        },
-      })
-      .then(result => {
-        var b = new Blob([result.data], { type: "application/pdf;" });
-        var url = URL.createObjectURL(b);
-        window.open(url, "_blank", "");
-      })
-      .catch(err => {
-        alert(err);
-      });
+  if (startDate === "" || endDate === "" || vendorName === "" || type === "")
+    return alert("모두 선택해주세요");
+  
+  const index = vendorAutoData.findIndex(data => data === vendorName);
+  
+  apis
+    .receptionReport({
+      data: {
+        receiptDate: startDate,
+        completionDate: endDate,
+        vendorSeqId: data[index].seqId,
+        reportType: type,
+      },
+    })
+    .then(result => {
+      console.log(result);
+      var b = new Blob([result.data], { type: "application/pdf;" });
+      var url = URL.createObjectURL(b);
+      window.open(url, "_blank", "");
+    })
+    .catch(err => {
+      alert(err);
+    });
 
     // axios({
     //   method: "POST",
@@ -124,88 +143,64 @@ const onSubmit = (data) => {
 
     return (
       <Modal open={open}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-                <Controller
-                  name="startDate"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="시작일자"
-                      type="date"
-                      className={classes.textField}
-                      onChange={onChange}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                />
-              <Controller
-                name="endDate"
-                control={control}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    label="종료일자"
-                    type="date"
-
-                    className={classes.textField}
-                    onChange={onChange}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                )}
+        <form id="formData" onSubmit={onSubmit}>
+          <TextField
+            className={classes.textField}
+            type="date"
+            name="startDate"
+            label="시작일자"
+            defaultValue={startDateValue}
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            className={classes.textField}
+            type="date"
+            name="endDate"
+            label="종료일자"
+            defaultValue={endDateValue}
+            InputLabelProps={{ shrink: true }}
+          />
+          <Autocomplete
+            className={classes.textField}
+            options={vendorAutoData}
+            filterOptions={filterOptions}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name="vendorName"
+                label="거래처명"
+                variant="outlined"
               />
-              
-              <Autocomplete
-                className={classes.textField}
-                name="ab"
-                options={vendor}
-                getOptionLabel={(option) => option.title}
-                filterOptions={filterOptions}
-                renderInput={(params) => <TextField {...params} label="거래처선택" variant="outlined" />}
-                getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                }}
-                onChange={(event, newValue) => {
-                  console.log(newValue.title);
-                  setVendorName(newValue.title);
-                }}
+            )}
+          />
+          <Autocomplete
+            className={classes.textField}
+            options={dash1}
+            filterOptions={filterOptions}
+            renderInput={params => (
+              <TextField
+                {...params}
+                name="type"
+                label="항목선택"
+                variant="outlined"
               />
-              <Autocomplete
-                className={classes.textField}
-                name="aa"
-                options={dash1}
-                getOptionLabel={(option) => option.title}
-                filterOptions={filterOptions}
-                renderInput={(params) => <TextField {...params} label="항목선택" variant="outlined" />}
-                getOptionSelected={(option, value) => {
-                    return option?.id === value?.id || option?.name.toLowerCase() === value?.name.toLowerCase();
-                }}
-                onChange={(event, newValue) => {
-                  setType(newValue.title);
-                }}
-              />
-          
-          
+            )}
+          />
           <Button
             type="submit"
-            className={classes.button} 
-            color="info" 
+            form="formData"
+            className={classes.button}
+            color="info"
             round
           >
             {"출력"}
-          </Button> 
+          </Button>
         </form>
-        <Button
-          className={classes.button} 
-          color="danger" 
-          round
-          onClick={close}
-        >취소
+        <Button className={classes.button} color="danger" round onClick={close}>
+          취소
         </Button>
       </Modal>
-    )
+    );
 }
 
 export default PrintModalContainer;
