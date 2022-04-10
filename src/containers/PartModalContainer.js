@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
@@ -63,27 +63,35 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
       };
 
       dispatch(parts.updatePartMiddleware(partObj.seqId, contents));
-    } else if (modalType === "삭제") {
+    } else if (modalType === "파트삭제") {
       dispatch(parts.deletePartMiddleware(seqId));
     }
 
   }
-
+  console.log(partObj);
   return (
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit} encType="multipart/form-data">
-        {modalType === "삭제" ? null : (
+        {modalType === "파트삭제" ? (
+          <div style={{ textAlign: "center" }}>{partObj.partName}</div>
+        ) : (
           <>
-            <TextField 
-              className={classes.textField} 
-              name="partName" 
-              label="파트명" 
-              variant="outlined" 
+            <TextField
+              className={classes.textField}
+              name="partName"
+              label="파트명"
+              variant="outlined"
               defaultValue={modalType === "파트수정" ? partObj.partName : ""}
             />
           </>
         )}
-        <Button type="submit" form="formData" className={classes.button} color="info" round>
+        <Button
+          type="submit"
+          form="formData"
+          className={classes.button}
+          color="info"
+          round
+        >
           {modalType}
         </Button>
       </form>

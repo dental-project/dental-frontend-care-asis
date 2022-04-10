@@ -86,7 +86,7 @@ const ItemModalContainer = ({
       };
       dispatch(items.addItemMiddleware(content));
 
-    } else if (modalType === "수정") {
+    } else if (modalType === "장치수정") {
       console.log("---");
       const contents = {
         seqId: itemObj.seqId,
@@ -98,7 +98,7 @@ const ItemModalContainer = ({
 
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       
-    } else if (modalType === "삭제") {
+    } else if (modalType === "장치삭제") {
       dispatch(items.deleteItemMiddleware(seqId));
 
     }
@@ -107,15 +107,22 @@ const ItemModalContainer = ({
   return (
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit}>
-        {modalType === "삭제" ? null : (
+        {modalType === "장치삭제" ? (
+          <div style={{ textAlign: "center" }}>{itemObj.itemName}</div>
+        ) : (
           <>
             <Autocomplete
               className={classes.textField}
               options={auto}
               filterOptions={filterOptions}
-              defaultValue={modalType === "수정" ? itemObj.partName : ""}
+              defaultValue={modalType === "장치수정" ? itemObj.partName : ""}
               renderInput={params => (
-                <TextField {...params} name="partName" label="파트명" variant="outlined" />
+                <TextField
+                  {...params}
+                  name="partName"
+                  label="파트명"
+                  variant="outlined"
+                />
               )}
             />
             <TextField
@@ -123,11 +130,17 @@ const ItemModalContainer = ({
               name="itemName"
               label="장치명"
               variant="outlined"
-              defaultValue={modalType === "수정" ? itemObj.itemName : ""}
+              defaultValue={modalType === "장치수정" ? itemObj.itemName : ""}
             />
           </>
         )}
-        <Button type="submit" form="formData" className={classes.button} color="info" round>
+        <Button
+          type="submit"
+          form="formData"
+          className={classes.button}
+          color="info"
+          round
+        >
           {modalType}
         </Button>
       </form>

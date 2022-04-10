@@ -69,7 +69,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   const onSubmit = (e) => {
     e && e.preventDefault();
 
-    if (modalType === "삭제") {
+    if (modalType === "단가삭제") {
       dispatch(prices.deletePriceMiddleware(seqId));
       return;
     }
@@ -115,7 +115,12 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   return (
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit}>
-        {modalType === "삭제" ? null : (
+        {modalType === "단가삭제" ? (
+          <>
+            <div style={{ textAlign: "center" }}>{priceObj.vendorName}</div>
+            <div style={{ textAlign: "center" }}>{priceObj.itemName}</div>
+          </>
+        ) : (
           <>
             <Autocomplete
               className={classes.textField}
@@ -154,7 +159,13 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
             />
           </>
         )}
-        <Button type="submit" form="formData" className={classes.button} color="info" round>
+        <Button
+          type="submit"
+          form="formData"
+          className={classes.button}
+          color="info"
+          round
+        >
           {modalType}
         </Button>
       </form>

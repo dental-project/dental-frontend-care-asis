@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import Modal from "components/Modal/Modal"
+import React, { useEffect, useState } from "react";
+import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,6 +49,9 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
   const businessTypeAutoData = useSelector(({businessType}) => businessType.data);
   const businessSectorAutoData = useSelector(({businessSector}) => businessSector.data);
   const bankAutoData = useSelector(({bank}) => bank.data);
+  const [businessTypeIndex, setBusinessTypeIndex] = useState(0);
+  const [businessSectorIndex, setBusinessSectorIndex] = useState(0);
+  const [bankIndex, setBankIndex] = useState(0);
 
   useEffect(() => {
     dispatch(businessTypes.getBusinessTypeMiddleware());
@@ -95,25 +98,29 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     const bankAccount = formData.get("bankAccount");
     const description = formData.get("description");
     
-    if (
-      vendorName === "" || ceo === "" || tel === "" || mobile === "" || fax === "" ||
-      businessNumber === "" || businessTypeName === "" || businessSectorName === "" ||
-      postNumber === "" || address === "" || bankName === "" || bankAccount === "" ||
-      description === ""
-    )
+    if (vendorName === "" || ceo === "" || businessNumber === "")
       return alert("빈칸없이 입력하세요");
 
-    const businessTypeIndex = businessTypeAutoData.findIndex(
-      obj => obj.typeName === businessTypeName
-    );
+    
+    if (businessTypeName !== "") {
+      setBusinessTypeIndex(businessTypeAutoData.findIndex(
+        obj => obj.typeName === businessTypeName
+      ));
+    }
    
-    const businessSectorIndex = businessSectorAutoData.findIndex(
-      obj => obj.sectorName === businessSectorName
-    );
+    if (businessSectorName !== "") {
+      setBusinessSectorIndex(
+        businessSectorAutoData.findIndex(
+          obj => obj.sectorName === businessSectorName
+        )
+      );
+    }
 
-    const bankIndex = bankAutoData.findIndex(
-      obj => obj.bankName === bankName
-    );
+    if (bankName !== "") {
+      setBankIndex(bankAutoData.findIndex(
+        obj => obj.bankName === bankName
+      ));
+    }
  
     if (modalType === "추가") {
       const contents = {
@@ -123,11 +130,17 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
         mobile: mobile,
         fax: fax,
         businessNumber: businessNumber,
-        businessTypeNo: businessTypeAutoData[businessTypeIndex].typeNo,
-        businessSectorNo: businessSectorAutoData[businessSectorIndex].sectorNo,
+        businessTypeNo:
+          businessTypeName !== ""
+            ? businessTypeAutoData[businessTypeIndex].typeNo
+            : "",
+        businessSectorNo:
+          businessSectorName !== ""
+            ? businessSectorAutoData[businessSectorIndex].sectorNo
+            : "",
         postNumber: postNumber,
         address: address,
-        bankNo: bankAutoData[bankIndex].banknNo,
+        bankNo: bankName !== "" ? bankAutoData[bankIndex].banknNo : "",
         bankAccount: bankAccount,
         description: description,
       };
@@ -151,7 +164,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       };
       
       dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents));
-    } else if (modalType === "삭제") {
+    } else if (modalType === "치과삭제") {
       dispatch(dentals.deleteDentalMiddleware(seqId));
     }
   }
@@ -159,7 +172,9 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
   return (
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit}>
-        {modalType === "삭제" ? null : (
+        {modalType === "치과삭제" ? (
+          <div style={{ textAlign: "center" }}>{dentalObj.vendorName}</div>
+        ) : (
           <>
             <TextField
               className={classes.textField}

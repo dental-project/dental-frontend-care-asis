@@ -130,9 +130,10 @@ function PartRegister() {
     handlePartModalOpen();
   };
 
-  const onRemoveButtonClicked = seqId => {
-    setModalType("삭제");
+  const onRemoveButtonClicked = (seqId, partObj) => {
+    setModalType("파트삭제");
     setSeqId(seqId);
+    setPartObj(partObj);
     handlePartModalOpen();
   };
 
@@ -159,7 +160,7 @@ function PartRegister() {
     },
     {
       name: "remove",
-      header: "삭제",
+      header: "파트삭제",
       align: "center",
       renderer: {
         type: RemoveButtonRenderer,

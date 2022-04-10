@@ -66,7 +66,7 @@ export default function ItemRegister() {
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
 
-  const partNameArr = ["전체"];
+  const partNameArr = [];
   const itemNameArr = ["전체"];
 
   data.map( (data) => {
@@ -74,10 +74,11 @@ export default function ItemRegister() {
     itemNameArr.push( data.itemName )
   });
  
-  const set1 = new Set(partNameArr);
+  const set1 = new Set(partNameArr.sort());
   const set2 = new Set(itemNameArr);
-
+  
   const auto1 = [...set1];
+  auto1.unshift("전체");
   const auto2 = [...set2];
 
   useEffect(() => {
@@ -116,14 +117,15 @@ export default function ItemRegister() {
   };
 
   const onUpdateButtonClicked = itemObj => {
-    setModalType("수정");
+    setModalType("장치수정");
     setItemObj(itemObj);
     handleItemModalOpen();
   };
 
-  const onRemoveButtonClicked = seqId => {
-    setModalType("삭제");
+  const onRemoveButtonClicked = (seqId, itemObj) => {
+    setModalType("장치삭제");
     setSeqId(seqId);
+    setItemObj(itemObj);
     handleItemModalOpen();
   };
 
@@ -155,7 +157,7 @@ export default function ItemRegister() {
     },
     {
       name: "remove",
-      header: "삭제",
+      header: "장치삭제",
       align: "center",
       renderer: {
         type: RemoveButtonRenderer,
@@ -172,7 +174,7 @@ export default function ItemRegister() {
     let formData = new FormData(document.getElementById("formSearchData"));
     const partName = formData.get("partName");
     const itemName = formData.get("itemName");
-    console.log(partName);
+    
     if (partName === "" || itemName === "") {
       return alert("검색어를 입력하세요.");
     }

@@ -133,9 +133,10 @@ export default function DentalRegister() {
     handleDentalModalOpen();
   };
 
-  const onRemoveButtonClicked = seqId => {
-    setModalType("삭제");
+  const onRemoveButtonClicked = (seqId, dentalObj)  => {
+    setModalType("치과삭제");
     setSeqId(seqId);
+    setDentalObj(dentalObj);
     handleDentalModalOpen();
   };
 
@@ -220,7 +221,7 @@ export default function DentalRegister() {
       name: "address",
       header: "주소",
       align: "center",
-      
+
       resizable: true,
       sortable: true,
       filter: "select",
@@ -265,7 +266,7 @@ export default function DentalRegister() {
     },
     {
       name: "remove",
-      header: "삭제",
+      header: "치과삭제",
       align: "center",
       renderer: {
         type: RemoveButtonRenderer,

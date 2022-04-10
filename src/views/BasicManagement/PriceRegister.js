@@ -142,9 +142,10 @@ export default function PriceRegister() {
     handlePriceModalOpen();
   };
 
-  const onRemoveButtonClicked = seqId => {
-    setModalType("삭제");
+  const onRemoveButtonClicked = (seqId, priceObj) => {
+    setModalType("단가삭제");
     setSeqId(seqId);
+    setPriceObj(priceObj);
     handlePriceModalOpen();
   };
 
@@ -198,7 +199,7 @@ export default function PriceRegister() {
     },
     {
       name: "remove",
-      header: "삭제",
+      header: "단가삭제",
       align: "center",
       renderer: {
         type: RemoveButtonRenderer,

@@ -47,16 +47,19 @@ const useStyles = makeStyles((theme) => ({
 const PrintModalContainer = ({ open, close}) => {
 
   const classes = useStyles();
-  
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ dental }) => dental);
 
-  const [vendorName, setVendorName] = useState('');
-  const [type, setType] = useState('');
-
   const [startDateValue, setStartDateValue] = useState(new Date());
   const [endDateValue, setEndDateValue] = useState(new Date());
-
+  const dash1 = [
+    "시간별완성현황",
+    "일생산현황",
+    "치과매출현황",
+    "파트별매출현황",
+    "치과별월매출현황",
+    "월생산현황표",
+  ];
 
   const vendorNameArr = [];
 
@@ -70,14 +73,6 @@ const PrintModalContainer = ({ open, close}) => {
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, [] );
-
-  const vendor = ["Dental.A 치과기공소", "거래처명", "거래처명2"];
-  const dash1 = ["시간별완성현황", "일생산현황", "치과매출현황", "파트별매출현황", "치과별월매출현황", "월생산현황표"];
-  
-
-
-  
-
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
