@@ -1298,7 +1298,7 @@
 
 "@emotion/sheet@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@emotion/sheet/-/sheet-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.1.0.tgz#56d99c41f0a1cda2726a05aa6a20afd4c63e58d2"
   integrity sha512-u0AX4aSo25sMAygCuQTzS+HsImZFuS8llY8O7b9MDRzbJM0kVJlAz6KNDqcG7pOuQZJmj/8X/rAW+66kMnMW+g==
 
 "@emotion/styled@^11.6.0":

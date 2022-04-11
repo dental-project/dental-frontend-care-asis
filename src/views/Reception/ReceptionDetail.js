@@ -43,8 +43,7 @@ export default function ReceptionDetail() {
   const [image, setImage] = useState("");
 
   const history = useHistory();
-  //const masterSeqId = history.location.state[0].seqId;
-
+ 
   useEffect(() => {
     
     localStorage.setItem("seqId", JSON.stringify(history.location.state[0].seqId));
@@ -55,19 +54,17 @@ export default function ReceptionDetail() {
     const obj = localStorage.getItem("obj");
     const img = localStorage.getItem("image");
 
-    if (masterSeqId !== null) {
+    if (img !== "null") {
+      setImage(JSON.parse(img));
+    }
+
+    if (masterSeqId !== "null") {
       setSeqId(JSON.parse(masterSeqId));
     }
 
-    if (obj !== null) {
+    if (obj !== "null") {
       setMasterData(JSON.parse(obj));
     }
-
-    if (img !== null) {
-      setImage(JSON.parse(img));
-    }
-    
-
 
     apis
       .getReceptionDetailSelect(masterSeqId)
@@ -103,10 +100,7 @@ export default function ReceptionDetail() {
 
 
   const masterColumns = [
-    {
-      name: " ",
-      align: "left"
-    },
+    
     {
       name: "접수일자",
       align: "center"
@@ -154,10 +148,6 @@ export default function ReceptionDetail() {
   ];
 
   const columns = [
-    {
-      name: " ",
-      align: "left"
-    },
     {
       name: "파트명",
       align: "center"
@@ -210,7 +200,7 @@ export default function ReceptionDetail() {
       ),
       배달일자: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.deliveryDate}
+          {data.deliveryDate === null ? "" : data.deliveryDate}
         </SuiTypography>
       ),
       거래처: (
@@ -220,7 +210,7 @@ export default function ReceptionDetail() {
       ),
       차트번호: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.chartNumber}
+          {data.chartNumber === null ? "" : data.chartNumber}
         </SuiTypography>
       ),
       Upper: (
@@ -250,7 +240,7 @@ export default function ReceptionDetail() {
       ),
       비고: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.description}
+          {data.description === null ? "" : data.description}
         </SuiTypography>
       )
     })
@@ -261,50 +251,50 @@ export default function ReceptionDetail() {
       //" ": [toothImg],
       파트명: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.partName}
+          {data.partName === null ? "" : data.partName}
         </SuiTypography>
       ),
       장치명: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.itemName}
+          {data.itemName === null ? "" : data.itemName}
         </SuiTypography>
       ),
       단가: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.unitPrice} 원
+          {data.unitPrice === null ? "" : data.unitPrice} 원
         </SuiTypography>
       ),
       수량: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.amount} 개
+          {data.amount === null ? "" : data.amount} 개
         </SuiTypography>
       ),
       정상가: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.normalPrice} 원
+          {data.normalPrice === null ? "" : data.normalPrice} 원
         </SuiTypography>
       ),
       할인금액: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.discountPrice} 원
+          {data.discountPrice === null ? "" : data.discountPrice} 원
         </SuiTypography>
       ),
       할인율: (
         <SuiTypography variant="caption" color="text" fontWeight="medium">
-          {data.discount} %
+          {data.discount === null ? "" : data.discount} %
         </SuiTypography>
       ),
       최종금액: (
-        <SuiBadge variant="gradient" badgeContent={data.realSellPrice + "원"}  color="info" size="lg" container />
+        <SuiBadge variant="gradient" badgeContent={data.realSellPrice === null ? "" : data.realSellPrice + "원"}  color="info" size="lg" container />
       )
     })
   });
 
-  const loginBtn = () => {
+  const imageZoom = () => {
     setZoomImage(image);
     handleReceptionDetailModalOpen();
   }
-
+  
   return (
     <SuiBox py={3}>
       <SuiBox mb={3}>
@@ -363,20 +353,9 @@ export default function ReceptionDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={3} >
                 <ImageCard
-                  image={image} 
-                  // label={"이미지1"}
-                  // title="이미지1"
-                  // description="기계장비 설명"
-                  // action={{
-                  //   // type: "button",
-                  //   // route: "/pages/profile/profile-overview",
-                  //   // color: "info",
-                  //   // label: "view project",
-                  // }}
-                  
-                 
+                  image={image}                        
                 />
-                <SuiButton className={classes.button} variant="outlined" color="info" size="small" onClick={() => loginBtn()}>
+                <SuiButton className={classes.button} variant="outlined" color="info" size="small" onClick={() => imageZoom()}>
                     확대
                 </SuiButton>
               </Grid>
@@ -389,7 +368,7 @@ export default function ReceptionDetail() {
       <ImageModalContainer
         open={openReceptionDetailModal}
         close={handleReceptionDetailModalClose}
-        image={image}
+        //image={image}
       />
 
     </SuiBox>

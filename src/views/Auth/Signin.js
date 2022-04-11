@@ -43,6 +43,10 @@ function SignIn() {
     });
   };
 
+  const onKeyPress = (e) => {
+    if (e.key === "Enter") loginBtn();
+  }
+
   const loginBtn = () => {
 
     apis
@@ -88,7 +92,7 @@ function SignIn() {
         <SuiBox pt={2} pb={3} px={3}>
           <SuiBox component="form" role="form">
             <SuiBox mb={2}>
-              <SuiInput name="userid" placeholder="Name" onChange={handleChange} />
+              <SuiInput name="userid" placeholder="Name" onChange={handleChange} onKeyPress={onKeyPress} />
             </SuiBox>
             <SuiBox mb={2}>
               <SuiInput
@@ -96,9 +100,10 @@ function SignIn() {
                 name="passwd"
                 placeholder="Password"
                 onChange={handleChange}
+                onKeyPress={onKeyPress}
               />
             </SuiBox>
-            <SuiBox display="flex" alignItems="center">
+            {/* <SuiBox display="flex" alignItems="center">
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
               <SuiTypography
                 variant="button"
@@ -108,13 +113,12 @@ function SignIn() {
               >
                 &nbsp;&nbsp;Remember me
               </SuiTypography>
-            </SuiBox>
+            </SuiBox> */}
             <SuiBox mt={4} mb={1}>
               <SuiButton variant="gradient" color="dark" fullWidth onClick={() => loginBtn()}>
                 sign in
               </SuiButton>
             </SuiBox>
-            
           </SuiBox>
         </SuiBox>
       </Card>

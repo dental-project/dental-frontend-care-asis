@@ -16,10 +16,17 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 
 // Form 양식
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 // Soft UI Dashboard React components
+// Soft UI Dashboard React components
+import SuiBox from "components/Sui/SuiBox";
 import SuiButton from "components/Sui/SuiButton";
+import ProjectHeader from "components/SuiProject/ProjectHeader";
+import ProjectBody from "components/SuiProject/ProjectBody";
+
+// @mui material components
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { useDispatch, useSelector } from "react-redux";
 import { dentals } from "modules/dentals";
@@ -30,7 +37,7 @@ import Autocomplete, {
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    width: "99%",
+    width: "98%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -40,25 +47,13 @@ const useStyles = makeStyles((theme) => ({
             borderColor: '#00acc1',
         },
     },
-  },
-  customText: {
-    color: "#26c6da",
-    fontWeight: "bold",
-    cursor:"pointer",
-    "&:hover": {
-      color: "#1993A8"
-    }
-  },
-  button: {
-    width: "99%",
-    marginLeft: "15px"
   }
 }));
 
 export default function Signup() {
     const classes = useStyles();
    
-    const { watch,  handleSubmit, control } = useForm();
+    const { watch,  handleSubmit } = useForm();
 
     const dispatch = useDispatch();
     const dentalAutoData = useSelector(({ dental }) => dental.data);
@@ -119,156 +114,80 @@ export default function Signup() {
 
     }
 
-    return (
-      <Grid
-        container
-        direction="row"
-      >
-        <Grid item xs={12} sm={12} md={12} >
+  return (
+    <>
+      <SuiBox py={3}>
+        <SuiBox mb={3}>
           <Card>
-            <CardHeader>
-            </CardHeader>
-            <CardBody>
+            <ProjectHeader title={"유저 회원가입"} subTitle={"Sign up"}></ProjectHeader>
             
+            <ProjectBody>
+
+
               <form onSubmit={handleSubmit(onSubmit)}>
-                <CSRFToken />
-                <Controller
-                  name="userid"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="User ID"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      
-                    />
-                  )}
-                  rules={{ 
-                    required: '아이디를 입력하세요.',
-                    // validate: (data) => {
-                    //   //console.log(data);
-                      
-                    // }
-                  }}
-                />              
+               <CSRFToken />
+                 <TextField
+                   className={classes.textField}
+                   name="userid"
+                   label="User ID"
+                   variant="outlined"
+                 />
+                 <TextField
+                   className={classes.textField}
+                   type="password"
+                   name="passwd"
+                   label="Password"
+                   variant="outlined"
+                 />
+                 <TextField
+                   className={classes.textField} 
+                   type="password"
+                   name="passwdConfirm"
+                   label="Password Confirm"
+                   variant="outlined"
+                 />
+                 <TextField
+                   className={classes.textField} 
+                   name="userName"
+                   label="User Name"
+                   variant="outlined"
+                 />
+                 <TextField
+                   className={classes.textField}
+                   name="tel" 
+                   label="Tel"
+                   variant="outlined"
+                 />
+                 <Autocomplete
+                   className={classes.textField}
+                   options={auto1}
+                   filterOptions={filterOptions}
+                   renderInput={params => (
+                     <TextField 
+                       {...params} 
+                       name="vendorName" 
+                       label="거래처명" 
+                       variant="outlined" 
+                     />
+                   )}
+                 />
 
-                <Controller
-                  name="passwd"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      type="password"
-                      label="Password"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: '패스워드를 입력 해주세요.'
-                  }}
-                />
-
-                <Controller
-                  name="passwdConfirm"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      type="password"
-                      label="Password Confirm"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: '입력한 패스워드를 확인 해주세요.' }}
-                />        
-
-                <Controller
-                  name="userName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="User Name"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: '이름을 입력 해주세요.' }}
-                />  
-                <Controller
-                  name="tel"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="Tel"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: '휴대폰 번호를 입력 해주세요.',
-                    pattern: {
-                      value: /^\d{3}\d{3,4}\d{4,}$/,
-                      message: "휴대폰 형식을 입력하세요."
-                    }
-                  }}
-                />
-                
-                <Autocomplete
-                  className={classes.textField}
-                  options={auto1}
-                  getOptionLabel={option => option}
-                  filterOptions={filterOptions}
-                  onChange={(event, newValue) => {
-                    
-                  }}
-                  renderInput={params => (
-                    <TextField {...params} name="partName" label="파트명" variant="outlined" />
-                  )}
-                />
-                
-                
-             
-               
-               
                 <SuiButton
+                  //className={classes.button}
                   type="submit"
-                  className={classes.button}
                   variant="outlined"
                   color="info"
-                  size="medium"
+                  style={{width: "98%", marginTop: "20px", marginLeft: "9px", marginBottom: "20px"}}
                 >
                   Sign up
                 </SuiButton>
-                
-              </form>  
-            </CardBody>
+             </form>  
+
+
+            </ProjectBody>
           </Card>
-        </Grid>
-      </Grid>
-    );
+        </SuiBox>
+      </SuiBox>
+    </>
+  );
 }
