@@ -79,12 +79,28 @@ export default function Signup() {
     const password = useRef();
     password.current = watch("passwd");
    
-    const onSubmit = (data) => {
+    const onSubmit = (e) => {
      
-      if(data.passwd !== data.passwdConfirm) {
+      e && e.preventDefault();
+
+      let formData = new FormData(document.getElementById("formData"));
+      const userid = formData.get("userid");
+      const passwd = formData.get("passwd");
+      const passwdConfirm = formData.get("passwdConfirm");
+      const userName = formData.get("userName");
+      const tel = formData.get("tel");
+      const vendorName = formData.get("vendorName");
+
+      
+      
+      const index = dentalAutoData.findIndex(data =>
+        data.vendorName === vendorName
+      )
+     
+      if(passwd !== passwdConfirm) {
         return alert("비밀번호가 서로 일치하지 않습니다.");
       }
-
+     
       const xtoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       const config = {
         withCredentials: true,
@@ -96,11 +112,11 @@ export default function Signup() {
       axios
         .post("/api/users/user/",
           { 
-            userid: data.userid, 
-            password: data.passwd,
-            username: data.userName,
-            tel: data.tel,
-            vendor_id: data.vendorid
+            userid: userid, 
+            password: passwd,
+            username: userName,
+            tel: tel,
+            vendor_id: dentalAutoData[index].seqId,
           },
           config
         
@@ -120,11 +136,8 @@ export default function Signup() {
         <SuiBox mb={3}>
           <Card>
             <ProjectHeader title={"유저 회원가입"} subTitle={"Sign up"}></ProjectHeader>
-            
             <ProjectBody>
-
-
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form id="formData" onSubmit={onSubmit}>
                <CSRFToken />
                  <TextField
                    className={classes.textField}
@@ -171,10 +184,9 @@ export default function Signup() {
                      />
                    )}
                  />
-
                 <SuiButton
-                  //className={classes.button}
                   type="submit"
+                  form="formData"
                   variant="outlined"
                   color="info"
                   style={{width: "98%", marginTop: "20px", marginLeft: "9px", marginBottom: "20px"}}
@@ -182,8 +194,6 @@ export default function Signup() {
                   Sign up
                 </SuiButton>
              </form>  
-
-
             </ProjectBody>
           </Card>
         </SuiBox>

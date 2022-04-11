@@ -67,7 +67,8 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   dentalAutoData.map(data => auto1.push(data.vendorName + "/" + data.ceo));
 
   const auto2 = [];
-  itemAutoData.map(data => auto2.push(data.itemName));
+  itemAutoData.map(data => auto2.push(data.itemName + "/" + data.partName));
+
 
   const onSubmit = (e) => {
     e && e.preventDefault();
@@ -82,21 +83,22 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
     const itemName = formData.get("itemName");
     const price = formData.get("price");
     const vendorNameArr = vendorName.split("/");
+    const itemNameArr = itemName.split("/");
 
-    if (vendorNameArr[0] === "" || itemName === "" || price === "")
+    if (vendorNameArr[0] === "" || itemNameArr[0] === "" || price === "")
       return alert("빈칸없이 입력하세요");
 
     const vendorNameIndex = dentalAutoData.findIndex(
       obj => obj.vendorName === vendorNameArr[0]
     );
-    const itemNameIndex = itemAutoData.findIndex(
-      obj => obj.itemName === itemName
+    const itemAutoDataArr = itemAutoData.filter(
+      obj => obj.itemName === itemNameArr[0] && obj.partName === itemNameArr[1]
     );
 
     if (modalType === "추가") {
       const content = {
         vendorSeqId: dentalAutoData[vendorNameIndex].seqId,
-        itemSeqId: itemAutoData[itemNameIndex].seqId,
+        itemSeqId: itemAutoDataArr[0].seqId,
         price: price,
       };
       
@@ -106,7 +108,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
       const contents = {
         seqId: priceObj.seqId,
         vendorSeqId: dentalAutoData[vendorNameIndex].seqId,
-        itemSeqId: itemAutoData[itemNameIndex].seqId,
+        itemSeqId: itemAutoDataArr[0].seqId,
         price: price,
       };
 
@@ -165,7 +167,7 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -175,8 +177,8 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
       </form>
       <SuiButton
           style={{float: "right", marginTop: "7px"}}
-          variant="outlined"
-          color="error"
+          variant="contained"
+          color="secondary"
           size="medium"
           onClick={close}
         >

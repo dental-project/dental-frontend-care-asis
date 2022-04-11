@@ -73,15 +73,13 @@ const ItemModalContainer = ({
       dispatch(items.addItemMiddleware(content));
 
     } else if (modalType === "장치수정") {
-      console.log("---");
+      
       const contents = {
         seqId: itemObj.seqId,
         partSeqId: partAutoData[index].seqId,
         itemName: itemName,
       };
-      console.log(itemObj.seqId);
-      console.log(contents);
-
+      
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       
     } else if (modalType === "장치삭제") {
