@@ -1,12 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from 'react-router-dom';
 
 // core components
 import Grid from '@material-ui/core/Grid';
 // import CustomInput from "components/CustomInput/CustomInput.js";
-import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -20,9 +18,19 @@ import axios from 'axios';
 // Form 양식
 import { useForm, Controller } from "react-hook-form";
 
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
+
+import { useDispatch, useSelector } from "react-redux";
+import { dentals } from "modules/dentals";
+
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
+
 const useStyles = makeStyles((theme) => ({
   textField: {
-    width: "95%",
+    width: "99%",
     margin: theme.spacing(1),
     '& label.Mui-focused': {
         color: '#00acc1',
@@ -42,15 +50,37 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   button: {
-    width: "100%"
+    width: "99%",
+    marginLeft: "15px"
   }
 }));
 
 export default function Signup() {
     const classes = useStyles();
-    let history = useHistory();
    
     const { watch,  handleSubmit, control } = useForm();
+
+    const dispatch = useDispatch();
+    const dentalAutoData = useSelector(({ dental }) => dental.data);
+
+    const vendorNameArr = [];
+
+    dentalAutoData.map(data => {
+      vendorNameArr.push( data.vendorName )
+    });
+
+    const set1 = new Set(vendorNameArr);
+    const auto1 = [...set1];
+
+    useEffect(() => {
+      dispatch(dentals.getDentalMiddleware());
+    }, []);
+
+    const filterOptions = createFilterOptions({
+      matchFrom: "start",
+      stringify: option => option,
+    });
+
     const password = useRef();
     password.current = watch("passwd");
    
@@ -86,10 +116,6 @@ export default function Signup() {
         .catch(() => {
           console.log("실패");
       });
-
-
-
-
 
     }
 
@@ -211,52 +237,36 @@ export default function Signup() {
                     }
                   }}
                 />
-                <Controller
-                  name="vendorid"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      className={classes.textField} 
-                      label="Dental ID"
-                      variant="outlined"
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ 
-                    required: '치과 아이디를 입력하세요.',
+                
+                <Autocomplete
+                  className={classes.textField}
+                  options={auto1}
+                  getOptionLabel={option => option}
+                  filterOptions={filterOptions}
+                  onChange={(event, newValue) => {
+                    
                   }}
-                />   
-
-                <Button
+                  renderInput={params => (
+                    <TextField {...params} name="partName" label="파트명" variant="outlined" />
+                  )}
+                />
+                
+                
+             
+               
+               
+                <SuiButton
                   type="submit"
-                  className={classes.button} 
-                  color="info" 
-                  round
+                  className={classes.button}
+                  variant="outlined"
+                  color="info"
+                  size="medium"
                 >
                   Sign up
-                </Button>
-
+                </SuiButton>
+                
               </form>  
-
             </CardBody>
-          
-            {/*<CardFooter>
-                <p style={{margin: "0 auto"}}></p>
-            </CardFooter>
-             <CardFooter style={{marginTop: "-20px"}}>
-                <p 
-                    className={classes.customText} 
-                    style={{margin: "0 auto"}}
-                    onClick={ () => history.goBack() }
-                >
-                    Sign In
-                </p> 
-            </CardFooter> */}
-            
           </Card>
         </Grid>
       </Grid>

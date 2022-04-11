@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
-import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { items } from "modules/items";
@@ -9,6 +8,9 @@ import { parts } from "modules/parts";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
+
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -22,22 +24,6 @@ const useStyles = makeStyles(theme => ({
         borderColor: "#00acc1",
       },
     },
-  },
-  inputs: {
-    "& label.Mui-focused": {
-      color: "#26c6da",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#26c6da",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "#26c6da",
-      },
-    },
-  },
-  button: {
-    width: "100%",
   },
 }));
 
@@ -108,7 +94,9 @@ const ItemModalContainer = ({
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "장치삭제" ? (
-          <div style={{ textAlign: "center" }}>{itemObj.itemName}</div>
+          <>
+            <div style={{padding: "50px",textAlign: "center" }}>{itemObj.itemName}</div>
+          </>
         ) : (
           <>
             <Autocomplete
@@ -134,19 +122,26 @@ const ItemModalContainer = ({
             />
           </>
         )}
-        <Button
+        <SuiButton
           type="submit"
           form="formData"
-          className={classes.button}
+          variant="outlined"
           color="info"
-          round
+          size="medium"
+          style={{float: "right", margin: "7px"}}
         >
           {modalType}
-        </Button>
+        </SuiButton>
       </form>
-      <Button className={classes.button} color="danger" round onClick={close}>
-        취소
-      </Button>
+      <SuiButton
+          style={{float: "right", marginTop: "7px"}}
+          variant="outlined"
+          color="error"
+          size="medium"
+          onClick={close}
+        >
+          취소
+        </SuiButton>
     </Modal>
   );
 };

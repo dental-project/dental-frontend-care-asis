@@ -122,7 +122,7 @@ const deleteReceptionMiddleware = seqId => {
       .then(result => {
 
         if (result.data.status === "SUCCESS") {
-          console.log(result)
+        
           dispatch(removeReception());
           alert("접수 정보를 삭제 했습니다.");
         } else {

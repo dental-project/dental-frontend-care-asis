@@ -44,26 +44,7 @@ const useStyles = makeStyles(theme => ({
   textFieldDate: {
     width: "100%",
   },
-  textField: {
-    width: "100%",
-    margin: theme.spacing(1),
-    "& label.Mui-focused": {
-      color: "#00acc1",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "#00acc1",
-      },
-    },
-  },
-  customText: {
-    color: "#26c6da",
-    fontWeight: "bold",
-    cursor: "pointer",
-    "&:hover": {
-      color: "#1993A8",
-    },
-  },
+
   button: {
     width: "100%",
   },

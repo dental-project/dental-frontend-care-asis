@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'components/Modal/Modal'
 import TextField from "@material-ui/core/TextField";
-import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { apis } from "apis/axios";
@@ -9,7 +8,8 @@ import { apis } from "apis/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { dentals } from "modules/dentals";
 
-
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -181,19 +181,26 @@ const onSubmit = (e) => {
               />
             )}
           />
-          <Button
-            type="submit"
-            form="formData"
-            className={classes.button}
-            color="info"
-            round
-          >
-            {"출력"}
-          </Button>
-        </form>
-        <Button className={classes.button} color="danger" round onClick={close}>
+        <SuiButton
+          type="submit"
+          form="formData"
+          variant="outlined"
+          color="info"
+          size="medium"
+          style={{float: "right", margin: "7px"}}
+        >
+          출력
+        </SuiButton>
+      </form>
+      <SuiButton
+          style={{float: "right", marginTop: "7px"}}
+          variant="outlined"
+          color="error"
+          size="medium"
+          onClick={close}
+        >
           취소
-        </Button>
+        </SuiButton>
       </Modal>
     );
 }

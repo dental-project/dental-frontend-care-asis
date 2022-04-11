@@ -6,6 +6,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { parts } from "modules/parts";
 
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
+
 const useStyles = makeStyles(theme => ({
   textField: {
     width: "95%",
@@ -68,12 +71,12 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
     }
 
   }
-  console.log(partObj);
+  
   return (
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit} encType="multipart/form-data">
         {modalType === "파트삭제" ? (
-          <div style={{ textAlign: "center" }}>{partObj.partName}</div>
+          <div style={{padding: "50px",textAlign: "center" }}>{partObj.partName}</div>
         ) : (
           <>
             <TextField
@@ -85,19 +88,26 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
             />
           </>
         )}
-        <Button
+        <SuiButton
           type="submit"
           form="formData"
-          className={classes.button}
+          variant="outlined"
           color="info"
-          round
+          size="medium"
+          style={{float: "right", margin: "7px"}}
         >
           {modalType}
-        </Button>
+        </SuiButton>
       </form>
-      <Button className={classes.button} color="danger" round onClick={close}>
-        취소
-      </Button>
+      <SuiButton
+          style={{float: "right", marginTop: "7px"}}
+          variant="outlined"
+          color="error"
+          size="medium"
+          onClick={close}
+        >
+          취소
+        </SuiButton>
     </Modal>
   );
 };

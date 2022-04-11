@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "components/CustomButtons/Button.js";
 import Modal from "components/Modal/Modal";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -18,6 +17,9 @@ import RowRemoveRenderer from "components/ToastGridRenderer/RowRemoveRenderer.js
 
 import { apis } from "apis/axios";
 import ButtonUpload from '@material-ui/core/Button';
+
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -678,17 +680,16 @@ const ReceptionModalContainer = ({
                 Upload
               </ButtonUpload>
             </label>
-
             <Grid item xs={12}>
-              <Button
-                className={classes.button}
+              <SuiButton
+                variant="outlined"
                 color="info"
-                round
+                size="large"
                 onClick={handleAppendRow}
+                style={{width: "100%", margin: "10px"}}
               >
                 그리드 행추가
-              </Button>
-
+              </SuiButton>
               {modalType === "추가" ? (
                 <ToastGrid
                   ref={gridRef}
@@ -728,19 +729,26 @@ const ReceptionModalContainer = ({
             </Grid>
           </>
         )}
-        <Button
+        <SuiButton
           type="submit"
           form="formData"
-          className={classes.button}
+          variant="outlined"
           color="info"
-          round
+          size="medium"
+          style={{float: "right", margin: "7px"}}
         >
           {modalType}
-        </Button>
+        </SuiButton>
       </form>
-      <Button className={classes.button} color="danger" round onClick={close}>
-        취소
-      </Button>
+        <SuiButton
+          style={{float: "right", marginTop: "7px"}}
+          variant="outlined"
+          color="error"
+          size="medium"
+          onClick={close}
+        >
+          취소
+        </SuiButton>
     </Modal>
   );
 };

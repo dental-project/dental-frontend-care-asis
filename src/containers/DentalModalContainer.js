@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "components/Modal/Modal";
 import TextField from "@material-ui/core/TextField";
-import Button from "components/CustomButtons/Button.js";
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { dentals } from 'modules/dentals';
@@ -10,36 +9,23 @@ import { businessSectors } from 'modules/businessSectors';
 import { banks } from 'modules/banks';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-const useStyles = makeStyles((theme) => ({
-    textField: {
-      width: "95%",
-      margin: theme.spacing(1),
-      '& label.Mui-focused': {
-          color: '#00acc1',
-      },
-      '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-              borderColor: '#00acc1',
-          },
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
+
+const useStyles = makeStyles(theme => ({
+  textField: {
+    width: "95%",
+    margin: theme.spacing(1),
+    '& label.Mui-focused': {
+        color: '#00acc1',
+    },
+    '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+        borderColor: '#00acc1',
       },
     },
-    inputs: {
-      '& label.Mui-focused': {
-        color: '#26c6da',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: '#26c6da',
-      },
-      '& .MuiOutlinedInput-root': {
-        '&.Mui-focused fieldset': {
-          borderColor: '#26c6da',
-        },
-      },
-    },
-    button: {
-      width: "100%"
-    }
-  }));
+  }
+}));
 
 const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
 
@@ -101,7 +87,6 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     if (vendorName === "" || ceo === "" || businessNumber === "")
       return alert("빈칸없이 입력하세요");
 
-    
     if (businessTypeName !== "") {
       setBusinessTypeIndex(businessTypeAutoData.findIndex(
         obj => obj.typeName === businessTypeName
@@ -173,7 +158,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
     <Modal open={open} modalType={modalType}>
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "치과삭제" ? (
-          <div style={{ textAlign: "center" }}>{dentalObj.vendorName}</div>
+          <div style={{padding: "50px",textAlign: "center" }}>{dentalObj.vendorName}</div>
         ) : (
           <>
             <TextField
@@ -304,21 +289,28 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
             />
           </>
         )}
-        <Button
+        <SuiButton
           type="submit"
           form="formData"
-          className={classes.button}
+          variant="outlined"
           color="info"
-          round
+          size="medium"
+          style={{float: "right", margin: "7px"}}
         >
           {modalType}
-        </Button>
+        </SuiButton>
       </form>
-      <Button className={classes.button} color="danger" round onClick={close}>
+      <SuiButton
+        style={{float: "right", marginTop: "7px"}}
+        variant="outlined"
+        color="error"
+        size="medium"
+        onClick={close}
+      >
         취소
-      </Button>
+      </SuiButton>
     </Modal>
   );
-}
+};
 
 export default DentalModalContainer;

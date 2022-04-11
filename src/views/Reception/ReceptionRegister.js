@@ -50,7 +50,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
 
-import { apis } from "apis/axios";
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -87,9 +87,9 @@ export default function ReceptionRegister() {
 
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ reception }) => reception);
-  const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [gridData, setGridData] = useState([]);
-  const [seqId, setSeqId] = useState("");
+  const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
+  const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
   const [selectedValue, setSelectedValue] = useState("reception");
   const [receptionStartDate, setReceptionStartDate] = useState(new Date());
@@ -98,15 +98,27 @@ export default function ReceptionRegister() {
   const [completeEndDate, setCompleteEndDate] = useState(new Date());
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
-  
-  const [searchType, setSearchType] = useState("");
 
   const [menu, setMenu] = useState(null);
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
 
+  const vendorNameArr = ["전체"];
+  const chartNumberArr = ["전체"];
+
+  data.map( data => {
+    vendorNameArr.push( data.vendorName )
+    chartNumberArr.push( data.chartNumber.toString() )
+  });
+
+  const set1 = new Set(vendorNameArr);
+  const set2 = new Set(chartNumberArr);
+
+  const auto1 = [...set1];
+  const auto2 = [...set2];
+
   useEffect(() => {
-    setGridData(data);
+    setGridData(data)
   }, [data]);
 
   useEffect(() => {
@@ -122,20 +134,6 @@ export default function ReceptionRegister() {
   useEffect(() => {
     setChartNumberAutoReset("전체");
   }, [chartNumberAutoReset]);
-
-  const vendorNameArr = ["전체"];
-  const chartNumberArr = ["전체"];
-
-  data.map( data => {
-    vendorNameArr.push( data.vendorName )
-    chartNumberArr.push( data.chartNumber.toString() )
-  });
-
-  const set1 = new Set(vendorNameArr);
-  const set2 = new Set(chartNumberArr);
-
-  const auto1 = [...set1];
-  const auto2 = [...set2];
 
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
@@ -175,10 +173,10 @@ export default function ReceptionRegister() {
   };
 
   const onDetailButtonClicked = receptionObj => {
+
     history.push({
       pathname: "/dental/receptionDetail",
       seqId: receptionObj.seqId,
-      detail: [selectDetailData],
       state: [receptionObj],
     });
   };
@@ -364,8 +362,6 @@ export default function ReceptionRegister() {
     
     if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
 
-    setSearchType("search");
-
     let receptionParams;
     let completeParams;
 
@@ -389,17 +385,17 @@ export default function ReceptionRegister() {
       }
     }
   
-    apis
-      .receptionSearch({
-        params:  dateSelect === "reception" ? receptionParams : completeParams,
+    axios
+      .get("/api/sell/master/", {
+        params : 
+          dateSelect === "reception" ? receptionParams : completeParams
       })
-      .then(result => {
-        setGridData(result.data);
+      .then((result) => {
+        setGridData(result.data)
       })
-      .catch(err => {
-        alert(err);
+      .catch((error) => {
+        throw new Error(error);
       });
-
   }
 
   return (
@@ -447,11 +443,7 @@ export default function ReceptionRegister() {
         <SuiBox mb={3}>
           <Card>
             <ProjectHeader title={"접수 리스트"} subTitle={"All List"}>
-              <MoreVertIcon
-                sx={{ cursor: "pointer", fontWeight: "bold" }}
-                fontSize="medium"
-                onClick={openMenu}
-              >
+              <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
               <Menu
@@ -468,12 +460,8 @@ export default function ReceptionRegister() {
                 open={Boolean(menu)}
                 onClose={closeMenu}
               >
-                <MenuItem onClick={e => receptionModalOpen(e)}>
-                  접수 추가
-                </MenuItem>
-                <MenuItem onClick={e => handleClickOpenPrint(e)}>
-                  PDF 출력
-                </MenuItem>
+                <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
+                <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
               </Menu>
             </ProjectHeader>
             <ProjectBody>
@@ -528,6 +516,7 @@ export default function ReceptionRegister() {
                         maxDate={new Date(2100, 0, 1)}
                         monthFormat="YYYY MM"
                         disabled={false}
+                      
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
@@ -582,7 +571,7 @@ export default function ReceptionRegister() {
                         variant="outlined"
                         color="info"
                         size="large"
-                        style={{ width: "95%", margin: "10px" }}
+                        style={{width: "95%", margin: "10px"}}
                       >
                         검색
                       </SuiButton>
@@ -591,11 +580,7 @@ export default function ReceptionRegister() {
                 </SuiBox>
               </form>
               <SuiBox px={2}>
-                <ToastGrid
-                  columns={columns}
-                  data={searchType === "" ? data : gridData}
-                  bodyHeight={500}
-                />
+                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
               </SuiBox>
             </ProjectBody>
           </Card>

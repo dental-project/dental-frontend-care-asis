@@ -12,6 +12,9 @@ import { prices } from "modules/prices";
 import { dentals } from "modules/dentals";
 import { items } from "modules/items";
 
+// Soft UI Dashboard React components
+import SuiButton from "components/Sui/SuiButton";
+
 const useStyles = makeStyles(theme => ({
   textField: {
     width: "95%",
@@ -117,8 +120,8 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "단가삭제" ? (
           <>
-            <div style={{ textAlign: "center" }}>{priceObj.vendorName}</div>
-            <div style={{ textAlign: "center" }}>{priceObj.itemName}</div>
+            <div style={{paddingTop: "50px",textAlign: "center" }}>{priceObj.vendorName}</div>
+            <div style={{paddingBottom: "50px",textAlign: "center" }}>{priceObj.itemName}</div>
           </>
         ) : (
           <>
@@ -159,19 +162,26 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
             />
           </>
         )}
-        <Button
+        <SuiButton
           type="submit"
           form="formData"
-          className={classes.button}
+          variant="outlined"
           color="info"
-          round
+          size="medium"
+          style={{float: "right", margin: "7px"}}
         >
           {modalType}
-        </Button>
+        </SuiButton>
       </form>
-      <Button className={classes.button} color="danger" round onClick={close}>
-        취소
-      </Button>
+      <SuiButton
+          style={{float: "right", marginTop: "7px"}}
+          variant="outlined"
+          color="error"
+          size="medium"
+          onClick={close}
+        >
+          취소
+        </SuiButton>
     </Modal>
   );
 };
