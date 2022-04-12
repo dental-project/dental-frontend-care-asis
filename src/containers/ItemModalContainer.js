@@ -83,18 +83,24 @@ const ItemModalContainer = ({
       dispatch(items.updateItemMiddleware(itemObj.seqId, contents));
       
     } else if (modalType === "장치삭제") {
-      dispatch(items.deleteItemMiddleware(seqId));
 
+      if (window.confirm("정말 삭제 하시겠습니까?")) {
+        dispatch(items.deleteItemMiddleware(seqId));
+      }
     }
   };
 
   return (
-    <Modal open={open} modalType={modalType}>
+    <Modal open={open} modalType={modalType} maxWidth={"xs"}>
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "장치삭제" ? (
-          <>
-            <div style={{padding: "50px",textAlign: "center" }}>{itemObj.itemName}</div>
-          </>
+          <TextField
+            className={classes.textField}
+            label="장치명"
+            variant="outlined"
+            disabled={true}
+            defaultValue={itemObj.itemName}
+          />
         ) : (
           <>
             <Autocomplete
@@ -123,7 +129,7 @@ const ItemModalContainer = ({
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -133,8 +139,8 @@ const ItemModalContainer = ({
       </form>
       <SuiButton
           style={{float: "right", marginTop: "7px"}}
-          variant="outlined"
-          color="error"
+          variant="contained"
+          color="secondary"
           size="medium"
           onClick={close}
         >

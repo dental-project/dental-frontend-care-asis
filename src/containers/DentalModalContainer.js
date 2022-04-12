@@ -150,15 +150,25 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       
       dispatch(dentals.updateDentalMiddleware(dentalObj.seqId, contents));
     } else if (modalType === "치과삭제") {
-      dispatch(dentals.deleteDentalMiddleware(seqId));
+
+      if (window.confirm("정말 삭제 하시겠습니까?")) {
+        dispatch(dentals.deleteDentalMiddleware(seqId));
+      }
+      
     }
   }
 
   return (
-    <Modal open={open} modalType={modalType}>
+    <Modal open={open} modalType={modalType} maxWidth={"xs"}>
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "치과삭제" ? (
-          <div style={{padding: "50px",textAlign: "center" }}>{dentalObj.vendorName}</div>
+          <TextField
+            className={classes.textField}
+            label="거래처명"
+            variant="outlined"
+            disabled={true}
+            defaultValue={dentalObj.vendorName}
+          />
         ) : (
           <>
             <TextField
@@ -292,7 +302,7 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -302,8 +312,8 @@ const DentalModalContainer = ({ modalType, open, close, seqId, dentalObj }) => {
       </form>
       <SuiButton
         style={{float: "right", marginTop: "7px"}}
-        variant="outlined"
-        color="error"
+        variant="contained"
+        color="secondary"
         size="medium"
         onClick={close}
       >

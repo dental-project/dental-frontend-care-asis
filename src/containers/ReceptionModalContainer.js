@@ -97,43 +97,44 @@ const ReceptionModalContainer = ({
     setDetailDataArr(selectDetailData);
   }, [selectDetailData]);
 
-  // useEffect(() => {
-  //   if (modalType === "접수수정") {
-     
-  //     const index = dentalAutoData.findIndex(
-  //       obj => obj.vendorName === selectReceptionData.vendorName
-  //     );
-  //     const vendorSeqId = dentalAutoData[index].seqId;
-
-  //     apis
-  //       .vendorSelectPrice({
-  //         vendorSeqId: vendorSeqId,
-  //       })
-  //       .then(result => {
-  //         const selectData = result.data;
-  //         setVendorSelectData(selectData);
-  //       })
-  //       .catch(err => {
-  //         alert(err);
-  //       });
-
-  //     // axios
-  //     // .get(`/api/vendor/${vendorSeqId}/price/`)
-  //     //   .then(result => {
-  //     //     console.log(result);
-  //     //   const selectData = result.data;
-  //     //   setVendorSelectData(selectData);
-  //     // })
-  //     // .catch(error => {
-  //     //   throw new Error(error);
-  //     // });
-
-  //   }
-  // }, [selectReceptionData.seqId]);
-  
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (modalType === "접수수정") {
+     
+      const index = dentalAutoData.findIndex(
+        obj => obj.vendorName === selectReceptionData.vendorName
+      );
+      const vendorSeqId = dentalAutoData[index].seqId;
+
+      apis
+        .vendorSelectPrice(
+          vendorSeqId,
+        )
+        .then(result => {
+          const selectData = result.data;
+            selectData
+              .filter(
+                (arr, index, callback) =>
+                  index ===
+                  callback.findIndex(
+                    t => t.partName === arr.partName
+                  )
+              )
+              .map(data => {
+                return data.partName;
+              });
+
+            setVendorSelectData(selectData);
+        })
+        .catch(err => {
+          alert(err);
+        });
+
+    }
+  }, [selectReceptionData.seqId]);
 
   const handleAppendRow = () => {
     gridRef.current.getInstance().appendRow({});
@@ -155,7 +156,6 @@ const ReceptionModalContainer = ({
     setDetailDataArr(detailArr);
     console.log("remove");
   };
-
 
   const filterVendorName = createFilterOptions({
     matchFrom: "start",
@@ -274,7 +274,10 @@ const ReceptionModalContainer = ({
     e && e.preventDefault();
 
     if (modalType === "삭제") {
-      return dispatch(receptions.deleteReceptionMiddleware(seqId));
+      if (window.confirm("정말 삭제 하시겠습니까?")) {
+        dispatch(receptions.deleteReceptionMiddleware(seqId));
+      }
+      return;
     }
     
     let formData = new FormData(document.getElementById("formData"));
@@ -353,8 +356,6 @@ const ReceptionModalContainer = ({
     form.append("patientName", patientName);
     form.append("description", description);
     form.append("vendorSeqId", dentalAutoData[index].seqId);
-
-
 
 
 
@@ -498,7 +499,6 @@ const ReceptionModalContainer = ({
                       const vendorSeqId = dentalAutoData[index].seqId;
                       gridRef.current.getInstance().restore();
 
-
                       apis
                         .vendorSelectPrice(
                           vendorSeqId,
@@ -522,32 +522,6 @@ const ReceptionModalContainer = ({
                         .catch(err => {
                           alert(err);
                         });
-
-
-                      // axios
-                      //   .get(
-                      //     `/api/vendor/${vendorSeqId}/price/`
-                      //   )
-                      //   .then(result => {
-       
-                      //     const selectData = result.data;
-                      //     selectData
-                      //       .filter(
-                      //         (arr, index, callback) =>
-                      //           index ===
-                      //           callback.findIndex(
-                      //             t => t.partName === arr.partName
-                      //           )
-                      //       )
-                      //       .map(data => {
-                      //         return data.partName;
-                      //       });
-
-                      //     setVendorSelectData(selectData);
-                      //   })
-                      //   .catch(error => {
-                      //     throw new Error(error);
-                      //   });
                     }
                   }}
                   renderInput={params => (
@@ -732,7 +706,7 @@ const ReceptionModalContainer = ({
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -742,8 +716,8 @@ const ReceptionModalContainer = ({
       </form>
         <SuiButton
           style={{float: "right", marginTop: "7px"}}
-          variant="outlined"
-          color="error"
+          variant="contained"
+          color="secondary"
           size="medium"
           onClick={close}
         >

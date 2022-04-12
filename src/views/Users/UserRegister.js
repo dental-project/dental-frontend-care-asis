@@ -2,12 +2,8 @@ import React, { useRef, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-// core components
-import Grid from '@material-ui/core/Grid';
 // import CustomInput from "components/CustomInput/CustomInput.js";
 import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
 import CSRFToken from "components/CSRF/CSRFToken"; 
 // Material
 import TextField from '@material-ui/core/TextField';
@@ -110,13 +106,13 @@ export default function Signup() {
       }   
 
       axios
-        .post("/api/users/user/",
+        .post("http://localhost:8000/api/users/user/",
           { 
             userid: userid, 
             password: passwd,
             username: userName,
             tel: tel,
-            vendor_id: dentalAutoData[index].seqId,
+            vendorSeqId: dentalAutoData[index].seqId,
           },
           config
         

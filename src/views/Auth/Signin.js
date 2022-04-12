@@ -57,7 +57,7 @@ function SignIn() {
       .then(result => {
         
         if (result.data.status === "SUCCESS") {
-          history.push("/dental");
+          history.push("/dental/receptionRegister");
         } else {
           alert(result.data.message);
         }

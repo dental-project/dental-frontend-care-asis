@@ -363,14 +363,11 @@ export default function ReceptionDetail() {
           </SuiBox>
         </Card>
       </SuiBox>
-
-
       <ImageModalContainer
         open={openReceptionDetailModal}
         close={handleReceptionDetailModalClose}
-        //image={image}
+        image={image}
       />
-
     </SuiBox>
   );
 }

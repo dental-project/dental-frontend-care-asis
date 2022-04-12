@@ -74,7 +74,10 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
     e && e.preventDefault();
 
     if (modalType === "단가삭제") {
-      dispatch(prices.deletePriceMiddleware(seqId));
+
+      if (window.confirm("정말 삭제 하시겠습니까?")) {
+        dispatch(prices.deletePriceMiddleware(seqId));
+      }
       return;
     }
 
@@ -118,12 +121,24 @@ const PriceModalContainer = ({ modalType, open, close, seqId, priceObj }) => {
   };
 
   return (
-    <Modal open={open} modalType={modalType}>
+    <Modal open={open} modalType={modalType} maxWidth={"xs"}>
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "단가삭제" ? (
           <>
-            <div style={{paddingTop: "50px",textAlign: "center" }}>{priceObj.vendorName}</div>
-            <div style={{paddingBottom: "50px",textAlign: "center" }}>{priceObj.itemName}</div>
+            <TextField
+              className={classes.textField}
+              label="거래처명"
+              variant="outlined"
+              disabled={true}
+              defaultValue={priceObj.vendorName}
+            />
+            <TextField
+              className={classes.textField}
+              label="장치명"
+              variant="outlined"
+              disabled={true}
+              defaultValue={priceObj.itemName}
+            />
           </>
         ) : (
           <>

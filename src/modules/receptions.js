@@ -16,7 +16,7 @@ const addReception = createAction(ADD_RECEPTION, data => ({ data }));
 const addReceptionPrice = createAction(ADD_RECEPTION_PRICE, data => ({ data }));
 const updateReception = createAction(UPDATE_RECEPTION, data => ({ data }));
 //const updateReceptionDetail = createAction(UPDATE_RECEPTION_DETAIL, data => ({ data }));
-const removeReception = createAction(REMOVE_RECEPTION, data => ({ data }));
+const removeReception = createAction(REMOVE_RECEPTION, seqId => ({ seqId }));
 //const removeReceptionDetail = createAction(REMOVE_RECEPTION_DETAIL, data => ({ data }));
 
 // initialState

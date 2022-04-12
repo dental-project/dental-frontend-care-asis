@@ -184,7 +184,7 @@ const onSubmit = (e) => {
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -194,8 +194,8 @@ const onSubmit = (e) => {
       </form>
       <SuiButton
           style={{float: "right", marginTop: "7px"}}
-          variant="outlined"
-          color="error"
+          variant="contained"
+          color="secondary"
           size="medium"
           onClick={close}
         >

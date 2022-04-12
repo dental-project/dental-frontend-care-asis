@@ -98,6 +98,7 @@ export default function ReceptionRegister() {
   const [completeEndDate, setCompleteEndDate] = useState(new Date());
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
+  const [searchType, setSearchType] = useState("");
 
   const [menu, setMenu] = useState(null);
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
@@ -184,6 +185,7 @@ export default function ReceptionRegister() {
   const onRemoveButtonClicked = seqId => {
     setModalType("삭제");
     setSeqId(seqId);
+    setSearchType("");
     handleReceptionModalOpen();
   };
 
@@ -385,6 +387,8 @@ export default function ReceptionRegister() {
       }
     }
   
+    setSearchType("search");
+
     axios
       .get("/api/sell/master/", {
         params : 
@@ -580,7 +584,11 @@ export default function ReceptionRegister() {
                 </SuiBox>
               </form>
               <SuiBox px={2}>
-                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+                <ToastGrid
+                  columns={columns}
+                  data={searchType === "" ? data : gridData}
+                  bodyHeight={500}
+                />
               </SuiBox>
             </ProjectBody>
           </Card>

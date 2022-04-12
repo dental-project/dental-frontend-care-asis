@@ -67,16 +67,26 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
 
       dispatch(parts.updatePartMiddleware(partObj.seqId, contents));
     } else if (modalType === "파트삭제") {
-      dispatch(parts.deletePartMiddleware(seqId));
+
+      if (window.confirm("정말 삭제 하시겠습니까?")) {
+        dispatch(parts.deletePartMiddleware(seqId));
+      } 
+
     }
 
   }
   
   return (
-    <Modal open={open} modalType={modalType}>
+    <Modal open={open} modalType={modalType} maxWidth={"xs"}>
       <form id="formData" onSubmit={onSubmit} encType="multipart/form-data">
         {modalType === "파트삭제" ? (
-          <div style={{padding: "50px",textAlign: "center" }}>{partObj.partName}</div>
+          <TextField
+            className={classes.textField}
+            label="파트명"
+            variant="outlined"
+            disabled={true}
+            defaultValue={partObj.partName}
+          />
         ) : (
           <>
             <TextField
@@ -91,7 +101,7 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
         <SuiButton
           type="submit"
           form="formData"
-          variant="outlined"
+          variant="contained"
           color="info"
           size="medium"
           style={{float: "right", margin: "7px"}}
@@ -101,8 +111,8 @@ const PartModalContainer = ({ modalType, open, close, seqId, partObj }) => {
       </form>
       <SuiButton
           style={{float: "right", marginTop: "7px"}}
-          variant="outlined"
-          color="error"
+          variant="contained"
+          color="secondary"
           size="medium"
           onClick={close}
         >

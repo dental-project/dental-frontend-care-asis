@@ -42,7 +42,7 @@ const ImageModalContainer = ({
 }) => {
  
   return (
-    <Modal open={open} close={close}>
+    <Modal open={open} close={close} maxWidth={"xl"}>
       <div style={{width: "100%", textAlign: "right"}}>
         <IconButton aria-label="close" onClick={close} >
           <CloseIcon />
