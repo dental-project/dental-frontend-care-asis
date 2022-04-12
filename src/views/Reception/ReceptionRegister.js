@@ -51,6 +51,8 @@ import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
 
 import axios from 'axios';
+import SearchIcon from '@material-ui/icons/Search';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -465,7 +467,7 @@ export default function ReceptionRegister({match}) {
                 onClose={closeMenu}
               >
                 <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
-                <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
+                {/* <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem> */}
               </Menu>
             </ProjectHeader>
             <ProjectBody>
@@ -546,7 +548,7 @@ export default function ReceptionRegister({match}) {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={2} xl={2}>
+                    <Grid item xs={12} sm={1} xl={1}>
                       <Autocomplete
                         freeSolo
                         className={classes.grid}
@@ -568,7 +570,7 @@ export default function ReceptionRegister({match}) {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={2} xl={2}>
+                    <Grid item xs={12} sm={1} xl={1}>
                       <SuiButton
                         type="submit"
                         form="formSearchData"
@@ -577,7 +579,18 @@ export default function ReceptionRegister({match}) {
                         size="large"
                         style={{width: "95%", margin: "10px"}}
                       >
-                        검색
+                        <SearchIcon></SearchIcon>
+                      </SuiButton>
+                    </Grid>
+                    <Grid item xs={12} sm={1} xl={1}>
+                      <SuiButton
+                        variant="outlined"
+                        color="info"
+                        size="large"
+                        style={{width: "95%", margin: "10px"}}
+                        onClick={e => handleClickOpenPrint(e)}
+                      >
+                        <PictureAsPdfIcon></PictureAsPdfIcon>
                       </SuiButton>
                     </Grid>
                   </Grid>

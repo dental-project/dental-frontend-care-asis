@@ -490,6 +490,7 @@ const ReceptionModalContainer = ({
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.vendorName : ""
                   }
+                  disabled={modalType === "접수수정" ? true : false}
                   onChange={(event, newValue) => {
 
                     if (newValue !== null) {
@@ -632,13 +633,13 @@ const ReceptionModalContainer = ({
               </Grid>
               <Grid item xs={2}></Grid>
             </Grid>
-            <Grid
+            {/* <Grid
               container
               justifyContent="center"
               style={{ marginTop: "30px", fontSize: "30px" }}
             >
               {"image.png"}
-            </Grid>
+            </Grid> */}
 
             <input
               accept="image/*"
@@ -650,7 +651,7 @@ const ReceptionModalContainer = ({
               type="file"
             />
             <label htmlFor="requestForm">
-              <ButtonUpload component="span" className={classes.button}>
+              <ButtonUpload component="span" color="primary" className={classes.button}>
                 Upload
               </ButtonUpload>
             </label>

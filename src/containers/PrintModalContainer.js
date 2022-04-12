@@ -137,9 +137,9 @@ const onSubmit = (e) => {
     }
 
     return (
-      <Modal open={open}>
+      <Modal open={open} modalType={"PDF 출력"}>
         <form id="formData" onSubmit={onSubmit}>
-          <TextField
+          {/* <TextField
             className={classes.textField}
             type="date"
             name="startDate"
@@ -167,7 +167,7 @@ const onSubmit = (e) => {
                 variant="outlined"
               />
             )}
-          />
+          /> */}
           <Autocomplete
             className={classes.textField}
             options={dash1}
