@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ReceptionRegister() {
+export default function ReceptionRegister({match}) {
   const classes = useStyles();
   let history = useHistory();
 

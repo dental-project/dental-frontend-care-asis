@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom"; 
+import { useHistory, location } from "react-router-dom"; 
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -57,7 +57,8 @@ function SignIn() {
       .then(result => {
         
         if (result.data.status === "SUCCESS") {
-          history.push("/dental/receptionRegister");
+          //history.push("/dental/receptionRegister");
+          window.location.replace("/dental");
         } else {
           alert(result.data.message);
         }
