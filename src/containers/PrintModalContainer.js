@@ -57,17 +57,6 @@ const PrintModalContainer = ({ open, close, printData}) => {
   const [printType, setPrintType] = useState([]);
   const [reportSeqId, setReportSeqId] =useState("");
 
-  const [startDateValue, setStartDateValue] = useState(new Date());
-  const [endDateValue, setEndDateValue] = useState(new Date());
-  const dash1 = [
-    "시간별완성현황",
-    "일생산현황",
-    "치과매출현황",
-    "파트별매출현황",
-    "치과별월매출현황",
-    "월생산현황표",
-  ];
-
   const vendorNameArr = [];
 
   data.map(data => {
@@ -75,12 +64,8 @@ const PrintModalContainer = ({ open, close, printData}) => {
   });
 
   const set1 = new Set(vendorNameArr);
-  const vendorAutoData = [...set1];
-
 
   useEffect(() => {
-
-   
     apis
       .getReportCode()
       .then((result) => {
