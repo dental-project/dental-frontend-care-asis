@@ -108,12 +108,10 @@ const PrintModalContainer = ({ open, close, printData}) => {
       return alert("출력 타입을 선택하세요.");
     
     printData.reportSeqId = reportSeqId;
-    console.log(printData);
    
     apis
-      .reportPrint(reportSeqId, printData)
+      .reportPrint(reportSeqId, { data: printData } )
       .then(result => {
-        console.log(result);
         var b = new Blob([result.data], { type: "application/pdf;" });
         var url = URL.createObjectURL(b);
         window.open(url, "_blank", "");
