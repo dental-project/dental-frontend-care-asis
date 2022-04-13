@@ -14,8 +14,6 @@ const instance = axios.create({
   // },
 });
 
-
-
 export const apis = {
 
   // 접수 불러오기
@@ -111,13 +109,13 @@ export const apis = {
   // 거래처에 해당하는 단가
   vendorSelectPrice: (vendorSeqId) => instance.get(`/vendor/${vendorSeqId}/price/`),
   
+  // PDF report 코드 가져오기
+  getReportCode: () => instance.get('/code/report/'),
+  // PDF 출력
+  reportPrint: (reportSeqId, contents) => instance.get(`/sell/report/${reportSeqId}`, contents),
 
 
-  // PDF report
-  receptionReport: (contents) => instance.get('/sell/report/', contents),
-  // 접수 리스트 마스터에 해당하는 디테일 상세
-  //receptionDetail
-
+  
 
 
 };

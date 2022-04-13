@@ -11,6 +11,11 @@ import { dentals } from "modules/dentals";
 // Soft UI Dashboard React components
 import SuiButton from "components/Sui/SuiButton";
 
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+
 const useStyles = makeStyles((theme) => ({
     textField: {
       width: "95%",
@@ -44,11 +49,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const PrintModalContainer = ({ open, close}) => {
+const PrintModalContainer = ({ open, close, printData}) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const { data, count } = useSelector(({ dental }) => dental);
+  const [printType, setPrintType] = useState([]);
+  const [reportSeqId, setReportSeqId] =useState("");
 
   const [startDateValue, setStartDateValue] = useState(new Date());
   const [endDateValue, setEndDateValue] = useState(new Date());
@@ -70,128 +77,82 @@ const PrintModalContainer = ({ open, close}) => {
   const set1 = new Set(vendorNameArr);
   const vendorAutoData = [...set1];
 
+
+  useEffect(() => {
+
+   
+    apis
+      .getReportCode()
+      .then((result) => {
+        setPrintType(result.data);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+
+  },[]);
+
   useEffect(() => {
     dispatch(dentals.getDentalMiddleware());
   }, [] );
 
-  const filterOptions = createFilterOptions({
-    matchFrom: 'start',
-    stringify: (option) => option,
-  });
 
+  const handleChange = (e) => {
+    setReportSeqId(e.target.value);
+  }
 
-const onSubmit = (e) => {
-  e && e.preventDefault();
+  const onReportPrint = (e) => {
+    e && e.preventDefault();
 
-  let formData = new FormData(document.getElementById("formData"));
-  const startDate = formData.get("startDate");
-  const endDate = formData.get("endDate");
-  const vendorName = formData.get("vendorName");
-  const type = formData.get("type");
+    if (reportSeqId === "")
+      return alert("출력 타입을 선택하세요.");
+    
+    printData.reportSeqId = reportSeqId;
+    console.log(printData);
+   
+    apis
+      .reportPrint(reportSeqId, printData)
+      .then(result => {
+        console.log(result);
+        var b = new Blob([result.data], { type: "application/pdf;" });
+        var url = URL.createObjectURL(b);
+        window.open(url, "_blank", "");
+      })
+      .catch(err => {
+        alert(err);
+      });
 
-  if (startDate === "" || endDate === "" || vendorName === "" || type === "")
-    return alert("모두 선택해주세요");
-  
-  const index = vendorAutoData.findIndex(data => data === vendorName);
-  
-  apis
-    .receptionReport({
-      data: {
-        receiptDate: startDate,
-        completionDate: endDate,
-        vendorSeqId: data[index].seqId,
-        reportType: type,
-      },
-    })
-    .then(result => {
-      console.log(result);
-      var b = new Blob([result.data], { type: "application/pdf;" });
-      var url = URL.createObjectURL(b);
-      window.open(url, "_blank", "");
-    })
-    .catch(err => {
-      alert(err);
-    });
-
-    // axios({
-    //   method: "POST",
-    //   url: "/api/sell/report/",
-    //   responseType: "blob",
-    //   data: {
-    //     receiptDate: data.startDate,
-    //     completionDate: data.endDate,
-    //     vendorSeqId: vendorSeqId,
-    //     reportType: type,
-    //   },
-    // })
-    //   .then(result => {
-    //     console.log(result);
-    //     var b = new Blob([result.data], { type: "application/pdf;" });
-    //     var url = URL.createObjectURL(b);
-    //     window.open(url, "_blank", "");
-    //   })
-    //   .catch(error => {
-    //     throw new Error(error);
-    //   });
-      
     }
 
     return (
       <Modal open={open} modalType={"PDF 출력"}>
-        <form id="formData" onSubmit={onSubmit}>
-          {/* <TextField
-            className={classes.textField}
-            type="date"
-            name="startDate"
-            label="시작일자"
-            defaultValue={startDateValue}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            className={classes.textField}
-            type="date"
-            name="endDate"
-            label="종료일자"
-            defaultValue={endDateValue}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Autocomplete
-            className={classes.textField}
-            options={vendorAutoData}
-            filterOptions={filterOptions}
-            renderInput={params => (
-              <TextField
-                {...params}
-                name="vendorName"
-                label="거래처명"
-                variant="outlined"
-              />
-            )}
-          /> */}
-          <Autocomplete
-            className={classes.textField}
-            options={dash1}
-            filterOptions={filterOptions}
-            renderInput={params => (
-              <TextField
-                {...params}
-                name="type"
-                label="항목선택"
-                variant="outlined"
-              />
-            )}
-          />
+        <FormControl variant="outlined" className={classes.textField}>
+          <InputLabel id="demo-simple-select-outlined-label">타입선택</InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            defaultValue={""}
+            onChange={handleChange}
+            label="타입선택"
+          >
+            {
+              printType.map(data => (
+                <MenuItem key={data.seqId} value={data.seqId}>{data.reportName}</MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
         <SuiButton
-          type="submit"
-          form="formData"
+        
           variant="contained"
           color="info"
           size="medium"
+          onClick={(e) => onReportPrint(e)}
           style={{float: "right", margin: "7px"}}
         >
           출력
         </SuiButton>
-      </form>
+      
       <SuiButton
           style={{float: "right", marginTop: "7px"}}
           variant="contained"

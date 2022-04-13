@@ -50,10 +50,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
 
-import axios from 'axios';
-import SearchIcon from '@material-ui/icons/Search';
-import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
-
+import { apis } from "apis/axios";
+import AddIcon from '@material-ui/icons/Add';
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -83,7 +81,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ReceptionRegister({match}) {
+export default function ReceptionRegister() {
   const classes = useStyles();
   let history = useHistory();
 
@@ -101,6 +99,7 @@ export default function ReceptionRegister({match}) {
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
   const [searchType, setSearchType] = useState("");
+  const [printData, setPrintData] = useState({});
 
   const [menu, setMenu] = useState(null);
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
@@ -153,6 +152,20 @@ export default function ReceptionRegister({match}) {
   const [openPrint, setOpenPrint] = useState(false);
   const handleClickOpenPrint = () => {
     closeMenu();
+
+    //setPrintData([])
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const dateSelect = formData.get("dateSelect");
+    const vendorName = formData.get("vendorName");
+    const chartNumber = formData.get("chartNumber");
+    
+    
+    setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber));
+
+
+
+    
     setOpenPrint(true);
   };
   const handleClosePrint = () => {
@@ -356,6 +369,37 @@ export default function ReceptionRegister({match}) {
     setSelectedValue(event.target.value);
   };
 
+
+  const searchTypeCheck = (dateSelect, vendorName, chartNumber) => {
+
+    if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
+
+    let result;
+ 
+    setSearchType("search");
+    
+    if(dateSelect === "reception") {
+      result = {
+        receptionDate: { 
+          startDate: dateFormat(receptionStartDate), 
+          endDate: dateFormat(receptionEndDate) 
+        }
+      }
+    } else {
+      result = {
+        completeDate: { 
+          startDate: dateFormat(completeStartDate), 
+          endDate: dateFormat(completeEndDate) 
+        }
+      } 
+    }
+
+    result.vendorName = vendorName === "전체" ? "" : vendorName;
+    result.chartNumber = chartNumber === "전체" ? "" : parseInt(chartNumber);
+
+    return result;
+  }
+
   const onSubmit = (e) => {
     e && e.preventDefault();
 
@@ -364,44 +408,20 @@ export default function ReceptionRegister({match}) {
     const vendorName = formData.get("vendorName");
     const chartNumber = formData.get("chartNumber");
     
-    if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
-
-    let receptionParams;
-    let completeParams;
-
-    if(dateSelect === "reception") {
-      receptionParams = {
-        receptionDate: { 
-          startDate: dateFormat(receptionStartDate), 
-          endDate: dateFormat(receptionEndDate) 
-        },
-        vendorName: vendorName === "전체" ? "" : vendorName,
-        chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
-      }
-    } else {
-      completeParams = {
-        completeDate: { 
-          startDate: dateFormat(completeStartDate), 
-          endDate: dateFormat(completeEndDate) 
-        },
-        vendorName: vendorName === "전체" ? "" : vendorName,
-        chartNumber: chartNumber === "전체" ? "" : parseInt(chartNumber),
-      }
-    }
-  
-    setSearchType("search");
-
-    axios
-      .get("/api/sell/master/", {
-        params : 
-          dateSelect === "reception" ? receptionParams : completeParams
+    const result = searchTypeCheck(dateSelect, vendorName, chartNumber);
+    console.log(result);
+    apis
+      .receptionSearch({
+        data: result
       })
       .then((result) => {
+        console.log(result);
         setGridData(result.data)
       })
       .catch((error) => {
         throw new Error(error);
       });
+
   }
 
   return (
@@ -449,7 +469,7 @@ export default function ReceptionRegister({match}) {
         <SuiBox mb={3}>
           <Card>
             <ProjectHeader title={"접수 리스트"} subTitle={"All List"}>
-              <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
+              <MoreVertIcon xs={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
                 more_vert
               </MoreVertIcon>
               <Menu
@@ -522,7 +542,6 @@ export default function ReceptionRegister({match}) {
                         maxDate={new Date(2100, 0, 1)}
                         monthFormat="YYYY MM"
                         disabled={false}
-                      
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
@@ -604,7 +623,11 @@ export default function ReceptionRegister({match}) {
         selectReceptionData={selectReceptionData} // 접수 수정 데이터
         selectDetailData={selectDetailData}
       />
-      <PrintModalContainer open={openPrint} close={handleClosePrint} />
+      <PrintModalContainer 
+        open={openPrint} 
+        close={handleClosePrint}
+        printData={printData}             
+      />
     </>
   );
 }
