@@ -112,7 +112,7 @@ export const apis = {
   // PDF report 코드 가져오기
   getReportCode: () => instance.get('/code/report/'),
   // PDF 출력
-  reportPrint: (reportSeqId, contents) => instance.get(`/sell/report/${reportSeqId}/`, contents),
+  reportPrint: (reportSeqId, contents) => instance.get(`/sell/report/1/`, contents),
 
   
 

@@ -63,8 +63,6 @@ const PrintModalContainer = ({ open, close, printData}) => {
     vendorNameArr.push(data.vendorName);
   });
 
-  const set1 = new Set(vendorNameArr);
-
   useEffect(() => {
     apis
       .getReportCode()
@@ -95,7 +93,7 @@ const PrintModalContainer = ({ open, close, printData}) => {
     printData.reportSeqId = reportSeqId;
    
     apis
-      .reportPrint(reportSeqId, { data: printData } )
+      .reportPrint(reportSeqId, { params: printData } )
       .then(result => {
         var b = new Blob([result.data], { type: "application/pdf;" });
         var url = URL.createObjectURL(b);

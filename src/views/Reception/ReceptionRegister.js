@@ -415,7 +415,7 @@ export default function ReceptionRegister() {
         data: result
       })
       .then((result) => {
-        console.log(result);
+        console.log(result)
         setGridData(result.data)
       })
       .catch((error) => {
