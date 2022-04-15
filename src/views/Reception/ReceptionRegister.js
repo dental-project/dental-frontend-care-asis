@@ -51,7 +51,7 @@ import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
 
 import { apis } from "apis/axios";
-import AddIcon from '@material-ui/icons/Add';
+
 const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
@@ -99,6 +99,7 @@ export default function ReceptionRegister() {
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
   const [searchType, setSearchType] = useState("");
+  const [searchCount, setSearchCount] = useState(count);
   const [printData, setPrintData] = useState({});
 
   const [menu, setMenu] = useState(null);
@@ -151,21 +152,14 @@ export default function ReceptionRegister() {
   // 출력 모달
   const [openPrint, setOpenPrint] = useState(false);
   const handleClickOpenPrint = () => {
-    closeMenu();
-
-    //setPrintData([])
-
+    
     let formData = new FormData(document.getElementById("formSearchData"));
     const dateSelect = formData.get("dateSelect");
     const vendorName = formData.get("vendorName");
     const chartNumber = formData.get("chartNumber");
     
-    
+    closeMenu();
     setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber));
-
-
-
-    
     setOpenPrint(true);
   };
   const handleClosePrint = () => {
@@ -409,13 +403,13 @@ export default function ReceptionRegister() {
     const chartNumber = formData.get("chartNumber");
     
     const result = searchTypeCheck(dateSelect, vendorName, chartNumber);
-    console.log(result);
+    
     apis
       .receptionSearch({
-        data: result
+        params: result
       })
       .then((result) => {
-        console.log(result)
+        console.log(result.data)
         setGridData(result.data)
       })
       .catch((error) => {
@@ -433,35 +427,16 @@ export default function ReceptionRegister() {
               <MiniStatisticsCard
                 title={{ text: "전체 리스트" }}
                 count={data.length}
-                percentage={{ color: "success", text: "EA" }}
+                percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "AllList" }}
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
-                title={{ text: "today's users" }}
-                count="2,300"
-                percentage={{ color: "success", text: "+3%" }}
+                title={{ text: "검색한 개수" }}
+                count={searchCount}
+                percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "public" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "new clients" }}
-                count="+3,462"
-                percentage={{ color: "error", text: "-2%" }}
-                icon={{ color: "info", component: "emoji_events" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "sales" }}
-                count="$103,430"
-                percentage={{ color: "success", text: "+5%" }}
-                icon={{
-                  color: "info",
-                  component: "shopping_cart",
-                }}
               />
             </Grid>
           </Grid>
@@ -550,7 +525,6 @@ export default function ReceptionRegister() {
                         className={classes.grid}
                         options={auto1}
                         value={vendorAutoReset}
-                        getOptionLabel={option => option}
                         filterOptions={filterOptions}
                         onChange={(event, newValue) => {
                           if (newValue === null) {
