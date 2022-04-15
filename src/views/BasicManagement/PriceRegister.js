@@ -214,6 +214,11 @@ export default function PriceRegister() {
 
     e && e.preventDefault();
 
+    priceSearchCheck();
+
+  }
+
+  const priceSearchCheck = () => {
     let formData = new FormData(document.getElementById("formSearchData"));
     const vendorName = formData.get("vendorName");
     const partName = formData.get("partName");
@@ -235,21 +240,27 @@ export default function PriceRegister() {
       data.itemName === itemName
     );
 
-    apis
-      .priceSearch({
-        params: {
-          vendorSeqId: vendorName === "전체" ? "" : vendorData[0].vendorSeqId,
-          partSeqId: partName === "전체" ? "" : partData[0].partSeqId,
-          itemSeqId: itemName === "전체" ? "" : itemData[0].itemSeqId,
-        },
-      })
-      .then(result => {
-        setGridData(result.data);
-      })
-      .catch(err => {
-        alert(err);
-      });
+    const parameter = {
+      vendorSeqId: vendorName === "전체" ? "" : vendorData[0].vendorSeqId,
+      partSeqId: partName === "전체" ? "" : partData[0].partSeqId,
+      itemSeqId: itemName === "전체" ? "" : itemData[0].itemSeqId,
+    };
+    
+    axiosPriceSearch(parameter);
+  }
 
+  const axiosPriceSearch = (parameter) => {
+    apis
+    .priceSearch({
+      params: parameter
+    })
+    .then(result => {
+      console.log(result);
+      setGridData(result.data);
+    })
+    .catch(err => {
+      alert(err);
+    });
   }
 
   return (
