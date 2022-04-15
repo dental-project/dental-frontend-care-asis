@@ -197,20 +197,12 @@ function PartRegister() {
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={6}>
+            <Grid item xs={12} sm={12} xl={12}>
               <MiniStatisticsCard
                 title={{ text: "전체 등록 리스트" }}
                 count={data.length}
-                percentage={{ color: "success", text: "개" }}
+                percentage={{ color: "success", text: "EA" }}
                 icon={{ color: "info", component: "AllList" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={6}>
-              <MiniStatisticsCard
-                title={{ text: "검색한 개수" }}
-                count={data.length}
-                percentage={{ color: "success", text: "개" }}
-                icon={{ color: "info", component: "public" }}
               />
             </Grid>
           </Grid>
@@ -281,7 +273,22 @@ function PartRegister() {
                 </SuiBox>
               </form>
               <SuiBox px={2}>
-                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+              <ToastGrid 
+                columns={columns} 
+                data={gridData} 
+                bodyHeight={500} 
+                summary={{
+                  height: 30,
+                  position: 'top',
+                  columnContent: {
+                    partName: {
+                      template: function(valueMap) {
+                        return `검색 리스트: ${valueMap.cnt} 개`;
+                      }
+                    }
+                  }
+                }}
+              />
               </SuiBox>
             </ProjectBody>
           </Card>

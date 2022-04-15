@@ -99,7 +99,6 @@ export default function ReceptionRegister() {
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
   const [searchType, setSearchType] = useState("");
-  const [searchCount, setSearchCount] = useState(count);
   const [printData, setPrintData] = useState({});
 
   const [menu, setMenu] = useState(null);
@@ -125,27 +124,24 @@ export default function ReceptionRegister() {
   // }, [data]);
 
   useEffect(() => {
-
+    
     let formData = new FormData(document.getElementById("formSearchData"));
     const dateSelect = formData.get("dateSelect");
-    const vendorName = formData.get("vendorName");
-    const chartNumber = formData.get("chartNumber");
+    const result = searchTypeCheck(dateSelect, "", "", "default");
     
-    const result = searchTypeCheck(dateSelect, vendorName, chartNumber, "default");
-
     apis
-    .receptionSearch({
-      params: result
-    })
-    .then((result) => {
-      setSearchCount(result.data.length);
-      setGridData(result.data);
-    })
-    .catch((error) => {
-      throw new Error(error);
-    });
-  }, []);
+      .receptionSearch({
+        params: result
+      })
+      .then((result) => {
+        console.log(result);
+        setGridData(result.data)
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
+  }, []);
 
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
@@ -182,7 +178,7 @@ export default function ReceptionRegister() {
     const chartNumber = formData.get("chartNumber");
     
     closeMenu();
-    setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber, "search"));
+    setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber));
     setOpenPrint(true);
   };
   const handleClosePrint = () => {
@@ -386,9 +382,10 @@ export default function ReceptionRegister() {
     setSelectedValue(event.target.value);
   };
 
+
   const searchTypeCheck = (dateSelect, vendorName, chartNumber, type) => {
 
-    if(type === "search") {
+    if(type !== "default") {
       if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
     }
     
@@ -433,8 +430,7 @@ export default function ReceptionRegister() {
         params: result
       })
       .then((result) => {
-        setSearchCount(result.data.length);
-        setGridData(result.data);
+        setGridData(result.data)
       })
       .catch((error) => {
         throw new Error(error);
@@ -447,20 +443,12 @@ export default function ReceptionRegister() {
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={6}>
+            <Grid item xs={12} sm={12} xl={12}>
               <MiniStatisticsCard
                 title={{ text: "전체 등록 리스트" }}
                 count={data.length}
                 percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "AllList" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={6}>
-              <MiniStatisticsCard
-                title={{ text: "검색한 개수" }}
-                count={searchCount}
-                percentage={{ color: "success", text: "개" }}
-                icon={{ color: "info", component: "public" }}
               />
             </Grid>
           </Grid>
@@ -549,6 +537,7 @@ export default function ReceptionRegister() {
                         className={classes.grid}
                         options={auto1}
                         value={vendorAutoReset}
+                        getOptionLabel={option => option}
                         filterOptions={filterOptions}
                         onChange={(event, newValue) => {
                           if (newValue === null) {
@@ -607,6 +596,17 @@ export default function ReceptionRegister() {
                   columns={columns}
                   data={gridData}
                   bodyHeight={500}
+                  summary={{
+                    height: 30,
+                    position: 'top',
+                    columnContent: {
+                      receiptDate: {
+                        template: function(valueMap) {
+                          return `검색 리스트: ${valueMap.cnt} 개`;
+                        }
+                      }
+                    }
+                  }}
                 />
               </SuiBox>
             </ProjectBody>

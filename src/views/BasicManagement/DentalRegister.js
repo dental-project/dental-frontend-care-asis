@@ -285,39 +285,12 @@ export default function DentalRegister() {
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={12} xl={12}>
               <MiniStatisticsCard
-                title={{ text: "전체 리스트" }}
+                title={{ text: "전체 등록 리스트" }}
                 count={data.length}
                 percentage={{ color: "success", text: "EA" }}
                 icon={{ color: "info", component: "AllList" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "today's users" }}
-                count="2,300"
-                percentage={{ color: "success", text: "+3%" }}
-                icon={{ color: "info", component: "public" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "new clients" }}
-                count="+3,462"
-                percentage={{ color: "error", text: "-2%" }}
-                icon={{ color: "info", component: "emoji_events" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "sales" }}
-                count="$103,430"
-                percentage={{ color: "success", text: "+5%" }}
-                icon={{
-                  color: "info",
-                  component: "shopping_cart",
-                }}
               />
             </Grid>
           </Grid>
@@ -388,7 +361,22 @@ export default function DentalRegister() {
                 </SuiBox>
               </form>
               <SuiBox px={2}>
-                <ToastGrid columns={columns} data={gridData} bodyHeight={500} />
+                <ToastGrid
+                  columns={columns}
+                  data={gridData}
+                  bodyHeight={500}
+                  summary={{
+                    height: 30,
+                    position: 'top',
+                    columnContent: {
+                      vendorName: {
+                        template: function(valueMap) {
+                          return `검색 리스트: ${valueMap.cnt} 개`;
+                        }
+                      }
+                    }
+                  }}
+                />
               </SuiBox>
             </ProjectBody>
           </Card>
