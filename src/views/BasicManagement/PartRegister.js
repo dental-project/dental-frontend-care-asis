@@ -197,39 +197,20 @@ function PartRegister() {
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={6} xl={6}>
               <MiniStatisticsCard
-                title={{ text: "전체 리스트" }}
+                title={{ text: "전체 등록 리스트" }}
                 count={data.length}
-                percentage={{ color: "success", text: "EA" }}
+                percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "AllList" }}
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={6} xl={6}>
               <MiniStatisticsCard
-                title={{ text: "today's users" }}
-                count="2,300"
-                percentage={{ color: "success", text: "+3%" }}
+                title={{ text: "검색한 개수" }}
+                count={data.length}
+                percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "public" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "new clients" }}
-                count="+3,462"
-                percentage={{ color: "error", text: "-2%" }}
-                icon={{ color: "info", component: "emoji_events" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "sales" }}
-                count="$103,430"
-                percentage={{ color: "success", text: "+5%" }}
-                icon={{
-                  color: "info",
-                  component: "shopping_cart",
-                }}
               />
             </Grid>
           </Grid>

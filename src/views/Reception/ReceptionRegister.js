@@ -120,9 +120,32 @@ export default function ReceptionRegister() {
   const auto1 = [...set1];
   const auto2 = [...set2];
 
+  // useEffect(() => {
+  //   setGridData(data)
+  // }, [data]);
+
   useEffect(() => {
-    setGridData(data)
-  }, [data]);
+
+    let formData = new FormData(document.getElementById("formSearchData"));
+    const dateSelect = formData.get("dateSelect");
+    const vendorName = formData.get("vendorName");
+    const chartNumber = formData.get("chartNumber");
+    
+    const result = searchTypeCheck(dateSelect, vendorName, chartNumber, "default");
+
+    apis
+    .receptionSearch({
+      params: result
+    })
+    .then((result) => {
+      setSearchCount(result.data.length);
+      setGridData(result.data);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+  }, []);
+
 
   useEffect(() => {
     dispatch(receptions.getReceptionMiddleware());
@@ -159,7 +182,7 @@ export default function ReceptionRegister() {
     const chartNumber = formData.get("chartNumber");
     
     closeMenu();
-    setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber));
+    setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber, "search"));
     setOpenPrint(true);
   };
   const handleClosePrint = () => {
@@ -363,11 +386,12 @@ export default function ReceptionRegister() {
     setSelectedValue(event.target.value);
   };
 
+  const searchTypeCheck = (dateSelect, vendorName, chartNumber, type) => {
 
-  const searchTypeCheck = (dateSelect, vendorName, chartNumber) => {
-
-    if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
-
+    if(type === "search") {
+      if(vendorName === "" || chartNumber === "") return alert("검색어를 입력하세요.");
+    }
+    
     let result;
  
     setSearchType("search");
@@ -409,8 +433,8 @@ export default function ReceptionRegister() {
         params: result
       })
       .then((result) => {
-        console.log(result.data)
-        setGridData(result.data)
+        setSearchCount(result.data.length);
+        setGridData(result.data);
       })
       .catch((error) => {
         throw new Error(error);
@@ -423,15 +447,15 @@ export default function ReceptionRegister() {
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={6} xl={6}>
               <MiniStatisticsCard
-                title={{ text: "전체 리스트" }}
+                title={{ text: "전체 등록 리스트" }}
                 count={data.length}
                 percentage={{ color: "success", text: "개" }}
                 icon={{ color: "info", component: "AllList" }}
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={6} xl={6}>
               <MiniStatisticsCard
                 title={{ text: "검색한 개수" }}
                 count={searchCount}
@@ -581,7 +605,7 @@ export default function ReceptionRegister() {
               <SuiBox px={2}>
                 <ToastGrid
                   columns={columns}
-                  data={searchType === "" ? data : gridData}
+                  data={gridData}
                   bodyHeight={500}
                 />
               </SuiBox>
