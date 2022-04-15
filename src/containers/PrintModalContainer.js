@@ -92,17 +92,12 @@ const PrintModalContainer = ({ open, close, printData}) => {
     
     printData.reportSeqId = reportSeqId;
    
-    // console.log(reportSeqId);
-
-    // return;
-
     apis
       .reportPrint(reportSeqId, { params: printData } )
       .then(result => {
-        console.log(result);
-        // var b = new Blob([result.data], { type: "application/pdf;" });
-        // var url = URL.createObjectURL(b);
-        // window.open(url, "_blank", "");
+        var b = new Blob([result.data], { type: "application/pdf;" });
+        var url = URL.createObjectURL(b);
+        window.open(url, "_blank", "");
       })
       .catch(err => {
         alert(err);
