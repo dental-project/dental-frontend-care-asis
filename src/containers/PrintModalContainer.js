@@ -93,7 +93,7 @@ const PrintModalContainer = ({ open, close, printData}) => {
     printData.reportSeqId = reportSeqId;
    
     apis
-      .reportPrint(reportSeqId, { params: printData } )
+      .reportPrint(reportSeqId, { params: printData, responseType: "arraybuffer" } )
       .then(result => {
         var b = new Blob([result.data], { type: "application/pdf;" });
         var url = URL.createObjectURL(b);
