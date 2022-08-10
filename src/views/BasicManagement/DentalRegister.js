@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core";
-
 import Grid from "@material-ui/core/Grid";
-
-
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+
+// @mui material components
+import Card from "@mui/material/Card";
 
 // Toast Grid
 import ToastGrid from "@toast-ui/react-grid";
@@ -17,24 +17,15 @@ import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 import DentalModalContainer from "containers/DentalModalContainer";
 
-import { dentals } from "modules/dentals";
-
 import { useDispatch, useSelector } from "react-redux";
-
+import { dentals } from "modules/dentals";
 import { apis } from "apis/axios";
 
 // Soft UI Dashboard React components
-import SuiBox from "components/Sui/SuiBox";
-import SuiButton from "components/Sui/SuiButton";
+import SoftBox from "components/Soft/SoftBox";
+import SoftButton from "components/Soft/SoftButton";
+import SoftTypography from "components/Soft/SoftTypography";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
-import ProjectHeader from "components/SuiProject/ProjectHeader";
-import ProjectBody from "components/SuiProject/ProjectBody";
-
-// @mui material components
-import Card from "@mui/material/Card";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -59,10 +50,6 @@ export default function DentalRegister() {
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
   const [seqId, setSeqId] = useState("");
   const [dentalObj, setDentalObj] = useState({});
-
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
 
   useEffect(() => {
     setGridData(data);
@@ -103,7 +90,6 @@ export default function DentalRegister() {
   };
 
   const dentalModalOpen = e => {
-    closeMenu();
     setModalType("추가");
     handleDentalModalOpen();
   };
@@ -282,8 +268,8 @@ export default function DentalRegister() {
 
   return (
     <>
-      <SuiBox py={3}>
-        <SuiBox mb={3}>
+      <SoftBox py={3}>
+        <SoftBox mb={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} xl={12}>
               <MiniStatisticsCard
@@ -294,33 +280,33 @@ export default function DentalRegister() {
               />
             </Grid>
           </Grid>
-        </SuiBox>
-        <SuiBox mb={3}>
+        </SoftBox>
+        <SoftBox>
           <Card>
-            <ProjectHeader title={"치과 리스트"} subTitle={"All List"}>
-              <MoreVertIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
-                more_vert
-              </MoreVertIcon>
-              <Menu
-                id="simple-menu"
-                anchorEl={menu}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(menu)}
-                onClose={closeMenu}
-              >
-                <MenuItem onClick={e => dentalModalOpen(e)}>치과 추가</MenuItem>
-              </Menu>
-            </ProjectHeader>
-            <ProjectBody>         
+            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <SoftBox>
+                <SoftTypography variant="h5" gutterBottom>
+                  치과 리스트
+                </SoftTypography>
+                <SoftBox display="flex" alignItems="center" lineHeight={0}>
+
+                </SoftBox>
+              </SoftBox>
+              <SoftBox px={2}>
+                <SoftButton 
+                  variant="gradient" 
+                  color="dark"
+                  style={{marginRight: "5px"}}
+                  onClick={e => dentalModalOpen(e)}
+                >
+                  치과 추가
+                </SoftButton>
+              </SoftBox>
+            </SoftBox>
+
+            <SoftBox>   
               <form id="formSearchData" onSubmit={onSubmit}>
-                <SuiBox display="flex" px={2}>
+                <SoftBox display="flex" px={2}>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={3} xl={3}>
                       <Autocomplete
@@ -346,7 +332,7 @@ export default function DentalRegister() {
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} xl={3}>
-                      <SuiButton
+                      <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
@@ -355,12 +341,12 @@ export default function DentalRegister() {
                         style={{width: "95%", margin: "10px"}}
                       >
                         검색
-                      </SuiButton>
+                      </SoftButton>
                     </Grid>
                   </Grid>
-                </SuiBox>
+                </SoftBox>
               </form>
-              <SuiBox px={2}>
+              <SoftBox px={2}>
                 <ToastGrid
                   columns={columns}
                   data={gridData}
@@ -377,11 +363,11 @@ export default function DentalRegister() {
                     }
                   }}
                 />
-              </SuiBox>
-            </ProjectBody>
+              </SoftBox>
+            </SoftBox>
           </Card>
-        </SuiBox>
-      </SuiBox>
+        </SoftBox>
+      </SoftBox>
       <DentalModalContainer
         modalType={modalType}
         open={openDentalAddModal}

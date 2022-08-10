@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-// @material-ui/core
-import { makeStyles } from "@material-ui/core";
-
-// core components
-import Grid from "@material-ui/core/Grid";
-
 // Toast Grid
 import ToastGrid from "@toast-ui/react-grid";
 
-// Material
+// @material
+import { makeStyles } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+
+// @mui material components
+import Card from "@mui/material/Card";
 
 import ReceptionModalContainer from "containers/ReceptionModalContainer";
 import PrintModalContainer from "containers/PrintModalContainer";
@@ -29,27 +28,15 @@ import { items } from "modules/items";
 import { useDispatch, useSelector } from "react-redux";
 
 // Soft UI Dashboard React components
-import SuiBox from "components/Sui/SuiBox";
-import SuiButton from "components/Sui/SuiButton";
+import SoftBox from "components/Soft/SoftBox";
+import SoftButton from "components/Soft/SoftButton";
+import SoftTypography from "components/Soft/SoftTypography";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
-import ProjectHeader from "components/SuiProject/ProjectHeader";
-import ProjectBody from "components/SuiProject/ProjectBody";
-
-// @mui material components
-import Card from "@mui/material/Card";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import { RangeDatePicker } from 'react-google-flight-datepicker';
 import 'react-google-flight-datepicker/dist/main.css';
-
 import { apis } from "apis/axios";
 
 const useStyles = makeStyles(theme => ({
@@ -91,7 +78,7 @@ export default function ReceptionRegister() {
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
   const [selectReceptionData, setSelectReceptionData] = useState({});
-  const [selectedValue, setSelectedValue] = useState("reception");
+  // const [selectedValue, setSelectedValue] = useState("reception");
   const [receptionStartDate, setReceptionStartDate] = useState(new Date());
   const [receptionEndDate, setReceptionEndDate] = useState(new Date());
   const [completeStartDate, setCompleteStartDate] = useState(new Date());
@@ -115,13 +102,8 @@ export default function ReceptionRegister() {
 
   const set1 = new Set(vendorNameArr);
   const set2 = new Set(chartNumberArr);
-
   const auto1 = [...set1];
   const auto2 = [...set2];
-
-  // useEffect(() => {
-  //   setGridData(data)
-  // }, [data]);
 
   useEffect(() => {
     
@@ -378,9 +360,9 @@ export default function ReceptionRegister() {
     setCompleteEndDate(endDate);
   }
 
-  const handleChangeRadio = (event) => {
-    setSelectedValue(event.target.value);
-  };
+  // const handleChangeRadio = (event) => {
+  //   setSelectedValue(event.target.value);
+  // };
 
 
   const searchTypeCheck = (dateSelect, vendorName, chartNumber, type) => {
@@ -440,8 +422,8 @@ export default function ReceptionRegister() {
 
   return (
     <>
-      <SuiBox py={3}>
-        <SuiBox mb={3}>
+      <SoftBox py={3}>
+        <SoftBox mb={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} xl={12}>
               <MiniStatisticsCard
@@ -452,43 +434,64 @@ export default function ReceptionRegister() {
               />
             </Grid>
           </Grid>
-        </SuiBox>
-        <SuiBox mb={3}>
+        </SoftBox>
+        <SoftBox>
           <Card>
-            <ProjectHeader title={"접수 리스트"} subTitle={"All List"}>
-              <MoreVertIcon xs={{ cursor: "pointer", fontWeight: "bold" }} fontSize="medium" onClick={openMenu}>
-                more_vert
-              </MoreVertIcon>
-              <Menu
-                id="simple-menu"
-                anchorEl={menu}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(menu)}
-                onClose={closeMenu}
-              >
-                <MenuItem onClick={e => receptionModalOpen(e)}>접수 추가</MenuItem>
-                <MenuItem onClick={e => handleClickOpenPrint(e)}>PDF 출력</MenuItem>
-              </Menu>
-            </ProjectHeader>
-            <ProjectBody>
+            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <SoftBox>
+                <SoftTypography variant="h5" gutterBottom>
+                  접수 리스트
+                </SoftTypography>
+                <SoftBox display="flex" alignItems="center" lineHeight={0}>
+                  {/* <Icon
+                    sx={{
+                      fontWeight: "bold",
+                      color: ({ palette: { info } }) => info.main,
+                      mt: -0.5,
+                    }}
+                  >
+                    done
+                  </Icon>
+                  <SoftTypography variant="button" fontWeight="regular" color="text">
+                    &nbsp;<strong>30 done</strong> this month
+                  </SoftTypography> */}
+                </SoftBox>
+              </SoftBox>
+              <SoftBox px={2}>
+                <SoftButton 
+                  variant="gradient" 
+                  color="dark"
+                  style={{marginRight: "5px"}}
+                  onClick={e => receptionModalOpen(e)}
+                >
+                  접수추가
+                </SoftButton>
+
+                <SoftButton 
+                  variant="gradient" 
+                  color="dark"
+                  onClick={e => handleClickOpenPrint(e)}
+                >
+                  
+                  PDF 출력
+                </SoftButton>
+
+
+
+              </SoftBox>
+            </SoftBox>
+            <SoftBox>
               <form id="formSearchData" onSubmit={onSubmit}>
-                <SuiBox display="flex" px={2}>
+                <SoftBox display="flex" px={2}>
                   <Grid container spacing={3}>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       checked={selectedValue === "reception"}
                       onChange={handleChangeRadio}
                       name="dateSelect"
                       value="reception"
                       control={<Radio color="primary" />}
                       label="접수일자"
-                    />
+                    /> */}
                     <Grid item xs={12} sm={4} xl={4}>
                       <RangeDatePicker
                         name="receiptDate"
@@ -506,17 +509,17 @@ export default function ReceptionRegister() {
                       />
                     </Grid>
                   </Grid>
-                </SuiBox>
-                <SuiBox display="flex" px={2}>
+                </SoftBox>
+                <SoftBox display="flex" px={2}>
                   <Grid container spacing={3}>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       checked={selectedValue === "complete"}
                       onChange={handleChangeRadio}
                       name="dateSelect"
                       value="complete"
                       control={<Radio color="primary" />}
                       label="완성일자"
-                    />
+                    /> */}
                     <Grid item xs={12} sm={4} xl={4}>
                       <RangeDatePicker
                         name="completeDate"
@@ -577,7 +580,7 @@ export default function ReceptionRegister() {
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
-                      <SuiButton
+                      <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
@@ -586,12 +589,12 @@ export default function ReceptionRegister() {
                         style={{width: "95%", margin: "10px"}}
                       >
                         검색
-                      </SuiButton>
+                      </SoftButton>
                     </Grid>
                   </Grid>
-                </SuiBox>
+                </SoftBox>
               </form>
-              <SuiBox px={2}>
+              <SoftBox px={2}>
                 <ToastGrid
                   columns={columns}
                   data={gridData}
@@ -608,11 +611,11 @@ export default function ReceptionRegister() {
                     }
                   }}
                 />
-              </SuiBox>
-            </ProjectBody>
+              </SoftBox>
+            </SoftBox>
           </Card>
-        </SuiBox>
-      </SuiBox>
+        </SoftBox>
+      </SoftBox>
       <ReceptionModalContainer
         modalType={modalType}
         open={openReceptionAddModal}
