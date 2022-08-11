@@ -13,16 +13,16 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 // Custom styles for SoftInput
-import SoftInputRoot from "components/SoftInput/SoftInputRoot";
-import SoftInputWithIconRoot from "components/SoftInput/SoftInputWithIconRoot";
-import SoftInputIconBoxRoot from "components/SoftInput/SoftInputIconBoxRoot";
-import SoftInputIconRoot from "components/SoftInput/SoftInputIconRoot";
+import SoftInputRoot from "components/Soft/SoftInput/SoftInputRoot";
+import SoftInputWithIconRoot from "components/Soft/SoftInput/SoftInputWithIconRoot";
+import SoftInputIconBoxRoot from "components/Soft/SoftInput/SoftInputIconBoxRoot";
+import SoftInputIconRoot from "components/Soft/SoftInput/SoftInputIconRoot";
 
 // Soft UI Dashboard React contexts
 import { useSoftUIController } from "context";

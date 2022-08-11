@@ -241,22 +241,22 @@ const ReceptionModalContainer = ({
       name: "normalPrice",
       validation: { required: true },
     },
-    {
-      header: "할인금액 (입력)",
-      name: "discountPrice",
-      editor: "text",
-      validation: { required: true },
-    },
+    // {
+    //   header: "할인금액 (입력)",
+    //   name: "discountPrice",
+    //   editor: "text",
+    //   validation: { required: true },
+    // },
     {
       header: "최종금액",
       name: "realSellPrice",
       validation: { required: true },
     },
-    {
-      header: "할인율 ",
-      name: "discount",
-      validation: { required: true },
-    },
+    // {
+    //   header: "할인율 ",
+    //   name: "discount",
+    //   validation: { required: true },
+    // },
     {
       name: "update",
       header: "삭제",
@@ -292,7 +292,7 @@ const ReceptionModalContainer = ({
     const upper = formData.get("upper");
     const lower = formData.get("lower");
     const bite = formData.get("bite");
-    const appliance = formData.get("appliance");
+    //const appliance = formData.get("appliance");
     const requestForm = formData.get("requestForm");
 
     if (
@@ -319,12 +319,10 @@ const ReceptionModalContainer = ({
         return alert(i + 1 + "번째 행 장치명을 선택하세요.");
       } else if (gridArr[i].amount === null || gridArr[i].amount === "") {
         return alert(i + 1 + "번째 행 수량을 입력하세요.");
-      } else if (
-        gridArr[i].discountPrice == null ||
-        gridArr[i].discountPrice === ""
-      ) {
-        return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
-      }
+      } 
+      // else if (gridArr[i].discountPrice == null || gridArr[i].discountPrice === "") {
+      //   return alert(i + 1 + "번째 행 할인금액을 입력하세요.");
+      // }
     }
 
     const detail = [];
@@ -352,7 +350,7 @@ const ReceptionModalContainer = ({
     form.append("upper", upper === "" ? true : false);
     form.append("lower", lower === "" ? true : false);
     form.append("bite", bite === "" ? true : false);
-    form.append("appliance", appliance === "" ? true : false);
+    //form.append("appliance", appliance === "" ? true : false);
     form.append("patientName", patientName);
     form.append("description", description);
     form.append("vendorSeqId", dentalAutoData[index].seqId);
@@ -404,20 +402,23 @@ const ReceptionModalContainer = ({
 
       resetColumn(rowId);
       setColumnValue(rowId, "normalPrice", gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount));
+      setColumnValue(rowId, "realSellPrice", gridArr[rowId].unitPrice * parseInt(gridArr[rowId].amount));
+    } 
+    
+    // else if (e.changes[0].columnName === "discountPrice") {
 
-    } else if (e.changes[0].columnName === "discountPrice") {
+    //   if (regNumber.test(gridArr[rowId].discountPrice) === false) {
+    //     resetColumn(rowId);
+    //     return alert("정수만 입력 가능합니다.");
+    //   }
+    //   if (parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) {
+    //     resetColumn(rowId);
+    //     return alert("할인금액이 정상가보다 금액이 큽니다.");
+    //   }
+    //   setColumnValue(rowId, "realSellPrice", gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice));
+    //   setColumnValue(rowId, "discount", ((gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) * 100).toFixed(2) + "%");
+    // }
 
-      if (regNumber.test(gridArr[rowId].discountPrice) === false) {
-        resetColumn(rowId);
-        return alert("정수만 입력 가능합니다.");
-      }
-      if (parseInt(gridArr[rowId].discountPrice) > gridArr[rowId].normalPrice) {
-        resetColumn(rowId);
-        return alert("할인금액이 정상가보다 금액이 큽니다.");
-      }
-      setColumnValue(rowId, "realSellPrice", gridArr[rowId].normalPrice - parseInt(gridArr[rowId].discountPrice));
-      setColumnValue(rowId, "discount", ((gridArr[rowId].discountPrice / gridArr[rowId].normalPrice) * 100).toFixed(2) + "%");
-    }
   };
 
   const setColumnValue = (rowId, columnName, value) => {
@@ -431,9 +432,9 @@ const ReceptionModalContainer = ({
       gridRef.current.getInstance().setValue(rowId, "normalPrice", "", false);
     }
 
-    gridRef.current.getInstance().setValue(rowId, "discountPrice", "", false);
+    //gridRef.current.getInstance().setValue(rowId, "discountPrice", "", false);
     gridRef.current.getInstance().setValue(rowId, "realSellPrice", "", false);
-    gridRef.current.getInstance().setValue(rowId, "discount", "", false);
+    //gridRef.current.getInstance().setValue(rowId, "discount", "", false);
   };
 
   return (
@@ -482,7 +483,7 @@ const ReceptionModalContainer = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <Autocomplete
                   className={classes.textField}
                   options={vendorNameAuto}
@@ -535,7 +536,7 @@ const ReceptionModalContainer = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <TextField
                   className={classes.textField}
                   name="chartNumber"
@@ -546,7 +547,7 @@ const ReceptionModalContainer = ({
                   }
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <TextField
                   className={classes.textField}
                   name="patientName"
@@ -557,7 +558,7 @@ const ReceptionModalContainer = ({
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={3}>
                 <TextField
                   className={classes.textField}
                   name="description"
@@ -568,7 +569,7 @@ const ReceptionModalContainer = ({
                   }
                 />
               </Grid>
-              <Grid item xs={2}></Grid>
+              <Grid item xs={3}></Grid>
               <Grid item xs={2}>
                 <FormControlLabel
                   label="Upper"
@@ -614,7 +615,7 @@ const ReceptionModalContainer = ({
                   }
                 />
               </Grid>
-              <Grid item xs={2}>
+              {/* <Grid item xs={2}>
                 <FormControlLabel
                   label="Appliance"
                   control={
@@ -630,8 +631,8 @@ const ReceptionModalContainer = ({
                     />
                   }
                 />
-              </Grid>
-              <Grid item xs={2}></Grid>
+              </Grid> */}
+              <Grid item xs={3}></Grid>
             </Grid>
             {/* <Grid
               container

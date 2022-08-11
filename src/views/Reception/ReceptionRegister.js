@@ -8,6 +8,7 @@ import ToastGrid from "@toast-ui/react-grid";
 import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -18,10 +19,6 @@ import DetailButtonRenderer from "components/ToastGridRenderer/DetailRenderer.js
 import UpdateButtonRenderer from "components/ToastGridRenderer/UpdateRenderer.js";
 import RemoveButtonRenderer from "components/ToastGridRenderer/RemoveRenderer.js";
 
-import Autocomplete, {
-  createFilterOptions,
-} from "@material-ui/lab/Autocomplete";
-
 import { receptions } from "modules/receptions";
 import { receptionDetails } from "modules/receptionDetails";
 import { items } from "modules/items";
@@ -29,14 +26,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/Soft/SoftBox";
+import SoftInput from "components/Soft/SoftInput";
 import SoftButton from "components/Soft/SoftButton";
 import SoftTypography from "components/Soft/SoftTypography";
 import MiniStatisticsCard from "components/MiniStatisticsCard";
-
-import "react-dates/initialize";
-import "react-dates/lib/css/_datepicker.css";
-import { RangeDatePicker } from 'react-google-flight-datepicker';
-import 'react-google-flight-datepicker/dist/main.css';
 import { apis } from "apis/axios";
 
 const useStyles = makeStyles(theme => ({
@@ -77,31 +70,36 @@ export default function ReceptionRegister() {
   const [gridData, setGridData] = useState([]);
   const selectDetailData = useSelector(({ receptionDetail }) => receptionDetail.data);
   const [seqId, setSeqId] = useState();
+
+
+  // 수정 해야함
   const [selectReceptionData, setSelectReceptionData] = useState({});
-  // const [selectedValue, setSelectedValue] = useState("reception");
   const [receptionStartDate, setReceptionStartDate] = useState(new Date());
   const [receptionEndDate, setReceptionEndDate] = useState(new Date());
   const [completeStartDate, setCompleteStartDate] = useState(new Date());
   const [completeEndDate, setCompleteEndDate] = useState(new Date());
+
+
+  const [receptionDate, setReceptionDate] = useState();
+  const [completeDate, setCompleteDate] = useState();
+
+
   const [vendorAutoReset, setVendorAutoReset] = useState("전체");
-  const [chartNumberAutoReset, setChartNumberAutoReset] = useState("전체");
+  const [patientNameAutoReset, setPatientNameAutoReset] = useState("전체");
   const [searchType, setSearchType] = useState("");
   const [printData, setPrintData] = useState({});
 
-  const [menu, setMenu] = useState(null);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
-
   const vendorNameArr = ["전체"];
-  const chartNumberArr = ["전체"];
+  const patientNameArr = ["전체"];
 
   data.map( data => {
+    console.log(data)
     vendorNameArr.push( data.vendorName )
-    chartNumberArr.push( data.chartNumber.toString() )
+    patientNameArr.push( data.patientName )
   });
 
   const set1 = new Set(vendorNameArr);
-  const set2 = new Set(chartNumberArr);
+  const set2 = new Set(patientNameArr);
   const auto1 = [...set1];
   const auto2 = [...set2];
 
@@ -136,8 +134,8 @@ export default function ReceptionRegister() {
   }, [vendorAutoReset]);
 
   useEffect(() => {
-    setChartNumberAutoReset("전체");
-  }, [chartNumberAutoReset]);
+    setPatientNameAutoReset("전체");
+  }, [patientNameAutoReset]);
 
   // 추가 모달
   const [openReceptionAddModal, setOpenReceptionModal] = useState(false);
@@ -159,7 +157,6 @@ export default function ReceptionRegister() {
     const vendorName = formData.get("vendorName");
     const chartNumber = formData.get("chartNumber");
     
-    closeMenu();
     setPrintData(searchTypeCheck(dateSelect, vendorName, chartNumber));
     setOpenPrint(true);
   };
@@ -168,18 +165,15 @@ export default function ReceptionRegister() {
   };
 
   const receptionModalOpen = () => {
-    closeMenu();
     setModalType("추가");
     handleReceptionModalOpen();
   };
 
   const onUpdateButtonClicked = receptionObj => {
-    setModalType("접수수정");
-    
     const sellMasterId = receptionObj.seqId;
-  
+    setModalType("접수수정");
     dispatch(receptionDetails.getReceptionDetailSelectMiddleware(sellMasterId));
-    setSelectReceptionData(receptionObj);
+    //setSelectReceptionData(receptionObj);
     handleReceptionModalOpen();
   };
 
@@ -273,15 +267,15 @@ export default function ReceptionRegister() {
       sortable: true,
       filter: "select",
     },
-    {
-      name: "appliance",
-      header: "Appliance",
-      align: "center",
-      whiteSpace: "nowrap",
-      resizable: true,
-      sortable: true,
-      filter: "select",
-    },
+    // {
+    //   name: "appliance",
+    //   header: "Appliance",
+    //   align: "center",
+    //   whiteSpace: "nowrap",
+    //   resizable: true,
+    //   sortable: true,
+    //   filter: "select",
+    // },
     {
       name: "patientName",
       header: "환자명",
@@ -350,20 +344,15 @@ export default function ReceptionRegister() {
     return date.getFullYear() + '-' + month + '-' + day;
 }
 
-  const onReceptionDateChange = (startDate, endDate) => {
-    setReceptionStartDate(startDate);
-    setReceptionEndDate(endDate);
-  }
+  // const onReceptionDateChange = (startDate, endDate) => {
+  //   setReceptionStartDate(startDate);
+  //   setReceptionEndDate(endDate);
+  // }
 
-  const onCompleteDateChange = (startDate, endDate) => {
-    setCompleteStartDate(startDate);
-    setCompleteEndDate(endDate);
-  }
-
-  // const handleChangeRadio = (event) => {
-  //   setSelectedValue(event.target.value);
-  // };
-
+  // const onCompleteDateChange = (startDate, endDate) => {
+  //   setCompleteStartDate(startDate);
+  //   setCompleteEndDate(endDate);
+  // }
 
   const searchTypeCheck = (dateSelect, vendorName, chartNumber, type) => {
 
@@ -378,7 +367,7 @@ export default function ReceptionRegister() {
     if(dateSelect === "reception") {
       result = {
         receptionDate: { 
-          startDate: dateFormat(receptionStartDate), 
+          startDate:  (receptionStartDate), 
           endDate: dateFormat(receptionEndDate) 
         }
       }
@@ -472,26 +461,14 @@ export default function ReceptionRegister() {
                   color="dark"
                   onClick={e => handleClickOpenPrint(e)}
                 >
-                  
                   PDF 출력
                 </SoftButton>
-
-
-
               </SoftBox>
             </SoftBox>
             <SoftBox>
               <form id="formSearchData" onSubmit={onSubmit}>
-                <SoftBox display="flex" px={2}>
+                {/* <SoftBox display="flex" px={2}>
                   <Grid container spacing={3}>
-                    {/* <FormControlLabel
-                      checked={selectedValue === "reception"}
-                      onChange={handleChangeRadio}
-                      name="dateSelect"
-                      value="reception"
-                      control={<Radio color="primary" />}
-                      label="접수일자"
-                    /> */}
                     <Grid item xs={12} sm={4} xl={4}>
                       <RangeDatePicker
                         name="receiptDate"
@@ -509,19 +486,11 @@ export default function ReceptionRegister() {
                       />
                     </Grid>
                   </Grid>
-                </SoftBox>
+                </SoftBox> */}
                 <SoftBox display="flex" px={2}>
                   <Grid container spacing={3}>
-                    {/* <FormControlLabel
-                      checked={selectedValue === "complete"}
-                      onChange={handleChangeRadio}
-                      name="dateSelect"
-                      value="complete"
-                      control={<Radio color="primary" />}
-                      label="완성일자"
-                    /> */}
-                    <Grid item xs={12} sm={4} xl={4}>
-                      <RangeDatePicker
+                    <Grid item xs={12} sm={2} xl={2}>
+                      {/* <RangeDatePicker
                         name="completeDate"
                         startDate={completeStartDate}
                         endDate={completeEndDate}
@@ -532,6 +501,25 @@ export default function ReceptionRegister() {
                         maxDate={new Date(2100, 0, 1)}
                         monthFormat="YYYY MM"
                         disabled={false}
+                      /> */}
+                      <TextField
+                        className={classes.textField}
+                        type="date"
+                        name="receiptDate"
+                        label="접수일자"
+                        defaultValue={dateFormat(new Date())}
+                        InputLabelProps={{ shrink: true }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={2} xl={2}>
+                      <SoftInput type="email" placeholder="Email" />
+                      <TextField
+                        className={classes.textField}
+                        type="date"
+                        name="receiptDate"
+                        label="완성일자"
+                        defaultValue={dateFormat(new Date())}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
@@ -553,12 +541,33 @@ export default function ReceptionRegister() {
                             name="vendorName"
                             label="거래처명"
                             variant="outlined"
+                            size="small"
                           />
                         )}
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
                       <Autocomplete
+                        freeSolo
+                        className={classes.grid}
+                        options={auto2}
+                        value={patientNameAutoReset}
+                        filterOptions={filterOptions}
+                        onChange={(event, newValue) => {
+                          if (newValue === null) {
+                            setPatientNameAutoReset("");
+                          }
+                        }}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            name="chartNumber"
+                            label="환자명"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                      {/* <Autocomplete
                         freeSolo
                         className={classes.grid}
                         options={auto2}
@@ -577,7 +586,7 @@ export default function ReceptionRegister() {
                             variant="outlined"
                           />
                         )}
-                      />
+                      /> */}
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
                       <SoftButton
