@@ -275,9 +275,7 @@ export default function PriceRegister() {
                 <SoftTypography variant="h5" gutterBottom>
                   단가 리스트
                 </SoftTypography>
-                <SoftBox display="flex" alignItems="center" lineHeight={0}>
-    
-                </SoftBox>
+                <SoftBox display="flex" alignItems="center" lineHeight={0}></SoftBox>
               </SoftBox>
               <SoftBox px={2}>
                 <SoftButton 
@@ -301,6 +299,7 @@ export default function PriceRegister() {
                         value={vendorAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setVendorAutoReset("전체");
@@ -325,6 +324,7 @@ export default function PriceRegister() {
                         value={partAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setPartAutoReset("전체");
@@ -344,6 +344,7 @@ export default function PriceRegister() {
                         value={itemAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setItemAutoReset("전체");
@@ -356,14 +357,15 @@ export default function PriceRegister() {
                         )}
                       />       
                     </Grid>
-                    <Grid item xs={12} sm={3} xl={3}>
+                    <Grid item xs={12} sm={2} xl={2}>
                       <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
                         color="info"
-                        size="large"
-                        style={{width: "95%", margin: "10px"}}
+                        size="medium"
+                        fullWidth
+                        style={{marginTop: "5px", marginBottom: "10px"}}
                       >
                         검색
                       </SoftButton>

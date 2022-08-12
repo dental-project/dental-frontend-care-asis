@@ -441,13 +441,14 @@ const ReceptionModalContainer = ({
     <Modal
       open={open}
       modalType={modalType}
-      screen={modalType === "삭제" ? false : true}
+      screen={modalType === "삭제" ? true : false}
+      maxWidth={"md"}
     >
       <form id="formData" onSubmit={onSubmit}>
         {modalType === "삭제" ? null : (
           <>
             <Grid container>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   type="date"
@@ -459,7 +460,7 @@ const ReceptionModalContainer = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   type="date"
@@ -471,7 +472,7 @@ const ReceptionModalContainer = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   type="date"
@@ -483,11 +484,12 @@ const ReceptionModalContainer = ({
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={12}>
                 <Autocomplete
                   className={classes.textField}
                   options={vendorNameAuto}
                   filterOptions={filterVendorName}
+                  size="small"
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.vendorName : ""
                   }
@@ -536,34 +538,37 @@ const ReceptionModalContainer = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   name="chartNumber"
                   label="차트번호"
                   variant="outlined"
+                  size="small"
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.chartNumber : ""
                   }
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   name="patientName"
                   label="환자명"
                   variant="outlined"
+                  size="small"
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.patientName : ""
                   }
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   name="description"
                   label="비고"
                   variant="outlined"
+                  size="small"
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.description : ""
                   }
@@ -652,9 +657,9 @@ const ReceptionModalContainer = ({
               type="file"
             />
             <label htmlFor="requestForm">
-              <ButtonUpload component="span" color="primary" className={classes.button}>
+              <SuiButton component="span" color="dark" className={classes.button}>
                 Upload
-              </ButtonUpload>
+              </SuiButton>
             </label>
             <Grid item xs={12}>
               <SuiButton

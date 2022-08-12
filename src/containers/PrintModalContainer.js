@@ -124,7 +124,6 @@ const PrintModalContainer = ({ open, close, printData}) => {
           </Select>
         </FormControl>
         <SuiButton
-        
           variant="contained"
           color="info"
           size="medium"

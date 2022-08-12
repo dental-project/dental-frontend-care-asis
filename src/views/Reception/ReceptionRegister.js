@@ -455,7 +455,6 @@ export default function ReceptionRegister() {
                 >
                   접수추가
                 </SoftButton>
-
                 <SoftButton 
                   variant="gradient" 
                   color="dark"
@@ -507,17 +506,18 @@ export default function ReceptionRegister() {
                         type="date"
                         name="receiptDate"
                         label="접수일자"
+                        size="small"
                         defaultValue={dateFormat(new Date())}
                         InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={2} xl={2}>
-                      <SoftInput type="email" placeholder="Email" />
                       <TextField
                         className={classes.textField}
                         type="date"
                         name="receiptDate"
                         label="완성일자"
+                        size="small"
                         defaultValue={dateFormat(new Date())}
                         InputLabelProps={{ shrink: true }}
                       />
@@ -530,6 +530,7 @@ export default function ReceptionRegister() {
                         value={vendorAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setVendorAutoReset("");
@@ -541,7 +542,6 @@ export default function ReceptionRegister() {
                             name="vendorName"
                             label="거래처명"
                             variant="outlined"
-                            size="small"
                           />
                         )}
                       />
@@ -553,6 +553,7 @@ export default function ReceptionRegister() {
                         options={auto2}
                         value={patientNameAutoReset}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setPatientNameAutoReset("");
@@ -594,8 +595,9 @@ export default function ReceptionRegister() {
                         form="formSearchData"
                         variant="outlined"
                         color="info"
-                        size="large"
-                        style={{width: "95%", margin: "10px"}}
+                        size="medium"
+                        fullWidth
+                        style={{marginTop: "5px", marginBottom: "10px"}}
                       >
                         검색
                       </SoftButton>

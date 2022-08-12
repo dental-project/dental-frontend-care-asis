@@ -100,7 +100,6 @@ export default function ReceptionDetail() {
 
 
   const masterColumns = [
-    
     {
       name: "접수일자",
       align: "center"

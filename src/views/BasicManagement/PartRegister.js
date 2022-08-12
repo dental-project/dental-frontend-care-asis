@@ -227,6 +227,7 @@ function PartRegister() {
                         value={autoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setAutoReset("");
@@ -242,14 +243,15 @@ function PartRegister() {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3} xl={3}>
+                    <Grid item xs={12} sm={2} xl={2}>
                       <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
                         color="info"
-                        size="large"
-                        style={{width: "95%", margin: "10px"}}
+                        size="medium"
+                        fullWidth
+                        style={{marginTop: "5px", marginBottom: "10px"}}
                       >
                         검색
                       </SoftButton>

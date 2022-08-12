@@ -288,9 +288,7 @@ export default function DentalRegister() {
                 <SoftTypography variant="h5" gutterBottom>
                   치과 리스트
                 </SoftTypography>
-                <SoftBox display="flex" alignItems="center" lineHeight={0}>
-
-                </SoftBox>
+                <SoftBox display="flex" alignItems="center" lineHeight={0}></SoftBox>
               </SoftBox>
               <SoftBox px={2}>
                 <SoftButton 
@@ -303,7 +301,6 @@ export default function DentalRegister() {
                 </SoftButton>
               </SoftBox>
             </SoftBox>
-
             <SoftBox>   
               <form id="formSearchData" onSubmit={onSubmit}>
                 <SoftBox display="flex" px={2}>
@@ -327,18 +324,20 @@ export default function DentalRegister() {
                             name="vendorName"
                             label="거래처명"
                             variant="outlined"
+                            size="small"
                           />
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3} xl={3}>
+                    <Grid item xs={12} sm={2} xl={2}>
                       <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
                         color="info"
-                        size="large"
-                        style={{width: "95%", margin: "10px"}}
+                        size="medium"
+                        fullWidth
+                        style={{marginTop: "5px", marginBottom: "10px"}}
                       >
                         검색
                       </SoftButton>

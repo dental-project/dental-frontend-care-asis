@@ -219,8 +219,6 @@ export default function ItemRegister() {
                 </SoftButton>
               </SoftBox>
             </SoftBox>
-
-
             <SoftBox>
               <form id="formSearchData" onSubmit={onSubmit}>
                 <SoftBox display="flex" px={2}>
@@ -232,6 +230,7 @@ export default function ItemRegister() {
                         value={partAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setPartAutoReset("전체");
@@ -252,6 +251,7 @@ export default function ItemRegister() {
                         value={itemAutoReset}
                         getOptionLabel={option => option}
                         filterOptions={filterOptions}
+                        size="small"
                         onChange={(event, newValue) => {
                           if (newValue === null) {
                             setItemAutoReset("");
@@ -262,14 +262,15 @@ export default function ItemRegister() {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3} xl={3}>
+                    <Grid item xs={12} sm={2} xl={2}>
                       <SoftButton
                         type="submit"
                         form="formSearchData"
                         variant="outlined"
                         color="info"
-                        size="large"
-                        style={{width: "95%", margin: "10px"}}
+                        size="medium"
+                        fullWidth
+                        style={{marginTop: "5px", marginBottom: "10px"}}
                       >
                         검색
                       </SoftButton>
