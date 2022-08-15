@@ -539,7 +539,7 @@ const ReceptionModalContainer = ({
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   className={classes.textField}
                   name="chartNumber"
                   label="차트번호"
@@ -548,7 +548,7 @@ const ReceptionModalContainer = ({
                   defaultValue={
                     modalType === "접수수정" ? selectReceptionData.chartNumber : ""
                   }
-                />
+                /> */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
